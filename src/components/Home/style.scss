@@ -13,7 +13,7 @@
 
     .cover {
         overflow: hidden;
-        // position: absolute;
+        position: absolute;
         margin-top: calc(0px - var(--height-nav));
         img {
             width: 100%;

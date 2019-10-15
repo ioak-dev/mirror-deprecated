@@ -5,7 +5,9 @@ import mirror_white from '../../images/mirror_white.svg';
 import mirror_black from '../../images/mirror_black.svg';
 import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
+// import SearchBar from '../Ux/SearchBar';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
+import SearchBar from '../Ux/SearchBar';
 
 interface Props {    
     sendEvent: Function,
@@ -18,11 +20,13 @@ interface Props {
     login: Function,
     transparent: boolean,
     logout: Function,
-    toggleSettings: any
+    toggleSettings: any,
+    handleSearchTextChange: Function
 }
 
 interface State {
-    showSettings: boolean
+    showSettings: boolean,
+    showSearchBar: boolean
 }
 
 class Desktop extends Component<Props, State> {
@@ -30,8 +34,19 @@ class Desktop extends Component<Props, State> {
         super(props);
         this.props.getProfile();
         this.state = {
+            showSearchBar: false,
             showSettings: false
         }
+    }
+
+    componentDidMount() {
+        receiveMessage().subscribe(message => {
+            if (message.name === 'show-navbar-element') {
+                this.setState({
+                    showSearchBar: message.signal
+                })
+            }
+        });
     }
 
     signin = (type) => {
@@ -45,6 +60,7 @@ class Desktop extends Component<Props, State> {
                     {!this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white} alt="Curate logo" />}
                     {(this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white} alt="Curate logo" />}
                     <Links authorization={this.props.authorization} profile={this.props.profile}/>
+                    {this.state.showSearchBar && <SearchBar value={this.props.profile.searchText} handleChange={this.props.handleSearchTextChange} />}
                 </div>
                 <div className="right">
                     <div className="action">

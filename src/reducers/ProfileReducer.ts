@@ -1,7 +1,9 @@
 import { GET_PROFILE, SET_PROFILE } from '../actions/types';
 
 const initialState = {
-    theme: 'theme_light'
+    theme: 'theme_light',
+    tenant: '',
+    searchText: ''
 }
 
 export default function(state = initialState, action) {

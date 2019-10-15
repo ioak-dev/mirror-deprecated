@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import './style.scss';
 import mirror_white from '../../images/mirror_white.svg';
 import mirror_black from '../../images/mirror_black.svg';
 import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
+import SearchBar from '../Ux/SearchBar';
+import { receiveMessage, sendMessage } from '../../events/MessageService';
+// import SearchBar from '../Ux/SearchBar';
 
 interface Props {    
     sendEvent: Function,
@@ -17,7 +21,8 @@ interface Props {
     login: Function,
     transparent: boolean,
     logout: Function,
-    toggleSettings: any
+    toggleSettings: any,
+    handleSearchTextChange: Function
 }
 
 interface State {
@@ -33,6 +38,16 @@ class Mobile extends Component<Props, State> {
             showSearchBar: false,
             menu: false
         }
+    }
+
+    componentDidMount() {
+        receiveMessage().subscribe(message => {
+            if (message.name === 'show-navbar-element') {
+                this.setState({
+                    showSearchBar: message.signal
+                })
+            }
+        });
     }
 
     toggleMenu = () => {
@@ -52,6 +67,7 @@ class Mobile extends Component<Props, State> {
                 <div className="left">
                     {!this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white} alt="Curate logo" />}
                     {(this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white} alt="Curate logo" />}
+                    {this.state.showSearchBar && <SearchBar value={this.props.profile.searchText} handleChange={this.props.handleSearchTextChange} />}
                     {/* links */}
                 </div>
                 <div className="right">

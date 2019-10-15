@@ -7,6 +7,7 @@ import Login from '../Auth/Login';
 import Landing from '../Landing';
 import PrivateRoute from '../Auth/PrivateRoute';
 import AuthInit from '../Auth/AuthInit';
+import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
@@ -16,6 +17,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Backdrop from './Backdrop';
 import Notification from '../Notification';
 import Navigation from '../Navigation';
+import store from '../../store';
 import { Authorization } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 
@@ -101,9 +103,10 @@ class Content extends Component<Props, State> {
                             <Notification />
                             <MuiThemeProvider theme={themes['themecolor_1']}>
                                 <Navigation {...this.props} logout={() => this.logout} event={this.state.event} />
-                                <Route path="/home" render={(props: any) => <Home {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
-                                <Route path="/login" render={(props: any) => <Login {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <Route path="/:tenant/home" render={(props: any) => <Home {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <Route path="/:tenant/login" render={(props: any) => <Login {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <Route path="/" exact render={(props: any) => <Landing {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <PrivateRoute path="/:tenant/test" render={(props: any) => <Landing {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                             </MuiThemeProvider>
                         </div>
                     </div>

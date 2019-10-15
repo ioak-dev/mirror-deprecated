@@ -5,7 +5,9 @@ export interface Authorization {
 }
 
 export interface Profile {
-    theme: string
+    theme: string,
+    tenant: string,
+    searchText: string
 }
 
 export interface Message {
