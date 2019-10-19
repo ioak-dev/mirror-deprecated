@@ -5,23 +5,28 @@
     input {
         padding-top: 10px;
         padding-bottom: 10px;
-        background-color: var(--color-body);
         color: var(--color-body-invert);
         font-size: 1em;
         outline: none;
         border: none;
-        width: 100%;
         background-color: var(--color-body-dim);
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        box-sizing:border-box;
+
+        &:focus {
+            background-color: var(--color-body-invert-dim);
+            color: var(--color-body);
+        }
     }
 
     label {
         font-family: "Roboto", "Helvetica", "Arial", sans-serif;
         display: block;
-        bottom: -8px;
+        // bottom: 8px;
         left: 10px;
         position: relative;
         font-size: 0.8em;
-        color: grey;
+        color: var(--color-body-invert-dim);
+        text-transform: capitalize;
     }
 }

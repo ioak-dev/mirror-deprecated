@@ -53,17 +53,17 @@ export default class Tenant extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="tenant">
-        Tenant creation
+      <div className="tenant boxed">
+        <div className="typography-3 space-bottom-4">Tenant creation</div>
         {this.state.pageNo === 1 && <div className="form">
           <ArcText id="name" data={this.state} label="Tenant Name"  handleChange={e => this.handleChange(e)}></ArcText>
           <ArcText id="email" data={this.state} label="Email"  handleChange={e => this.handleChange(e)}></ArcText>
-          <button className="primary invert animate" onClick={this.createTenant}>Next</button>
+          <button className="primary alt animate" onClick={this.createTenant}>Next</button>
         </div>}
         {this.state.pageNo === 2 && <div className="form">
-          <ArcText id="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)}></ArcText>
-          <ArcText id="repeatPassword" data={this.state} label="Password"  handleChange={e => this.handleChange(e)}></ArcText>
-          <button className="primary invert animate" onClick={this.createAdministrator}>Create Tenant</button>
+          <ArcText id="password" data={this.state} label="Password"  handleChange={e => this.handleChange(e)}></ArcText>
+          <ArcText id="repeatPassword" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)}></ArcText>
+          <button className="primary alt animate" onClick={this.createAdministrator}>Create Tenant</button>
         </div>}
       </div>
     );
