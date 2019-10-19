@@ -20,6 +20,7 @@ import Navigation from '../Navigation';
 import store from '../../store';
 import { Authorization } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
+import Tenant from '../Tenant';
 
 const themes = {
     'themecolor_1': getTheme('#69A7BF'),
@@ -106,7 +107,9 @@ class Content extends Component<Props, State> {
                                 <Route path="/:tenant/home" render={(props: any) => <Home {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <Route path="/:tenant/login" render={(props: any) => <Login {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <Route path="/" exact render={(props: any) => <Landing {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
-                                <PrivateRoute path="/:tenant/test" render={(props: any) => <Landing {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <Route path="/home" exact render={(props: any) => <Landing {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <Route path="/tenant" exact render={(props: any) => <Tenant {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                {/* <PrivateRoute path="/:tenant/test" render={(props: any) => <Landing {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} /> */}
                             </MuiThemeProvider>
                         </div>
                     </div>
