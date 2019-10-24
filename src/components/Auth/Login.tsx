@@ -4,6 +4,11 @@ import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import {withCookies} from 'react-cookie';
 import './Login.scss';
 import { Authorization } from '../Types/GeneralTypes';
+import ArcText from '../Ux/ArcText';
+import { sendMessage } from '../../events/MessageService';
+import {signin, preSignin,sentPasswordChangeEmail} from './AuthService';
+import {isEmptyOrSpaces} from "../Utils";
+
 
 interface Props {
     getAuth: Function,
@@ -11,24 +16,65 @@ interface Props {
     removeAuth: Function,
     cookies: any,
     history: any,
+    profile:any,
     authorization: Authorization
 }
 
 interface State {
-    newuser: boolean
+    newuser: boolean,
+    name: string,
+    email: string,
+    password: string
 }
 
 class Login extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.state = {
-            newuser: false
+            newuser: false,
+            name:'',
+            email:'',
+            password:''
         }
     }
 
-    login = () => {
-        // Real check
-        this.success();
+    login = (event) => {
+        event.preventDefault();
+        sendMessage('notification', false);
+       // sendMessage('spinner');
+        if (this.state.email && this.state.password) {
+            preSignin({
+                name:this.props.profile.tenant,
+                email:this.state.email})
+                .then((response) => {
+                    if (response.status === 200) {
+                    signin({
+                        name:this.props.profile.tenant,
+                        email: this.state.email,
+                        password: this.state.password
+                        }, response.data)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                sendMessage('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
+                                this.success(response.data);
+                            } else if (response.status === 401) {
+                                sendMessage('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
+                            } else {
+                                sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
+                            }
+                        })
+                        .catch((error) => {
+                            sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+                        })
+                } else if (response.status === 404) {
+                    sendMessage('notification', true, {message: 'User name does not exist', type: 'failure', duration: 3000});
+                }
+            })
+
+            
+        } else {
+            sendMessage('notification', true, {type: 'failure', message: 'Username/password cannot be empty', duration: 3000});
+        }
     }
 
     logout = () => {
@@ -36,14 +82,21 @@ class Login extends Component<Props, State> {
         this.props.cookies.remove('isAuth');
     }
 
-    success = () => {
+    success = (data) => {
         this.props.addAuth({
             isAuth: true,
-            firstname: 'Arun Kumar',
-            lastname: 'Selvaraj'
+            token: data.token,
+            secret: data.secret,
+            name: data.name
+
         });
+        sendMessage('loggedin', true);
         this.props.cookies.set('isAuth', true);
-        this.props.history.push("/");
+        this.props.cookies.set('token', data.token);
+        this.props.cookies.set('secret', data.secret);
+        this.props.cookies.set('name', data.name);
+        this.props.cookies.set('email', data.email);
+        this.props.history.push("/");    
     }
 
     toggle = () => {
@@ -52,12 +105,64 @@ class Login extends Component<Props, State> {
         });
     }
 
+    handleChange = (event) => {
+        this.setState(
+            {
+                ...this.state,
+                [event.currentTarget.name]: event.currentTarget.value
+            }
+        )
+    }
+
+    sentEmailWithCode = () => {
+        if (isEmptyOrSpaces(this.state.email)) {
+            sendMessage('notification', true, {message: 'Email cannot be empty', type: 'failure', duration: 5000});
+            return;
+        }
+
+        this.sentPasswordChangeEmail('password');
+
+    }
+
+    sentPasswordChangeEmail = (type) => {
+        const min = 1;
+        const max = 100;
+        const rand = min + Math.random() * (max - min);
+        sentPasswordChangeEmail({
+            email: this.state.email,
+            resetCode: rand
+        }, type)
+            .then((response: any) => {
+                if (response === 200) {
+                    if (type === 'password') {
+                        sendMessage('notification', true, {message: 'Password sent successfully', type: 'success', duration: 3000});
+                    }
+                } else {
+                    sendMessage('notification', true, {'type': 'failure', message: 'Invalid Email error', duration: 3000});
+                }
+            })
+            .catch((error) => {
+                sendMessage('notification', true, {'type': 'failure', message: 'Bad request', duration: 3000});
+            })
+    }
+
     render() {
         return (
             <>
                 <div className="login boxed">
-                    {this.props.authorization.isAuth && <button className="secondary animate alt" onClick={this.logout}>Logout</button>}
-                    {!this.props.authorization.isAuth && <button className="primary block" onClick={this.login}>Login</button>}
+                {!this.state.newuser && <div className="container">
+                    <form method="GET" onSubmit={this.login} noValidate>
+                        
+                        <div className="form">
+                            <ArcText label="E-mail" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <ArcText label="Password" id="password"   data={this.state} handleChange={e => this.handleChange(e)} />
+                        </div>
+                        <br />
+                        <button className="primary block"  onClick={this.login}>Sign In</button>
+                    </form>
+                    <br />
+                    <button className="invert" onClick={this.sentEmailWithCode}>Forgot password ?</button>
+                </div>}
                 </div>
             </>
         );
