@@ -23,7 +23,7 @@ export function signup(data) {
 }
 
 export function preSignin(data) {
-    return httpGet(constants.API_URL+data.name+constants.API_KEYS+data.email, null)
+    return httpGet(constants.API_URL+data.name+constants.API_KEYS + '/' + data.email, null)
         .then(response => Promise.resolve(response))
         .catch(error => Promise.resolve(error.response))
 }
