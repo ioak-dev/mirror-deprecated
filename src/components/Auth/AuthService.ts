@@ -12,7 +12,7 @@ export function preSignup(data) {
 }
 
 export function signup(data) {
-    return httpPost(constants.API_SIGNUP+data.name+constants.API_SIGNUP, {
+    return httpPost(constants.API_URL+data.name+constants.API_SIGNUP, {
         email: data.email,
         problem: encrypt(data.password, data.solution, data.salt),
         solution: data.solution
