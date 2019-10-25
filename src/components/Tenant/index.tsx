@@ -104,7 +104,6 @@ export default class Tenant extends React.Component<Props, State> {
                     return 
                   }
               }).catch((error)=>{
-                console.log(error.response)
                 sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
                 that.setState({
                   name:'',
