@@ -10,7 +10,6 @@ interface Props {
     errorFields?: any
 }
 function ArcText(props: Props) {
-    console.log(props.errorFields)
     return (
         <div className="arc-text-field">
             <label>{props.label}</label>

@@ -60,6 +60,7 @@ class Login extends Component<Props, State> {
                             } else if (response.status === 401) {
                                 sendMessage('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
                             } else {
+                                console.log(response);
                                 sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
                             }
                         })
@@ -149,7 +150,7 @@ class Login extends Component<Props, State> {
     render() {
         return (
             <>
-                <div className="login boxed">
+                <div className="login">
                 {!this.state.newuser && <div className="container">
                     <form method="GET" onSubmit={this.login} noValidate>
                         

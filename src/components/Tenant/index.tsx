@@ -2,8 +2,8 @@ import React from 'react';
 import './style.scss';
 import ArcText from '../Ux/ArcText';
 import { sendMessage } from '../../events/MessageService';
-import { createTenant, sentTenantUrl } from './TenantService'
-import {preSignup, signup} from '../Auth/AuthService'
+import { sentTenantUrl } from './TenantService'
+import {preSignup, createTenant } from '../Auth/AuthService'
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { isEmptyOrSpaces } from '../Utils';
 
