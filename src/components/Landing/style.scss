@@ -1,2 +1,12 @@
 .landing {
+    display: grid;
+    grid-template-columns: auto;
+    justify-content: center;
+
+    padding: 100px;
+
+    .action {
+        display: grid;
+        justify-content: center;
+    }
 }
