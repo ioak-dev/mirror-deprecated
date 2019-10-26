@@ -2,7 +2,7 @@ import React from 'react';
 import './style.scss';
 import ArcText from '../Ux/ArcText';
 import { sendMessage } from '../../events/MessageService';
-import { createTenant, sentTenantUrl } from '../Tenant/Tenant'
+import { createTenant, sentTenantUrl } from './TenantService'
 import {preSignup, signup} from '../Auth/AuthService'
 import { Authorization, Profile } from '../Types/GeneralTypes';
 
@@ -16,7 +16,13 @@ interface State {
   email: string,
   pageNo: number,
   password: string,
-  repeatPassword: string
+  repeatPassword: string,
+  errorFields: {
+    name: boolean,
+    email: boolean,
+    password: boolean,
+    repeatPassword: boolean
+  }
 }
 export default class Tenant extends React.Component<Props, State> {
 
@@ -28,7 +34,13 @@ export default class Tenant extends React.Component<Props, State> {
       email: '',
       password: '',
       repeatPassword: '',
-      pageNo: 1
+      pageNo: 1,
+      errorFields: {
+        name: false,
+        email: false,
+        password: false,
+        repeatPassword: false
+      }
     }
   }
   
@@ -41,7 +53,11 @@ export default class Tenant extends React.Component<Props, State> {
       this.setState(
           {
               ...this.state,
-              [event.currentTarget.name]: event.currentTarget.value
+              [event.currentTarget.name]: event.currentTarget.value,
+              errorFields: {
+                ...this.state.errorFields,
+                [event.currentTarget.name]: false
+              }
           }
       )
   }
@@ -52,9 +68,9 @@ export default class Tenant extends React.Component<Props, State> {
       })
       .then((response: any) => {
           if (response === 200) {
-                  sendMessage('notification', true, {message: 'Password sent successfully', type: 'success', duration: 3000});
+            sendMessage('notification', true, {message: 'Password sent successfully', type: 'success', duration: 3000});
           } else {
-              sendMessage('notification', true, {'type': 'failure', message: 'Invalid Email error', duration: 3000});
+            sendMessage('notification', true, {'type': 'failure', message: 'Invalid Email error', duration: 3000});
           }
       })
       .catch((error) => {
@@ -62,13 +78,37 @@ export default class Tenant extends React.Component<Props, State> {
       })
   }
 
+  clearError() {
+    this.setState({
+      errorFields: {
+        name: false,
+        email: false,
+        password: false,
+        repeatPassword: false
+      }
+    })
+  }
+
   createTenant = (event) => {
     event.preventDefault();
     const that = this;
+    this.clearError();
     if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email))) {
+      this.setState({
+        errorFields: {
+          ...this.state.errorFields,
+          email: true
+        }
+      })
       sendMessage('notification', true, {type: 'failure', message: 'Email ID is invalid', duration: 3000});
       return;
     } else if(this.state.password!=this.state.repeatPassword){
+      this.setState({
+        errorFields: {
+          ...this.state.errorFields,
+          repeatPassword: true
+        }
+      })
       sendMessage('notification', true, {'type': 'failure', message: 'Password and repeat password should be same', duration: 3000});
     } else {
       // tenant creation service call 
@@ -149,10 +189,10 @@ export default class Tenant extends React.Component<Props, State> {
       <div className="tenant boxed">
         <div className="typography-3 space-bottom-4">Tenant creation</div>
         {this.state.pageNo === 1 && <div className="form">
-          <ArcText id="name" data={this.state} label="Tenant Name"  handleChange={e => this.handleChange(e)}></ArcText>
-          <ArcText id="email" data={this.state} label="Email"  handleChange={e => this.handleChange(e)}></ArcText>
-          <ArcText id="password" data={this.state} label="Password"  handleChange={e => this.handleChange(e)}></ArcText>
-          <ArcText id="repeatPassword" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)}></ArcText>
+          <ArcText id="name" data={this.state} label="Tenant Name"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+          <ArcText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+          <ArcText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+          <ArcText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <button className="primary alt animate" onClick={this.createTenant}>Next</button>
         </div>}
       </div>
