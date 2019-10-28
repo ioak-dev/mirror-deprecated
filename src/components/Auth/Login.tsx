@@ -12,12 +12,14 @@ import {isEmptyOrSpaces} from "../Utils";
 const queryString = require('query-string');
 
 interface Props {
+    setProfile: Function,
     getAuth: Function,
     addAuth: Function,
     removeAuth: Function,
     cookies: any,
     history: any,
     profile:any,
+    match: any,
     location:any,
     authorization: Authorization
 }
@@ -43,12 +45,24 @@ class Login extends Component<Props, State> {
     componentDidMount(){
         if(this.props.location.search){
             const query = queryString.parse(this.props.location.search)
-            if(query&&query.type==='signup'){
+            if (query && query.type === 'signup') {
                 this.setState({
                     newuser : true
                 })
             }
+            if (query && query.jwt) {
+                this.loginViaJwt(query.jwt);
+            }
         }
+
+        this.props.setProfile({
+            ...this.props.profile,
+            tenant: this.props.match.params.tenant
+        })
+    }
+
+    loginViaJwt = (jwt: string) => {
+        console.log(jwt);
     }
 
     login = (event) => {
@@ -231,7 +245,7 @@ class Login extends Component<Props, State> {
                         <ArcText label="Name" id="name" data={this.state} handleChange={e => this.handleChange(e)} />
                         <ArcText label="E-mail" id="email" data={this.state} handleChange ={e=> this.handleChange(e)} />
                         <ArcText label="Password" type="password" id="password" data={this.state} handleChange={e => this.handleChange(e)} />
-                        <ArcText label="Repeate Password" type="password"  id="repeatpassword" data={this.state} handleChange={e => this.handleChange(e)} />
+                        <ArcText label="Repeat Password" type="password"  id="repeatpassword" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
                         <button className="primary block" onClick={this.signup}>Create Account</button>
