@@ -30,7 +30,7 @@ export default class Home extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    sendMessage('navbar-transparency', true);
+    // sendMessage('navbar-transparency', true);
     window.addEventListener("scroll", this.handleScroll);
     this.props.setProfile({
       ...this.props.profile,
@@ -41,7 +41,7 @@ export default class Home extends React.Component<Props, State> {
   componentWillUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
     sendMessage('show-navbar-element', false);
-    sendMessage('navbar-transparency', false);
+    // sendMessage('navbar-transparency', false);
   }
 
 
@@ -60,7 +60,7 @@ export default class Home extends React.Component<Props, State> {
 
     if (this.state.showMainSearchBar !== showMainSearchBar) {
       if (!showMainSearchBar) {
-        sendMessage('navbar-transparency', false);
+        // sendMessage('navbar-transparency', false);
         sendMessage('show-navbar-element', true, {
           element: 
             <>
@@ -72,7 +72,7 @@ export default class Home extends React.Component<Props, State> {
             </>
         });
       } else {
-        sendMessage('navbar-transparency', true);
+        // sendMessage('navbar-transparency', true);
         sendMessage('show-navbar-element', false);
       }
     }

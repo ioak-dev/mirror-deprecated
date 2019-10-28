@@ -66,13 +66,13 @@ class Desktop extends Component<Props, State> {
                     <div className="action">
                         {/* <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">palette</i>Theme</button> */}
                         {this.props.authorization.isAuth && 
-                            <button className="primary animate small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</button>}
+                            <button className="primary animate in alt right small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</button>}
                         {this.props.authorization.isAuth && 
-                            <button className="default block small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
+                            <button className="primary animate out alt right small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
                         {!this.props.authorization.isAuth && 
-                            <button className="default block small" onClick={() => this.signin('signin')}><i className="material-icons">person</i>Login</button>}
+                            <button className="default animate in right small" onClick={() => this.signin('signin')}><i className="material-icons">person</i>Login</button>}
                         {!this.props.authorization.isAuth && 
-                            <button className="default block small" onClick={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</button>}
+                            <button className="default animate in right small" onClick={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</button>}
                     </div>
                 </div>
             </div>

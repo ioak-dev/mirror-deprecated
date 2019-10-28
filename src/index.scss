@@ -44,8 +44,10 @@ code {
   --color-primary-alt: #1BA88C;
   --color-secondary: #114B5F;
   --color-secondary-alt: #265B6D;
-  --color-default: #232a34;
-  --color-default-alt: #373D46;
+  --color-dark: #232a34;
+  --color-dark-alt: #373D46;
+  --color-light: white;
+  --color-light-alt: white;
   --color-white: white;
   --color-black: black;
   --color-success: #437A34;
@@ -65,8 +67,10 @@ code {
   --color-btn-primary-bg-hover: var(--color-primary-alt);
   --color-btn-secondary-bg: var(--color-secondary);
   --color-btn-secondary-bg-hover: var(--color-secondary-alt);
-  --color-btn-default-bg: var(--color-default);
-  --color-btn-default-bg-hover: var(--color-default-alt);
+  --color-btn-dark-bg: var(--color-dark);
+  --color-btn-dark-bg-hover: var(--color-dark-alt);
+  --color-btn-light-bg: var(--color-light);
+  --color-btn-light-bg-hover: var(--color-light-alt);
   --color-btn-invert-bg: var(--color-body);
   --color-btn-invert-bg-hover: var(--color-body-dim);
 

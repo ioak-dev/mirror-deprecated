@@ -230,12 +230,12 @@ class Login extends Component<Props, State> {
                             <ArcText label="Password" type="password"  id="password"   data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
-                        <button className="primary block"  onClick={this.login}>Sign In</button>
+                        <button className="primary animate out right"  onClick={this.login}>Sign In</button>
                         <br /> <br />
-                        Don't have an account? <button className="secondary block"  onClick={this.toggle}>Sign Up</button>
+                        Don't have an account? <button className="default animate right small"  onClick={this.toggle}>Sign Up</button>
                     </form>
                     <br />
-                    <button className="invert" onClick={this.sentEmailWithCode}>Forgot password ?</button>
+                    <button className="default animate right small" onClick={this.sentEmailWithCode}>Forgot password ?</button>
                 </div>}
 
                 {this.state.newuser && <div className="container">
