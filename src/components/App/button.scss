@@ -30,6 +30,7 @@ button {
   cursor: pointer;
   // transition: 0.8s;
   // transition: .4s cubic-bezier(.7,0,.3,1);
+  // text-transform: uppercase;
   transition: .4s cubic-bezier(.5,1.6,.4,.7);
   position: relative;
   overflow: hidden;
@@ -45,15 +46,15 @@ button {
   }
   
   // Button placement against each other
-  &.left {
+  &.align-left {
     margin-right: 5px;
   }
 
-  &.right {
+  &.align-right {
     margin-left: 5px;
   }
 
-  &.center {
+  &.align-center {
     margin-left: 5px;
     margin-right: 5px;
   }

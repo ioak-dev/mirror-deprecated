@@ -182,9 +182,9 @@ export default class Tenant extends React.Component<Props, State> {
           <ArcText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <ArcText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <ArcText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-          <button className="primary alt animate" onClick={this.submit}>Next</button>
+          <button className="primary animate in right" onClick={this.submit}>Next</button>
         </div>}
-        {this.state.created && <button className="primary alt block" onClick={this.gotoTenantPage}>Take me to my tenant</button>}
+        {this.state.created && <button className="primary animate out right" onClick={this.gotoTenantPage}>Take me to my tenant</button>}
       </div>
     );
   }

@@ -15,7 +15,7 @@ export default class Landing extends React.Component {
           <p><em><b>Queen</b></em> [repulsed] The heart of a pig?! Then I've been tricked!</p>
         </div>
         <div className="action">
-          <NavLink to="/tenant" className="navitem" activeClassName="active"><button className="primary block">Create Tenant</button></NavLink>
+          <NavLink to="/tenant" className="navitem" activeClassName="active"><button className="primary animate out right">Create Tenant</button></NavLink>
         </div>
       </div>
     );
