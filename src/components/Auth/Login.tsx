@@ -6,7 +6,7 @@ import './Login.scss';
 import { Authorization } from '../Types/GeneralTypes';
 import ArcText from '../Ux/ArcText';
 import { sendMessage } from '../../events/MessageService';
-import {signin, preSignin,sentPasswordChangeEmail, preSignup, signup} from './AuthService';
+import {signinWithJwt, signin, preSignin,sentPasswordChangeEmail, preSignup, signup} from './AuthService';
 import {isEmptyOrSpaces} from "../Utils";
 
 const queryString = require('query-string');
@@ -62,7 +62,24 @@ class Login extends Component<Props, State> {
     }
 
     loginViaJwt = (jwt: string) => {
-        console.log(jwt);
+        signinWithJwt({
+            tenantName: this.props.match.params.tenant,
+            jwt:jwt
+        })
+        .then((response) => {
+            if (response.status === 200) {
+                sendMessage('notification', true, {message: 'Signed In successfully', type: 'success', duration: 3000});
+                this.success(response.data);
+            } else if (response.status === 500) {
+                sendMessage('notification', true, {message: 'Signature verification failed', type: 'failure', duration: 3000});
+            } else {
+                console.log(response);
+                sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
+            }
+        })
+        .catch((error) => {
+            sendMessage('notification', true, {'type': 'failure', message: 'Unknown error. Please try again or at a later time', duration: 3000});
+        });
     }
 
     login = (event) => {

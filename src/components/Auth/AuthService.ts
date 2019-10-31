@@ -23,15 +23,10 @@ export function signup(data) {
 }
 
 export function createTenant(data) {
-    console.log({
-        tenantName: data.tenantName,
-        email: data.email,
-        problem: encrypt(data.password, data.solution, data.salt),
-        solution: data.solution
-        });
     return httpPost(constants.API_URL_TENANT_CREATE, {
         tenantName: data.tenantName,
         email: data.email,
+        jwtPassword:data.jwtPassword,
         problem: encrypt(data.password, data.solution, data.salt),
         solution: data.solution
         }, null)
@@ -66,6 +61,16 @@ export function signin(data, problem) {
             return Promise.resolve(error);
         }
     }
+}
+
+export function signinWithJwt(data){
+
+    return httpPost(constants.API_URL+data.tenantName+constants.API_JWT, {
+        jwtToken: data.jwt
+    }, null)
+        .then(function(response){
+            return Promise.resolve(response);
+        });
 }
 
 export function sentPasswordChangeEmail(data, type) {

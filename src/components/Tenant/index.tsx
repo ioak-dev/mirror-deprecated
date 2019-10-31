@@ -18,12 +18,14 @@ interface State {
   pageNo: number,
   password: string,
   repeatPassword: string,
+  jwtPassword:string,
   created: boolean,
   errorFields: {
     name: boolean,
     email: boolean,
     password: boolean,
-    repeatPassword: boolean
+    repeatPassword: boolean,
+    jwtPassword:boolean
   }
 }
 export default class Tenant extends React.Component<Props, State> {
@@ -36,13 +38,15 @@ export default class Tenant extends React.Component<Props, State> {
       email: '',
       password: '',
       repeatPassword: '',
+      jwtPassword:'',
       pageNo: 1,
       created: false,
       errorFields: {
         name: false,
         email: false,
         password: false,
-        repeatPassword: false
+        repeatPassword: false,
+        jwtPassword: false
       }
     }
   }
@@ -82,7 +86,8 @@ export default class Tenant extends React.Component<Props, State> {
         name: false,
         email: false,
         password: false,
-        repeatPassword: false
+        repeatPassword: false,
+        jwtPassword:false
       }
     })
   }
@@ -145,6 +150,7 @@ export default class Tenant extends React.Component<Props, State> {
       tenantName: this.state.name,
       email: this.state.email,
       password: this.state.password,
+      jwtPassword:this.state.jwtPassword,
       solution: preSignupData.solution,
       salt: preSignupData.salt
     })
@@ -175,6 +181,7 @@ export default class Tenant extends React.Component<Props, State> {
           <ArcText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <ArcText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <ArcText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+          <ArcText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <button className="primary alt animate" onClick={this.submit}>Next</button>
         </div>}
         {this.state.created && <button className="primary alt block" onClick={this.gotoTenantPage}>Take me to my tenant</button>}
