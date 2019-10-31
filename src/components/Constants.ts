@@ -11,6 +11,6 @@ export const constants ={
     API_SIGNIN:"/signin",
     API_SIGNUP:"/signup",
     API_KEYS:"/keys",
-    API_JWT: "/jwttest"
+    API_JWT: "/signin/jwt"
 }
     

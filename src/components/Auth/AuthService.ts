@@ -65,7 +65,7 @@ export function signin(data, problem) {
 
 export function signinWithJwt(data){
 
-    return httpPost(constants.API_URL+data.tenantName+constants.API_JWT, {
+    return httpPost(constants.API_URL + data.tenantName + constants.API_JWT, {
         jwtToken: data.jwt
     }, null)
         .then(function(response){
