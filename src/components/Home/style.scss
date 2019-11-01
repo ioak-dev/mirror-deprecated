@@ -15,10 +15,12 @@
         overflow: hidden;
         position: absolute;
         margin-top: calc(0px - var(--height-nav));
+        // object-fit: fill;
+        height: 50vh;
         img {
             width: 100%;
             @media (max-width: 767px) {
-                width: 200%;
+                // width: 200%;
             }
         }
     }
