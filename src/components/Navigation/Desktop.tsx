@@ -20,8 +20,7 @@ interface Props {
     login: Function,
     transparent: boolean,
     logout: Function,
-    toggleSettings: any,
-    handleSearchTextChange: Function
+    toggleSettings: any
 }
 
 interface State {
@@ -60,7 +59,7 @@ class Desktop extends Component<Props, State> {
                     {!this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white} alt="Curate logo" />}
                     {(this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white} alt="Curate logo" />}
                     <Links authorization={this.props.authorization} profile={this.props.profile}/>
-                    {this.state.showSearchBar && <SearchBar value={this.props.profile.searchText} handleChange={this.props.handleSearchTextChange} />}
+                    {this.state.showSearchBar && <SearchBar alt />}
                 </div>
                 <div className="right">
                     <div className="action">

@@ -13,7 +13,7 @@ function ArcText(props: Props) {
     return (
         <div className="arc-text-field">
             <label>{props.label}</label>
-            <input className={props.errorFields && props.errorFields[props.id] ? "error" : ""}type={props.type ? props.type : "text"} name={props.id} value={props.data[props.id]} onChange={props.handleChange}></input>
+            <input autoComplete="off" className={props.errorFields && props.errorFields[props.id] ? "error" : ""}type={props.type ? props.type : "text"} name={props.id} value={props.data[props.id]} onChange={props.handleChange}></input>
         </div>
     )
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import './style.scss';
 import mirror_white from '../../images/mirror_white.svg';
+import mirror_white_small from '../../images/mirror_white_small.svg';
 import mirror_black from '../../images/mirror_black.svg';
 import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
@@ -21,8 +22,7 @@ interface Props {
     login: Function,
     transparent: boolean,
     logout: Function,
-    toggleSettings: any,
-    handleSearchTextChange: Function
+    toggleSettings: any
 }
 
 interface State {
@@ -65,9 +65,11 @@ class Mobile extends Component<Props, State> {
             <>
             <div className={(this.props.transparent ? "navbar mobile transparent" : "navbar mobile")}>
                 <div className="left">
-                    {!this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white} alt="Curate logo" />}
-                    {(this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white} alt="Curate logo" />}
-                    {this.state.showSearchBar && <SearchBar value={this.props.profile.searchText} handleChange={this.props.handleSearchTextChange} />}
+                    {!this.state.showSearchBar && !this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white} alt="Mirror logo" />}
+                    {!this.state.showSearchBar && (this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white} alt="Mirror logo" />}
+                    {this.state.showSearchBar && !this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white_small} alt="Mirror logo" />}
+                    {this.state.showSearchBar && (this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white_small} alt="Mirror logo" />}
+                    {this.state.showSearchBar && <SearchBar alt />}
                     {/* links */}
                 </div>
                 <div className="right">

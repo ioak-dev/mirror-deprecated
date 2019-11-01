@@ -118,19 +118,11 @@ class Navigation extends Component<Props, State> {
         })
     }
 
-
-    handleSearchTextChange = (event) => {
-      this.props.setProfile({
-        ...this.props.profile,
-        searchText: event.target.value
-      })
-    }
-
     render() {
         return (
             <div className="nav">
-                <Desktop {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} handleSearchTextChange={this.handleSearchTextChange} />
-                <Mobile {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} handleSearchTextChange={this.handleSearchTextChange} />
+                <Desktop {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
+                <Mobile {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
             </div>
         );
     }
