@@ -19,6 +19,7 @@ interface State {
   password: string,
   repeatPassword: string,
   jwtPassword:string,
+  banner: any,
   created: boolean,
   errorFields: {
     name: boolean,
@@ -39,6 +40,7 @@ export default class Tenant extends React.Component<Props, State> {
       password: '',
       repeatPassword: '',
       jwtPassword:'',
+      banner: null,
       pageNo: 1,
       created: false,
       errorFields: {
@@ -145,6 +147,12 @@ export default class Tenant extends React.Component<Props, State> {
     });
   }
 
+  handleImageChange = (e) => {
+    this.setState({
+      banner: e.target.files[0]
+    })
+  };
+
   createTenant = (preSignupData) => {
     createTenant({
       tenantName: this.state.name,
@@ -152,7 +160,8 @@ export default class Tenant extends React.Component<Props, State> {
       password: this.state.password,
       jwtPassword:this.state.jwtPassword,
       solution: preSignupData.solution,
-      salt: preSignupData.salt
+      salt: preSignupData.salt,
+      banner: this.state.banner
     })
     .then((response) => {
       if (response.status === 200) {
@@ -182,6 +191,9 @@ export default class Tenant extends React.Component<Props, State> {
           <ArcText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <ArcText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <ArcText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+          <input type="file"
+                   id="image"
+                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
           <button className="primary animate in right" onClick={this.submit}>Next</button>
         </div>}
         {this.state.created && <button className="primary animate out right" onClick={this.gotoTenantPage}>Take me to my tenant</button>}

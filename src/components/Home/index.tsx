@@ -4,6 +4,7 @@ import cover from '../../images/cover.jpg';
 import SearchBar from '../Ux/SearchBar';
 
 import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { getTenant } from '../Tenant/TenantService';
 
 
 const pageYOffsetCutoff = 10;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 interface State {
+  banner: any,
   prevScrollpos: number,
   showMainSearchBar: boolean
 }
@@ -23,7 +25,7 @@ export default class Home extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-
+      banner: null,
       prevScrollpos: window.pageYOffset,
       showMainSearchBar: true
     };
@@ -42,6 +44,24 @@ export default class Home extends React.Component<Props, State> {
     window.removeEventListener("scroll", this.handleScroll);
     sendMessage('show-navbar-element', false);
     // sendMessage('navbar-transparency', false);
+  }
+
+  componentWillReceiveProps(nextProps) {
+      if (nextProps.authorization) {
+        getTenant(this.props.match.params.tenant,  {
+          headers: {
+              Authorization: nextProps.authorization.token
+          }
+        }).then ((response) => {
+          if (response.status === 200 && response.data) {
+            this.setState({banner: 'data:image/jpeg;base64,' + response.data});
+          } else {
+            this.setState({banner: cover});
+          }
+        }).catch(() => {
+          this.setState({banner: cover});
+        })
+      }
   }
 
 
@@ -88,7 +108,8 @@ export default class Home extends React.Component<Props, State> {
       <>
         <div className="home full">
             <div className='cover'>
-              <img src={cover}/>
+              {/* <img src={cover}/> */}
+              <img src={this.state.banner} alt="Red dot" />
             </div>
             {this.state.showMainSearchBar && <SearchBar value={this.props.profile.searchText} handleChange={this.handleSearchTextChange} />}
             <br /> Search results goes here

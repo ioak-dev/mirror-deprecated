@@ -73,7 +73,6 @@ class Login extends Component<Props, State> {
             } else if (response.status === 500) {
                 sendMessage('notification', true, {message: 'Signature verification failed', type: 'failure', duration: 3000});
             } else {
-                console.log(response);
                 sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
             }
         })
@@ -104,7 +103,6 @@ class Login extends Component<Props, State> {
                             } else if (response.status === 401) {
                                 sendMessage('notification', true, {message: 'Incorrect passphrase', type: 'failure', duration: 3000});
                             } else {
-                                console.log(response);
                                 sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
                             }
                         })
