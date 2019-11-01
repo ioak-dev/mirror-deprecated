@@ -151,6 +151,8 @@ export default class Tenant extends React.Component<Props, State> {
     this.setState({
       banner: e.target.files[0]
     })
+
+    console.log(e.target.files[0]);
   };
 
   createTenant = (preSignupData) => {
@@ -191,10 +193,15 @@ export default class Tenant extends React.Component<Props, State> {
           <ArcText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <ArcText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
           <ArcText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-          <input type="file"
-                   id="image"
-                   accept="image/png, image/jpeg"  onChange={this.handleImageChange} required/>
-          <button className="primary animate in right" onClick={this.submit}>Next</button>
+          <label className="file-upload space-top-1 space-bottom-4">
+            <input type="file" accept="image/png, image/jpeg" onChange={this.handleImageChange} required/>
+            <i className="material-icons">add_photo_alternate</i>
+            {!this.state.banner && "Choose Banner/Cover Image"}
+            {this.state.banner && this.state.banner.name}
+          </label>
+          <div className="action">
+            <button className="primary animate in right" onClick={this.submit}>Create Tenant</button>
+          </div>
         </div>}
         {this.state.created && <button className="primary animate out right" onClick={this.gotoTenantPage}>Take me to my tenant</button>}
       </div>

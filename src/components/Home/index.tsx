@@ -4,7 +4,7 @@ import cover from '../../images/cover.jpg';
 import SearchBar from '../Ux/SearchBar';
 
 import { sendMessage, receiveMessage } from '../../events/MessageService';
-import { getTenant } from '../Tenant/TenantService';
+import { getBanner } from '../Tenant/TenantService';
 
 
 const pageYOffsetCutoff = 10;
@@ -48,7 +48,7 @@ export default class Home extends React.Component<Props, State> {
 
   componentWillReceiveProps(nextProps) {
       if (nextProps.authorization) {
-        getTenant(this.props.match.params.tenant,  {
+        getBanner(this.props.match.params.tenant,  {
           headers: {
               Authorization: nextProps.authorization.token
           }
