@@ -15,6 +15,8 @@
         overflow: hidden;
         position: absolute;
         margin-top: calc(0px - var(--height-nav));
+        // object-fit: fill;
+        height: 50vh;
         img {
             width: 100%;
             @media (max-width: 767px) {
@@ -22,4 +24,9 @@
             }
         }
     }
+
+    // .search-results {
+    //     position: absolute;;
+    //     margin-top: 300px;
+    // }
 }

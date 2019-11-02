@@ -12,7 +12,7 @@ export function preSignup(data) {
 }
 
 export function signup(data) {
-    return httpPost(constants.API_URL+data.name+constants.API_SIGNUP, {
+    return httpPost(constants.API_URL+data.tenantName+constants.API_SIGNUP, {
         email: data.email,
         problem: encrypt(data.password, data.solution, data.salt),
         solution: data.solution
@@ -23,18 +23,16 @@ export function signup(data) {
 }
 
 export function createTenant(data) {
-    console.log({
-        tenantName: data.tenantName,
-        email: data.email,
-        problem: encrypt(data.password, data.solution, data.salt),
-        solution: data.solution
-        });
-    return httpPost(constants.API_URL_TENANT_CREATE, {
-        tenantName: data.tenantName,
-        email: data.email,
-        problem: encrypt(data.password, data.solution, data.salt),
-        solution: data.solution
-        }, null)
+    const formData = new FormData();
+    formData.append('tenantName', data.tenantName);
+    formData.append('email', data.email);
+    formData.append('jwtPassword', data.jwtPassword);
+    formData.append('problem', encrypt(data.password, data.solution, data.salt));
+    formData.append('solution', data.solution);
+    if(data.banner) {
+        formData.append('banner', data.banner, 'banner.jpg');
+    }
+    return httpPost(constants.API_URL_TENANT_CREATE, formData, {'Content-Type': 'multipart/form-data'})
         .then(function(response) {
             return Promise.resolve(response);
         })
@@ -66,6 +64,16 @@ export function signin(data, problem) {
             return Promise.resolve(error);
         }
     }
+}
+
+export function signinWithJwt(data){
+
+    return httpPost(constants.API_URL + data.tenantName + constants.API_JWT, {
+        jwtToken: data.jwt
+    }, null)
+        .then(function(response){
+            return Promise.resolve(response);
+        });
 }
 
 export function sentPasswordChangeEmail(data, type) {

@@ -1,4 +1,4 @@
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { Message } from '../components/Types/GeneralTypes';
 
 const subject = new Subject<Message>();

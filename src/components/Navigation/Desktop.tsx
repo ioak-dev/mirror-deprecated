@@ -20,8 +20,7 @@ interface Props {
     login: Function,
     transparent: boolean,
     logout: Function,
-    toggleSettings: any,
-    handleSearchTextChange: Function
+    toggleSettings: any
 }
 
 interface State {
@@ -60,19 +59,19 @@ class Desktop extends Component<Props, State> {
                     {!this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white} alt="Curate logo" />}
                     {(this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white} alt="Curate logo" />}
                     <Links authorization={this.props.authorization} profile={this.props.profile}/>
-                    {this.state.showSearchBar && <SearchBar value={this.props.profile.searchText} handleChange={this.props.handleSearchTextChange} />}
+                    {this.state.showSearchBar && <SearchBar alt />}
                 </div>
                 <div className="right">
                     <div className="action">
                         {/* <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">palette</i>Theme</button> */}
                         {this.props.authorization.isAuth && 
-                            <button className="primary animate small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</button>}
+                            <button className="primary animate in alt right align-left small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</button>}
                         {this.props.authorization.isAuth && 
-                            <button className="default block small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
+                            <button className="primary animate out alt right align-right small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
                         {!this.props.authorization.isAuth && 
-                            <button className="default block small" onClick={() => this.signin('signin')}><i className="material-icons">person</i>Login</button>}
+                            <button className="primary animate in alt right align-left small" onClick={() => this.signin('signin')}><i className="material-icons">person</i>Login</button>}
                         {!this.props.authorization.isAuth && 
-                            <button className="default block small" onClick={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</button>}
+                            <button className="primary animate in alt right align-right small" onClick={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</button>}
                     </div>
                 </div>
             </div>

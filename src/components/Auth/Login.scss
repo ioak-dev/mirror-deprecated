@@ -1,7 +1,7 @@
 .login {
     height: 100vh;
     @media (min-width: 768px) {
-        background: url('../../images/mirror.jpg') no-repeat center center;
+        background: url('../../images/login_bg.jpg') no-repeat center center;
         background-size: cover;
 
         .nav-trans {
@@ -22,8 +22,9 @@
     }
 
     .container {
-        background: var(--color-body);
         position: absolute;
+        background: var(--color-body);
+        color: var(--color-body-invert);
 
         .form {
             width: 15rem;

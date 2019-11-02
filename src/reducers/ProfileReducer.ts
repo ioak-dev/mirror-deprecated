@@ -2,8 +2,7 @@ import { GET_PROFILE, SET_PROFILE } from '../actions/types';
 
 const initialState = {
     theme: 'theme_light',
-    tenant: '',
-    searchText: ''
+    tenant: ''
 }
 
 export default function(state = initialState, action) {

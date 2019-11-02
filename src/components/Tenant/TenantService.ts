@@ -17,3 +17,20 @@ export function sentTenantUrl(data) {
     
 
 
+export function getTenant(tenantName, headers) {
+    return httpGet(constants.API_URL_TENANT + '/' + tenantName, headers)
+        .then(function(response) {
+            return Promise.resolve(response);
+        })
+}
+
+
+export function getBanner(tenantName, headers) {
+    return httpGet(constants.API_URL_TENANT_BANNER + '/' + tenantName, headers)
+        .then(function(response) {
+            return Promise.resolve(response);
+        })
+}
+    
+
+
