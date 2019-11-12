@@ -151,8 +151,6 @@ export default class Tenant extends React.Component<Props, State> {
     this.setState({
       banner: e.target.files[0]
     })
-
-    console.log(e.target.files[0]);
   };
 
   createTenant = (preSignupData) => {

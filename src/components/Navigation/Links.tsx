@@ -26,7 +26,7 @@ class Links extends Component<Props, State> {
                 {this.props.authorization.isAuth &&
                     <>
                     <NavLink to={"/" + this.props.profile.tenant + "/home"} className="navitem" activeClassName="active">Home</NavLink>
-                    <NavLink to={"/" + this.props.profile.tenant + "/login"} className="navitem" activeClassName="active">Login</NavLink>
+                    <NavLink to={"/" + this.props.profile.tenant + "/settings"} className="navitem" activeClassName="active">Settings</NavLink>
                     </>
                 }
             </div>
