@@ -29,6 +29,10 @@
                 color: var(--color-body-invert);
             }
         }
+
+        &.disabled {
+            background-color: var(--color-body);
+        }
     }
 
     label {

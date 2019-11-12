@@ -1,7 +1,8 @@
 export interface Authorization {
     isAuth: boolean,
     firstname?: string,
-    lastname?: string
+    lastname?: string,
+    token?: string
 }
 
 export interface Profile {

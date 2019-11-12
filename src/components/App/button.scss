@@ -142,6 +142,12 @@ button {
         color: var(--color-btn-dark-bg);
       }
     }
+    &.block {
+      color: var(--color-btn-light-bg);
+      &:hover {
+        color: var(--color-btn-light-bg);
+      }
+    }
 
     &.alt {
       border-color: var(--color-btn-light-bg);
@@ -162,6 +168,12 @@ button {
         color: var(--color-btn-dark-bg);
         &:hover {
           color: var(--color-btn-light-bg);
+        }
+      }
+      &.block {
+        color: var(--color-btn-dark-bg);
+        &:hover {
+          color: var(--color-btn-dark-bg);
         }
       }
     }
@@ -192,6 +204,10 @@ button {
     @media (max-width: 767px) {
       padding: 5px 16px !important;
     }
+  }
+
+  .uppercase {
+    text-transform: uppercase;
   }
 
   // &.animate {

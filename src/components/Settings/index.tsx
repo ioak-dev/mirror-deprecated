@@ -2,11 +2,17 @@ import React, { Component } from 'react';
 import './style.scss';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import ArcText from '../Ux/ArcText';
+import { getTenant } from '../Tenant/TenantService';
+import { Authorization } from '../Types/GeneralTypes';
+import ViewResolver from '../Ux/ViewResolver';
+import View from '../Ux/View';
+import Sidebar from '../Ux/Sidebar';
 
 interface Props {
     match: any,
     setProfile: Function,
-    profile: any
+    profile: any,
+    authorization: Authorization
 }
 
 interface State { 
@@ -18,7 +24,11 @@ interface State {
     name: boolean,
     email: boolean,
     jwtPassword:boolean
-  }
+  },
+
+  section: String,
+
+  sidebarElements: any
 }
 
 class Settings extends Component<Props, State> {
@@ -33,8 +43,58 @@ class Settings extends Component<Props, State> {
             name: false,
             email: false,
             jwtPassword: false
+          },
+          section: 'tenantProfile',
+
+          sidebarElements: {
+            tenant: [
+                {
+                    label: 'Profile',
+                    action: () => this.chooseSection('tenantProfile'),
+                    icon: 'info'
+                }
+            ],
+            user: [
+                {
+                    label: 'Profile',
+                    action: () => this.chooseSection('userProfile'),
+                    icon: 'info'
+                },
+                {
+                    label: 'Password',
+                    action: () => this.chooseSection('userPassword'),
+                    icon: 'security'
+                }
+            ]
           }
         }
+    }
+
+    componentDidMount() {
+      this.props.setProfile({
+        ...this.props.profile,
+        tenant: this.props.match.params.tenant
+      })
+
+        getTenant(this.props.match.params.tenant,  {
+            headers: {
+                Authorization: this.props.authorization.token
+            }
+        }).then ((response) => {
+            this.setState({
+                name: response.data.name,
+                email: response.data.ownerEmail,
+                jwtPassword: response.data.jwtPassword
+            })
+        }).catch(() => {
+        })
+    }
+
+    chooseSection = (section: String) => {
+        this.setState({
+            section: section
+        });
+        sendMessage('sidebar', false);
     }
 
     handleImageChange = (e) => {
@@ -58,21 +118,44 @@ class Settings extends Component<Props, State> {
 
     render() {
         return (
-            <div className="tenant boxed">
-                <div className="typography-3 space-bottom-2">Tenant Profile</div>
-                <div className="form">
-                    <ArcText id="name" data={this.state} label="Tenant Name"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-                    <ArcText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-                    <ArcText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-                    <ArcText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-                    <ArcText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-                    <label className="file-upload space-top-1 space-bottom-4">
-                        <input type="file" accept="image/png, image/jpeg" onChange={this.handleImageChange} required/>
-                        <i className="material-icons">add_photo_alternate</i>
-                        {!this.state.banner && "Choose Banner/Cover Image"}
-                        {this.state.banner && this.state.banner.name}
-                    </label>
-                </div>
+            <div className="settings">
+                
+                <ViewResolver sideLabel='More options'>
+                    <View main>
+                        {this.state.section === 'tenantProfile' && 
+                        <>
+                        <div className="typography-3 space-bottom-2">Tenant Profile</div>
+                        <div className="form">
+                            <ArcText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+                            <ArcText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+                            <label className="file-upload space-top-1 space-bottom-4">
+                                <input type="file" accept="image/png, image/jpeg" onChange={this.handleImageChange} required/>
+                                <i className="material-icons">add_photo_alternate</i>
+                                {!this.state.banner && "Choose Banner/Cover Image"}
+                                {this.state.banner && this.state.banner.name}
+                            </label>
+                        </div>
+                        </>}
+
+                        {this.state.section === 'userProfile' && 
+                        <>
+                        <div className="typography-3 space-bottom-2">User Profile</div>
+                        </>}
+
+                        {this.state.section === 'userPassword' && 
+                        <>
+                        <div className="typography-3 space-bottom-2">Change Login Password</div>
+                        </>}
+                    </View>
+                    <View side>
+                            <div className="filter-container">
+                                <div className="section-main">
+                                    <Sidebar label="Tenant" elements={this.state.sidebarElements['tenant']} icon="home" animate />
+                                    <Sidebar label="User" elements={this.state.sidebarElements['user']} icon="account_circle" animate />
+                                </div>
+                            </div>
+                    </View>
+                </ViewResolver>
             </div>
         );
     }

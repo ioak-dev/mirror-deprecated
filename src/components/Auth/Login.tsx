@@ -178,6 +178,7 @@ class Login extends Component<Props, State> {
 
         });
         sendMessage('loggedin', true);
+        console.log(data);
         this.props.cookies.set('isAuth', true);
         this.props.cookies.set('token', data.token);
         this.props.cookies.set('secret', data.secret);
