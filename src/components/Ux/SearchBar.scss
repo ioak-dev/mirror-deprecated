@@ -20,6 +20,7 @@ form {
                 text-align: center;
                 white-space: nowrap;
                 padding: 14.4px 24px;
+                padding: 3px 24px;
                 border: none;
                 // line-height: 25px;
                 // padding: 14.4px 16px;
@@ -32,6 +33,7 @@ form {
 
         input {
             // z-index: 0;
+            height: 20px;
             border-radius: 3px 0px 0px 3px;
         }
 
