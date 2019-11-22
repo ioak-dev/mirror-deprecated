@@ -32,5 +32,10 @@ export function getBanner(tenantName, headers) {
         })
 }
     
-
+export function updateTenant(data, headers){
+    return httpPut(constants.API_URL_TENANT_STAGE + '/' + data.name, data, headers)
+        .then(function(response){
+            return Promise.resolve(response)
+        })
+}
 

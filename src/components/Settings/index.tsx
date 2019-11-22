@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import './style.scss';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import ArcText from '../Ux/ArcText';
-import { getTenant } from '../Tenant/TenantService';
+import { getTenant, updateTenant } from '../Tenant/TenantService';
 import { Authorization } from '../Types/GeneralTypes';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import Sidebar from '../Ux/Sidebar';
+import { any } from 'prop-types';
 
 interface Props {
     match: any,
@@ -20,6 +21,9 @@ interface State {
   email: string,
   jwtPassword:string,
   banner: any,
+  stage: Array<String>,
+  stages: any,
+  _id: any,
   errorFields: {
     name: boolean,
     email: boolean,
@@ -39,19 +43,27 @@ class Settings extends Component<Props, State> {
           email: '',
           jwtPassword:'',
           banner: null,
+          stage: [],
+          stages: '',
+          _id: any,
           errorFields: {
             name: false,
             email: false,
             jwtPassword: false
           },
           section: 'tenantProfile',
-
+          
           sidebarElements: {
             tenant: [
                 {
                     label: 'Profile',
                     action: () => this.chooseSection('tenantProfile'),
                     icon: 'info'
+                },
+                {
+                    label:'Stages',
+                    action: () => this.chooseSection('stage'),
+                    icon:'info'
                 }
             ],
             user: [
@@ -84,7 +96,9 @@ class Settings extends Component<Props, State> {
             this.setState({
                 name: response.data.name,
                 email: response.data.ownerEmail,
-                jwtPassword: response.data.jwtPassword
+                jwtPassword: response.data.jwtPassword,
+                stage: response.data.stage,
+                _id: response.data._id,
             })
         }).catch(() => {
         })
@@ -101,6 +115,33 @@ class Settings extends Component<Props, State> {
       this.setState({
         banner: e.target.files[0]
       })
+    }
+
+    handleAddStage= e => {
+        e.preventDefault()
+        const stage = this.state.stage.concat(this.state.stages)
+        this.setState(state =>({
+            stage: [...this.state.stage,this.state.stages]
+        }))
+    }
+
+    handleRemoveStage = idx => () =>{
+        this.setState({
+            stage: [...this.state.stage.filter((s, sidx) => idx != sidx)]
+        })
+    }
+
+    levels = () => {
+        updateTenant({
+            name: this.state.name,
+            _id: this.state._id,
+            data: this.state.stage,
+        },{
+        headers: {
+            Authorization: this.props.authorization.token
+        }
+       }
+    ) 
     }
 
     handleChange = (event) => {
@@ -137,6 +178,22 @@ class Settings extends Component<Props, State> {
                         </div>
                         </>}
 
+                        {this.state.section === 'stage' &&
+                        <>
+                        <div className="typography-3 space-bottom-2">Support Levels</div>
+                        <div className="form">
+                           {this.state.stage.map((item, idx) => (
+                                <>
+                                    <ArcText  id="stages" label="" data={item} handleChange ={ (e) =>this.handleChange(e) } />
+                                    <button className="primary animate out small" onClick={this.handleRemoveStage(idx)}>-</button>
+                                </>
+                            ))}
+                            <button className="default animate right small" onClick={e => this.handleAddStage(e)}> + </button>
+                        </div>
+                        <br />
+                        <button className="primary block" onClick={this.levels}>Create Support Levels</button>
+                        <br /> <br />
+                        </>}
                         {this.state.section === 'userProfile' && 
                         <>
                         <div className="typography-3 space-bottom-2">User Profile</div>

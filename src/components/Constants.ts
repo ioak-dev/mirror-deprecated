@@ -2,6 +2,7 @@ export const constants ={
     API_URL_TENANT:"/tenant",
     API_URL_TENANT_BANNER:"/tenant/banner",
     API_URL_TENANT_CREATE:"/tenant/create",
+    API_URL_TENANT_STAGE:"/tenant/stage",
     API_TENANT_URL: "/tenant/sendURL",
     
     API_URL_PRESIGNUP: "/auth/keys",
