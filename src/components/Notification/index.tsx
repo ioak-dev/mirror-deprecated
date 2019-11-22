@@ -84,9 +84,9 @@ class Notification extends Component<Props, State> {
             <>
             {/* {this.state.notification && <div className={"notification " + this.state.notification.type}><div className="message">{this.state.notification.message}</div></div>} */}
             {<div className={"notification " + (this.state.notification ? " show " + this.state.notification.type : (" hide " + this.state.lastNotificationType))}><div className="message">{this.state.notification? this.state.notification.message : ""}</div></div>}
-            {this.state.spinner && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>}
-            {/* {this.props.spinner && <div className="lds-facebook"><div></div><div></div><div></div></div>} */}
-            {/* {this.props.spinner && <div className="lds-dual-ring"></div>} */}
+            {/* {this.state.spinner && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>} */}
+            {/* {this.state.spinner && <div className="lds-facebook"><div></div><div></div><div></div></div>} */}
+            {this.state.spinner && <div className="lds-dual-ring"></div>}
             </>
         );
     }
