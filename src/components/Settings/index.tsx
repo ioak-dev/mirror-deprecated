@@ -61,7 +61,7 @@ class Settings extends Component<Props, State> {
                     icon: 'home'
                 },
                 {
-                    label:'Stages',
+                    label:'Support levels',
                     action: () => this.chooseSection('stage'),
                     icon:'fast_forward'
                 },
@@ -192,18 +192,18 @@ class Settings extends Component<Props, State> {
                         <div className="stage">
                             <div className="typography-3 space-bottom-2">Support Levels</div>
                             <div className="form">
-                                <button className="secondary animate in right space-bottom-2" onClick={e => this.handleAddStage(e)}><i className="material-icons">label_important</i>New Stage</button>
-                            {this.state.stage && this.state.stage.map((item, idx) => (
+                                <button className="secondary animate in right align-left" onClick={e => this.handleAddStage(e)}><i className="material-icons">label_important</i>New Stage</button>
+                                <button className="primary animate in right align-center" onClick={this.levels}><i className="material-icons">save_alt</i>Save</button>
+                                <button className="default animate in right align-right" onClick={this.levels}><i className="material-icons">undo</i>Reset</button>
+                                <div className="space-bottom-2"></div>
+                                {this.state.stage && this.state.stage.map((item, idx) => (
                                     <div className="stage-row">
                                         <div><ArcText  id="stages" label="" data={item} handleChange ={ (e) =>this.handleChange(e) } /></div>
                                         <div><button className="secondary animate in right space-bottom-2" onClick={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</button></div>
                                     </div>
                                 ))}
+                                {(!this.state.stage || this.state.stage.length === 0) && <div>No custom stages defined</div>}
                             </div>
-                            <br />
-                            <button className="primary animate out right align-left" onClick={this.levels}>Save</button>
-                            <button className="default animate in right align-right" onClick={this.levels}>Reset</button>
-                            <br /> <br />
                         </div>}
 
                         {this.state.section === 'userProfile' && 
