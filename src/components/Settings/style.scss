@@ -1,17 +1,7 @@
-.tenant {
+.settings {
     // display: grid;
     // grid-template-columns: auto;
     // justify-content: center;
-    // min-height: 100vh;
-    .form {
-        display: grid;
-        grid-template-columns: auto;
-
-        .action {
-            display: flex;
-            justify-content: flex-end;
-        }
-    }
 
     .file-upload {
         background-color: var(--color-body-dim);
@@ -24,7 +14,16 @@
             display: inline-flex;
             vertical-align: middle;
             margin-right: 5px;
-            font-size: 2em;
+            // font-size: 2em;
+        }
+    }
+
+    .stage {
+        .stage-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
         }
     }
 }

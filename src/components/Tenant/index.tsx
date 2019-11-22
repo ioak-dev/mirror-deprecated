@@ -121,7 +121,7 @@ export default class Tenant extends React.Component<Props, State> {
       return false;
     }
 
-    if (this.state.password != this.state.repeatPassword){
+    if (this.state.password !== this.state.repeatPassword){
       this.setError('repeatPassword');
       sendMessage('notification', true, {'type': 'failure', message: 'Password and repeat password should be same', duration: 3000});
       return false;
@@ -151,8 +151,6 @@ export default class Tenant extends React.Component<Props, State> {
     this.setState({
       banner: e.target.files[0]
     })
-
-    console.log(e.target.files[0]);
   };
 
   createTenant = (preSignupData) => {

@@ -7,7 +7,8 @@ interface Props {
 
 interface State {
     notification: any,
-    spinner: boolean
+    spinner: boolean,
+    lastNotificationType?: string
 }
 
 class Notification extends Component<Props, State> {
@@ -15,9 +16,11 @@ class Notification extends Component<Props, State> {
         super(props);
         this.state = {
             spinner: false,
-            notification: null
+            notification: null,
+            lastNotificationType: undefined
         }
     }
+
     componentWillMount() {
         receiveMessage().subscribe(message => {
             if (message.name === 'notification') {
@@ -28,6 +31,7 @@ class Notification extends Component<Props, State> {
                 } else {
                     this.setState({
                         notification: message.data,
+                        lastNotificationType: message.data.type,
                         spinner: false
                     })
                     
@@ -62,6 +66,7 @@ class Notification extends Component<Props, State> {
             } else {
                 this.setState({
                     notification: nextProps.event.data,
+                    lastNotificationType: nextProps.event.data.type,
                     spinner: false
                 })
                 
@@ -77,10 +82,11 @@ class Notification extends Component<Props, State> {
     render() {
         return (
             <>
-            {this.state.notification && <div className={"notification " + this.state.notification.type}><div className="message">{this.state.notification.message}</div></div>}
-            {this.state.spinner && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>}
-            {/* {this.props.spinner && <div className="lds-facebook"><div></div><div></div><div></div></div>} */}
-            {/* {this.props.spinner && <div className="lds-dual-ring"></div>} */}
+            {/* {this.state.notification && <div className={"notification " + this.state.notification.type}><div className="message">{this.state.notification.message}</div></div>} */}
+            {<div className={"notification " + (this.state.notification ? " show " + this.state.notification.type : (" hide " + this.state.lastNotificationType))}><div className="message">{this.state.notification? this.state.notification.message : ""}</div></div>}
+            {/* {this.state.spinner && <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>} */}
+            {/* {this.state.spinner && <div className="lds-facebook"><div></div><div></div><div></div></div>} */}
+            {this.state.spinner && <div className="lds-dual-ring"></div>}
             </>
         );
     }
