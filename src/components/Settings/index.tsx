@@ -182,7 +182,7 @@ class Settings extends Component<Props, State> {
                         <>
                         <div className="typography-3 space-bottom-2">Support Levels</div>
                         <div className="form">
-                           {this.state.stage.map((item, idx) => (
+                           {this.state.stage && this.state.stage.map((item, idx) => (
                                 <>
                                     <ArcText  id="stages" label="" data={item} handleChange ={ (e) =>this.handleChange(e) } />
                                     <button className="primary animate out small" onClick={this.handleRemoveStage(idx)}>-</button>
