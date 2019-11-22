@@ -58,19 +58,29 @@ class Settings extends Component<Props, State> {
                 {
                     label: 'Profile',
                     action: () => this.chooseSection('tenantProfile'),
-                    icon: 'info'
+                    icon: 'home'
                 },
                 {
                     label:'Stages',
                     action: () => this.chooseSection('stage'),
-                    icon:'info'
+                    icon:'fast_forward'
+                },
+                {
+                    label:'Training dataset',
+                    action: () => this.chooseSection('trainingDataset'),
+                    icon:'bubble_chart'
+                },
+                {
+                    label:'Article categories',
+                    action: () => this.chooseSection('articleCategories'),
+                    icon:'compare'
                 }
             ],
             user: [
                 {
                     label: 'Profile',
                     action: () => this.chooseSection('userProfile'),
-                    icon: 'info'
+                    icon: 'person'
                 },
                 {
                     label: 'Password',
@@ -179,21 +189,23 @@ class Settings extends Component<Props, State> {
                         </>}
 
                         {this.state.section === 'stage' &&
-                        <>
-                        <div className="typography-3 space-bottom-2">Support Levels</div>
-                        <div className="form">
-                           {this.state.stage && this.state.stage.map((item, idx) => (
-                                <>
-                                    <ArcText  id="stages" label="" data={item} handleChange ={ (e) =>this.handleChange(e) } />
-                                    <button className="primary animate out small" onClick={this.handleRemoveStage(idx)}>-</button>
-                                </>
-                            ))}
-                            <button className="default animate right small" onClick={e => this.handleAddStage(e)}> + </button>
-                        </div>
-                        <br />
-                        <button className="primary block" onClick={this.levels}>Create Support Levels</button>
-                        <br /> <br />
-                        </>}
+                        <div className="stage">
+                            <div className="typography-3 space-bottom-2">Support Levels</div>
+                            <div className="form">
+                                <button className="secondary animate in right space-bottom-2" onClick={e => this.handleAddStage(e)}><i className="material-icons">label_important</i>New Stage</button>
+                            {this.state.stage && this.state.stage.map((item, idx) => (
+                                    <div className="stage-row">
+                                        <div><ArcText  id="stages" label="" data={item} handleChange ={ (e) =>this.handleChange(e) } /></div>
+                                        <div><button className="secondary animate in right space-bottom-2" onClick={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</button></div>
+                                    </div>
+                                ))}
+                            </div>
+                            <br />
+                            <button className="primary animate out right align-left" onClick={this.levels}>Save</button>
+                            <button className="default animate in right align-right" onClick={this.levels}>Reset</button>
+                            <br /> <br />
+                        </div>}
+
                         {this.state.section === 'userProfile' && 
                         <>
                         <div className="typography-3 space-bottom-2">User Profile</div>

@@ -59,15 +59,17 @@ class Sidebar extends Component<Props, State> {
 
     render() {
         const elements = this.state.elements.map((item: any) => (
-            <div key={item.label} className="element" onClick={item.action}><i className="material-icons">{item.icon}</i>{item.label}</div>
+            <div key={item.label} className="element" onClick={item.action}><i className="material-icons">{item.icon}</i><div className="label-text">{item.label}</div></div>
         ))
         return (            
             <div className="sidebar">
                 <div className={this.state.show ? "header active" : "header"} onClick={this.toggle}>
                     <div className="label">
-                        <i className="material-icons">{this.props.icon}</i>
-                        {this.props.label}
-                        {this.props.number !== undefined && <div className="number">{this.props.number}</div>}
+                        {/* <i className="material-icons">{this.props.icon}</i> */}
+                        <div className="label-text">
+                            {this.props.label}
+                            {this.props.number !== undefined && <div className="number">{this.props.number}</div>}
+                        </div>
                     </div>
                     {/* <div className="aria"><i className="material-icons">{this.state.show ? 'expand_less' : 'expand_more'}</i></div> */}
                     <div className="aria"><i className={this.state.show ? "material-icons collapse" : "material-icons"}>keyboard_arrow_left</i></div>

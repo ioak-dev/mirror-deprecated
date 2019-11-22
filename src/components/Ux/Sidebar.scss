@@ -51,6 +51,11 @@
                 height: 14px;
                 line-height: 14px;
             }
+            
+            .label-text {
+                display: inline;
+                vertical-align: middle;
+            }
         }
     }
     .content {
@@ -88,6 +93,11 @@
             color: var(--color-sidebar-fg);
             font-size: 16px;
 
+            .label-text {
+                display: inline;
+                vertical-align: middle;
+            }
+
             &:hover {
                 color: var(--color-sidebar-fg-hover);
             }
@@ -95,6 +105,7 @@
     }
 
     .element .material-icons, .label .material-icons {
+        display: inline-flex;
         vertical-align: middle;
         margin-right: 5px;
         font-size: 1.4em;
