@@ -10,13 +10,23 @@
     color: var(--color-white);
     position: fixed;
     z-index: 2;
-
     &.success {
         background-color: var(--color-success);
     }
 
     &.failure {
         background-color: var(--color-failure);
+    }
+
+    &.show {
+      transition: transform .5s;
+      transform: translateX(0px);
+    }
+
+    &.hide {
+      transition: transform .5s;
+      transform: translateX(-150vw);
+      // background-color: var(--color-body-invert-dim);
     }
 }
 
