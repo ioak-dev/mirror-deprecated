@@ -1,14 +1,15 @@
 .home {
-    .search-bar {
+    .search-bar {position: fixed;
         display: flex;
         flex: 1 1 100%;
-        max-width: 100%;
+        // max-width: 100%;
+        width: 80vw;
 
         input {
             z-index: 0;
         }
 
-        margin: 5vh 10vw 0px 10vw;
+        margin: 14vh 10vw 0px 10vw;
     }
 
     .cover {
@@ -16,7 +17,7 @@
         position: absolute;
         margin-top: calc(0px - var(--height-nav));
         // object-fit: fill;
-        height: 50vh;
+        height: 40vh;
         img {
             width: 100%;
             @media (max-width: 767px) {
@@ -25,8 +26,7 @@
         }
     }
 
-    // .search-results {
-    //     position: absolute;;
-    //     margin-top: 300px;
-    // }
+    .search-results {
+        margin-top: calc(0px - var(--height-nav) + 40vh);
+    }
 }

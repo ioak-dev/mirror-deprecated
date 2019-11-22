@@ -107,7 +107,7 @@ export default class Home extends React.Component<Props, State> {
             {this.state.showMainSearchBar && <SearchBar />}
 
             <div className='search-results'>
-              <br /> Search results goes here
+              Search results goes here
               <br /> {this.state.searchText}
             </div>
         </div>
