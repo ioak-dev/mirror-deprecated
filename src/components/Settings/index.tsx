@@ -192,8 +192,8 @@ class Settings extends Component<Props, State> {
                         <div className="stage">
                             <div className="typography-3 space-bottom-2">Support Levels</div>
                             <div className="form">
-                                <button className="secondary animate in right align-left" onClick={e => this.handleAddStage(e)}><i className="material-icons">label_important</i>New Stage</button>
-                                <button className="primary animate in right align-center" onClick={this.levels}><i className="material-icons">save_alt</i>Save</button>
+                                <button className="secondary animate out right align-left" onClick={e => this.handleAddStage(e)}><i className="material-icons">label_important</i>New Stage</button>
+                                <button className="primary animate out right align-center" onClick={this.levels}><i className="material-icons">save_alt</i>Save</button>
                                 <button className="default animate in right align-right" onClick={this.levels}><i className="material-icons">undo</i>Reset</button>
                                 <div className="space-bottom-2"></div>
                                 {this.state.stage && this.state.stage.map((item, idx) => (

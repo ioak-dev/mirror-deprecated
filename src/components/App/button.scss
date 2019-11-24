@@ -185,12 +185,70 @@ button {
     &::before {
       background-color: var(--color-btn-primary-bg);
     }
+    color: var(--color-btn-dark-bg);
+    &:hover {
+      color: var(--color-btn-light-bg);
+    }
+    &.in {
+      color: var(--color-btn-dark-bg);
+      &:hover {
+        color: var(--color-btn-light-bg);
+      }
+    }
+    &.out {
+      color: var(--color-btn-light-bg);
+      &:hover {
+        color: var(--color-btn-dark-bg);
+      }
+    }
+    &.block {
+      color: var(--color-btn-light-bg);
+      &:hover {
+        color: var(--color-btn-light-bg);
+      }
+    }
+
+    &.alt {
+      color: var(--color-btn-light-bg);
+      &:hover {
+        color: var(--color-btn-light-bg);
+      }
+    }
   }
 
   &.secondary {
     border-color: var(--color-btn-secondary-bg);
     &::before {
       background-color: var(--color-btn-secondary-bg);
+    }
+    color: var(--color-btn-dark-bg);
+    &:hover {
+      color: var(--color-btn-light-bg);
+    }
+    &.in {
+      color: var(--color-btn-dark-bg);
+      &:hover {
+        color: var(--color-btn-light-bg);
+      }
+    }
+    &.out {
+      color: var(--color-btn-light-bg);
+      &:hover {
+        color: var(--color-btn-dark-bg);
+      }
+    }
+    &.block {
+      color: var(--color-btn-light-bg);
+      &:hover {
+        color: var(--color-btn-light-bg);
+      }
+    }
+
+    &.alt {
+      color: var(--color-btn-light-bg);
+      &:hover {
+        color: var(--color-btn-light-bg);
+      }
     }
   }
 
