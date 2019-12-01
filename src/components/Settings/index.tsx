@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import './style.scss';
-import { receiveMessage, sendMessage } from '../../events/MessageService';
+import { sendMessage } from '../../events/MessageService';
 import ArcText from '../Ux/ArcText';
-import { getTenant, updateTenant } from '../Tenant/TenantService';
+import { getTenant } from '../Tenant/TenantService';
 import { Authorization } from '../Types/GeneralTypes';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import Sidebar from '../Ux/Sidebar';
 import { any } from 'prop-types';
+import Stages from '../Stages/index'
 
 interface Props {
     match: any,
@@ -21,9 +22,6 @@ interface State {
   email: string,
   jwtPassword:string,
   banner: any,
-  stage: Array<String>,
-  stages: any,
-  _id: any,
   errorFields: {
     name: boolean,
     email: boolean,
@@ -43,9 +41,6 @@ class Settings extends Component<Props, State> {
           email: '',
           jwtPassword:'',
           banner: null,
-          stage: [],
-          stages: '',
-          _id: any,
           errorFields: {
             name: false,
             email: false,
@@ -106,9 +101,7 @@ class Settings extends Component<Props, State> {
             this.setState({
                 name: response.data.name,
                 email: response.data.ownerEmail,
-                jwtPassword: response.data.jwtPassword,
-                stage: response.data.stage,
-                _id: response.data._id,
+                jwtPassword: response.data.jwtPassword
             })
         }).catch(() => {
         })
@@ -125,33 +118,6 @@ class Settings extends Component<Props, State> {
       this.setState({
         banner: e.target.files[0]
       })
-    }
-
-    handleAddStage= e => {
-        e.preventDefault()
-        const stage = this.state.stage.concat(this.state.stages)
-        this.setState(state =>({
-            stage: [...this.state.stage,this.state.stages]
-        }))
-    }
-
-    handleRemoveStage = idx => () =>{
-        this.setState({
-            stage: [...this.state.stage.filter((s, sidx) => idx != sidx)]
-        })
-    }
-
-    levels = () => {
-        updateTenant({
-            name: this.state.name,
-            _id: this.state._id,
-            data: this.state.stage,
-        },{
-        headers: {
-            Authorization: this.props.authorization.token
-        }
-       }
-    ) 
     }
 
     handleChange = (event) => {
@@ -190,20 +156,7 @@ class Settings extends Component<Props, State> {
 
                         {this.state.section === 'stage' &&
                         <div className="stage">
-                            <div className="typography-3 space-bottom-2">Support Levels</div>
-                            <div className="form">
-                                <button className="secondary animate out right align-left" onClick={e => this.handleAddStage(e)}><i className="material-icons">label_important</i>New Stage</button>
-                                <button className="primary animate out right align-center" onClick={this.levels}><i className="material-icons">save_alt</i>Save</button>
-                                <button className="default animate in right align-right" onClick={this.levels}><i className="material-icons">undo</i>Reset</button>
-                                <div className="space-bottom-2"></div>
-                                {this.state.stage && this.state.stage.map((item, idx) => (
-                                    <div className="stage-row">
-                                        <div><ArcText  id="stages" label="" data={item} handleChange ={ (e) =>this.handleChange(e) } /></div>
-                                        <div><button className="secondary animate in right space-bottom-2" onClick={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</button></div>
-                                    </div>
-                                ))}
-                                {(!this.state.stage || this.state.stage.length === 0) && <div>No custom stages defined</div>}
-                            </div>
+                           <Stages match={this.props.match} authorization = {this.props.authorization} />   
                         </div>}
 
                         {this.state.section === 'userProfile' && 
