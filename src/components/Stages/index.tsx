@@ -4,6 +4,7 @@ import ArcText from '../Ux/ArcText';
 import { Authorization } from '../Types/GeneralTypes';
 import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
 import { constants } from '../Constants';
+import { sendMessage } from '../../events/MessageService';
 
 interface Props {
     match: any,
@@ -30,7 +31,7 @@ export default class Stages extends Component<Props, State> {
         }}
         ).then ((response) => {
             this.setState({
-                stage: response.data
+                stage: response.data.data
                 })
             }).catch(() => {})
     }
@@ -63,9 +64,15 @@ export default class Stages extends Component<Props, State> {
                 Authorization: this.props.authorization.token
                 }
             })
-                .then(function(response){
-                    return Promise.resolve(response)
-                    })
+            .then((response) => {
+                if (response.status === 200) {
+                    sendMessage('notification', true, {message: 'Stages Updated successfully', type: 'success', duration: 3000});
+                } else if (response.status === 500) {
+                    sendMessage('notification', true, {message: 'Stages Updation failed', type: 'failure', duration: 3000});
+                } else {
+                    sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
+                }
+                })
         }
 
     resetStages = () => {

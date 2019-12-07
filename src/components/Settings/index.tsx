@@ -9,6 +9,7 @@ import View from '../Ux/View';
 import Sidebar from '../Ux/Sidebar';
 import { any } from 'prop-types';
 import Stages from '../Stages/index'
+import Article from '../Article/index'
 
 interface Props {
     match: any,
@@ -158,6 +159,12 @@ class Settings extends Component<Props, State> {
                         <div className="stage">
                            <Stages match={this.props.match} authorization = {this.props.authorization} />   
                         </div>}
+
+                        {this.state.section === 'articleCategories' &&
+                        <div className="articleCategories">
+                           <Article match={this.props.match} authorization = {this.props.authorization} />   
+                        </div>}
+
 
                         {this.state.section === 'userProfile' && 
                         <>
