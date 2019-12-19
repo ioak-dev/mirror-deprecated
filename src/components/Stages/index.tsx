@@ -31,7 +31,7 @@ export default class Stages extends Component<Props, State> {
         }}
         ).then ((response) => {
             this.setState({
-                stage: response.data.data
+                stage: response.data.stage
                 })
             }).catch(() => {})
     }
