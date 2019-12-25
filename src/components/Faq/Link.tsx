@@ -18,7 +18,7 @@ class Link extends Component<Props, State> {
     }
 
     delete = () => {
-        this.props.deleteFaq(this.props.id);
+        this.props.deleteFaq(this.props.faq._id);
     }
 
     render() {

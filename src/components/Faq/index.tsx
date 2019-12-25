@@ -6,7 +6,7 @@ import ArcDialog from '../Ux/ArcDialog';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import { Authorization } from '../Types/GeneralTypes';
-import { httpGet, httpPut, httpPost } from '../Lib/RestTemplate';
+import { httpGet, httpDelete, httpPost, httpPut } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
@@ -14,6 +14,8 @@ import Sidebar from '../Ux/Sidebar';
 
 interface Props{
   match: any,
+  setProfile: Function,
+  profile: any,
   authorization: Authorization,
   logout: Function
 }
@@ -57,6 +59,12 @@ export default class Faq extends React.Component<Props, State> {
     if(this.props.authorization.isAuth){
       this.initializeFaq(this.props.authorization)
     }
+
+    this.props.setProfile({
+      ...this.props.profile,
+      tenant: this.props.match.params.tenant
+    })
+
   }
 
   componentWillReceiveProps(nextProps){
@@ -75,7 +83,6 @@ export default class Faq extends React.Component<Props, State> {
         }
       })
       .then(function(response){
-        console.log(response.data.faq)
         that.setState({
           faq:response.data.faq
         });
@@ -107,10 +114,28 @@ export default class Faq extends React.Component<Props, State> {
   }
 
   deleteFaq = (faqId) => {
+    const that = this;
+    httpDelete(constants.API_URL_FAQ + '/' + this.props.match.params.tenant + '/' + faqId,
+    {
+      headers: {
+        Authorization: this.props.authorization.token
+      }
+    })
+        .then(function(response) {
+            if (response.status === 200) {
+                sendMessage('notification', true, {type: 'success', message: 'FAQ deleted', duration: 5000});
+                that.initializeFaq(that.props.authorization);
+            }
+        })
+        .catch((error) => {
+            if (error.response.status === 401) {
+                that.props.logout(null, 'failure', 'Session expired. Login again');
+            }
+        })
 
   }
 
-  searchByFaq = (faqName) =>{
+  searchByWord = (faqName) =>{
 
   }
 
@@ -138,7 +163,7 @@ export default class Faq extends React.Component<Props, State> {
         faq.answer = 'unsorted';
     }
 
-    httpPost(constants.API_URL_FAQ + '/' + 
+    httpPut(constants.API_URL_FAQ + '/' + 
     this.props.match.params.tenant + '/',
     faq,
     {
@@ -147,8 +172,8 @@ export default class Faq extends React.Component<Props, State> {
       }
     })
     .then(function(response) {
-        if (response.status === 201) {
-            sendMessage('notification', true, {type: 'success', message: 'Bookmark created', duration: 5000});
+        if (response.status === 200) {
+            sendMessage('notification', true, {type: 'success', message: 'FAQ created', duration: 5000});
             that.toggleEditDialog();
 
             that.initializeFaq(that.props.authorization);
@@ -174,7 +199,7 @@ export default class Faq extends React.Component<Props, State> {
   render() {
     const listview = this.state.faq.map(item => (
       <div key={item._id}>
-        <Link id={item._id} faq={item} editFaq={this.editFaq} deleteFaq={this.deleteFaq} search={this.searchByFaq}></Link>
+        <Link id={item._id} faq={item} editFaq={this.editFaq} deleteFaq={this.deleteFaq} search={this.searchByWord}></Link>
         <br />
       </div>
     ))
