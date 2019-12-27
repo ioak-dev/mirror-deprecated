@@ -41,14 +41,14 @@ export default class Faq extends React.Component<Props, State> {
       category: '',
       question: '',
       answer: '',
-      editDialogLabel: 'Add',
+      editDialogLabel: 'Article',
 
       sidebarElements: {
-        addNew: [
+        article: [
             {
-                label: 'New FAQ',
+                label: 'New article',
                 action: this.toggleEditDialog,
-                icon: 'faq_add'
+                icon: 'add'
             }
         ]
     }
@@ -210,8 +210,8 @@ export default class Faq extends React.Component<Props, State> {
           <ArcTextField label="Question" data={this.state} id="question" handleChange={e => this.handleChange(e)} />
           <ArcTextField label="Answer" data={this.state} id="answer" handleChange={e => this.handleChange(e)} />
           <div className="actions">
-            <button onClick={this.toggleEditDialog} className="default disabled"><i className="material-icons">close</i>Cancel</button>
-            <button onClick={this.addFaq} className="primary block"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
+            <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
+            <button onClick={this.addFaq} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
           </div>
         </ArcDialog>
 
@@ -222,7 +222,10 @@ export default class Faq extends React.Component<Props, State> {
             <View side>
               <div className="filter-container">
                   <div className="section-main">
-                    <Sidebar label="Add New" elements={this.state.sidebarElements['addNew']} icon="add" animate />
+                    <Sidebar label="Article" elements={this.state.sidebarElements['article']} icon="add" animate />
+                    <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate>
+                      Search content goes here
+                    </Sidebar>
                   </div>
               </div>
             </View>

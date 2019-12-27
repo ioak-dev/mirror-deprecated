@@ -23,14 +23,35 @@ class ArcDialog extends Component<Props, State> {
             }
         }
     }
+    
+    componentDidMount(){
+      document.addEventListener("keydown", this.escFunction, false);
+    }
+    
+    componentWillUnmount(){
+      document.removeEventListener("keydown", this.escFunction, false);
+    }
+
+    escFunction = (event) => {
+        if(event.keyCode === 27) {
+          if (this.props.visible) {
+            this.props.toggleVisibility();
+          }
+        }
+    }
+
     render() {
         return (
             <>
-            <div className="dialog-outer">
+            <div className="arc-dialog">
                 <div className={(this.props.visible ? "dialog show" : "dialog hide")}>
-                    {this.props.title && <div className="header">{this.props.title}<i className="material-icons" onClick={this.props.toggleVisibility}>close</i></div>}
-                    <div className="container">
-                        {this.props.children}
+                    <div className={(this.props.visible ? "container": "container hidetext")}>
+                        <div className="dialog-header" onClick={this.props.toggleVisibility}><i className="material-icons">close</i><div className="text-esc">esc</div></div>
+                        <div className="header-space"></div>
+                        {/* {this.props.title && <div className="header">{this.props.title}<i className="material-icons" onClick={this.props.toggleVisibility}>close</i></div>} */}
+                        <div className="dialog-body">
+                            {this.props.children}
+                        </div>
                     </div>
                 </div>
             </div>
