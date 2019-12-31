@@ -3,6 +3,7 @@ import './style.scss';
 import Link from './Link';
 import OakTextField from '../Ux/OakTextField';
 import OakDialog from '../Ux/OakDialog';
+import OakSelect from '../Ux/OakSelect';
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import { Authorization } from '../Types/GeneralTypes';
@@ -23,12 +24,14 @@ interface Props{
 interface State{
   faq: any,
   id?: string,
-  category: string,
+  category: any,
   question: string,
   answer: string,
   editDialogLabel: string,
   isEditDialogOpen:boolean,
-  sidebarElements:any
+  sidebarElements:any,
+  existingCategories: any,
+  newCategory: String
 }
 
 export default class Faq extends React.Component<Props, State> {
@@ -36,11 +39,13 @@ export default class Faq extends React.Component<Props, State> {
     super(props)
     this.state = {
       faq:[],
+      existingCategories: [],
       isEditDialogOpen: false,
       id: undefined,
       category: '',
       question: '',
       answer: '',
+      newCategory: '',
       editDialogLabel: 'Article',
 
       sidebarElements: {
@@ -84,8 +89,10 @@ export default class Faq extends React.Component<Props, State> {
       })
       .then(function(response){
         that.setState({
-          faq:response.data.faq
+          faq:response.data.faq,
+          existingCategories: response.data.category
         });
+
       })
       
   }
@@ -103,6 +110,11 @@ export default class Faq extends React.Component<Props, State> {
 
 
   editFaq = (faq) => {
+    let category = this.state.category
+    if (category === '<create new>') {
+      category = this.state.newCategory;
+    }
+    
     this.setState({
       isEditDialogOpen: true,
       id: faq._id,
@@ -141,14 +153,16 @@ export default class Faq extends React.Component<Props, State> {
 
   addFaq= () => {
     const that = this;
-
+    let category = this.state.category
+    if (category === '<create new>') {
+      category = this.state.newCategory;
+    }
     let faq = {
         id: this.state.id,
-        category: this.state.category,
         question: this.state.question,
-        answer: this.state.answer
+        answer: this.state.answer,
+        category: category
     }
-
     if (isEmptyOrSpaces(faq.category)) {
         sendMessage('notification', true, {type: 'failure', message: 'Category is missing', duration: 5000});
         return;
@@ -191,7 +205,7 @@ export default class Faq extends React.Component<Props, State> {
     this.setState(
         {
             ...this.state,
-            [event.currentTarget.name]: event.currentTarget.value
+            [event.target.name]: event.target.value
         }
     )
   }
@@ -207,7 +221,11 @@ export default class Faq extends React.Component<Props, State> {
       <div className="faq">
         <OakDialog title="Add FAQ " visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
           <div className="dialog-body">
-            <OakTextField label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} />
+          <div><OakSelect label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.state.existingCategories} firstAction="<create new>" /></div>
+          <div>
+            {this.state.category === '<create new>' && <OakTextField label="Category name" data={this.state} id="newCategory" handleChange={e => this.handleChange(e)} />}
+          </div>
+            
             <OakTextField label="Question" data={this.state} id="question" handleChange={e => this.handleChange(e)} />
             <OakTextField label="Answer" data={this.state} id="answer" handleChange={e => this.handleChange(e)} />
           </div>
