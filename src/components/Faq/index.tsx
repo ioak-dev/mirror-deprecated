@@ -206,10 +206,12 @@ export default class Faq extends React.Component<Props, State> {
     return (
       <div className="faq">
         <ArcDialog title="Add FAQ " visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
-          <ArcTextField label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} />
-          <ArcTextField label="Question" data={this.state} id="question" handleChange={e => this.handleChange(e)} />
-          <ArcTextField label="Answer" data={this.state} id="answer" handleChange={e => this.handleChange(e)} />
-          <div className="actions">
+          <div className="dialog-body">
+            <ArcTextField label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} />
+            <ArcTextField label="Question" data={this.state} id="question" handleChange={e => this.handleChange(e)} />
+            <ArcTextField label="Answer" data={this.state} id="answer" handleChange={e => this.handleChange(e)} />
+          </div>
+          <div className="dialog-footer">
             <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
             <button onClick={this.addFaq} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
           </div>

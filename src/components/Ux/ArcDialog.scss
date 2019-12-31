@@ -11,7 +11,7 @@
         }
         right: 0;
         top: var(--height-nav);
-        background-color: var(--color-nav-slider);
+        background-color: var(--color-body);
         position: fixed;
         box-shadow: 0 19px 38px var(--color-box-shadow), 0 15px 12px var(--color-box-shadow);
 
@@ -54,11 +54,11 @@
             }
 
             .dialog-footer {
-                background-color: var(--color-nav);
+                background-color: var(--color-body-dim);
                 height: 70px;
-                display: grid;
+                display: flex;
                 align-items: center;
-                justify-items: center;
+                justify-content: center;
 
                 // &::before {
                 //     position: fixed;
