@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './ArcDialog.scss';
+import './OakDialog.scss';
 import { sendMessage } from '../../events/MessageService';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 interface State {
 }
 
-class ArcDialog extends Component<Props, State> {
+class OakDialog extends Component<Props, State> {
     componentWillReceiveProps(nextProps) {
         if (this.props.visible !== nextProps.visible) {
             if (nextProps.visible) {
@@ -53,4 +53,4 @@ class ArcDialog extends Component<Props, State> {
     }
 }
 
-export default ArcDialog;
+export default OakDialog;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './style.scss';
 import { sendMessage } from '../../events/MessageService';
-import ArcText from '../Ux/ArcText';
+import OakText from '../Ux/OakText';
 import { getTenant } from '../Tenant/TenantService';
 import { Authorization } from '../Types/GeneralTypes';
 import ViewResolver from '../Ux/ViewResolver';
@@ -144,8 +144,8 @@ class Settings extends Component<Props, State> {
                         <>
                         <div className="typography-3 space-bottom-2">Tenant Profile</div>
                         <div className="form">
-                            <ArcText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-                            <ArcText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+                            <OakText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
+                            <OakText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
                             <label className="file-upload space-top-1 space-bottom-4">
                                 <input type="file" accept="image/png, image/jpeg" onChange={this.handleImageChange} required/>
                                 <i className="material-icons">add_photo_alternate</i>

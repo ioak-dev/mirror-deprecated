@@ -1,5 +1,5 @@
 import React from 'react';
-import './ArcText.scss';
+import './OakText.scss';
 
 interface Props {
     label: string,
@@ -10,7 +10,7 @@ interface Props {
     errorFields?: any,
     disabled?: boolean
 }
-function ArcText(props: Props) {
+function OakText(props: Props) {
     return (
         <div className="arc-text-field">
             <label>{props.label}</label>
@@ -21,7 +21,7 @@ function ArcText(props: Props) {
     )
 }
 
-ArcText.propTypes = {
+OakText.propTypes = {
 };
 
-export default ArcText;
+export default OakText;

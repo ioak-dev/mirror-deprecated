@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './style.scss';
-import ArcText from '../Ux/ArcText';
+import OakText from '../Ux/OakText';
 import { Authorization } from '../Types/GeneralTypes';
 import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
 import { constants } from '../Constants';
@@ -98,7 +98,7 @@ export default class Stages extends Component<Props, State> {
                     <div className="space-bottom-2"></div>
                     {this.state.stage && this.state.stage.map((item, idx) => (
                         <div className="stage-row" key={idx}>
-                            <div><ArcText  id="name" label={`Level ${idx+1}`} data={item} handleChange ={ (e) =>this.handleChangeStage(e, idx) } /></div>
+                            <div><OakText  id="name" label={`Level ${idx+1}`} data={item} handleChange ={ (e) =>this.handleChangeStage(e, idx) } /></div>
                             <div><button className="secondary animate in right space-bottom-2" onClick={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</button></div>
                             </div>
                             ))}

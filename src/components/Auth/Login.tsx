@@ -4,7 +4,7 @@ import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import {withCookies} from 'react-cookie';
 import './Login.scss';
 import { Authorization } from '../Types/GeneralTypes';
-import ArcText from '../Ux/ArcText';
+import OakText from '../Ux/OakText';
 import { sendMessage } from '../../events/MessageService';
 import {signinWithJwt, signin, preSignin,sentPasswordChangeEmail, preSignup, signup} from './AuthService';
 import {isEmptyOrSpaces} from "../Utils";
@@ -242,8 +242,8 @@ class Login extends Component<Props, State> {
                     <form method="GET" onSubmit={this.login} noValidate>
                         
                         <div className="form">
-                            <ArcText label="E-mail" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
-                            <ArcText label="Password" type="password"  id="password"   data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="E-mail" id="email" data={this.state} handleChange={e => this.handleChange(e)} />
+                            <OakText label="Password" type="password"  id="password"   data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
                         <button className="primary animate out right"  onClick={this.login}>Sign In</button>
@@ -258,10 +258,10 @@ class Login extends Component<Props, State> {
                     <form method="GET" onSubmit={this.signup} noValidate>
                         <h1>Sign Up</h1>
                         <div className="form">
-                        <ArcText label="Name" id="name" data={this.state} handleChange={e => this.handleChange(e)} />
-                        <ArcText label="E-mail" id="email" data={this.state} handleChange ={e=> this.handleChange(e)} />
-                        <ArcText label="Password" type="password" id="password" data={this.state} handleChange={e => this.handleChange(e)} />
-                        <ArcText label="Repeat Password" type="password"  id="repeatpassword" data={this.state} handleChange={e => this.handleChange(e)} />
+                        <OakText label="Name" id="name" data={this.state} handleChange={e => this.handleChange(e)} />
+                        <OakText label="E-mail" id="email" data={this.state} handleChange ={e=> this.handleChange(e)} />
+                        <OakText label="Password" type="password" id="password" data={this.state} handleChange={e => this.handleChange(e)} />
+                        <OakText label="Repeat Password" type="password"  id="repeatpassword" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
                         <button className="primary block" onClick={this.signup}>Create Account</button>
