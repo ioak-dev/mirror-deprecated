@@ -29,6 +29,7 @@ interface State{
   answer: string,
   editDialogLabel: string,
   isEditDialogOpen:boolean,
+  isDeleteDialogOpen:boolean,
   sidebarElements:any,
   existingCategories: any,
   newCategory: String
@@ -41,6 +42,7 @@ export default class Faq extends React.Component<Props, State> {
       faq:[],
       existingCategories: [],
       isEditDialogOpen: false,
+      isDeleteDialogOpen: false,
       id: undefined,
       category: '',
       question: '',
@@ -108,6 +110,13 @@ export default class Faq extends React.Component<Props, State> {
     })
   }
 
+  toggleDeleteDialog = () => {
+    this.setState({
+        isDeleteDialogOpen: !this.state.isDeleteDialogOpen,
+        id: undefined,
+        editDialogLabel: 'Delete'
+    })
+  }
 
   editFaq = (faq) => {
     let category = this.state.category
@@ -125,9 +134,17 @@ export default class Faq extends React.Component<Props, State> {
     })
   }
 
-  deleteFaq = (faqId) => {
+  confirmDeleteFaq =(faqId) => {
+    this.setState({
+      isDeleteDialogOpen: true,
+      id: faqId,
+      editDialogLabel: 'Delete'   
+    })
+  }
+
+  deleteFaq = () => {
     const that = this;
-    httpDelete(constants.API_URL_FAQ + '/' + this.props.match.params.tenant + '/' + faqId,
+    httpDelete(constants.API_URL_FAQ + '/' + this.props.match.params.tenant + '/' + this.state.id,
     {
       headers: {
         Authorization: this.props.authorization.token
@@ -213,7 +230,7 @@ export default class Faq extends React.Component<Props, State> {
   render() {
     const listview = this.state.faq.map(item => (
       <div key={item._id}>
-        <Link id={item._id} faq={item} editFaq={this.editFaq} deleteFaq={this.deleteFaq} search={this.searchByWord}></Link>
+        <Link id={item._id} faq={item} editFaq={this.editFaq} confirmDeleteFaq={this.confirmDeleteFaq} search={this.searchByWord}></Link>
         <br />
       </div>
     ))
@@ -232,6 +249,17 @@ export default class Faq extends React.Component<Props, State> {
           <div className="dialog-footer">
             <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
             <button onClick={this.addFaq} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
+          </div>
+        </OakDialog>
+        
+      {this.state.isDeleteDialogOpen}
+        <OakDialog title="Delete FAQ " visible={this.state.isDeleteDialogOpen} toggleVisibility={this.toggleDeleteDialog}>
+          <div className="dialog-body">
+            Are you sure you want to continue?
+            </div>
+          <div className="dialog-footer">
+            <button onClick={this.toggleDeleteDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
+            <button onClick={this.deleteFaq} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
           </div>
         </OakDialog>
 

@@ -3,7 +3,7 @@ import './style.scss';
 
 interface Props {
     editFaq: Function,
-    deleteFaq: Function,
+    confirmDeleteFaq: Function,
     search: Function,
     faq: any,
     id: string
@@ -18,7 +18,7 @@ class Link extends Component<Props, State> {
     }
 
     delete = () => {
-        this.props.deleteFaq(this.props.faq._id);
+        this.props.confirmDeleteFaq(this.props.faq._id);
     }
 
     render() {
