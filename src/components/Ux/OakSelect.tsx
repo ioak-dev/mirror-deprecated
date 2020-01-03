@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   
 interface Props {
   id: string,
-  label: string,
+  label?: string,
   handleChange: Function,
   error?: boolean,
   data: any,
@@ -46,7 +46,7 @@ function OakSelect(props: Props) {
     return (
         <>
         <FormControl className={"oak-select " + classes.formControl}>
-            <InputLabel htmlFor={id}>{label}</InputLabel>
+            {label && <InputLabel htmlFor={id}>{label}</InputLabel>}
             <Select
             value={data[id]}
             onChange={e => handleChange(e)}

@@ -7,5 +7,33 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+        th {
+            border-top: 1px solid #ddd;
+        }
+    }
+
+    .pagination {
+        font-size: 0.8em;
+        user-select: none;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-direction: row;
+
+        .page-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .material-icons {
+          vertical-align: middle;
+          font-size: 25px;
+          cursor: pointer;
+
+          &.disabled {
+              cursor: auto;
+              color: #ddd;
+          }
+        }
     }
 }

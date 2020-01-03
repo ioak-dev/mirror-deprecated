@@ -67,11 +67,21 @@ export default class Faq extends React.Component<Props, State> {
   componentWillMount() {
     // Temporary data for illustration of table
     const rows = [
-      this.createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-      this.createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-      this.createData('Eclair', 262, 16.0, 24, 6.0),
-      this.createData('Cupcake', 305, 3.7, 67, 4.3),
-      this.createData('Gingerbread', 356, 16.0, 49, 3.9),
+      this.createData('1 Frozen yoghurt', 159, 6.0, 24, 4.0),
+      this.createData('2 Ice cream sandwich', 237, 9.0, 37, 4.3),
+      this.createData('3 Eclair', 262, 16.0, 24, 6.0),
+      this.createData('4 Cupcake', 305, 3.7, 67, 4.3),
+      this.createData('5 Gingerbread', 356, 16.0, 49, 3.9),
+      this.createData('6 Frozen yoghurt', 159, 6.0, 24, 4.0),
+      this.createData('7 Ice cream sandwich', 237, 9.0, 37, 4.3),
+      this.createData('8 Eclair', 262, 16.0, 24, 6.0),
+      this.createData('9 Cupcake', 305, 3.7, 67, 4.3),
+      this.createData('10 Gingerbread', 356, 16.0, 49, 3.9),
+      this.createData('11 Frozen yoghurt', 159, 6.0, 24, 4.0),
+      this.createData('12 Ice cream sandwich', 237, 9.0, 37, 4.3),
+      this.createData('13 Eclair', 262, 16.0, 24, 6.0),
+      this.createData('14 Cupcake', 305, 3.7, 67, 4.3),
+      this.createData('15 Gingerbread', 356, 16.0, 49, 3.9),
     ];
 
     this.setState({
