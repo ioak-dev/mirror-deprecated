@@ -45,7 +45,7 @@ function OakSelect(props: Props) {
     
     return (
         <>
-        <FormControl className={"arc-select " + classes.formControl}>
+        <FormControl className={"oak-select " + classes.formControl}>
             <InputLabel htmlFor={id}>{label}</InputLabel>
             <Select
             value={data[id]}

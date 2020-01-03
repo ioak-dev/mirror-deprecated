@@ -12,6 +12,7 @@ import { constants } from '../Constants';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
 import Sidebar from '../Ux/Sidebar';
+import OakTable from '../Ux/OakTable';
 
 interface Props{
   match: any,
@@ -32,7 +33,8 @@ interface State{
   isDeleteDialogOpen:boolean,
   sidebarElements:any,
   existingCategories: any,
-  newCategory: String
+  newCategory: String,
+  data?: any
 }
 
 export default class Faq extends React.Component<Props, State> {
@@ -60,6 +62,25 @@ export default class Faq extends React.Component<Props, State> {
         ]
     }
     }
+  }
+
+  componentWillMount() {
+    // Temporary data for illustration of table
+    const rows = [
+      this.createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+      this.createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+      this.createData('Eclair', 262, 16.0, 24, 6.0),
+      this.createData('Cupcake', 305, 3.7, 67, 4.3),
+      this.createData('Gingerbread', 356, 16.0, 49, 3.9),
+    ];
+
+    this.setState({
+      data: rows
+    })
+  }
+
+  createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
   }
 
   componentDidMount(){
@@ -266,6 +287,13 @@ export default class Faq extends React.Component<Props, State> {
         <ViewResolver sideLabel='More options'>
             <View main>
             {listview}
+            {/* Temporary for illustration */}
+            <OakTable data={this.state.data} header={[{key: "name", label:"Name"},
+                                                      {key: "calories", label:"Calories"},
+                                                      {key: "fat", label:"Fat"},
+                                                      {key: "carbs", label:"Carbohydrates"},
+                                                      {key: "protein", label:"Protein"}]}/>
+            {/* Temporary for illustration */}
             </View>
             <View side>
               <div className="filter-container">

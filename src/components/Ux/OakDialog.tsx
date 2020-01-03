@@ -41,7 +41,7 @@ class OakDialog extends Component<Props, State> {
 
     render() {
         return (
-            <div className="arc-dialog">
+            <div className="oak-dialog">
                 <div className={(this.props.visible ? "dialog show" : "dialog hide")}>
                     <div className={(this.props.visible ? "container": "container hidetext")}>
                         <div className="dialog-header" onClick={this.props.toggleVisibility}><i className="material-icons">close</i><div className="text-esc">esc</div></div>
