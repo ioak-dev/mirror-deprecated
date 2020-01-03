@@ -7,7 +7,8 @@ interface Props {
     data: {
         key: string,
         label: string
-    }[]
+    }[],
+    dense?: boolean
 }
 
 interface State {
@@ -59,7 +60,7 @@ class OakTable extends Component<Props, State> {
     render() {
         return (
             <div className="oak-table">
-                <table>
+                <table className = {this.props.dense ? "dense" : ""}>
                     <thead>
                         <tr>
                             {this.props.header && this.props.header.map(item =>
