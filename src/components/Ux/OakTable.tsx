@@ -48,11 +48,12 @@ class OakTable extends Component<Props, State> {
         }
     }
 
-    handleChange = (event) => {
+    handleRowCountChange = (event) => {
         this.setState(
             {
                 ...this.state,
-                [event.target.name]: event.target.value
+                [event.target.name]: event.target.value,
+                pageNo: 1
             }
         )
     }
@@ -83,7 +84,7 @@ class OakTable extends Component<Props, State> {
                 <div className="pagination">
                     <div className="space-right-3">Rows per page</div>
                     <div className="space-right-3">
-                        <OakSelect maxWidth="max-width-50" data={this.state} id="rowsPerPage" handleChange={e => this.handleChange(e)} elements={["5","10","20","50"]} />
+                        <OakSelect maxWidth="max-width-50" data={this.state} id="rowsPerPage" handleChange={e => this.handleRowCountChange(e)} elements={["5","10","20","50"]} />
                     </div>
                     <div className="page-number space-right-3">
                         <div>{(this.state.pageNo - 1) * this.state.rowsPerPage + 1} 
