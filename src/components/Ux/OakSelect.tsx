@@ -24,7 +24,7 @@ interface Props {
   handleChange: Function,
   error?: boolean,
   data: any,
-  elements?: Array<string>,
+  elements?: string[],
   objects?: Array<any>,
   first?: string,
   firstAction?: string,

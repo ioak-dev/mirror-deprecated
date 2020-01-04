@@ -258,6 +258,10 @@ export default class Faq extends React.Component<Props, State> {
     )
   }
 
+  onChangePage = (pageNo: number, rowsPerPage: number) => {
+    console.log(pageNo, rowsPerPage);
+  }
+
   render() {
     const listview = this.state.faq.map(item => (
       <div key={item._id}>
@@ -298,7 +302,7 @@ export default class Faq extends React.Component<Props, State> {
             <View main>
             {listview}
             {/* Temporary for illustration */}
-            <OakTable data={this.state.data} header={[{key: "name", label:"Name"},
+            <OakTable onChangePage={this.onChangePage} data={this.state.data} header={[{key: "name", label:"Name"},
                                                       {key: "calories", label:"Calories"},
                                                       {key: "fat", label:"Fat"},
                                                       {key: "carbs", label:"Carbohydrates"},
