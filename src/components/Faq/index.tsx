@@ -302,7 +302,7 @@ export default class Faq extends React.Component<Props, State> {
             <View main>
             {listview}
             {/* Temporary for illustration */}
-            <OakTable onChangePage={this.onChangePage} data={this.state.data} header={[{key: "name", label:"Name"},
+            <OakTable material onChangePage={this.onChangePage} data={this.state.data} header={[{key: "name", label:"Name"},
                                                       {key: "calories", label:"Calories"},
                                                       {key: "fat", label:"Fat"},
                                                       {key: "carbs", label:"Carbohydrates"},

@@ -23,7 +23,7 @@ class Link extends Component<Props, State> {
 
     render() {
         return (
-            <div>
+            <div className="faq-record">
                 <div className="title typography-4">
                     <div className="tag" key={this.props.faq.category} onClick={() => this.props.search(this.props.faq.category)}>{this.props.faq.category}</div>
                     {this.props.faq.question}
