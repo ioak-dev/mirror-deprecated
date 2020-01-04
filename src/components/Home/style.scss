@@ -27,6 +27,29 @@
     }
 
     .search-results {
-        margin-top: calc(0px - var(--height-nav) + 40vh);
+        width: 75vw;
+        @media (max-width: 767px) {
+            width: 96vw;
+        }
+        margin: auto;
+        margin-top: calc(0px - var(--height-nav) + 40vh + 20px);
+        display: grid;
+        grid-template-rows: auto;
+        grid-gap: 20px;
+        .result-record {
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            padding: 15px;
+            .question {
+
+            }
+            .answer {
+
+            }
+        }
+        .action-bar {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+        }
     }
 }

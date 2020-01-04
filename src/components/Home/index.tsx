@@ -2,25 +2,27 @@ import React from 'react';
 import './style.scss';
 import cover from '../../images/cover.jpg';
 import SearchBar from '../Ux/SearchBar';
-
+import { constants } from '../Constants';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import { searchTextChangedEvent$, searchEvent$ } from '../../events/SearchEvent';
 import { getBanner } from '../Tenant/TenantService';
-
+import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
+import { Authorization } from '../Types/GeneralTypes';
 
 const pageYOffsetCutoff = 10;
 
 interface Props {
   setProfile: Function,
   profile: any,
-  match: any
+  match: any,
+  authorization: Authorization
 }
 
 interface State {
   banner: any,
   prevScrollpos: number,
   showMainSearchBar: boolean,
-  searchText: string
+  searchResults: any[]
 }
 
 export default class Home extends React.Component<Props, State> {
@@ -30,7 +32,7 @@ export default class Home extends React.Component<Props, State> {
       banner: null,
       prevScrollpos: window.pageYOffset,
       showMainSearchBar: true,
-      searchText: ""
+      searchResults: []
     };
   }
 
@@ -42,11 +44,34 @@ export default class Home extends React.Component<Props, State> {
       tenant: this.props.match.params.tenant
     })
 
-    searchEvent$.subscribe(searchText => {
-      this.setState({
-        searchText: searchText
+    searchEvent$.subscribe(searchText => this.search(searchText))
+  }
+
+  search = (searchText: string) => {
+    httpPost('/deeplearning/' + 
+    this.props.match.params.tenant + constants.API_URL_PREDICT, searchText,
+    {headers: {
+        Authorization: this.props.authorization.token
+    }}
+    ).then ((response) => {
+      let predictionMap: any = {};
+      response.data.prediction.forEach(element => {
+        predictionMap[element.rank] = element.label
       });
-    })
+      httpGet(constants.API_URL_FAQ + '/' + 
+      this.props.match.params.tenant + '/category/' + predictionMap[response.data.prediction.length - 1],
+        {
+          headers:{
+            Authorization: this.props.authorization.token
+          }
+        })
+        .then((faqs) => {
+          console.log(faqs.data);
+          this.setState({
+            searchResults: faqs.data.data
+          });
+        })
+    }).catch(() => {})
   }
 
   componentWillUnmount() {
@@ -107,8 +132,16 @@ export default class Home extends React.Component<Props, State> {
             {this.state.showMainSearchBar && <SearchBar />}
 
             <div className='search-results'>
-              Search results goes here
-              <br /> {this.state.searchText}
+              <div className="action-bar">
+                <button className="primary animate in right align-left">Helpful</button>
+                <button className="primary animate in right align-right">Not Helpful</button>
+              </div>
+              {this.state.searchResults && this.state.searchResults.map(item =>
+                <div key={item.question} className="result-record">
+                  <div className="question typography-4 space-bottom-2">{item.question}</div>
+                  <div className="answer typography-5">{item.answer}</div>
+                </div>
+              )}
             </div>
         </div>
       </>
