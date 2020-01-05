@@ -13,6 +13,7 @@ import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
 import Sidebar from '../Ux/Sidebar';
 import OakTable from '../Ux/OakTable';
+import OakPagination from '../Ux/OakPagination';
 
 interface Props{
   match: any,
@@ -34,7 +35,9 @@ interface State{
   sidebarElements:any,
   existingCategories: any,
   newCategory: String,
-  data?: any
+  data?: any,
+  pageNo: number,
+  rowsPerPage: number
 }
 
 export default class Faq extends React.Component<Props, State> {
@@ -51,6 +54,8 @@ export default class Faq extends React.Component<Props, State> {
       answer: '',
       newCategory: '',
       editDialogLabel: 'Article',
+      pageNo: 1,
+      rowsPerPage: 6,
 
       sidebarElements: {
         article: [
@@ -259,11 +264,18 @@ export default class Faq extends React.Component<Props, State> {
   }
 
   onChangePage = (pageNo: number, rowsPerPage: number) => {
-    console.log(pageNo, rowsPerPage);
+      this.setState({
+          pageNo: pageNo,
+          rowsPerPage: rowsPerPage
+      });
   }
 
   render() {
-    const listview = this.state.faq.map(item => (
+    let view: any[] = [];
+    if (this.state.faq) {
+      view = this.state.faq.slice((this.state.pageNo - 1) * this.state.rowsPerPage, this.state.pageNo * this.state.rowsPerPage);
+    }
+    const listview = view.map(item => (
       <div key={item._id}>
         <Link id={item._id} faq={item} editFaq={this.editFaq} confirmDeleteFaq={this.confirmDeleteFaq} search={this.searchByWord}></Link>
         <br />
@@ -301,8 +313,9 @@ export default class Faq extends React.Component<Props, State> {
         <ViewResolver sideLabel='More options'>
             <View main>
             {listview}
+            <OakPagination totalRows={this.state.faq.length} onChangePage={this.onChangePage} label="Items per page" />
             {/* Temporary for illustration */}
-            <OakTable material onChangePage={this.onChangePage} data={this.state.data} header={[{key: "name", label:"Name"},
+            <OakTable material data={this.state.data} header={[{key: "name", label:"Name"},
                                                       {key: "calories", label:"Calories"},
                                                       {key: "fat", label:"Fat"},
                                                       {key: "carbs", label:"Carbohydrates"},

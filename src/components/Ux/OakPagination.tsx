@@ -35,7 +35,7 @@ class OakPagination extends Component<Props, State> {
     }
 
     nextPage = () => {
-        if (Math.round(this.props.totalRows / this.state.rowsPerPage) !== this.state.pageNo) {
+        if (Math.ceil(this.props.totalRows / this.state.rowsPerPage) !== this.state.pageNo) {
             this.setState({
                 pageNo: this.state.pageNo + 1
             }, () => this.pageChanged());
@@ -67,7 +67,7 @@ class OakPagination extends Component<Props, State> {
                 </div>
                 <div className="page-nav">
                     <div className="space-right-2"><i className={this.state.pageNo === 1 ? "material-icons disabled" : "material-icons"} onClick={this.previousPage}>keyboard_arrow_left</i></div>
-                    <div><i className={Math.round(this.props.totalRows / this.state.rowsPerPage) === this.state.pageNo ? "material-icons disabled" : "material-icons"} onClick={this.nextPage}>keyboard_arrow_right</i></div>
+                    <div><i className={Math.ceil(this.props.totalRows / this.state.rowsPerPage) === this.state.pageNo ? "material-icons disabled" : "material-icons"} onClick={this.nextPage}>keyboard_arrow_right</i></div>
                 </div>
             </div>
         )
