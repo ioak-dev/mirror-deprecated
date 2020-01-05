@@ -6,7 +6,8 @@ import OakDialog from './OakDialog';
 interface Props {
     visible: boolean,
     toggleVisibility: any,
-    action: any
+    action: any,
+    text?: string
 }
 
 interface State {
@@ -38,7 +39,7 @@ class OakPrompt extends Component<Props, State> {
         return (
             <OakDialog small visible={this.props.visible} toggleVisibility={this.props.toggleVisibility}>
                 <div className="dialog-body typography-4 space-top-4 space-bottom-4">
-                    Are you sure you want to continue?
+                    {this.props.text ? this.props.text : "Are you sure you want to continue?"}
                 </div>
                 <div className="dialog-footer">
                     {this.props.children && this.props.children}
