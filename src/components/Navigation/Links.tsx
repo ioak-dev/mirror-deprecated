@@ -27,6 +27,7 @@ class Links extends Component<Props, State> {
                     <>
                     <NavLink to={"/" + this.props.profile.tenant + "/home"} className="navitem" activeClassName="active">Home</NavLink>
                     <NavLink to={"/" + this.props.profile.tenant + "/faq"} className="navitem" activeClassName="active">FAQ</NavLink>
+                    <NavLink to={"/" + this.props.profile.tenant + "/servicerequests"} className="navitem" activeClassName="active">ServiceRequests</NavLink>
                     <NavLink to={"/" + this.props.profile.tenant + "/settings"} className="navitem" activeClassName="active">Settings</NavLink>
                     </>
                 }
