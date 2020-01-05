@@ -93,4 +93,20 @@
 
     }
 
+    &.small {
+        .dialog {
+            height: auto;
+            top: 30vh;
+
+            .dialog-header {
+                display: none;
+            }
+
+            .dialog-body {
+                // height: calc(40vh - var(--height-nav) - 135px);
+                height: auto;
+            }
+        }
+    }
+
 }

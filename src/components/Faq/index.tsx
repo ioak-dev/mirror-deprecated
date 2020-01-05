@@ -14,6 +14,7 @@ import { sendMessage } from '../../events/MessageService';
 import Sidebar from '../Ux/Sidebar';
 import OakTable from '../Ux/OakTable';
 import OakPagination from '../Ux/OakPagination';
+import OakPrompt from '../Ux/OakPrompt';
 
 interface Props{
   match: any,
@@ -148,9 +149,7 @@ export default class Faq extends React.Component<Props, State> {
 
   toggleDeleteDialog = () => {
     this.setState({
-        isDeleteDialogOpen: !this.state.isDeleteDialogOpen,
-        id: undefined,
-        editDialogLabel: 'Delete'
+        isDeleteDialogOpen: !this.state.isDeleteDialogOpen
     })
   }
 
@@ -283,7 +282,7 @@ export default class Faq extends React.Component<Props, State> {
     ))
     return (
       <div className="faq">
-        <OakDialog title="Add FAQ " visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
+        <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
           <div className="dialog-body">
           <div><OakSelect label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.state.existingCategories} firstAction="<create new>" /></div>
           <div>
@@ -300,7 +299,7 @@ export default class Faq extends React.Component<Props, State> {
         </OakDialog>
         
       {this.state.isDeleteDialogOpen}
-        <OakDialog title="Delete FAQ " visible={this.state.isDeleteDialogOpen} toggleVisibility={this.toggleDeleteDialog}>
+        {/* <OakDialog small visible={this.state.isDeleteDialogOpen} toggleVisibility={this.toggleDeleteDialog}>
           <div className="dialog-body">
             Are you sure you want to continue?
             </div>
@@ -308,7 +307,8 @@ export default class Faq extends React.Component<Props, State> {
             <button onClick={this.toggleDeleteDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
             <button onClick={this.deleteFaq} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
           </div>
-        </OakDialog>
+        </OakDialog> */}
+        <OakPrompt action={this.deleteFaq} visible={this.state.isDeleteDialogOpen} toggleVisibility={this.toggleDeleteDialog} />
 
         <ViewResolver sideLabel='More options'>
             <View main>
