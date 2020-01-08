@@ -83,26 +83,26 @@ export default class ServiceRequests extends Component<Props, State> {
         
     }
 
-    onChangePage = (pageNo: number, rowsPerPage: number) => {
-        this.setState({
-            pageNo: this.state.pageNo,
-            rowsPerPage: this.state.rowsPerPage
-        })
-        const that = this;
-        httpGet(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/',
-        {
-            headers:{
-                Authorization: this.props.authorization.token
-            }
-        })
-        .then(function(response){
-            that.setState({
-                data:response.data.data,
-            });
-        })
-        console.log(pageNo, rowsPerPage);
-    }
+    // onChangePage = (pageNo: number, rowsPerPage: number) => {
+    //     this.setState({
+    //         pageNo: this.state.pageNo,
+    //         rowsPerPage: this.state.rowsPerPage
+    //     })
+    //     const that = this;
+    //     httpGet(constants.API_URL_SR + '/' + 
+    //     this.props.match.params.tenant + '/',
+    //     {
+    //         headers:{
+    //             Authorization: this.props.authorization.token
+    //         }
+    //     })
+    //     .then(function(response){
+    //         that.setState({
+    //             data:response.data.data,
+    //         });
+    //     })
+    //     console.log(pageNo, rowsPerPage);
+    // }
 
     toggleEditDialog = () => {
         this.setState({
@@ -177,7 +177,7 @@ export default class ServiceRequests extends Component<Props, State> {
                 <ViewResolver sideLabel='More options'>
                     <View main>
                         <OakTable material
-                        data={this.state.data} header={[{key:"requestno", label:"Request Number"},
+                        data={this.state.data} header={[{key:"requestNo", label:"Request Number"},
                                 {key:"title", label:"Title"},
                                 {key:"description", label:"Description"},
                                 {key:"status", label:"Status"},

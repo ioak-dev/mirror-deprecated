@@ -48,6 +48,7 @@ class OakTable extends Component<Props, State> {
         } else if (this.props.data && !this.props.totalRows) {
             view = this.props.data.slice((this.state.pageNo - 1) * this.state.rowsPerPage, this.state.pageNo * this.state.rowsPerPage);
         }
+        let key = 0;
 
         return (
             <div className={this.props.material ? "oak-table material" : "oak-table"}>
@@ -63,9 +64,9 @@ class OakTable extends Component<Props, State> {
                         </thead>
                         <tbody>
                         {this.props.data && view.map(row => 
-                            <tr key={row[this.props.header[0].key]}>
+                            <tr key={key=key+1}>
                                 {this.props.header && this.props.header.map(column =>
-                                    <td key={column.key}>{row[column.key]}</td>
+                                    <td key={key=key+1}>{row[column.key]}</td>
                                     )
                                 }
                             </tr>
@@ -78,9 +79,9 @@ class OakTable extends Component<Props, State> {
                 <div className="mobile-view">
                     <div className="card-container">
                         {this.props.data && view.map(row => 
-                            <div className="card" key={row[this.props.header[0].key]}>
+                            <div className="card" key={key=key+1}>
                                 {this.props.header && this.props.header.map(column =>
-                                    <div key={column.key}>
+                                    <div key={key=key+1}>
                                         <b>{column.label}</b>: {row[column.key]}
                                     </div>
                                     )
