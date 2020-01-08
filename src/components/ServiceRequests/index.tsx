@@ -11,6 +11,7 @@ import OakDialog from '../Ux/OakDialog';
 import OakTextField from '../Ux/OakTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
+import ServiceRequestView from './view';
 
 interface Props{
     match: any,
@@ -28,7 +29,8 @@ interface State{
     pageNo: number,
     rowsPerPage: number,
     title: string,
-    description: string
+    description: string,
+    selectedRequest: any
 }
 
 export default class ServiceRequests extends Component<Props, State> {
@@ -42,6 +44,7 @@ export default class ServiceRequests extends Component<Props, State> {
             editDialogLabel: 'Service Request',
             title:'',
             description:'',
+            selectedRequest: undefined,
 
             sidebarElements: {
                 serviceRequest: [
@@ -64,7 +67,13 @@ export default class ServiceRequests extends Component<Props, State> {
           tenant: this.props.match.params.tenant
         })
     
-      }
+    }
+
+    openRequest = (request) => {
+        this.setState({
+            selectedRequest: request
+        })
+    }
 
     initializeRequest(authorization) {
         const that = this;
@@ -75,9 +84,30 @@ export default class ServiceRequests extends Component<Props, State> {
                 Authorization: this.props.authorization.token
             }
         })
-        .then(function(response){
-            that.setState({
-                data:response.data.data,
+        .then((response) => {
+            let list: any[] = [];
+            response.data.data.forEach((item) => {
+                if (item.status === 'assigned') {
+                    item.status = <div className="tag-2"><span>{'Assigned to ' + item.stage}</span></div>
+                } else if (item.status === 'progress') {
+                    item.status = <div className="tag-4"><span>{'In progress with ' + item.stage}</span></div>
+                } else if (item.status === 'resolved') {
+                    item.status = <div className="tag-5"><span>Resolved</span></div>
+                }
+
+                
+                list.push({
+                    ...item, 
+                    action: 
+                    <>
+                        <button className="primary noborder icon animate none align-left" onClick={() => this.openRequest(item)}><i className="material-icons">open_in_new</i></button>
+                        {item.status === 'resolved' && 
+                            <button className="default noborder icon animate none align-right"><i className="material-icons">archive</i></button>}
+                    </>
+                })
+            })
+            this.setState({
+                data: list
             });
         })
         
@@ -107,7 +137,8 @@ export default class ServiceRequests extends Component<Props, State> {
     toggleEditDialog = () => {
         this.setState({
             isEditDialogOpen: !this.state.isEditDialogOpen,
-            editDialogLabel: 'Add'
+            editDialogLabel: 'Add',
+            selectedRequest: undefined
         })
     }
 
@@ -158,8 +189,6 @@ export default class ServiceRequests extends Component<Props, State> {
             }
         )
     }
-    
-
 
     render() {
         return (
@@ -174,6 +203,7 @@ export default class ServiceRequests extends Component<Props, State> {
                         <button onClick={this.addRequest} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
                     </div>
                 </OakDialog>
+                <ServiceRequestView {...this.props} request = {this.state.selectedRequest}/>
                 <ViewResolver sideLabel='More options'>
                     <View main>
                         <OakTable material
@@ -183,8 +213,8 @@ export default class ServiceRequests extends Component<Props, State> {
                                 {key:"description", label:"Description"},
                                 {key:"status", label:"Status"},
                                 {key:"category", label:"Category"},
-                                {key:"createDate", label:"Create Date"},
-                                {key:"updateDate", label:"Update Date "}]} >
+                                {key:"createDate", label:"Opened On"},
+                                {key:"action", label:"Action"}]} >
                         </OakTable>                    
                     </View>
                     <View side>
