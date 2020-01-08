@@ -37,6 +37,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-gap: 15px;
+        word-break: break-word;
         .card {
             // background-color: aquamarine;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
