@@ -52,4 +52,18 @@
             justify-content: flex-end;
         }
     }
+
+    .request-created {
+        word-break: break-word;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        .request-icon {
+            color: var(--color-success);
+            .material-icons {
+                font-size: 5em;
+            }
+        }
+    }
 }
