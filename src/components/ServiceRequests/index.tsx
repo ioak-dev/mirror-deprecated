@@ -177,7 +177,8 @@ export default class ServiceRequests extends Component<Props, State> {
                 <ViewResolver sideLabel='More options'>
                     <View main>
                         <OakTable material
-                        data={this.state.data} header={[{key:"requestNo", label:"Request Number"},
+                        data={this.state.data} header={[
+                                {key:"_id", label:"Request Number"},
                                 {key:"title", label:"Title"},
                                 {key:"description", label:"Description"},
                                 {key:"status", label:"Status"},
