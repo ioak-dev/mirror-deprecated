@@ -1,0 +1,72 @@
+.requests {
+    .form {
+        width: 100%;
+    }
+
+    .tag {
+        cursor: pointer;
+        background-color: var(--color-body-dim);
+        display: inline;
+        margin-right: 10px;
+        padding: 0px 4px 2px 4px;
+        border-radius: 50px;
+        text-align: center;
+        vertical-align: center;
+        font-size: 16px;
+    }
+
+    .action-icon {
+        cursor: pointer;
+        display: inline;
+        padding-left: 10px;
+        color: var(--color-primary);
+        color: var(--color-body-invert-dim);
+
+        .material-icons {
+          vertical-align: middle;
+          margin-right: 5px;
+          font-size: 1em
+        }
+    }
+
+    .url, .title {
+        word-break: break-word;
+    }
+
+    .timestamp {
+        color: var(--color-body-invert-dim);
+    }
+
+
+    .tag-1 > span {
+        background-color: var(--color-tag-1);
+    }
+
+    .tag-2 > span {
+        background-color: var(--color-tag-2);
+    }
+
+    .tag-3 > span {
+        background-color: var(--color-tag-3);
+    }
+
+    .tag-4 > span {
+        background-color: var(--color-tag-4);
+    }
+
+    .tag-5 > span {
+        background-color: var(--color-tag-5);
+    }
+
+    .tag-6 > span {
+        background-color: var(--color-tag-6);
+    }
+
+    .tag-1, .tag-2, .tag-3, .tag-4, .tag-5, .tag-6 {
+        span {
+            color: white;
+            padding: 2px 6px 2px 6px;
+            border-radius: 3px;
+        }
+    }
+}

@@ -10,7 +10,12 @@ export const constants ={
     API_URL_USER_DETAILS: "/user/details",
 
     API_URL_STAGE:"/stage",
-    
+    API_URL_PREDICT: "/model/predict",
+
+    API_URL_ARTICLE:"/article",
+    API_URL_CATEGORY:"/category",
+    API_URL_FAQ:"/faq",
+    API_URL_SR:"/servicerequests",
     API_URL:"/auth/",
     API_SIGNIN:"/signin",
     API_SIGNUP:"/signup",

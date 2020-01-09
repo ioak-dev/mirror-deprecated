@@ -1,5 +1,5 @@
 import React from 'react';
-import './ArcText.scss';
+import './OakText.scss';
 
 interface Props {
     label: string,
@@ -10,9 +10,9 @@ interface Props {
     errorFields?: any,
     disabled?: boolean
 }
-function ArcText(props: Props) {
+function OakText(props: Props) {
     return (
-        <div className="arc-text-field">
+        <div className="oak-text-field">
             <label>{props.label}</label>
             <input disabled={props.disabled} autoComplete="off"
                 className={(props.errorFields && props.errorFields[props.id] ? "error" : "") + (props.disabled ? " disabled" : "")}
@@ -21,7 +21,7 @@ function ArcText(props: Props) {
     )
 }
 
-ArcText.propTypes = {
+OakText.propTypes = {
 };
 
-export default ArcText;
+export default OakText;

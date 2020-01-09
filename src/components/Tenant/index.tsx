@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.scss';
-import ArcText from '../Ux/ArcText';
+import OakText from '../Ux/OakText';
 import { sendMessage } from '../../events/MessageService';
 import { sentTenantUrl } from './TenantService'
 import {preSignup, createTenant } from '../Auth/AuthService'
@@ -186,11 +186,11 @@ export default class Tenant extends React.Component<Props, State> {
         {!this.state.created && <div className="typography-3 space-bottom-4">Tenant creation</div>}
         {this.state.created && <div className="typography-3 space-bottom-4">Tenant [{this.state.name}] available now</div>}
         {this.state.pageNo === 1 && <div className="form">
-          <ArcText id="name" data={this.state} label="Tenant Name"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-          <ArcText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-          <ArcText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-          <ArcText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
-          <ArcText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></ArcText>
+          <OakText id="name" data={this.state} label="Tenant Name"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
+          <OakText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
+          <OakText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
+          <OakText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
+          <OakText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
           <label className="file-upload space-top-1 space-bottom-4">
             <input type="file" accept="image/png, image/jpeg" onChange={this.handleImageChange} required/>
             <i className="material-icons">add_photo_alternate</i>

@@ -117,7 +117,7 @@ button {
           right: 0;
           width: var(--width-end);
         }
-      }        
+      }
     }
   }
 
@@ -178,6 +178,15 @@ button {
         }
       }
     }
+
+    &.animate {
+      &.none {
+        background: none;
+        &:hover {
+          background: var(--color-btn-dark-bg);
+        }
+      }
+    }
   }
 
   &.primary {
@@ -212,6 +221,15 @@ button {
       color: var(--color-btn-light-bg);
       &:hover {
         color: var(--color-btn-light-bg);
+      }
+    }
+
+    &.animate {
+      &.none {
+        background: none;
+        &:hover {
+          background: var(--color-btn-primary-bg);
+        }
       }
     }
   }
@@ -250,6 +268,15 @@ button {
         color: var(--color-btn-light-bg);
       }
     }
+
+    &.animate {
+      &.none {
+        background: none;
+        &:hover {
+          background: var(--color-btn-primary-bg);
+        }
+      }
+    }
   }
 
   &.noborder {
@@ -267,6 +294,18 @@ button {
 
   .uppercase {
     text-transform: uppercase;
+  }
+
+  &.icon {
+    border-width: 1px;
+    padding: 2px 4px;
+    .material-icons {
+      margin: 0;
+      font-size: 1.8em;
+    }
+  }
+
+  &.animate {
   }
 
   // &.animate {

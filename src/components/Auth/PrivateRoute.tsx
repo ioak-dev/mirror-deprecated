@@ -17,6 +17,7 @@ interface State {
 
 class PrivateRoute extends Component<Props, State> {
   componentWillMount() {
+    console.log(this.props);
     this.props.getAuth();
   }
 
@@ -24,7 +25,7 @@ class PrivateRoute extends Component<Props, State> {
     return (
       <>
         {this.props.authorization.isAuth && <Route path={this.props.path} render={this.props.render} />}
-        {!this.props.authorization.isAuth && <Redirect to={{pathname: "/home"}} />}
+        {/* {!this.props.authorization.isAuth && !this.props.path.endsWith('/home') && <Redirect to={{pathname: "/home"}} />} */}
       </>
     );
   }

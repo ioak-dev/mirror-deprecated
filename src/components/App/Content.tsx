@@ -22,6 +22,8 @@ import { Authorization } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import Tenant from '../Tenant';
 import Settings from './../Settings';
+import Faq from '../Faq';
+import ServiceRequests from '../ServiceRequests'
 
 const themes = {
     'themecolor_1': getTheme('#69A7BF'),
@@ -111,6 +113,8 @@ class Content extends Component<Props, State> {
                                 <Route path="/home" exact render={(props: any) => <Landing {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <Route path="/tenant" exact render={(props: any) => <Tenant {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <PrivateRoute path="/:tenant/settings" render={(props: any) => <Settings {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <PrivateRoute path="/:tenant/faq" render={(props: any) => <Faq {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <PrivateRoute path="/:tenant/servicerequests" render={(props: any) => <ServiceRequests {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                             </MuiThemeProvider>
                         </div>
                     </div>

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import './style.scss';
-import ArcText from '../Ux/ArcText';
+import OakText from '../Ux/OakText';
 import { Authorization } from '../Types/GeneralTypes';
 import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
 import { constants } from '../Constants';
+import { sendMessage } from '../../events/MessageService';
 
 interface Props {
     match: any,
@@ -30,7 +31,7 @@ export default class Stages extends Component<Props, State> {
         }}
         ).then ((response) => {
             this.setState({
-                stage: response.data
+                stage: response.data.stage
                 })
             }).catch(() => {})
     }
@@ -63,9 +64,15 @@ export default class Stages extends Component<Props, State> {
                 Authorization: this.props.authorization.token
                 }
             })
-                .then(function(response){
-                    return Promise.resolve(response)
-                    })
+            .then((response) => {
+                if (response.status === 200) {
+                    sendMessage('notification', true, {message: 'Stages Updated successfully', type: 'success', duration: 3000});
+                } else if (response.status === 500) {
+                    sendMessage('notification', true, {message: 'Stages Updation failed', type: 'failure', duration: 3000});
+                } else {
+                    sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
+                }
+                })
         }
 
     resetStages = () => {
@@ -91,7 +98,7 @@ export default class Stages extends Component<Props, State> {
                     <div className="space-bottom-2"></div>
                     {this.state.stage && this.state.stage.map((item, idx) => (
                         <div className="stage-row" key={idx}>
-                            <div><ArcText  id="name" label={`Level ${idx+1}`} data={item} handleChange ={ (e) =>this.handleChangeStage(e, idx) } /></div>
+                            <div><OakText  id="name" label={`Level ${idx+1}`} data={item} handleChange ={ (e) =>this.handleChangeStage(e, idx) } /></div>
                             <div><button className="secondary animate in right space-bottom-2" onClick={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</button></div>
                             </div>
                             ))}

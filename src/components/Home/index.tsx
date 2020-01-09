@@ -2,25 +2,37 @@ import React from 'react';
 import './style.scss';
 import cover from '../../images/cover.jpg';
 import SearchBar from '../Ux/SearchBar';
-
+import { constants } from '../Constants';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import { searchTextChangedEvent$, searchEvent$ } from '../../events/SearchEvent';
 import { getBanner } from '../Tenant/TenantService';
-
+import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
+import { Authorization } from '../Types/GeneralTypes';
+import OakDialog from '../Ux/OakDialog';
+import OakTextField from '../Ux/OakTextField';
+import { isEmptyOrSpaces } from '../Utils';
+import OakPrompt from '../Ux/OakPrompt';
 
 const pageYOffsetCutoff = 10;
 
 interface Props {
   setProfile: Function,
   profile: any,
-  match: any
+  match: any,
+  authorization: Authorization,
+  history: any
 }
 
 interface State {
   banner: any,
   prevScrollpos: number,
   showMainSearchBar: boolean,
-  searchText: string
+  searchResults: any[],
+  isCreateRequestDialogOpen: boolean,
+  isNotLoggedInPromptOpen: boolean,
+  searchTitle: string,
+  searchDescription: string,
+  requestId?: string
 }
 
 export default class Home extends React.Component<Props, State> {
@@ -30,7 +42,11 @@ export default class Home extends React.Component<Props, State> {
       banner: null,
       prevScrollpos: window.pageYOffset,
       showMainSearchBar: true,
-      searchText: ""
+      searchTitle: '',
+      searchDescription: '',
+      isCreateRequestDialogOpen: false,
+      isNotLoggedInPromptOpen: false,
+      searchResults: []
     };
   }
 
@@ -42,11 +58,37 @@ export default class Home extends React.Component<Props, State> {
       tenant: this.props.match.params.tenant
     })
 
-    searchEvent$.subscribe(searchText => {
-      this.setState({
-        searchText: searchText
-      });
+    searchEvent$.subscribe(searchText => this.search(searchText))
+  }
+
+  search = (searchText: string) => {
+    this.setState({
+      searchTitle: searchText,
+      requestId: undefined
     })
+    httpPost('/deeplearning/' + 
+    this.props.match.params.tenant + constants.API_URL_PREDICT, searchText,
+    {headers: {
+        Authorization: this.props.authorization.token
+    }}
+    ).then ((response) => {
+      let predictionMap: any = {};
+      response.data.prediction.forEach(element => {
+        predictionMap[element.rank] = element.label
+      });
+      httpGet(constants.API_URL_FAQ + '/' + 
+      this.props.match.params.tenant + '/category/' + predictionMap[response.data.prediction.length - 1],
+        {
+          headers:{
+            Authorization: this.props.authorization.token
+          }
+        })
+        .then((faqs) => {
+          this.setState({
+            searchResults: faqs.data.data
+          });
+        })
+    }).catch(() => {})
   }
 
   componentWillUnmount() {
@@ -96,22 +138,116 @@ export default class Home extends React.Component<Props, State> {
     });
   };
 
+  notHelpful = () => {
+    console.log(this.props.authorization);
+    if (this.props.authorization && this.props.authorization.token) {
+      this.toggleEditDialog();
+    } else {
+      this.toggleNotLoggedInPrompt();
+    }
+  }
+
+  toggleEditDialog = () => {
+      this.setState({
+          isCreateRequestDialogOpen: !this.state.isCreateRequestDialogOpen
+          // editDialogLabel: 'Add'
+      })
+  }
+
+  toggleNotLoggedInPrompt = () => {
+    this.setState({
+      isNotLoggedInPromptOpen: !this.state.isNotLoggedInPromptOpen
+    })
+  }
+
+  redirectToLogin = () => {
+    this.props.history.push("/" + this.props.match.params.tenant + "/login");
+  }
+
+  handleChange = (event) => {
+      this.setState(
+          {
+              ...this.state,
+              [event.target.name]: event.target.value
+          }
+      )
+  }
+
+
+  addRequest = () => {
+    const that = this;
+    let request = {
+        title: this.state.searchTitle,
+        description: this.state.searchDescription,
+    }
+    if (isEmptyOrSpaces(request.title)) {
+        sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
+        return;
+    }
+
+    if (isEmptyOrSpaces(request.description)) {
+        sendMessage('notification', true, {type: 'failure', message: 'Description is missing', duration: 5000});
+        return;
+    }
+
+    httpPut(constants.API_URL_SR + '/' + 
+    this.props.match.params.tenant + '/',
+    request,
+    {
+      headers: {
+        Authorization: this.props.authorization.token
+      }
+    })
+    .then((response) => {
+        if (response.status === 200) {
+            sendMessage('notification', true, {type: 'success', message: 'Request created [' + response.data._id + ']', duration: 10000});
+            this.toggleEditDialog();
+            this.setState({
+              requestId: response.data._id
+            })
+        }
+    });
+  }
+
   render() {
     return (
-      <>
-        <div className="home full">
-            <div className='cover'>
-              {/* <img src={cover}/> */}
-              <img src={this.state.banner} alt="Red dot" />
+      <div className="home full">
+        <OakDialog visible={this.state.isCreateRequestDialogOpen} toggleVisibility={this.toggleEditDialog}>
+            <div className="dialog-body">
+                <OakTextField label="Title" data={this.state} id="searchTitle" handleChange={e => this.handleChange(e)} />
+                <OakTextField label="Description" data={this.state} id="searchDescription" handleChange={e => this.handleChange(e)} />
             </div>
-            {this.state.showMainSearchBar && <SearchBar />}
+            <div className="dialog-footer">
+                <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
+                <button onClick={this.addRequest} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>Create Service Request</button>
+            </div>
+        </OakDialog>
+        <OakPrompt action={this.redirectToLogin} visible={this.state.isNotLoggedInPromptOpen} toggleVisibility={this.toggleNotLoggedInPrompt} text="You are not logged in. Do you want to login to submit a service request?" />
+          <div className='cover'>
+            <img src={this.state.banner} alt="Red dot" />
+          </div>
+          {this.state.showMainSearchBar && <SearchBar />}
 
-            <div className='search-results'>
-              Search results goes here
-              <br /> {this.state.searchText}
+          <div className='search-results'>
+            <div className="action-bar">
+              <button className="primary animate in right align-left">Helpful</button>
+              <button className="primary animate in right align-right" onClick={this.notHelpful}>Not Helpful</button>
             </div>
-        </div>
-      </>
+            {this.state.searchResults && this.state.searchResults.map(item =>
+              <div key={item.question} className="result-record">
+                <div className="question typography-4 space-bottom-2">{item.question}</div>
+                <div className="answer typography-5">{item.answer}</div>
+              </div>
+            )}
+            {this.state.requestId &&
+              <div className="request-created">
+                <div className="request-icon"><i className="material-icons">file_copy</i></div>
+                <div className="request-id typography-4">{this.state.requestId}</div>
+                <div className="request-message typography-5">Your request has been created and an email has been sent to your inbox with details</div>
+              </div>
+            }
+          </div>
+      </div>
     );
   }
 }
