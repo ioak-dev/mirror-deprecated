@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Authorization } from '../Types/GeneralTypes';
 import './style.scss'
 import OakDialog from '../Ux/OakDialog';
-import OakTextField from '../Ux/OakTextField';
+import OakText from '../Ux/OakText';
 
 interface Props {
     match: any,
@@ -81,8 +81,8 @@ export default class ServiceRequestView extends Component<Props, State> {
             <div className="view-request">
                 <OakDialog visible={this.state.isDialogOpen} toggleVisibility={this.toggleDialog}>
                     <div className="dialog-body">
-                        <OakTextField label="Title" data={this.state.request} id="title" handleChange={e => this.handleChange(e)} />
-                        <OakTextField label="Description" data={this.state.request} id="description" handleChange={e => this.handleChange(e)} />
+                        <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleChange(e)} />
+                        <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleChange(e)} />
                     </div>
                     <div className="dialog-footer">
                         <button onClick={this.toggleDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>

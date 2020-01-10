@@ -2,9 +2,8 @@
 
     // width: 100%;
     
-    input {
-        padding-top: 10px;
-        padding-bottom: 10px;
+    input, textarea {
+        width: 100%;
         color: var(--color-body-invert);
         font-size: 1em;
         outline: none;
@@ -12,6 +11,7 @@
         background-color: var(--color-body-dim);
         margin-bottom: 20px;
         box-sizing:border-box;
+        padding: 10px 16px;
         // border: 2px solid;
         // border-color: var(--color-body-dim);
 
@@ -33,6 +33,10 @@
         &.disabled {
             background-color: var(--color-body);
         }
+    }
+
+    textarea {
+        resize: vertical;
     }
 
     label {

@@ -9,9 +9,9 @@ import { getBanner } from '../Tenant/TenantService';
 import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
 import { Authorization } from '../Types/GeneralTypes';
 import OakDialog from '../Ux/OakDialog';
-import OakTextField from '../Ux/OakTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import OakPrompt from '../Ux/OakPrompt';
+import OakText from '../Ux/OakText';
 
 const pageYOffsetCutoff = 10;
 
@@ -214,8 +214,8 @@ export default class Home extends React.Component<Props, State> {
       <div className="home full">
         <OakDialog visible={this.state.isCreateRequestDialogOpen} toggleVisibility={this.toggleEditDialog}>
             <div className="dialog-body">
-                <OakTextField label="Title" data={this.state} id="searchTitle" handleChange={e => this.handleChange(e)} />
-                <OakTextField label="Description" data={this.state} id="searchDescription" handleChange={e => this.handleChange(e)} />
+                <OakText label="Title" data={this.state} id="searchTitle" handleChange={e => this.handleChange(e)} />
+                <OakText label="Description" data={this.state} id="searchDescription" handleChange={e => this.handleChange(e)} />
             </div>
             <div className="dialog-footer">
                 <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>

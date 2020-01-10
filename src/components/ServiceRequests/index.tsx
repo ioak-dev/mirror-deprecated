@@ -8,10 +8,10 @@ import Sidebar from '../Ux/Sidebar';
 import { httpGet, httpDelete, httpPost, httpPut } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
 import OakDialog from '../Ux/OakDialog';
-import OakTextField from '../Ux/OakTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
 import ServiceRequestView from './view';
+import OakText from '../Ux/OakText';
 
 interface Props{
     match: any,
@@ -88,9 +88,9 @@ export default class ServiceRequests extends Component<Props, State> {
             let list: any[] = [];
             response.data.data.forEach((item) => {
                 if (item.status === 'assigned') {
-                    item.status = <div className="tag-2"><span>{'Assigned to ' + item.stage}</span></div>
+                    item.status = <div className="tag-2"><span>{'Assigned_to_' + item.stage}</span></div>
                 } else if (item.status === 'progress') {
-                    item.status = <div className="tag-4"><span>{'In progress with ' + item.stage}</span></div>
+                    item.status = <div className="tag-4"><span>{'In_progress_with ' + item.stage}</span></div>
                 } else if (item.status === 'resolved') {
                     item.status = <div className="tag-5"><span>Resolved</span></div>
                 }
@@ -195,8 +195,8 @@ export default class ServiceRequests extends Component<Props, State> {
             <div className="requests">
                 <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
                     <div className="dialog-body">
-                        <OakTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                        <OakTextField label="Description" data={this.state} id="description" handleChange={e => this.handleChange(e)} />
+                        <OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
+                        <OakText label="Description" data={this.state} id="description" handleChange={e => this.handleChange(e)} />
                     </div>
                     <div className="dialog-footer">
                         <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
@@ -213,7 +213,7 @@ export default class ServiceRequests extends Component<Props, State> {
                                 {key:"description", label:"Description"},
                                 {key:"status", label:"Status"},
                                 {key:"category", label:"Category"},
-                                {key:"createDate", label:"Opened On"},
+                                {key:"createDate", label:"Opened On", dtype: "date"},
                                 {key:"action", label:"Action"}]} >
                         </OakTable>                    
                     </View>
