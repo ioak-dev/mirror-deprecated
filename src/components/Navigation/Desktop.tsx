@@ -8,6 +8,7 @@ import { Authorization, Profile } from '../Types/GeneralTypes';
 // import SearchBar from '../Ux/SearchBar';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import SearchBar from '../Ux/SearchBar';
+import OakButton from '../Ux/OakButton';
 
 interface Props {    
     sendEvent: Function,
@@ -63,15 +64,14 @@ class Desktop extends Component<Props, State> {
                 </div>
                 <div className="right">
                     <div className="action">
-                        {/* <button className="default disabled small" onClick={this.props.toggleSettings}><i className="material-icons">palette</i>Theme</button> */}
                         {this.props.authorization.isAuth && 
-                            <button className="primary animate in alt right align-left small" onClick={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</button>}
+                            <OakButton theme="primary" variant="animate" invert align="left" small action={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</OakButton>}
                         {this.props.authorization.isAuth && 
-                            <button className="primary animate out alt right align-right small" onClick={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</button>}
+                            <OakButton theme="primary" variant="animate out" invert align="right" small action={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</OakButton>}
                         {!this.props.authorization.isAuth && 
-                            <button className="primary animate in alt right align-left small" onClick={() => this.signin('signin')}><i className="material-icons">person</i>Login</button>}
+                            <OakButton theme="primary" variant="animate" invert align="left" small action={() => this.signin('signin')}><i className="material-icons">person</i>Login</OakButton>}
                         {!this.props.authorization.isAuth && 
-                            <button className="primary animate in alt right align-right small" onClick={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</button>}
+                            <OakButton theme="primary" variant="animate" invert align="right" small action={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</OakButton>}
                     </div>
                 </div>
             </div>

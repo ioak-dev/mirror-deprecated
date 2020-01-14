@@ -6,6 +6,7 @@ import { sentTenantUrl } from './TenantService'
 import {preSignup, createTenant } from '../Auth/AuthService'
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { isEmptyOrSpaces } from '../Utils';
+import OakButton from '../Ux/OakButton';
 
 interface Props {
   getProfile: Function,
@@ -198,10 +199,10 @@ export default class Tenant extends React.Component<Props, State> {
             {this.state.banner && this.state.banner.name}
           </label>
           <div className="action">
-            <button className="primary animate in right" onClick={this.submit}>Create Tenant</button>
+            <OakButton theme="primary" variant="animate" action={this.submit}>Create Tenant</OakButton>
           </div>
         </div>}
-        {this.state.created && <button className="primary animate out right" onClick={this.gotoTenantPage}>Take me to my tenant</button>}
+        {this.state.created && <OakButton theme="primary" variant="animate out" action={this.gotoTenantPage}>Take me to my tenant</OakButton>}
       </div>
     );
   }

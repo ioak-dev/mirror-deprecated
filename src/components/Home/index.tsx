@@ -12,6 +12,7 @@ import OakDialog from '../Ux/OakDialog';
 import { isEmptyOrSpaces } from '../Utils';
 import OakPrompt from '../Ux/OakPrompt';
 import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 const pageYOffsetCutoff = 10;
 
@@ -218,8 +219,8 @@ export default class Home extends React.Component<Props, State> {
                 <OakText label="Description" data={this.state} id="searchDescription" handleChange={e => this.handleChange(e)} />
             </div>
             <div className="dialog-footer">
-                <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
-                <button onClick={this.addRequest} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>Create Service Request</button>
+                <OakButton action={this.toggleEditDialog} theme="default" variant="animate" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                <OakButton action={this.addRequest} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Create Service Request</OakButton>
             </div>
         </OakDialog>
         <OakPrompt action={this.redirectToLogin} visible={this.state.isNotLoggedInPromptOpen} toggleVisibility={this.toggleNotLoggedInPrompt} text="You are not logged in. Do you want to login to submit a service request?" />
@@ -230,8 +231,8 @@ export default class Home extends React.Component<Props, State> {
 
           <div className='search-results'>
             <div className="action-bar">
-              <button className="primary animate in right align-left">Helpful</button>
-              <button className="primary animate in right align-right" onClick={this.notHelpful}>Not Helpful</button>
+              <OakButton theme="primary" action="" variant="animate" align="left">Helpful</OakButton>
+              <OakButton theme="primary" variant="animate" align="right" action={this.notHelpful}>Not Helpful</OakButton>
             </div>
             {this.state.searchResults && this.state.searchResults.map(item =>
               <div key={item.question} className="result-record">

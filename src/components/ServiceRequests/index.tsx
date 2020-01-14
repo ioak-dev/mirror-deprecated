@@ -12,6 +12,7 @@ import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
 import ServiceRequestView from './view';
 import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 interface Props{
     match: any,
@@ -95,14 +96,13 @@ export default class ServiceRequests extends Component<Props, State> {
                     item.status = <div className="tag-5"><span>Resolved</span></div>
                 }
 
-                
                 list.push({
                     ...item, 
                     action: 
                     <>
-                        <button className="primary noborder icon animate none align-left" onClick={() => this.openRequest(item)}><i className="material-icons">open_in_new</i></button>
+                        <OakButton theme="primary" variant="block" align="left" action={() => this.openRequest(item)} icon="open_in_new"></OakButton>
                         {item.status === 'resolved' && 
-                            <button className="default noborder icon animate none align-right"><i className="material-icons">archive</i></button>}
+                            <OakButton theme="default" variant="block" align="right" action=""><i className="material-icons">archive</i></OakButton>}
                     </>
                 })
             })
@@ -199,8 +199,8 @@ export default class ServiceRequests extends Component<Props, State> {
                         <OakText label="Description" data={this.state} id="description" handleChange={e => this.handleChange(e)} />
                     </div>
                     <div className="dialog-footer">
-                        <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.addRequest} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
+                        <OakButton action={this.toggleEditDialog} theme="default" variant="animate" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                        <OakButton action={this.addRequest} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
                     </div>
                 </OakDialog>
                 <ServiceRequestView {...this.props} request = {this.state.selectedRequest}/>

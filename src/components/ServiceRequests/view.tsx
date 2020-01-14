@@ -3,6 +3,7 @@ import { Authorization } from '../Types/GeneralTypes';
 import './style.scss'
 import OakDialog from '../Ux/OakDialog';
 import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 interface Props {
     match: any,
@@ -85,7 +86,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                         <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleChange(e)} />
                     </div>
                     <div className="dialog-footer">
-                        <button onClick={this.toggleDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
+                        <OakButton action={this.toggleDialog} theme="default" variant="animate" align="left"><i className="material-icons">close</i>Cancel</OakButton>
                     </div>
                 </OakDialog>
             </div>
