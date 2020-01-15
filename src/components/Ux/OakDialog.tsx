@@ -44,7 +44,11 @@ class OakDialog extends Component<Props, State> {
             <div className={this.props.small ? "oak-dialog small" : "oak-dialog"}>
                 <div className={(this.props.visible ? "dialog show" : "dialog hide")}>
                     <div className={(this.props.visible ? "container": "container hidetext")}>
-                        <div className="dialog-header" onClick={this.props.toggleVisibility}><i className="material-icons">close</i><div className="text-esc">esc</div></div>
+                        <div className="dialog-header">
+                            <div className="container" onClick={this.props.toggleVisibility}>
+                                <i className="material-icons">close</i><div className="text-esc">esc</div>
+                            </div>
+                        </div>
                         {this.props.children}
                     </div>
                 </div>

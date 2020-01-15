@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import './OakButton.scss';
+import './oak-button-slide.scss';
 
 interface Props {
     icon?: string,
     action?: any,
-    variant?: 'block' | 'outline' | 'animate in' | 'animate out' | 'animate none'
+    variant?: 'block' | 'outline' | 'animate in' | 'animate out' | 'animate none' | 'disabled'
     theme?: 'primary' | 'secondary' | 'tertiary' | 'default',
     align?: 'left' | 'right' | 'center',
     small?: boolean,
