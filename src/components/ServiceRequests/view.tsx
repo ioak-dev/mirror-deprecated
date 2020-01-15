@@ -86,7 +86,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                         <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleChange(e)} />
                     </div>
                     <div className="dialog-footer">
-                        <OakButton action={this.toggleDialog} theme="default" variant="animate" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                        <OakButton action={this.toggleDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
                     </div>
                 </OakDialog>
             </div>

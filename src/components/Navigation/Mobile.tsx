@@ -83,12 +83,12 @@ class Mobile extends Component<Props, State> {
                 <div className={(this.state.menu ? "container": "container hidetext")} onClick={this.toggleMenu}>
                     <div className="action">
                         <div className="settings-icon" onClick={this.props.toggleSettings}>
-                            {this.props.authorization.isAuth && <OakButton invert variant="animate" small action={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</OakButton>}
+                            {this.props.authorization.isAuth && <OakButton invert variant="animate in" small action={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</OakButton>}
                         </div>
                         <div className="buttons">
-                            {this.props.authorization.isAuth && <OakButton invert variant="animate" small action={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</OakButton>}
-                            {!this.props.authorization.isAuth && <OakButton invert variant="animate" small action={() => this.signin('signin')}><i className="material-icons">person</i>Login</OakButton>}
-                            {!this.props.authorization.isAuth && <OakButton invert variant="animate" small action={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</OakButton>}
+                            {this.props.authorization.isAuth && <OakButton invert variant="animate in" small action={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</OakButton>}
+                            {!this.props.authorization.isAuth && <OakButton invert variant="animate in" small action={() => this.signin('signin')}><i className="material-icons">person</i>Login</OakButton>}
+                            {!this.props.authorization.isAuth && <OakButton invert variant="animate in" small action={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</OakButton>}
                         </div>
                     </div>
                     <Links authorization={this.props.authorization} profile={this.props.profile}/>

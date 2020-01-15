@@ -46,7 +46,7 @@ class OakPrompt extends Component<Props, State> {
                     {this.props.children && this.props.children}
                     {!this.props.children && 
                         <>
-                            <OakButton action={this.props.toggleVisibility} theme="default" variant="animate" align="left"><i className="material-icons">close</i>No</OakButton>
+                            <OakButton action={this.props.toggleVisibility} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>No</OakButton>
                             <OakButton action={this.action} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Yes</OakButton>
                         </>
                     }

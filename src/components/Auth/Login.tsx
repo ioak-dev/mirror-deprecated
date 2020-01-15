@@ -249,10 +249,10 @@ class Login extends Component<Props, State> {
                         <br />
                         <OakButton variant="animate out" theme="primary" action={this.login}>Sign In</OakButton>
                         <br /> <br />
-                        Don't have an account? <OakButton theme="default" variant="animate" small action={this.toggle}>Sign Up</OakButton>
+                        Don't have an account? <OakButton theme="default" variant="animate in" small action={this.toggle}>Sign Up</OakButton>
                     </form>
                     <br />
-                    <OakButton theme="default" variant="animate" small action={this.sentEmailWithCode}>Forgot password ?</OakButton>
+                    <OakButton theme="default" variant="animate in" small action={this.sentEmailWithCode}>Forgot password ?</OakButton>
                 </div>}
 
                 {this.state.newuser && <div className="container">

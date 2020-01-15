@@ -65,13 +65,13 @@ class Desktop extends Component<Props, State> {
                 <div className="right">
                     <div className="action">
                         {this.props.authorization.isAuth && 
-                            <OakButton theme="primary" variant="animate" invert align="left" small action={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</OakButton>}
+                            <OakButton theme="primary" variant="animate in" invert align="left" small action={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</OakButton>}
                         {this.props.authorization.isAuth && 
                             <OakButton theme="primary" variant="animate out" invert align="right" small action={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</OakButton>}
                         {!this.props.authorization.isAuth && 
-                            <OakButton theme="primary" variant="animate" invert align="left" small action={() => this.signin('signin')}><i className="material-icons">person</i>Login</OakButton>}
+                            <OakButton theme="primary" variant="animate in" invert align="left" small action={() => this.signin('signin')}><i className="material-icons">person</i>Login</OakButton>}
                         {!this.props.authorization.isAuth && 
-                            <OakButton theme="primary" variant="animate" invert align="right" small action={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</OakButton>}
+                            <OakButton theme="primary" variant="animate in" invert align="right" small action={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</OakButton>}
                     </div>
                 </div>
             </div>

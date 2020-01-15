@@ -95,12 +95,12 @@ export default class Stages extends Component<Props, State> {
                 <div className="form">
                     <OakButton theme="secondary" variant="animate out" align="left" action={ this.handleAddStage }><i className="material-icons">label_important</i>New Stage</OakButton>
                     <OakButton theme="primary" variant="animate out" align="center" action={this.saveStages}><i className="material-icons">save_alt</i>Save</OakButton>
-                    <OakButton theme="default" variant="animate" align="right" action={this.resetStages}><i className="material-icons">undo</i>Reset</OakButton>
+                    <OakButton theme="default" variant="animate in" align="right" action={this.resetStages}><i className="material-icons">undo</i>Reset</OakButton>
                     <div className="space-bottom-2"></div>
                     {this.state.stage && this.state.stage.map((item, idx) => (
                         <div className="stage-row" key={idx}>
                             <div><OakText  id="name" label={`Level ${idx+1}`} data={item} handleChange ={ (e) =>this.handleChangeStage(e, idx) } /></div>
-                            <div className="space-bottom-2"><OakButton theme="secondary" variant="animate" action={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</OakButton></div>
+                            <div className="space-bottom-2"><OakButton theme="secondary" variant="animate in" action={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</OakButton></div>
                             </div>
                             ))}
                             {(!this.state.stage || this.state.stage.length === 0) && <div>No custom stages defined</div>}

@@ -74,7 +74,7 @@ class Sidebar extends Component<Props, State> {
                     {/* <div className="aria"><i className="material-icons">{this.state.show ? 'expand_less' : 'expand_more'}</i></div> */}
                     <div className="aria"><i className={this.state.show ? "material-icons collapse" : "material-icons"}>keyboard_arrow_left</i></div>
                 </div>
-                <div className={this.state.show ? "content show " + (this.props.animate ? "animate" : "static") : "content hide " + (this.props.animate ? "animate" : "static")}>
+                <div className={this.state.show ? "content show " + (this.props.animate ? "animate in" : "static") : "content hide " + (this.props.animate ? "animate in" : "static")}>
                     {elements}
                     {this.props.children}
                 </div>

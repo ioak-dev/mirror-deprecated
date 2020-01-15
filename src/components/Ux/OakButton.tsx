@@ -4,8 +4,8 @@ import './OakButton.scss';
 interface Props {
     icon?: string,
     action?: any,
-    variant?: 'block' | 'outline' | 'animate' | 'animate out'
-    theme?: 'primary' | 'secondary' | 'default',
+    variant?: 'block' | 'outline' | 'animate in' | 'animate out' | 'animate none'
+    theme?: 'primary' | 'secondary' | 'tertiary' | 'default',
     align?: 'left' | 'right' | 'center',
     small?: boolean,
     invert?: boolean
@@ -25,22 +25,13 @@ class OakButton extends Component<Props, State> {
 
     getStyle = () => {
         let style = this.props.theme ? this.props.theme : "";
-
-        if (this.props.variant === "animate out") {
-            style = style + " animate out";
-        } else if (this.props.variant === "animate") {
-            style = style + " animate in";
-        } else if (this.props.variant === "block") {
-            style = style + " noborder animate none";
-        } else if (this.props.variant === "outline") {
-            style = style + " animate none";
-        }
+        style = style + (this.props.variant ? " " + this.props.variant : "");
 
         if (!this.props.children) {
             style = style + " icon";
         }
 
-        style = style + (this.props.invert ? " alt": "");
+        style = style + (this.props.invert ? " invert": "");
 
         style = style + (this.props.small ? " small" : "");
 

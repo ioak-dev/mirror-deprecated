@@ -40,6 +40,7 @@ code {
   --color-body-dim: #E6E6E6;
   --color-body-invert: #252525;
   --color-body-invert-dim: #6E6E6E;
+  --color-default: rgba(64,64,64,1);
   --color-primary: #D93D4A;
   --color-primary-alt: #D93D4A;
   --color-secondary: #D9AB23;
@@ -77,16 +78,21 @@ code {
   --color-nav-slider: #373D46;
   --color-navitem-mobile: var(--color-white);
 
+  
   --color-btn-primary-bg: var(--color-primary);
-  --color-btn-primary-bg-hover: var(--color-primary-alt);
+  --color-btn-primary-fg: var(--color-body-invert);
+  --color-btn-primary-fg-hover: white;
   --color-btn-secondary-bg: var(--color-secondary);
-  --color-btn-secondary-bg-hover: var(--color-secondary-alt);
-  --color-btn-dark-bg: var(--color-dark);
-  --color-btn-dark-bg-hover: var(--color-dark-alt);
-  --color-btn-light-bg: var(--color-light);
-  --color-btn-light-bg-hover: var(--color-light-alt);
-  --color-btn-invert-bg: var(--color-body);
-  --color-btn-invert-bg-hover: var(--color-body-dim);
+  --color-btn-secondary-fg: var(--color-body-invert);
+  --color-btn-secondary-fg-hover: white;
+  --color-btn-tertiary-bg: var(--color-tertiary);
+  --color-btn-tertiary-fg: var(--color-body-invert);
+  --color-btn-tertiary-fg-hover: white;
+  --color-btn-default-bg: var(--color-default);
+  --color-btn-default-fg: var(--color-body-invert);
+  --color-btn-default-fg-hover: var(--color-body);
+  
+  --color-btn-action-danger-bg: #DC758F;
 
   --color-btn-fg-dark: black;
   --color-btn-fg-light: white;

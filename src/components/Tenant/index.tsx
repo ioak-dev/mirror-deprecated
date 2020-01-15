@@ -199,7 +199,7 @@ export default class Tenant extends React.Component<Props, State> {
             {this.state.banner && this.state.banner.name}
           </label>
           <div className="action">
-            <OakButton theme="primary" variant="animate" action={this.submit}>Create Tenant</OakButton>
+            <OakButton theme="primary" variant="animate in" action={this.submit}>Create Tenant</OakButton>
           </div>
         </div>}
         {this.state.created && <OakButton theme="primary" variant="animate out" action={this.gotoTenantPage}>Take me to my tenant</OakButton>}

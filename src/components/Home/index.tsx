@@ -219,7 +219,7 @@ export default class Home extends React.Component<Props, State> {
                 <OakText label="Description" data={this.state} id="searchDescription" handleChange={e => this.handleChange(e)} />
             </div>
             <div className="dialog-footer">
-                <OakButton action={this.toggleEditDialog} theme="default" variant="animate" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                <OakButton action={this.toggleEditDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
                 <OakButton action={this.addRequest} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Create Service Request</OakButton>
             </div>
         </OakDialog>
@@ -231,8 +231,8 @@ export default class Home extends React.Component<Props, State> {
 
           <div className='search-results'>
             <div className="action-bar">
-              <OakButton theme="primary" action="" variant="animate" align="left">Helpful</OakButton>
-              <OakButton theme="primary" variant="animate" align="right" action={this.notHelpful}>Not Helpful</OakButton>
+              <OakButton theme="primary" action="" variant="animate in" align="left">Helpful</OakButton>
+              <OakButton theme="primary" variant="animate in" align="right" action={this.notHelpful}>Not Helpful</OakButton>
             </div>
             {this.state.searchResults && this.state.searchResults.map(item =>
               <div key={item.question} className="result-record">

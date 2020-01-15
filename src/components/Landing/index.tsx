@@ -35,10 +35,11 @@ export default class Landing extends React.Component<Props, State> {
         </div>
         {/* <OakSubMenu data = {this.state.data} variant="secondary"/>
         <div>
-          <OakButton small align="left" theme="primary" variant="animate out" icon="open_in_new" action="">test2</OakButton>
-          <OakButton align="right" theme="secondary" variant="animate" icon="open_in_new" action="">test</OakButton>
-          <OakButton align="right" theme="secondary" variant="block" icon="open_in_new" action="">test</OakButton>
-          <OakButton align="right" theme="secondary" variant="outline" icon="open_in_new" action="">test</OakButton>
+          <OakButton align="left" theme="primary" variant="animate out" icon="open_in_new" action="">animate out</OakButton>
+          <OakButton align="right" theme="default" variant="animate in" icon="open_in_new" action="">animate in</OakButton>
+          <OakButton align="right" theme="secondary" variant="animate none" icon="open_in_new" action="">animate none</OakButton>
+          <OakButton align="right" theme="secondary" variant="block" icon="open_in_new" action="">block</OakButton>
+          <OakButton align="right" theme="secondary" variant="outline" icon="open_in_new" action="">outline</OakButton>
           <OakButton align="right" theme="secondary" variant="block" icon="open_in_new" action=""></OakButton>
         </div> */}
       </div>
