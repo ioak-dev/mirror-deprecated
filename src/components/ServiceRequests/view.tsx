@@ -68,11 +68,13 @@ export default class ServiceRequestView extends Component<Props, State> {
         })
     }
 
-    handleChange = (event) => {
+    handleRequestChange = (event) => {
         this.setState(
             {
-                ...this.state,
-                [event.target.name]: event.target.value
+                request: {
+                    ...this.state.request,
+                    [event.target.name]: event.target.value
+                }
             }
         )
     }
@@ -82,8 +84,8 @@ export default class ServiceRequestView extends Component<Props, State> {
             <div className="view-request">
                 <OakDialog visible={this.state.isDialogOpen} toggleVisibility={this.toggleDialog}>
                     <div className="dialog-body">
-                        <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleChange(e)} />
-                        <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleChange(e)} />
+                        <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleRequestChange(e)} />
+                        <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleRequestChange(e)} />
                     </div>
                     <div className="dialog-footer">
                         <OakButton action={this.toggleDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
