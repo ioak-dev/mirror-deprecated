@@ -6,6 +6,11 @@
     .dialog {
         height: calc(100vh - var(--height-nav));
         width: calc(100vw - 362px - 50px);
+
+        &.fullscreen {
+            width: calc(100vw - 25px);
+        }
+
         @media (max-width: 767px) {
             width: calc(100vw - 5px);
         }
@@ -94,11 +99,7 @@
             // padding-right: 2vh;
         }
 
-
-    }
-
-    &.small {
-        .dialog {
+        &.small {
             height: auto;
             top: 30vh;
 
@@ -112,5 +113,4 @@
             }
         }
     }
-
 }

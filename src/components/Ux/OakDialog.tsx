@@ -5,7 +5,8 @@ import { sendMessage } from '../../events/MessageService';
 interface Props {
     visible: boolean,
     toggleVisibility: any,
-    small?: boolean
+    small?: boolean,
+    fullscreen?: boolean
 }
 
 interface State {
@@ -39,10 +40,17 @@ class OakDialog extends Component<Props, State> {
         }
     }
 
+    getDialogStyle = () => {
+        let style = "";
+        style = style + (this.props.small ? " small" : "");
+        style = style + (this.props.fullscreen ? " fullscreen" : "");
+        return style;
+    }
+
     render() {
         return (
-            <div className={this.props.small ? "oak-dialog small" : "oak-dialog"}>
-                <div className={(this.props.visible ? "dialog show" : "dialog hide")}>
+            <div className="oak-dialog">
+                <div className={(this.props.visible ? "dialog show " + this.getDialogStyle() : "dialog hide " + this.getDialogStyle())}>
                     <div className={(this.props.visible ? "container": "container hidetext")}>
                         <div className="dialog-header">
                             <div className="container" onClick={this.props.toggleVisibility}>

@@ -94,17 +94,21 @@ export default class ServiceRequestView extends Component<Props, State> {
         )
     }
 
+    nextStage = (stage) => {
+        console.log(stage);
+    }
+
     render() {
         return (
             <div className="view-request">
-                <OakDialog visible={this.state.isDialogOpen} toggleVisibility={this.toggleDialog}>
+                <OakDialog visible={this.state.isDialogOpen} toggleVisibility={this.toggleDialog} fullscreen>
                     <div className="dialog-body">
                         <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleRequestChange(e)} />
                         <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleRequestChange(e)} />
-                        Next Stage: {this.state.nextStage && this.state.nextStage}
                     </div>
                     <div className="dialog-footer">
-                        <OakButton action={this.toggleDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                        {this.state.nextStage && <OakButton theme="primary" variant="outline" align="left" icon="person_add" action={() => this.nextStage(this.state.nextStage)}>Assign to {this.state.nextStage}</OakButton>}
+                        <OakButton theme="primary" variant="outline" align="right" icon="save">Save Changes</OakButton>
                     </div>
                 </OakDialog>
             </div>
