@@ -11,12 +11,14 @@ interface Props {
     profile: any,
     authorization: Authorization,
     logout: Function,
-    request: any
+    request: any,
+    stages: any
 }
 
 interface State {
     request: any,
-    isDialogOpen: boolean
+    isDialogOpen: boolean,
+    nextStage?: string
 }
 
 export default class ServiceRequestView extends Component<Props, State> {
@@ -32,7 +34,6 @@ export default class ServiceRequestView extends Component<Props, State> {
     }
 
     componentDidMount(){
-        console.log(this.props.request);
         this.props.setProfile({
           ...this.props.profile,
           tenant: this.props.match.params.tenant
@@ -45,6 +46,20 @@ export default class ServiceRequestView extends Component<Props, State> {
                 request: nextProps.request,
                 isDialogOpen: true
             })
+        }
+        if (nextProps.request || nextProps.stages) {
+            this.findNextStage(nextProps);
+        }
+    }
+
+    findNextStage = (props) => {
+        if (props.request && props.request.stage && props.stages && props.stages.length > 0) {
+            let index = props.stages.findIndex(x => x.name === props.request.stage);
+            if (props.stages.length > index + 1) {
+                this.setState({
+                    nextStage: props.stages[index + 1].name
+                });
+            }
         }
     }
 
@@ -86,6 +101,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                     <div className="dialog-body">
                         <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleRequestChange(e)} />
                         <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleRequestChange(e)} />
+                        Next Stage: {this.state.nextStage && this.state.nextStage}
                     </div>
                     <div className="dialog-footer">
                         <OakButton action={this.toggleDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>

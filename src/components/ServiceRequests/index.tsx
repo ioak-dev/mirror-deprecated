@@ -31,7 +31,8 @@ interface State{
     rowsPerPage: number,
     title: string,
     description: string,
-    selectedRequest: any
+    selectedRequest: any,
+    stages: any
 }
 
 export default class ServiceRequests extends Component<Props, State> {
@@ -46,6 +47,7 @@ export default class ServiceRequests extends Component<Props, State> {
             title:'',
             description:'',
             selectedRequest: undefined,
+            stages: [],
 
             sidebarElements: {
                 serviceRequest: [
@@ -67,6 +69,19 @@ export default class ServiceRequests extends Component<Props, State> {
           ...this.props.profile,
           tenant: this.props.match.params.tenant
         })
+
+        httpGet(constants.API_URL_STAGE + '/' + this.props.match.params.tenant + '/', 
+            {headers: {
+                Authorization: this.props.authorization.token
+            }}
+            ).then ((response) => {
+                console.log(response);
+                this.setState({
+                    stages: response.data.stage
+                })
+            }).catch((error) => {
+                console.log(error);
+            })
     
     }
 
@@ -203,7 +218,7 @@ export default class ServiceRequests extends Component<Props, State> {
                         <OakButton action={this.addRequest} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
                     </div>
                 </OakDialog>
-                <ServiceRequestView {...this.props} request = {this.state.selectedRequest}/>
+                <ServiceRequestView {...this.props} request = {this.state.selectedRequest} stages={this.state.stages} />
                 <ViewResolver sideLabel='More options'>
                     <View main>
                         <OakTable material
