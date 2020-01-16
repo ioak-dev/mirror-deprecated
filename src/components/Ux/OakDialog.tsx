@@ -17,15 +17,23 @@ class OakDialog extends Component<Props, State> {
         if (this.props.visible !== nextProps.visible) {
             if (nextProps.visible) {
                 sendMessage('dialog');
-                window.scrollTo(500, 0);
+                document.body.classList.add('oak-dialog-open');
+                // window.scrollTo(500, 0);
             } else {
                 sendMessage('dialog', false);
+                document.body.classList.remove('oak-dialog-open');
             }
         }
     }
     
     componentDidMount(){
       document.addEventListener("keydown", this.escFunction, false);
+      const documentWidth = document.documentElement.clientWidth;
+      const windowWidth = window.innerWidth;
+      const scrollBarWidth = windowWidth - documentWidth;
+      document.documentElement.style
+          .setProperty('--scrollbar-width', scrollBarWidth + 'px');
+      
     }
 
     componentWillUnmount(){
