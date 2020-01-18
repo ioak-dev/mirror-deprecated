@@ -75,7 +75,6 @@ export default class ServiceRequests extends Component<Props, State> {
                 Authorization: this.props.authorization.token
             }}
             ).then ((response) => {
-                console.log(response);
                 this.setState({
                     stages: response.data.stage
                 })
@@ -152,7 +151,7 @@ export default class ServiceRequests extends Component<Props, State> {
     toggleEditDialog = () => {
         this.setState({
             isEditDialogOpen: !this.state.isEditDialogOpen,
-            editDialogLabel: 'Add',
+            editDialogLabel: 'Create Service Request',
             selectedRequest: undefined
         })
     }
@@ -162,6 +161,9 @@ export default class ServiceRequests extends Component<Props, State> {
         let request = {
             title: this.state.title,
             description: this.state.description,
+            priority: 'Low',
+            createDate: new Date().toLocaleString(),
+            updateDate: new Date().toLocaleString()
         }
         if (isEmptyOrSpaces(request.title)) {
             sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
@@ -228,6 +230,7 @@ export default class ServiceRequests extends Component<Props, State> {
                                 {key:"description", label:"Description"},
                                 {key:"status", label:"Status"},
                                 {key:"category", label:"Category"},
+                                {key:"priority", label:"Priority"},
                                 {key:"createDate", label:"Opened On", dtype: "date"},
                                 {key:"action", label:"Action"}]} >
                         </OakTable>                    

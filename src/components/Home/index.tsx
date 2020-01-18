@@ -180,6 +180,9 @@ export default class Home extends React.Component<Props, State> {
     let request = {
         title: this.state.searchTitle,
         description: this.state.searchDescription,
+        priority: 'Low',
+        createDate: new Date().toLocaleString(),
+        updateDate: new Date().toLocaleString()
     }
     if (isEmptyOrSpaces(request.title)) {
         sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
