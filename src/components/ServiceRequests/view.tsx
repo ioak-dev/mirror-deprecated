@@ -197,34 +197,25 @@ export default class ServiceRequestView extends Component<Props, State> {
                 <OakDialog fullscreen visible={this.state.isDialogOpen} toggleVisibility={this.toggleDialog} >
                     <div className="dialog-body">
                         <div>
-                            <div>Request Number #:  {this.state.request._id}</div>
-                            <br></br>
-                            <div>
+                            <OakText label="Request Id" data={this.state.request} disabled id="_id" handleChange={e => this.handleRequestChange(e)} />
                             <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleRequestChange(e)} />
-                            </div>
-                            <div>
                             <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleRequestChange(e)} />
-                            </div>
-                            <div>
                             <OakSelect label="Priority" data={this.state.request} id="priority" handleChange={e => this.handleRequestChange(e)} elements={this.state.priorities}/>
-                            </div>
-                            <br></br>
-                            <div>
                             <OakText label="Comments" multiline data={this.state.request} id="comment" handleChange={e => this.handleRequestChange(e)} />
-                            </div>
-                            
                         </div>
                         
                         {this.state.request.comments && this.state.request.comments.map((item)=>(
-                            <div>
-                                Updated By {item.name} on {item.date}
-                            <div>
-                            
-                            </div>
-                            <div>
-                            <OakText disabled label="" data={item} id="comment" handleChange={e =>this.handleRequestChange(e)} />
-                            </div>
-                            </div>
+                            <>
+                                <div className="comment-author">
+                                    Updated By {item.name}
+                                </div>
+                                <div className="comment-date">
+                                    {item.date}
+                                </div>
+                                <div className="comment-text">
+                                    {item.comment}
+                                </div>
+                            </>
                         ))}
                         
                     </div>
