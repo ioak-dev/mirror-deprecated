@@ -76,7 +76,6 @@ export default class ServiceRequestView extends Component<Props, State> {
 
     clearRequest = () => {
         this.setState({
-            isDialogOpen:false,
             request: {
                 title: '',
                 description: '',
