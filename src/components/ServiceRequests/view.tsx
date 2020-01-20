@@ -36,7 +36,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                 title: '',
                 description: '',
                 priority: '',
-                comments:[],
+                comments:[{comment:'', name:'', date:''}],
                 comment:''
             },
             priorities: ['Low', 'Medium', 'High'],
@@ -108,65 +108,30 @@ export default class ServiceRequestView extends Component<Props, State> {
     }
 
     nextStage = (stage) => {
-        const that = this
-        const stageDetails ={
-            stageId: this.state.request._id,
-            previousStage: this.props.stages[this.props.stages.findIndex(x => x.name === stage)-1].name,
-            stage:stage
-        }
-
-        httpPut(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/',
-        stageDetails,
-        {
-            headers: {
-                Authorization: this.props.authorization.token
-            }
-        })
-        .then(function(response) {
-            if (response.status === 200) {
-                sendMessage('notification', true, {type: 'success', message: `passed to ${stage}`, duration: 5000});
-                that.clearRequest();
-            }
-        })
-        .catch((error) => {
-            if (error.response.status === 401) {
-                that.props.logout(null, 'failure', 'Session expired. Login again');
-            }
-        })
           
     }
 
     saveChanges = () =>{
-        const that = this
-        
-        let comment = {
-            comment:this.state.request.comment,
-            name: this.props.match.params.tenant,
-            date: new Date().toLocaleString()
+        const that = this;
+        console.log(this.state.request.comment)
+        let existingComments = this.state.request.comments
+        if(this.state.request.comment){
+            existingComments.push(
+                {
+                    comment: this.state.request.comment, 
+                    name: this.props.match.params.tenant, 
+                    date: new Date().toLocaleString()
+                }
+            )
         }
-        
-        let comments =[{}]
-        comments = this.state.request.comments
-        if(comment.comment){
-            if(comments === undefined){
-                comments = [comment]
-            }
-            else{
-                comments.push(comment)
-            }    
-        }
-        else{
-            comments = [...this.state.request.comments]
-        }
-        
+
         let request ={
             id : this.state.request._id,
             title: this.state.request.title,
             description: this.state.request.description,
             priority: this.state.request.priority,
             updateTime: new Date().toLocaleString(),
-            comment: comments,
+            comment: existingComments,
             assignedTo: this.props.match.params.tenant
         }
         httpPut(constants.API_URL_SR + '/' + 
@@ -180,12 +145,14 @@ export default class ServiceRequestView extends Component<Props, State> {
         .then(function(response) {
             if (response.status === 200) {
                 sendMessage('notification', true, {type: 'success', message: 'Service Request Updated', duration: 5000});
-                that.clearRequest();
+                that.toggleDialog();
+                return;
             }
         })
         .catch((error) => {
             if (error.response.status === 401) {
                 that.props.logout(null, 'failure', 'Session expired. Login again');
+                that.clearRequest();
             }
         })
     }

@@ -84,6 +84,12 @@ export default class ServiceRequests extends Component<Props, State> {
     
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.authorization){
+          this.initializeRequest(this.props.authorization)
+        }
+      }
+
     openRequest = (request) => {
         this.setState({
             selectedRequest: request
@@ -91,6 +97,7 @@ export default class ServiceRequests extends Component<Props, State> {
     }
 
     initializeRequest(authorization) {
+        console.log('inside')
         const that = this;
         httpGet(constants.API_URL_SR + '/' + 
         this.props.match.params.tenant + '/',
@@ -163,7 +170,13 @@ export default class ServiceRequests extends Component<Props, State> {
             description: this.state.description,
             priority: 'Low',
             createDate: new Date().toLocaleString(),
-            updateDate: new Date().toLocaleString()
+            updateDate: new Date().toLocaleString(),
+            comments:[
+                {
+                    name: this.props.match.params.tenant,
+                    date: new Date().toLocaleString(),
+                    comment: "Opened Service Request"
+             }]
         }
         if (isEmptyOrSpaces(request.title)) {
             sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});

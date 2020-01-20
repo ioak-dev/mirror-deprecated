@@ -182,7 +182,13 @@ export default class Home extends React.Component<Props, State> {
         description: this.state.searchDescription,
         priority: 'Low',
         createDate: new Date().toLocaleString(),
-        updateDate: new Date().toLocaleString()
+        updateDate: new Date().toLocaleString(),
+        comments:[
+          {
+              name: this.props.match.params.tenant,
+              date: new Date().toLocaleString(),
+              comment: "Opened Service Request"
+       }]
     }
     if (isEmptyOrSpaces(request.title)) {
         sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
