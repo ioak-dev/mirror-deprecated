@@ -165,18 +165,27 @@ export default class ServiceRequests extends Component<Props, State> {
     }
 
     saveRequestEvent = () =>{
+        let stage = [...this.state.stages]
         this.saveRequest({
             title: this.state.title,
             description: this.state.description,
             priority: 'Low',
             createDate: new Date().toLocaleString(),
             updateDate: new Date().toLocaleString(),
-            comments:[
+            stage: stage[0]["name"],
+            comment:[
                 {
                     name: this.props.match.params.tenant,
                     date: new Date().toLocaleString(),
                     comment: "Opened Service Request"
-             }]
+            }]
+        })
+    }
+    
+    clearRequest = () => {
+        this.setState({
+            title: '',
+            description: ''
         })
     }
 
@@ -185,8 +194,10 @@ export default class ServiceRequests extends Component<Props, State> {
             isEditDialogOpen:false,
             selectedRequest:undefined
         })
+        this.clearRequest()
     }
 
+    
     saveRequest = (request, edit=false) => {
         const that = this;
         if (!request) {

@@ -34,8 +34,8 @@ export default class ServiceRequestView extends Component<Props, State> {
                 title: '',
                 description: '',
                 priority: '',
-                comments:[{comment:'', name:'', date:''}],
-                comment:''
+                comment:[{comment:'', name:'', date:''}],
+                newComment:''
             }
         }
     }
@@ -74,7 +74,8 @@ export default class ServiceRequestView extends Component<Props, State> {
         this.setState({
             request: {
                 title: '',
-                description: ''
+                description: '',
+                newComment:''
             }
         })
     }
@@ -103,11 +104,11 @@ export default class ServiceRequestView extends Component<Props, State> {
 
     editRequest = () =>{
         const that = this
-        let existingComments = this.state.request.comments
-        if(this.state.request.comment){
+        let existingComments = this.state.request.comment
+        if(this.state.request.newComment){
             existingComments.push(
                 {
-                    comment: this.state.request.comment, 
+                    comment: this.state.request.newComment, 
                     name: this.props.match.params.tenant, 
                     date: new Date().toLocaleString()
                 }
@@ -124,6 +125,7 @@ export default class ServiceRequestView extends Component<Props, State> {
         }, true )
 
         this.toggleDialog()
+        
     }
     nextStage = (stage) => {
           
@@ -140,10 +142,10 @@ export default class ServiceRequestView extends Component<Props, State> {
                             <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleRequestChange(e)} />
                             <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleRequestChange(e)} />
                             <OakSelect label="Priority" data={this.state.request} id="priority" handleChange={e => this.handleRequestChange(e)} elements={["Low", "Medium","High"]} />
-                            <OakText label="Comments" multiline data={this.state.request} id="comment" handleChange={e => this.handleRequestChange(e)} />
+                            <OakText label="Comments" multiline data={this.state.request} id="newComment" handleChange={e => this.handleRequestChange(e)} />
                         </div>
                         
-                        {this.state.request.comments && this.state.request.comments.map((item)=>(
+                        {this.state.request.comment && this.state.request.comment.map((item)=>(
                             <>
                                 <div className="comment-author">
                                     Updated By {item.name}

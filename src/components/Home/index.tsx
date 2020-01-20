@@ -140,7 +140,6 @@ export default class Home extends React.Component<Props, State> {
   };
 
   notHelpful = () => {
-    console.log(this.props.authorization);
     if (this.props.authorization && this.props.authorization.token) {
       this.toggleEditDialog();
     } else {
@@ -183,7 +182,7 @@ export default class Home extends React.Component<Props, State> {
         priority: 'Low',
         createDate: new Date().toLocaleString(),
         updateDate: new Date().toLocaleString(),
-        comments:[
+        comment:[
           {
               name: this.props.match.params.tenant,
               date: new Date().toLocaleString(),
