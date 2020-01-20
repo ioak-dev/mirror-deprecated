@@ -5,9 +5,6 @@ import OakDialog from '../Ux/OakDialog';
 import OakText from '../Ux/OakText';
 import OakButton from '../Ux/OakButton';
 import OakSelect from '../Ux/OakSelect';
-import { httpPut } from '../Lib/RestTemplate';
-import { constants } from '../Constants';
-import { sendMessage } from '../../events/MessageService';
 
 interface Props {
     match: any,
@@ -16,7 +13,8 @@ interface Props {
     authorization: Authorization,
     logout: Function,
     request: any,
-    stages: any
+    stages: any,
+    saveRequest: Function
 }
 
 interface State {
@@ -24,7 +22,7 @@ interface State {
     isDialogOpen: boolean,
     nextStage?: string,
     previousStage?: any,
-    priorities: any
+    
 }
 
 export default class ServiceRequestView extends Component<Props, State> {
@@ -38,9 +36,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                 priority: '',
                 comments:[{comment:'', name:'', date:''}],
                 comment:''
-            },
-            priorities: ['Low', 'Medium', 'High'],
-            
+            }
         }
     }
 
@@ -78,9 +74,7 @@ export default class ServiceRequestView extends Component<Props, State> {
         this.setState({
             request: {
                 title: '',
-                description: '',
-                priority: '',
-                comment: ''
+                description: ''
             }
         })
     }
@@ -107,13 +101,8 @@ export default class ServiceRequestView extends Component<Props, State> {
         )
     }
 
-    nextStage = (stage) => {
-          
-    }
-
-    saveChanges = () =>{
-        const that = this;
-        console.log(this.state.request.comment)
+    editRequest = () =>{
+        const that = this
         let existingComments = this.state.request.comments
         if(this.state.request.comment){
             existingComments.push(
@@ -124,8 +113,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                 }
             )
         }
-
-        let request ={
+        this.props.saveRequest({
             id : this.state.request._id,
             title: this.state.request.title,
             description: this.state.request.description,
@@ -133,30 +121,15 @@ export default class ServiceRequestView extends Component<Props, State> {
             updateTime: new Date().toLocaleString(),
             comment: existingComments,
             assignedTo: this.props.match.params.tenant
-        }
-        httpPut(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/',
-        request,
-        {
-            headers: {
-                Authorization: this.props.authorization.token
-            }
-        })
-        .then(function(response) {
-            if (response.status === 200) {
-                sendMessage('notification', true, {type: 'success', message: 'Service Request Updated', duration: 5000});
-                that.toggleDialog();
-                return;
-            }
-        })
-        .catch((error) => {
-            if (error.response.status === 401) {
-                that.props.logout(null, 'failure', 'Session expired. Login again');
-                that.clearRequest();
-            }
-        })
+        }, true )
+
+        this.toggleDialog()
+    }
+    nextStage = (stage) => {
+          
     }
 
+   
     render() {
         return (
             <div className="view-request">
@@ -166,7 +139,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                             <OakText label="Request Id" data={this.state.request} disabled id="_id" handleChange={e => this.handleRequestChange(e)} />
                             <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleRequestChange(e)} />
                             <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleRequestChange(e)} />
-                            <OakSelect label="Priority" data={this.state.request} id="priority" handleChange={e => this.handleRequestChange(e)} elements={this.state.priorities}/>
+                            <OakSelect label="Priority" data={this.state.request} id="priority" handleChange={e => this.handleRequestChange(e)} elements={["Low", "Medium","High"]} />
                             <OakText label="Comments" multiline data={this.state.request} id="comment" handleChange={e => this.handleRequestChange(e)} />
                         </div>
                         
@@ -187,7 +160,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                     </div>
                     <div className="dialog-footer">
                         {this.state.nextStage && <OakButton theme="primary" variant="outline" align="left" icon="person_add" action={() => this.nextStage(this.state.nextStage)}>Assign to {this.state.nextStage}</OakButton>}
-                        <OakButton theme="primary" variant="outline" align="right" icon="save" action={this.saveChanges}>Save Changes</OakButton>
+                        <OakButton theme="primary" variant="outline" align="right" icon="save" action={this.editRequest}>Save Changes</OakButton>
                     </div>
                 </OakDialog>
             </div>

@@ -33,6 +33,7 @@ interface State{
     description: string,
     selectedRequest: any,
     stages: any
+    
 }
 
 export default class ServiceRequests extends Component<Props, State> {
@@ -48,6 +49,7 @@ export default class ServiceRequests extends Component<Props, State> {
             description:'',
             selectedRequest: undefined,
             stages: [],
+            
 
             sidebarElements: {
                 serviceRequest: [
@@ -97,7 +99,6 @@ export default class ServiceRequests extends Component<Props, State> {
     }
 
     initializeRequest(authorization) {
-        console.log('inside')
         const that = this;
         httpGet(constants.API_URL_SR + '/' + 
         this.props.match.params.tenant + '/',
@@ -163,9 +164,8 @@ export default class ServiceRequests extends Component<Props, State> {
         })
     }
 
-    addRequest = () => {
-        const that = this;
-        let request = {
+    saveRequestEvent = () =>{
+        this.saveRequest({
             title: this.state.title,
             description: this.state.description,
             priority: 'Low',
@@ -177,7 +177,23 @@ export default class ServiceRequests extends Component<Props, State> {
                     date: new Date().toLocaleString(),
                     comment: "Opened Service Request"
              }]
+        })
+    }
+
+    closeAllDialog = () =>{
+        this.setState({
+            isEditDialogOpen:false,
+            selectedRequest:undefined
+        })
+    }
+
+    saveRequest = (request, edit=false) => {
+        const that = this;
+        if (!request) {
+            sendMessage('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
+            return;
         }
+
         if (isEmptyOrSpaces(request.title)) {
             sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
             return;
@@ -198,11 +214,18 @@ export default class ServiceRequests extends Component<Props, State> {
         })
         .then(function(response) {
             if (response.status === 200) {
-                sendMessage('notification', true, {type: 'success', message: 'Request created', duration: 5000});
-                that.toggleEditDialog();
-    
+                if (edit) {
+                    sendMessage('notification', true, {type: 'success', message: 'Request edited', duration: 5000});
+                    sendMessage('closeNoteEditView', true);
+                } else {
+                    sendMessage('notification', true, {type: 'success', message: 'Request created', duration: 5000});
+                    that.closeAllDialog();
+                }
+                
+                that.closeAllDialog();
                 that.initializeRequest(that.props.authorization);
             }
+            
         })
         .catch((error) => {
             if (error.response.status === 401) {
@@ -230,10 +253,10 @@ export default class ServiceRequests extends Component<Props, State> {
                     </div>
                     <div className="dialog-footer">
                         <OakButton action={this.toggleEditDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
-                        <OakButton action={this.addRequest} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
+                        <OakButton action={this.saveRequestEvent} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
                     </div>
                 </OakDialog>
-                <ServiceRequestView {...this.props} request = {this.state.selectedRequest} stages={this.state.stages} />
+                <ServiceRequestView {...this.props} saveRequest={this.saveRequest} request = {this.state.selectedRequest} stages={this.state.stages} />
                 <ViewResolver sideLabel='More options'>
                     <View main>
                         <OakTable material
