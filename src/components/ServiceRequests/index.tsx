@@ -101,7 +101,7 @@ export default class ServiceRequests extends Component<Props, State> {
     initializeRequest(authorization) {
         const that = this;
         httpGet(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/',
+        this.props.match.params.tenant + '/main',
         {
             headers:{
                 Authorization: this.props.authorization.token
@@ -216,7 +216,7 @@ export default class ServiceRequests extends Component<Props, State> {
         }
 
         httpPut(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/',
+        this.props.match.params.tenant + '/main',
         request,
         {
           headers: {
