@@ -69,7 +69,7 @@ export default class OakSelect extends React.Component<Props, State> {
             <div className="dropdown-content">
               {this.props.first && <div className="option" onClick={e => this.changeSelection(e, this.props.first)}>{this.props.first}</div>}
               {this.props.firstAction && <div className="option" onClick={e => this.changeSelection(e, this.props.firstAction)}>{this.props.firstAction}</div>}
-              {dropdownList}{dropdownList}{dropdownList}{dropdownList}{dropdownList}{dropdownList}{dropdownList}{dropdownList}{dropdownList}{dropdownList}
+              {dropdownList}
             </div>
           </div>
         </div>

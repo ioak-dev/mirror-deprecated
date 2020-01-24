@@ -1,7 +1,9 @@
 .oak-select {
     user-select: none;
-    word-break: none;
     margin-bottom: 20px;
+    --color-bg: var(--color-btn-default-bg);
+    --color-fg: var(--color-btn-default-fg);
+    --color-fg-hover: var(--color-btn-default-fg-hover);
     &.default {
         --color-bg: var(--color-btn-default-bg);
         --color-fg: var(--color-btn-default-fg);
