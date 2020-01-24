@@ -62,7 +62,9 @@ export default class OakSelect extends React.Component<Props, State> {
         <div className={"oak-select " + this.getStyle()}>
           {this.props.label && <label>{this.props.label}</label>}
           <div className="select-button" onClick={() => this.toggle()}>
-            <div>{this.props.data[this.props.id]}</div>
+            {this.props.elements && <div>{this.props.data[this.props.id]}</div>}
+            {this.props.objects && <div>{this.props.objects.find((element) => element.key === this.props.data[this.props.id]) && this.props.objects.find((element) => element.key === this.props.data[this.props.id]).value}</div>}
+            {/*{this.props.objects && <div>{this.props.objects[0].value}</div>}*/}
             <div><i className="material-icons">keyboard_arrow_down</i></div>
           </div>
           <div className={this.state.show ? "dropdown show" : "dropdown hide"}>
