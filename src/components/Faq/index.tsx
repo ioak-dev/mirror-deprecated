@@ -285,7 +285,7 @@ export default class Faq extends React.Component<Props, State> {
       <div className="faq">
         <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
           <div className="dialog-body">
-          <div><OakSelect label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.state.existingCategories} firstAction="<create new>" /></div>
+          <div><OakSelect theme="default" label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.state.existingCategories} firstAction="<create new>" /></div>
           <div>
             {this.state.category === '<create new>' && <OakText label="Category name" data={this.state} id="newCategory" handleChange={e => this.handleChange(e)} />}
           </div>
