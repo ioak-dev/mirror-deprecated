@@ -95,16 +95,18 @@
 
     .dropdown {
         z-index: 1;
-        position: relative;
+        // position: relative;
         &.show {display:block;}
         &.hide {display:none;}
 
         .dropdown-content {
+            z-index: 1;
             max-height: 300px;
             overflow-y: auto;
             position: absolute;
-            width: 100%;
+            // width: 100%;
             background-color: var(--color-body-dim);
+            margin-top: 4px;
     
             .option {
                 padding: 10px 16px;
