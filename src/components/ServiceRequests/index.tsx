@@ -214,7 +214,7 @@ export default class ServiceRequests extends Component<Props, State> {
                 sendMessage('notification', true, {type: 'success', message: 'Comments Added  Successfully', duration: 5000});
                 that.closeAllDialog();
             }
-            
+            that.closeAllDialog();
             that.initializeRequest(that.props.authorization);
              
         })

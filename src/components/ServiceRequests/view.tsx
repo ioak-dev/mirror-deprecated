@@ -131,6 +131,8 @@ export default class ServiceRequestView extends Component<Props, State> {
         }
         this.setState({
             isDialogOpen: !this.state.isDialogOpen,
+            newLog: false,
+            editDialogLabel: 'Add Comments'
             // editDialogLabel: 'Add'
         })
     }
@@ -151,13 +153,9 @@ export default class ServiceRequestView extends Component<Props, State> {
             id: this.state.request._id,
             comments: this.state.log
         })
-        this.setState({
-            newLog: false,
-            editDialogLabel: 'Add Comments'
-        })
-        this.clearRequest()
-
-        this.initializeLogs(this.props)
+        
+        this.toggleDialog()
+        
     }
 
     handleLog = (e) => {
