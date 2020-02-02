@@ -5,6 +5,8 @@ import OakDialog from '../Ux/OakDialog';
 import OakText from '../Ux/OakText';
 import OakButton from '../Ux/OakButton';
 import OakSelect from '../Ux/OakSelect';
+import { httpGet } from '../Lib/RestTemplate';
+import { constants } from '../Constants';
 
 interface Props {
     match: any,
@@ -14,7 +16,8 @@ interface Props {
     logout: Function,
     request: any,
     stages: any,
-    saveRequest: Function
+    saveRequest: Function,
+    addLog: Function
 }
 
 interface State {
@@ -22,7 +25,10 @@ interface State {
     isDialogOpen: boolean,
     nextStage?: string,
     previousStage?: any,
-    
+    logs: any
+    log: any,
+    newLog: any,
+    editDialogLabel: string
 }
 
 export default class ServiceRequestView extends Component<Props, State> {
@@ -33,10 +39,12 @@ export default class ServiceRequestView extends Component<Props, State> {
             request: {
                 title: '',
                 description: '',
-                priority: '',
-                comment:[{comment:'', name:'', date:''}],
-                newComment:''
-            }
+                priority: ''
+            },
+            logs: [],
+            log: '',
+            newLog: false,
+            editDialogLabel: 'Add Comments'
         }
     }
 
@@ -45,6 +53,11 @@ export default class ServiceRequestView extends Component<Props, State> {
           ...this.props.profile,
           tenant: this.props.match.params.tenant
         })
+
+        this.setState({
+            newLog:false
+        })
+        
     }
 
     componentWillReceiveProps(nextProps) {
@@ -54,9 +67,16 @@ export default class ServiceRequestView extends Component<Props, State> {
                 isDialogOpen: true
             })
         }
+
+        if (nextProps.request) {
+            this.initializeLogs(nextProps);
+        }
+
         if (nextProps.request || nextProps.stages) {
             this.findNextStage(nextProps);
         }
+
+        
     }
 
     findNextStage = (props) => {
@@ -66,7 +86,31 @@ export default class ServiceRequestView extends Component<Props, State> {
                 this.setState({
                     nextStage: props.stages[index + 1].name
                 });
+            } else {
+                this.setState({
+                    nextStage: ''
+                });
             }
+        }
+    }
+
+    initializeLogs = (props) => {
+        if (props.request&& props.request._id){
+            httpGet(constants.API_URL_SR + '/' + 
+            this.props.match.params.tenant + '/log' + '/' + props.request._id,
+            {
+                headers:{Authorization: this.props.authorization.token}
+            })
+            .then((response) => {
+                this.setState({
+                    logs: response.data.data
+            })
+        })
+        .catch((error) => {
+            if (error.response.status === 401) {
+                this.props.logout(null, 'failure', 'Session expired. Login again');
+            }
+        })
         }
     }
 
@@ -75,8 +119,8 @@ export default class ServiceRequestView extends Component<Props, State> {
             request: {
                 title: '',
                 description: '',
-                newComment:''
-            }
+            },
+            log: ''
         })
     }
 
@@ -102,35 +146,68 @@ export default class ServiceRequestView extends Component<Props, State> {
         )
     }
 
+    addLog = () => {
+        this.props.addLog({
+            id: this.state.request._id,
+            comments: this.state.log
+        })
+        this.setState({
+            newLog: false,
+            editDialogLabel: 'Add Comments'
+        })
+        this.clearRequest()
+
+        this.initializeLogs(this.props)
+    }
+
+    handleLog = (e) => {
+        this.setState({
+            newLog: !this.state.newLog,
+            editDialogLabel: 'Save Comments',
+        })
+        
+    }
+    
     editRequest = () =>{
         const that = this
-        let existingComments = this.state.request.comment
-        if(this.state.request.newComment){
-            existingComments.push(
-                {
-                    comment: this.state.request.newComment, 
-                    name: this.props.match.params.tenant, 
-                    date: new Date().toLocaleString()
-                }
-            )
-        }
         this.props.saveRequest({
             id : this.state.request._id,
             title: this.state.request.title,
             description: this.state.request.description,
             priority: this.state.request.priority,
-            updateTime: new Date().toLocaleString(),
-            comment: existingComments,
             assignedTo: this.props.match.params.tenant
         }, true )
-
+        
         this.toggleDialog()
         
     }
+
     nextStage = (stage) => {
-          
+        let index = this.props.stages.findIndex(x => x.name === stage);
+        if(this.props.stages.length > index){
+            this.props.saveRequest({
+                id : this.state.request._id,
+                title: this.state.request.title,
+                description: this.state.request.description,
+                priority: this.state.request.priority,
+                updateTime: new Date().toLocaleString(),
+                comment: this.state.request.comment,
+                stage:stage,
+                previousStage: this.props.stages[index - 1].name,
+                assignedTo: this.props.match.params.tenant
+            }, true )
+        }
+        
+       this.toggleDialog()
     }
 
+    
+    handleChange = (event) => {
+        this.setState({
+            ...this.state,
+            [event.target.name]:[event.target.value]
+        })
+    }
    
     render() {
         return (
@@ -142,22 +219,23 @@ export default class ServiceRequestView extends Component<Props, State> {
                             <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleRequestChange(e)} />
                             <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleRequestChange(e)} />
                             <OakSelect label="Priority" data={this.state.request} id="priority" handleChange={e => this.handleRequestChange(e)} elements={["Low", "Medium","High"]} />
-                            <OakText label="Comments" multiline data={this.state.request} id="newComment" handleChange={e => this.handleRequestChange(e)} />
                         </div>
-                        
-                        {this.state.request.comment && this.state.request.comment.map((item)=>(
+                        {!this.state.newLog && <OakButton space-top-3 theme="primary" variant="outline" align="right" icon="add" action={this.handleLog}>{this.state.editDialogLabel}</OakButton>}
+                        {this.state.logs && this.state.logs.length > 0 && this.state.logs.map((item)=>(
                             <>
                                 <div className="comment-author">
-                                    Updated By {item.name}
+                                    Updated By {item.lastModifiedBy}
                                 </div>
                                 <div className="comment-date">
-                                    {item.date}
+                                    {item.lastModifiedAt}
                                 </div>
                                 <div className="comment-text">
-                                    {item.comment}
+                                    {item.comments}
                                 </div>
                             </>
                         ))}
+                        {this.state.newLog && <OakText label="Comments" multiline data={this.state} id="log" handleChange={e => this.handleChange(e)} />}
+                        {this.state.newLog && <OakButton theme="primary" variant="outline" align="right" icon="add" action={this.addLog}>{this.state.editDialogLabel}</OakButton>}
                         
                     </div>
                     <div className="dialog-footer">

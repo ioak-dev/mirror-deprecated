@@ -5,7 +5,7 @@ import './style.scss'
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import Sidebar from '../Ux/Sidebar';
-import { httpGet, httpDelete, httpPost, httpPut } from '../Lib/RestTemplate';
+import { httpGet, httpPut } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
 import OakDialog from '../Ux/OakDialog';
 import { isEmptyOrSpaces } from '../Utils';
@@ -13,6 +13,7 @@ import { sendMessage } from '../../events/MessageService';
 import ServiceRequestView from './view';
 import OakText from '../Ux/OakText';
 import OakButton from '../Ux/OakButton';
+
 
 interface Props{
     match: any,
@@ -33,7 +34,6 @@ interface State{
     description: string,
     selectedRequest: any,
     stages: any
-    
 }
 
 export default class ServiceRequests extends Component<Props, State> {
@@ -49,7 +49,6 @@ export default class ServiceRequests extends Component<Props, State> {
             description:'',
             selectedRequest: undefined,
             stages: [],
-            
 
             sidebarElements: {
                 serviceRequest: [
@@ -100,6 +99,7 @@ export default class ServiceRequests extends Component<Props, State> {
 
     initializeRequest(authorization) {
         const that = this;
+        
         httpGet(constants.API_URL_SR + '/' + 
         this.props.match.params.tenant + '/main',
         {
@@ -164,22 +164,16 @@ export default class ServiceRequests extends Component<Props, State> {
         })
     }
 
-    saveRequestEvent = () =>{
+    saveRequestEvent = () => {
         let stage = [...this.state.stages]
         this.saveRequest({
             title: this.state.title,
             description: this.state.description,
             priority: 'Low',
-            createDate: new Date().toLocaleString(),
-            updateDate: new Date().toLocaleString(),
             stage: stage[0]["name"],
-            comment:[
-                {
-                    name: this.props.match.params.tenant,
-                    date: new Date().toLocaleString(),
-                    comment: "Opened Service Request"
-            }]
+            status:'assigned'
         })
+        this.toggleEditDialog()
     }
     
     clearRequest = () => {
@@ -189,7 +183,7 @@ export default class ServiceRequests extends Component<Props, State> {
         })
     }
 
-    closeAllDialog = () =>{
+    closeAllDialog = () => {
         this.setState({
             isEditDialogOpen:false,
             selectedRequest:undefined
@@ -197,14 +191,47 @@ export default class ServiceRequests extends Component<Props, State> {
         this.clearRequest()
     }
 
-    
+    addLog = (log) => {
+        const that = this;
+        if (isEmptyOrSpaces(log.comments[0])) {
+            sendMessage('notification', true, {type: 'failure', message: 'Nothing to add', duration: 5000});
+            return;
+        }
+        
+        httpPut(constants.API_URL_SR + '/' + 
+        this.props.match.params.tenant + '/log' +'/' + log.id,
+        {
+            request_id:log.id,
+            comments: log.comments
+        },
+        {
+          headers: {
+            Authorization: this.props.authorization.token
+          }
+        })
+        .then(function(response) {
+            if (response.status === 200) {
+                sendMessage('notification', true, {type: 'success', message: 'Comments Added  Successfully', duration: 5000});
+                that.closeAllDialog();
+            }
+            
+            that.initializeRequest(that.props.authorization);
+             
+        })
+        .catch((error) => {
+            if (error.response.status === 401) {
+                that.props.logout(null, 'failure', 'Session expired. Login again');
+            }
+        })
+    }
+
     saveRequest = (request, edit=false) => {
         const that = this;
         if (!request) {
             sendMessage('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
             return;
         }
-
+        
         if (isEmptyOrSpaces(request.title)) {
             sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
             return;
@@ -227,12 +254,11 @@ export default class ServiceRequests extends Component<Props, State> {
             if (response.status === 200) {
                 if (edit) {
                     sendMessage('notification', true, {type: 'success', message: 'Request edited', duration: 5000});
-                    sendMessage('closeNoteEditView', true);
+                    that.closeAllDialog();
                 } else {
                     sendMessage('notification', true, {type: 'success', message: 'Request created', duration: 5000});
                     that.closeAllDialog();
                 }
-                
                 that.closeAllDialog();
                 that.initializeRequest(that.props.authorization);
             }
@@ -267,7 +293,7 @@ export default class ServiceRequests extends Component<Props, State> {
                         <OakButton action={this.saveRequestEvent} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
                     </div>
                 </OakDialog>
-                <ServiceRequestView {...this.props} saveRequest={this.saveRequest} request = {this.state.selectedRequest} stages={this.state.stages} />
+                <ServiceRequestView {...this.props} saveRequest={this.saveRequest} addLog={this.addLog} request = {this.state.selectedRequest} stages={this.state.stages} />
                 <ViewResolver sideLabel='More options'>
                     <View main>
                         <OakTable material
@@ -278,7 +304,7 @@ export default class ServiceRequests extends Component<Props, State> {
                                 {key:"status", label:"Status"},
                                 {key:"category", label:"Category"},
                                 {key:"priority", label:"Priority"},
-                                {key:"createDate", label:"Opened On", dtype: "date"},
+                                {key:"createdAt", label:"Opened On", dtype: "date"},
                                 {key:"action", label:"Action"}]} >
                         </OakTable>                    
                     </View>

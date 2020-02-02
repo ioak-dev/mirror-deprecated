@@ -33,7 +33,8 @@ interface State {
   isNotLoggedInPromptOpen: boolean,
   searchTitle: string,
   searchDescription: string,
-  requestId?: string
+  requestId?: string,
+  stages: any
 }
 
 export default class Home extends React.Component<Props, State> {
@@ -47,7 +48,8 @@ export default class Home extends React.Component<Props, State> {
       searchDescription: '',
       isCreateRequestDialogOpen: false,
       isNotLoggedInPromptOpen: false,
-      searchResults: []
+      searchResults: [],
+      stages: []
     };
   }
 
@@ -57,6 +59,18 @@ export default class Home extends React.Component<Props, State> {
     this.props.setProfile({
       ...this.props.profile,
       tenant: this.props.match.params.tenant
+    })
+    
+    httpGet(constants.API_URL_STAGE + '/' + this.props.match.params.tenant + '/', 
+    {headers: {
+      Authorization: this.props.authorization.token
+      }}
+      ).then ((response) => {
+        this.setState({
+          stages: response.data.stage
+        })
+      }).catch((error) => {
+        console.log(error);
     })
 
     searchEvent$.subscribe(searchText => this.search(searchText))
@@ -176,18 +190,13 @@ export default class Home extends React.Component<Props, State> {
 
   addRequest = () => {
     const that = this;
+    let stage = [...this.state.stages]
     let request = {
         title: this.state.searchTitle,
         description: this.state.searchDescription,
         priority: 'Low',
-        createDate: new Date().toLocaleString(),
-        updateDate: new Date().toLocaleString(),
-        comment:[
-          {
-              name: this.props.match.params.tenant,
-              date: new Date().toLocaleString(),
-              comment: "Opened Service Request"
-       }]
+        stage: stage[0]["name"],
+        status:'assigned'
     }
     if (isEmptyOrSpaces(request.title)) {
         sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
@@ -200,7 +209,7 @@ export default class Home extends React.Component<Props, State> {
     }
 
     httpPut(constants.API_URL_SR + '/' + 
-    this.props.match.params.tenant + '/',
+    this.props.match.params.tenant + '/main',
     request,
     {
       headers: {
@@ -209,11 +218,11 @@ export default class Home extends React.Component<Props, State> {
     })
     .then((response) => {
         if (response.status === 200) {
-            sendMessage('notification', true, {type: 'success', message: 'Request created [' + response.data._id + ']', duration: 10000});
-            this.toggleEditDialog();
-            this.setState({
-              requestId: response.data._id
-            })
+          sendMessage('notification', true, {type: 'success', message: 'Request created [' + response.data.data._id + ']' , duration: 10000});
+          this.toggleEditDialog();
+          this.setState({
+            requestId: response.data.data._id
+          })
         }
     });
   }
