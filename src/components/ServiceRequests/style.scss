@@ -37,6 +37,26 @@
         color: var(--color-body-invert-dim);
     }
 
+    .comment {
+        display: grid;
+        grid-template-rows: auto;
+
+        background-color: var(--color-body-dim-2);
+        border-radius: 3px;
+        padding: 10px;
+
+        .comment-date {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .material-icons {
+            vertical-align: middle;
+            margin-right: 5px;
+            font-size: 1.6em
+        }
+    }
+
 
     .tag-1 > span {
         background-color: var(--color-tag-1);

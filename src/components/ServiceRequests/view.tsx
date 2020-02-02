@@ -162,8 +162,7 @@ export default class ServiceRequestView extends Component<Props, State> {
 
     handleLog = (e) => {
         this.setState({
-            newLog: !this.state.newLog,
-            editDialogLabel: 'Save Comments',
+            newLog: !this.state.newLog
         })
         
     }
@@ -200,7 +199,6 @@ export default class ServiceRequestView extends Component<Props, State> {
         
        this.toggleDialog()
     }
-
     
     handleChange = (event) => {
         this.setState({
@@ -210,32 +208,48 @@ export default class ServiceRequestView extends Component<Props, State> {
     }
    
     render() {
+        const newLogSection = <>
+        {!this.state.newLog && 
+            <>
+                <OakButton theme="secondary" variant="animate none" align="right" icon="forum" small action={this.handleLog}>Add Comment</OakButton>
+            </>
+        }
+        {this.state.newLog && 
+            <>
+                <OakText label="Comments" multiline data={this.state} id="log" handleChange={e => this.handleChange(e)} />
+                <OakButton theme="secondary" variant="animate out" small align="right" icon="done" action={this.addLog}>Save Comment</OakButton>
+                <OakButton theme="default" variant="animate in" small align="right" icon="close" action={this.handleLog}>Cancel</OakButton>
+            </>
+        }
+        <div className="space-bottom-3" /></>
         return (
             <div className="view-request">
                 <OakDialog fullscreen visible={this.state.isDialogOpen} toggleVisibility={this.toggleDialog} >
                     <div className="dialog-body">
+                        <div className="typography-3 space-bottom-3">Request Details</div>
                         <div>
                             <OakText label="Request Id" data={this.state.request} disabled id="_id" handleChange={e => this.handleRequestChange(e)} />
                             <OakText label="Title" data={this.state.request} id="title" handleChange={e => this.handleRequestChange(e)} />
                             <OakText label="Description" data={this.state.request} id="description" handleChange={e => this.handleRequestChange(e)} />
                             <OakSelect label="Priority" data={this.state.request} id="priority" handleChange={e => this.handleRequestChange(e)} elements={["Low", "Medium","High"]} />
                         </div>
-                        {!this.state.newLog && <OakButton space-top-3 theme="primary" variant="outline" align="right" icon="add" action={this.handleLog}>{this.state.editDialogLabel}</OakButton>}
+                        
+                        <div className="typography-3 space-bottom-3 space-top-5">Comments and work log</div>
+                        {newLogSection}
                         {this.state.logs && this.state.logs.length > 0 && this.state.logs.map((item)=>(
-                            <>
-                                <div className="comment-author">
-                                    Updated By {item.lastModifiedBy}
-                                </div>
-                                <div className="comment-date">
+                            <div className="comment space-bottom-2">
+                                <div className="comment-author typography-4 space-bottom-1">
+                                    {/* <i className="material-icons">person</i> */}
+                                    {item.lastModifiedBy}
+                                    </div>
+                                <div className="comment-text space-bottom-1">{item.comments}</div>
+                                <div className="comment-date typography-6">
+                                    {/* <i className="material-icons">access_time</i> */}
                                     {item.lastModifiedAt}
                                 </div>
-                                <div className="comment-text">
-                                    {item.comments}
-                                </div>
-                            </>
+                            </div>
                         ))}
-                        {this.state.newLog && <OakText label="Comments" multiline data={this.state} id="log" handleChange={e => this.handleChange(e)} />}
-                        {this.state.newLog && <OakButton theme="primary" variant="outline" align="right" icon="add" action={this.addLog}>{this.state.editDialogLabel}</OakButton>}
+                        {newLogSection}
                         
                     </div>
                     <div className="dialog-footer">
