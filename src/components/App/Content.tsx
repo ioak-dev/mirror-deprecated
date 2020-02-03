@@ -115,6 +115,7 @@ class Content extends Component<Props, State> {
                                 <PrivateRoute path="/:tenant/settings" render={(props: any) => <Settings {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <PrivateRoute path="/:tenant/faq" render={(props: any) => <Faq {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <PrivateRoute path="/:tenant/servicerequests" render={(props: any) => <ServiceRequests {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <PrivateRoute path="/:tenant/useradministration" render={(props: any) => <ServiceRequests {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                             </MuiThemeProvider>
                         </div>
                     </div>

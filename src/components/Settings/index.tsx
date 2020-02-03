@@ -72,7 +72,7 @@ class Settings extends Component<Props, State> {
                     icon:'compare'
                 }
             ],
-            user: [
+            myProfile: [
                 {
                     label: 'Profile',
                     action: () => this.chooseSection('userProfile'),
@@ -174,7 +174,7 @@ class Settings extends Component<Props, State> {
                             <div className="filter-container">
                                 <div className="section-main">
                                     <Sidebar label="Tenant" elements={this.state.sidebarElements['tenant']} icon="home" animate />
-                                    <Sidebar label="User" elements={this.state.sidebarElements['user']} icon="account_circle" animate />
+                                    <Sidebar label="My Profile" elements={this.state.sidebarElements['myProfile']} icon="account_circle" animate />
                                 </div>
                             </div>
                     </View>
