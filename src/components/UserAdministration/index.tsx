@@ -87,8 +87,8 @@ export default class UserAdministration extends Component<Props, State> {
     initializeRequest(authorization) {
         const that = this;
         
-        httpGet(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/main',
+        httpGet(constants.API_URL_USER + '/' + 
+        this.props.match.params.tenant,
         {
             headers:{
                 Authorization: this.props.authorization.token
@@ -97,14 +97,6 @@ export default class UserAdministration extends Component<Props, State> {
         .then((response) => {
             let list: any[] = [];
             response.data.data.forEach((item) => {
-                if (item.status === 'assigned') {
-                    item.status = <div className="tag-2"><span>{'Assigned_to_' + item.stage}</span></div>
-                } else if (item.status === 'progress') {
-                    item.status = <div className="tag-4"><span>{'In_progress_with ' + item.stage}</span></div>
-                } else if (item.status === 'resolved') {
-                    item.status = <div className="tag-5"><span>Resolved</span></div>
-                }
-
                 list.push({
                     ...item, 
                     action: 
@@ -244,8 +236,8 @@ export default class UserAdministration extends Component<Props, State> {
 
     find = (event) => {
       const dataview = this.state.data.filter((item) => (
-        item.title.toLowerCase().indexOf(event.target.value) !== -1 ||
-        item.description.toLowerCase().indexOf(event.target.value) !== -1
+        // item.name.toLowerCase().indexOf(event.target.value) !== -1 ||
+        item.email.toLowerCase().indexOf(event.target.value) !== -1
       ));
       this.setState({dataview: dataview, searchCriteria: event.target.value})
     }
@@ -253,7 +245,7 @@ export default class UserAdministration extends Component<Props, State> {
     render() {
         return (
             <div className="user-administration boxed">
-                <UserAdministrationView {...this.props} saveRequest={this.saveRequest} addLog={this.addLog} request = {this.state.selectedUser} stages={this.state.stages} />
+                <UserAdministrationView {...this.props} saveRequest={this.saveRequest} addLog={this.addLog} user = {this.state.selectedUser} stages={this.state.stages} />
                 <ViewResolver sideLabel='More options'>
                     <View main>
                       <div className="search-bar">
@@ -265,9 +257,9 @@ export default class UserAdministration extends Component<Props, State> {
                         data={this.state.dataview} header={[
                                 {key:"_id", label:"User Id"},
                                 {key:"title", label:"Full Name"},
-                                {key:"description", label:"Email"},
+                                {key:"email", label:"Email"},
                                 {key:"status", label:"Status"},
-                                {key:"category", label:"Roles"},
+                                {key:"roles", label:"Roles"},
                                 {key:"action", label:"Action"}]} >
                         </OakTable>                    
                     </View>

@@ -238,7 +238,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                             <div className="comment space-bottom-2">
                                 <div className="comment-author typography-4 space-bottom-1">
                                     {/* <i className="material-icons">person</i> */}
-                                    {item.lastModifiedBy}
+                                    {item.lastModifiedByEmail}
                                     </div>
                                 <div className="comment-text space-bottom-1">{item.comments}</div>
                                 <div className="comment-date typography-6">

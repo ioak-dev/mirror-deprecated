@@ -102,3 +102,15 @@
         }
     }
 }
+
+.view-user {
+    .role-container {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-content: left;
+
+        .label, .value {
+            padding: 10px;
+        }
+    }
+}
