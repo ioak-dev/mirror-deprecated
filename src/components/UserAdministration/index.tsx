@@ -25,15 +25,13 @@ interface Props{
 
 interface State{
     data?: any,
-    sidebarElements: any,
+    dataview?: any,
     isEditDialogOpen:boolean,
-    editDialogLabel: string,
     pageNo: number,
     rowsPerPage: number,
-    title: string,
-    description: string,
-    selectedRequest: any,
-    stages: any
+    selectedUser: any,
+    stages: any,
+    searchCriteria: string
 }
 
 export default class UserAdministration extends Component<Props, State> {
@@ -41,24 +39,13 @@ export default class UserAdministration extends Component<Props, State> {
         super(props)
         this.state = {
             data: [],
+            dataview: [],
             pageNo: 1,
             rowsPerPage: 6,
             isEditDialogOpen: false,
-            editDialogLabel: 'Service Request',
-            title:'',
-            description:'',
-            selectedRequest: undefined,
+            selectedUser: undefined,
             stages: [],
-
-            sidebarElements: {
-                serviceRequest: [
-                    {
-                        label: 'New Request',
-                        action: this.toggleEditDialog,
-                        icon: 'add'
-                    }
-                ]
-            }
+            searchCriteria: ''
         }
     }
     componentDidMount(){
@@ -91,9 +78,9 @@ export default class UserAdministration extends Component<Props, State> {
         }
       }
 
-    openRequest = (request) => {
+    openUser = (user) => {
         this.setState({
-            selectedRequest: request
+            selectedUser: user
         })
     }
 
@@ -122,14 +109,15 @@ export default class UserAdministration extends Component<Props, State> {
                     ...item, 
                     action: 
                     <>
-                        <OakButton theme="primary" variant="block" align="left" action={() => this.openRequest(item)} icon="open_in_new"></OakButton>
+                        <OakButton theme="primary" variant="block" align="left" action={() => this.openUser(item)} icon="open_in_new"></OakButton>
                         {item.status === 'resolved' && 
                             <OakButton theme="default" variant="block" align="right" action=""><i className="material-icons">archive</i></OakButton>}
                     </>
                 })
             })
             this.setState({
-                data: list
+                data: list,
+                dataview: list
             });
         })
         
@@ -138,16 +126,13 @@ export default class UserAdministration extends Component<Props, State> {
     toggleEditDialog = () => {
         this.setState({
             isEditDialogOpen: !this.state.isEditDialogOpen,
-            editDialogLabel: 'Create Service Request',
-            selectedRequest: undefined
+            selectedUser: undefined
         })
     }
 
     saveRequestEvent = () => {
         let stage = [...this.state.stages]
         this.saveRequest({
-            title: this.state.title,
-            description: this.state.description,
             priority: 'Low',
             stage: stage[0]["name"],
             status:'assigned'
@@ -157,15 +142,13 @@ export default class UserAdministration extends Component<Props, State> {
     
     clearRequest = () => {
         this.setState({
-            title: '',
-            description: ''
         })
     }
 
     closeAllDialog = () => {
         this.setState({
             isEditDialogOpen:false,
-            selectedRequest:undefined
+            selectedUser:undefined
         })
         this.clearRequest()
     }
@@ -259,43 +242,33 @@ export default class UserAdministration extends Component<Props, State> {
         )
     }
 
+    find = (event) => {
+      const dataview = this.state.data.filter((item) => (
+        item.title.toLowerCase().indexOf(event.target.value) !== -1 ||
+        item.description.toLowerCase().indexOf(event.target.value) !== -1
+      ));
+      this.setState({dataview: dataview, searchCriteria: event.target.value})
+    }
+
     render() {
         return (
-            <div className="user-administration">
-                <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
-                    <div className="dialog-body">
-                        <OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                        <OakText label="Description" data={this.state} id="description" handleChange={e => this.handleChange(e)} />
-                    </div>
-                    <div className="dialog-footer">
-                        <OakButton action={this.toggleEditDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
-                        <OakButton action={this.saveRequestEvent} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
-                    </div>
-                </OakDialog>
-                <UserAdministrationView {...this.props} saveRequest={this.saveRequest} addLog={this.addLog} request = {this.state.selectedRequest} stages={this.state.stages} />
+            <div className="user-administration boxed">
+                <UserAdministrationView {...this.props} saveRequest={this.saveRequest} addLog={this.addLog} request = {this.state.selectedUser} stages={this.state.stages} />
                 <ViewResolver sideLabel='More options'>
                     <View main>
+                      <div className="search-bar">
+                        <div><OakText label="Search" data={this.state} handleChange={this.find} id="searchCriteria" /></div>
+                        <div className="clear"><OakButton theme="default" variant="block" icon="clear"></OakButton></div>
+                      </div>
                         <OakTable material
-                        data={this.state.data} header={[
-                                {key:"_id", label:"Request Number"},
-                                {key:"title", label:"Title"},
-                                {key:"description", label:"Description"},
+                        data={this.state.dataview} header={[
+                                {key:"_id", label:"User Id"},
+                                {key:"title", label:"Full Name"},
+                                {key:"description", label:"Email"},
                                 {key:"status", label:"Status"},
-                                {key:"category", label:"Category"},
-                                {key:"priority", label:"Priority"},
-                                {key:"createdAt", label:"Opened On", dtype: "date"},
+                                {key:"category", label:"Roles"},
                                 {key:"action", label:"Action"}]} >
                         </OakTable>                    
-                    </View>
-                    <View side>
-                        <div className="filter-container">
-                            <div className="section-main">
-                                <Sidebar label="ServiceRequest" elements={this.state.sidebarElements['serviceRequest']} icon="add" animate />
-                                <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate>
-                                    Search content goes here
-                                </Sidebar>
-                            </div>
-                        </div>
                     </View>
                 </ViewResolver>
                                

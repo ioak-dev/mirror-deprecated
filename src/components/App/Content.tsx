@@ -24,6 +24,7 @@ import Tenant from '../Tenant';
 import Settings from './../Settings';
 import Faq from '../Faq';
 import ServiceRequests from '../ServiceRequests'
+import UserAdministration from '../UserAdministration';
 
 const themes = {
     'themecolor_1': getTheme('#69A7BF'),
@@ -72,7 +73,6 @@ class Content extends Component<Props, State> {
         this.props.getProfile();
         this.props.getAuth();
 
-
         this.state = {
             authorization: {
                 isAuth: false
@@ -115,7 +115,7 @@ class Content extends Component<Props, State> {
                                 <PrivateRoute path="/:tenant/settings" render={(props: any) => <Settings {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <PrivateRoute path="/:tenant/faq" render={(props: any) => <Faq {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                                 <PrivateRoute path="/:tenant/servicerequests" render={(props: any) => <ServiceRequests {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
-                                <PrivateRoute path="/:tenant/useradministration" render={(props: any) => <ServiceRequests {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
+                                <PrivateRoute path="/:tenant/useradministration" render={(props: any) => <UserAdministration {...props} {...this.props} logout={() => this.logout} event={this.state.event} />} />
                             </MuiThemeProvider>
                         </div>
                     </div>

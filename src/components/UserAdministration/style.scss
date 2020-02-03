@@ -3,6 +3,16 @@
         width: 100%;
     }
 
+    .search-bar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        .clear {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+    }
+
     .tag {
         cursor: pointer;
         background-color: var(--color-body-dim);

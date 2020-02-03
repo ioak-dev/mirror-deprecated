@@ -135,27 +135,6 @@ export default class ServiceRequests extends Component<Props, State> {
         
     }
 
-    // onChangePage = (pageNo: number, rowsPerPage: number) => {
-    //     this.setState({
-    //         pageNo: this.state.pageNo,
-    //         rowsPerPage: this.state.rowsPerPage
-    //     })
-    //     const that = this;
-    //     httpGet(constants.API_URL_SR + '/' + 
-    //     this.props.match.params.tenant + '/',
-    //     {
-    //         headers:{
-    //             Authorization: this.props.authorization.token
-    //         }
-    //     })
-    //     .then(function(response){
-    //         that.setState({
-    //             data:response.data.data,
-    //         });
-    //     })
-    //     console.log(pageNo, rowsPerPage);
-    // }
-
     toggleEditDialog = () => {
         this.setState({
             isEditDialogOpen: !this.state.isEditDialogOpen,
@@ -311,7 +290,7 @@ export default class ServiceRequests extends Component<Props, State> {
                     <View side>
                         <div className="filter-container">
                             <div className="section-main">
-                                <Sidebar label="ServiceRequest" elements={this.state.sidebarElements['serviceRequest']} icon="add" animate />
+                                <Sidebar label="Service Request" elements={this.state.sidebarElements['serviceRequest']} icon="add" animate />
                                 <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate>
                                     Search content goes here
                                 </Sidebar>
