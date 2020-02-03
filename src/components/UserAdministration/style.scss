@@ -5,8 +5,10 @@
 
     .search-bar {
         display: grid;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: 0.5fr 0.4fr auto;
+        justify-content: right;
         .clear {
+            padding-left: 10px;
             display: flex;
             align-items: center;
             margin-bottom: 6px;

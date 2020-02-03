@@ -257,6 +257,7 @@ export default class UserAdministration extends Component<Props, State> {
                 <ViewResolver sideLabel='More options'>
                     <View main>
                       <div className="search-bar">
+                        <div></div>
                         <div><OakText label="Search" data={this.state} handleChange={this.find} id="searchCriteria" /></div>
                         <div className="clear"><OakButton theme="default" variant="block" icon="clear"></OakButton></div>
                       </div>
