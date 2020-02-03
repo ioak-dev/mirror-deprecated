@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './OakDialog.scss';
 import { sendMessage } from '../../events/MessageService';
 import OakDialog from './OakDialog';
+import OakButton from './OakButton';
 
 interface Props {
     visible: boolean,
@@ -45,8 +46,8 @@ class OakPrompt extends Component<Props, State> {
                     {this.props.children && this.props.children}
                     {!this.props.children && 
                         <>
-                            <button onClick={this.props.toggleVisibility} className="default animate in right align-left"><i className="material-icons">close</i>No</button>
-                            <button onClick={this.action} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>Yes</button>
+                            <OakButton action={this.props.toggleVisibility} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>No</OakButton>
+                            <OakButton action={this.action} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Yes</OakButton>
                         </>
                     }
                 </div>

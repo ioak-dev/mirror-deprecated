@@ -8,6 +8,7 @@ import OakText from '../Ux/OakText';
 import { sendMessage } from '../../events/MessageService';
 import {signinWithJwt, signin, preSignin,sentPasswordChangeEmail, preSignup, signup} from './AuthService';
 import {isEmptyOrSpaces} from "../Utils";
+import OakButton from '../Ux/OakButton';
 
 const queryString = require('query-string');
 
@@ -246,12 +247,12 @@ class Login extends Component<Props, State> {
                             <OakText label="Password" type="password"  id="password"   data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
-                        <button className="primary animate out right"  onClick={this.login}>Sign In</button>
+                        <OakButton variant="animate out" theme="primary" action={this.login}>Sign In</OakButton>
                         <br /> <br />
-                        Don't have an account? <button className="default animate right small"  onClick={this.toggle}>Sign Up</button>
+                        Don't have an account? <OakButton theme="default" variant="animate in" small action={this.toggle}>Sign Up</OakButton>
                     </form>
                     <br />
-                    <button className="default animate right small" onClick={this.sentEmailWithCode}>Forgot password ?</button>
+                    <OakButton theme="default" variant="animate in" small action={this.sentEmailWithCode}>Forgot password ?</OakButton>
                 </div>}
 
                 {this.state.newuser && <div className="container">
@@ -264,9 +265,9 @@ class Login extends Component<Props, State> {
                         <OakText label="Repeat Password" type="password"  id="repeatpassword" data={this.state} handleChange={e => this.handleChange(e)} />
                         </div>
                         <br />
-                        <button className="primary block" onClick={this.signup}>Create Account</button>
+                        <OakButton theme="primary" variant="block" action={this.signup}>Create Account</OakButton>
                         <br /> <br />
-                        Already have an account? <button className="secondary block" onClick={this.toggle}>Sign In</button> 
+                        Already have an account? <OakButton theme="secondary" variant="block" action={this.toggle}>Sign In</OakButton> 
                     </form>
                 </div>
                 }

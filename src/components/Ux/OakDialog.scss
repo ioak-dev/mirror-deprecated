@@ -6,6 +6,11 @@
     .dialog {
         height: calc(100vh - var(--height-nav));
         width: calc(100vw - 362px - 50px);
+
+        &.fullscreen {
+            width: calc(100vw - 25px);
+        }
+
         @media (max-width: 767px) {
             width: calc(100vw - 5px);
         }
@@ -29,18 +34,22 @@
                 display: grid;
                 align-items: center;
                 justify-content: flex-end;
-                cursor: pointer;
-                .material-icons {
-                    vertical-align: middle;
-                    margin-left: 5px;
-                    font-size: 2em;
-                    color: var(--color-body-invert);           
-                }
-                .text-esc {
-                    vertical-align: middle;
-                    margin-left: 5px;
-                    font-size: 1.2em;
-                    color: var(--color-body-invert-dim);       
+                .container {
+                    cursor: pointer;
+                    color: var(--color-body-invert-dim);
+                    &:hover {
+                        color: var(--color-body-invert);
+                    }
+                    .material-icons {
+                        vertical-align: middle;
+                        margin-left: 5px;
+                        font-size: 2em;
+                    }
+                    .text-esc {
+                        vertical-align: middle;
+                        margin-left: 5px;
+                        font-size: 1.2em;
+                    }
                 }
             }
 
@@ -90,11 +99,7 @@
             // padding-right: 2vh;
         }
 
-
-    }
-
-    &.small {
-        .dialog {
+        &.small {
             height: auto;
             top: 30vh;
 
@@ -108,5 +113,4 @@
             }
         }
     }
-
 }

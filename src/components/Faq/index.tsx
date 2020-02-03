@@ -1,7 +1,6 @@
 import React from 'react';
 import './style.scss';
 import Link from './Link';
-import OakTextField from '../Ux/OakTextField';
 import OakDialog from '../Ux/OakDialog';
 import OakSelect from '../Ux/OakSelect';
 import ViewResolver from '../Ux/ViewResolver';
@@ -15,6 +14,8 @@ import Sidebar from '../Ux/Sidebar';
 import OakTable from '../Ux/OakTable';
 import OakPagination from '../Ux/OakPagination';
 import OakPrompt from '../Ux/OakPrompt';
+import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 interface Props{
   match: any,
@@ -284,30 +285,21 @@ export default class Faq extends React.Component<Props, State> {
       <div className="faq">
         <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
           <div className="dialog-body">
-          <div><OakSelect label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.state.existingCategories} firstAction="<create new>" /></div>
+          <div><OakSelect theme="default" label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.state.existingCategories} firstAction="<create new>" /></div>
           <div>
-            {this.state.category === '<create new>' && <OakTextField label="Category name" data={this.state} id="newCategory" handleChange={e => this.handleChange(e)} />}
+            {this.state.category === '<create new>' && <OakText label="Category name" data={this.state} id="newCategory" handleChange={e => this.handleChange(e)} />}
           </div>
             
-            <OakTextField label="Question" data={this.state} id="question" handleChange={e => this.handleChange(e)} />
-            <OakTextField label="Answer" data={this.state} id="answer" handleChange={e => this.handleChange(e)} />
+            <OakText label="Question" data={this.state} id="question" handleChange={e => this.handleChange(e)} />
+            <OakText label="Answer" data={this.state} id="answer" handleChange={e => this.handleChange(e)} />
           </div>
           <div className="dialog-footer">
-            <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
-            <button onClick={this.addFaq} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
+            <OakButton action={this.toggleEditDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+            <OakButton action={this.addFaq} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
           </div>
         </OakDialog>
         
       {this.state.isDeleteDialogOpen}
-        {/* <OakDialog small visible={this.state.isDeleteDialogOpen} toggleVisibility={this.toggleDeleteDialog}>
-          <div className="dialog-body">
-            Are you sure you want to continue?
-            </div>
-          <div className="dialog-footer">
-            <button onClick={this.toggleDeleteDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
-            <button onClick={this.deleteFaq} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
-          </div>
-        </OakDialog> */}
         <OakPrompt action={this.deleteFaq} visible={this.state.isDeleteDialogOpen} toggleVisibility={this.toggleDeleteDialog} />
 
         <ViewResolver sideLabel='More options'>
@@ -316,8 +308,8 @@ export default class Faq extends React.Component<Props, State> {
             <OakPagination totalRows={this.state.faq.length} onChangePage={this.onChangePage} label="Items per page" />
             {/* Temporary for illustration */}
             <OakTable material data={this.state.data} header={[{key: "name", label:"Name"},
-                                                      {key: "calories", label:"Calories"},
-                                                      {key: "fat", label:"Fat"},
+                                                      {key: "calories", label:"Calories", dtype: 'string'},
+                                                      {key: "fat", label:"Fat", dtype: 'number'},
                                                       {key: "carbs", label:"Carbohydrates"},
                                                       {key: "protein", label:"Protein"}]}/>
             {/* Temporary for illustration */}

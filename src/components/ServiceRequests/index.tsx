@@ -5,13 +5,15 @@ import './style.scss'
 import ViewResolver from '../Ux/ViewResolver';
 import View from '../Ux/View';
 import Sidebar from '../Ux/Sidebar';
-import { httpGet, httpDelete, httpPost, httpPut } from '../Lib/RestTemplate';
+import { httpGet, httpPut } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
 import OakDialog from '../Ux/OakDialog';
-import OakTextField from '../Ux/OakTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
 import ServiceRequestView from './view';
+import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
+
 
 interface Props{
     match: any,
@@ -30,7 +32,8 @@ interface State{
     rowsPerPage: number,
     title: string,
     description: string,
-    selectedRequest: any
+    selectedRequest: any,
+    stages: any
 }
 
 export default class ServiceRequests extends Component<Props, State> {
@@ -45,6 +48,7 @@ export default class ServiceRequests extends Component<Props, State> {
             title:'',
             description:'',
             selectedRequest: undefined,
+            stages: [],
 
             sidebarElements: {
                 serviceRequest: [
@@ -66,8 +70,26 @@ export default class ServiceRequests extends Component<Props, State> {
           ...this.props.profile,
           tenant: this.props.match.params.tenant
         })
+
+        httpGet(constants.API_URL_STAGE + '/' + this.props.match.params.tenant + '/', 
+            {headers: {
+                Authorization: this.props.authorization.token
+            }}
+            ).then ((response) => {
+                this.setState({
+                    stages: response.data.stage
+                })
+            }).catch((error) => {
+                console.log(error);
+            })
     
     }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.authorization){
+          this.initializeRequest(this.props.authorization)
+        }
+      }
 
     openRequest = (request) => {
         this.setState({
@@ -77,8 +99,9 @@ export default class ServiceRequests extends Component<Props, State> {
 
     initializeRequest(authorization) {
         const that = this;
+        
         httpGet(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/',
+        this.props.match.params.tenant + '/main',
         {
             headers:{
                 Authorization: this.props.authorization.token
@@ -88,21 +111,20 @@ export default class ServiceRequests extends Component<Props, State> {
             let list: any[] = [];
             response.data.data.forEach((item) => {
                 if (item.status === 'assigned') {
-                    item.status = <div className="tag-2"><span>{'Assigned to ' + item.stage}</span></div>
+                    item.status = <div className="tag-2"><span>{'Assigned_to_' + item.stage}</span></div>
                 } else if (item.status === 'progress') {
-                    item.status = <div className="tag-4"><span>{'In progress with ' + item.stage}</span></div>
+                    item.status = <div className="tag-4"><span>{'In_progress_with ' + item.stage}</span></div>
                 } else if (item.status === 'resolved') {
                     item.status = <div className="tag-5"><span>Resolved</span></div>
                 }
 
-                
                 list.push({
                     ...item, 
                     action: 
                     <>
-                        <button className="primary noborder icon animate none align-left" onClick={() => this.openRequest(item)}><i className="material-icons">open_in_new</i></button>
+                        <OakButton theme="primary" variant="block" align="left" action={() => this.openRequest(item)} icon="open_in_new"></OakButton>
                         {item.status === 'resolved' && 
-                            <button className="default noborder icon animate none align-right"><i className="material-icons">archive</i></button>}
+                            <OakButton theme="default" variant="block" align="right" action=""><i className="material-icons">archive</i></OakButton>}
                     </>
                 })
             })
@@ -137,17 +159,79 @@ export default class ServiceRequests extends Component<Props, State> {
     toggleEditDialog = () => {
         this.setState({
             isEditDialogOpen: !this.state.isEditDialogOpen,
-            editDialogLabel: 'Add',
+            editDialogLabel: 'Create Service Request',
             selectedRequest: undefined
         })
     }
 
-    addRequest = () => {
-        const that = this;
-        let request = {
+    saveRequestEvent = () => {
+        let stage = [...this.state.stages]
+        this.saveRequest({
             title: this.state.title,
             description: this.state.description,
+            priority: 'Low',
+            stage: stage[0]["name"],
+            status:'assigned'
+        })
+        this.toggleEditDialog()
+    }
+    
+    clearRequest = () => {
+        this.setState({
+            title: '',
+            description: ''
+        })
+    }
+
+    closeAllDialog = () => {
+        this.setState({
+            isEditDialogOpen:false,
+            selectedRequest:undefined
+        })
+        this.clearRequest()
+    }
+
+    addLog = (log) => {
+        const that = this;
+        if (isEmptyOrSpaces(log.comments[0])) {
+            sendMessage('notification', true, {type: 'failure', message: 'Nothing to add', duration: 5000});
+            return;
         }
+        
+        httpPut(constants.API_URL_SR + '/' + 
+        this.props.match.params.tenant + '/log' +'/' + log.id,
+        {
+            request_id:log.id,
+            comments: log.comments
+        },
+        {
+          headers: {
+            Authorization: this.props.authorization.token
+          }
+        })
+        .then(function(response) {
+            if (response.status === 200) {
+                sendMessage('notification', true, {type: 'success', message: 'Comments Added  Successfully', duration: 5000});
+                that.closeAllDialog();
+            }
+            that.closeAllDialog();
+            that.initializeRequest(that.props.authorization);
+             
+        })
+        .catch((error) => {
+            if (error.response.status === 401) {
+                that.props.logout(null, 'failure', 'Session expired. Login again');
+            }
+        })
+    }
+
+    saveRequest = (request, edit=false) => {
+        const that = this;
+        if (!request) {
+            sendMessage('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
+            return;
+        }
+        
         if (isEmptyOrSpaces(request.title)) {
             sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
             return;
@@ -159,7 +243,7 @@ export default class ServiceRequests extends Component<Props, State> {
         }
 
         httpPut(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/',
+        this.props.match.params.tenant + '/main',
         request,
         {
           headers: {
@@ -168,11 +252,17 @@ export default class ServiceRequests extends Component<Props, State> {
         })
         .then(function(response) {
             if (response.status === 200) {
-                sendMessage('notification', true, {type: 'success', message: 'Request created', duration: 5000});
-                that.toggleEditDialog();
-    
+                if (edit) {
+                    sendMessage('notification', true, {type: 'success', message: 'Request edited', duration: 5000});
+                    that.closeAllDialog();
+                } else {
+                    sendMessage('notification', true, {type: 'success', message: 'Request created', duration: 5000});
+                    that.closeAllDialog();
+                }
+                that.closeAllDialog();
                 that.initializeRequest(that.props.authorization);
             }
+            
         })
         .catch((error) => {
             if (error.response.status === 401) {
@@ -195,15 +285,15 @@ export default class ServiceRequests extends Component<Props, State> {
             <div className="requests">
                 <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
                     <div className="dialog-body">
-                        <OakTextField label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                        <OakTextField label="Description" data={this.state} id="description" handleChange={e => this.handleChange(e)} />
+                        <OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
+                        <OakText label="Description" data={this.state} id="description" handleChange={e => this.handleChange(e)} />
                     </div>
                     <div className="dialog-footer">
-                        <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
-                        <button onClick={this.addRequest} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</button>
+                        <OakButton action={this.toggleEditDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                        <OakButton action={this.saveRequestEvent} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
                     </div>
                 </OakDialog>
-                <ServiceRequestView {...this.props} request = {this.state.selectedRequest}/>
+                <ServiceRequestView {...this.props} saveRequest={this.saveRequest} addLog={this.addLog} request = {this.state.selectedRequest} stages={this.state.stages} />
                 <ViewResolver sideLabel='More options'>
                     <View main>
                         <OakTable material
@@ -213,7 +303,8 @@ export default class ServiceRequests extends Component<Props, State> {
                                 {key:"description", label:"Description"},
                                 {key:"status", label:"Status"},
                                 {key:"category", label:"Category"},
-                                {key:"createDate", label:"Opened On"},
+                                {key:"priority", label:"Priority"},
+                                {key:"createdAt", label:"Opened On", dtype: "date"},
                                 {key:"action", label:"Action"}]} >
                         </OakTable>                    
                     </View>

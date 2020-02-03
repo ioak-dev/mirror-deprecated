@@ -9,9 +9,10 @@ import { getBanner } from '../Tenant/TenantService';
 import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
 import { Authorization } from '../Types/GeneralTypes';
 import OakDialog from '../Ux/OakDialog';
-import OakTextField from '../Ux/OakTextField';
 import { isEmptyOrSpaces } from '../Utils';
 import OakPrompt from '../Ux/OakPrompt';
+import OakText from '../Ux/OakText';
+import OakButton from '../Ux/OakButton';
 
 const pageYOffsetCutoff = 10;
 
@@ -32,7 +33,8 @@ interface State {
   isNotLoggedInPromptOpen: boolean,
   searchTitle: string,
   searchDescription: string,
-  requestId?: string
+  requestId?: string,
+  stages: any
 }
 
 export default class Home extends React.Component<Props, State> {
@@ -46,7 +48,8 @@ export default class Home extends React.Component<Props, State> {
       searchDescription: '',
       isCreateRequestDialogOpen: false,
       isNotLoggedInPromptOpen: false,
-      searchResults: []
+      searchResults: [],
+      stages: []
     };
   }
 
@@ -56,6 +59,18 @@ export default class Home extends React.Component<Props, State> {
     this.props.setProfile({
       ...this.props.profile,
       tenant: this.props.match.params.tenant
+    })
+    
+    httpGet(constants.API_URL_STAGE + '/' + this.props.match.params.tenant + '/', 
+    {headers: {
+      Authorization: this.props.authorization.token
+      }}
+      ).then ((response) => {
+        this.setState({
+          stages: response.data.stage
+        })
+      }).catch((error) => {
+        console.log(error);
     })
 
     searchEvent$.subscribe(searchText => this.search(searchText))
@@ -139,7 +154,6 @@ export default class Home extends React.Component<Props, State> {
   };
 
   notHelpful = () => {
-    console.log(this.props.authorization);
     if (this.props.authorization && this.props.authorization.token) {
       this.toggleEditDialog();
     } else {
@@ -176,9 +190,13 @@ export default class Home extends React.Component<Props, State> {
 
   addRequest = () => {
     const that = this;
+    let stage = [...this.state.stages]
     let request = {
         title: this.state.searchTitle,
         description: this.state.searchDescription,
+        priority: 'Low',
+        stage: stage[0]["name"],
+        status:'assigned'
     }
     if (isEmptyOrSpaces(request.title)) {
         sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
@@ -191,7 +209,7 @@ export default class Home extends React.Component<Props, State> {
     }
 
     httpPut(constants.API_URL_SR + '/' + 
-    this.props.match.params.tenant + '/',
+    this.props.match.params.tenant + '/main',
     request,
     {
       headers: {
@@ -200,11 +218,11 @@ export default class Home extends React.Component<Props, State> {
     })
     .then((response) => {
         if (response.status === 200) {
-            sendMessage('notification', true, {type: 'success', message: 'Request created [' + response.data._id + ']', duration: 10000});
-            this.toggleEditDialog();
-            this.setState({
-              requestId: response.data._id
-            })
+          sendMessage('notification', true, {type: 'success', message: 'Request created [' + response.data.data._id + ']' , duration: 10000});
+          this.toggleEditDialog();
+          this.setState({
+            requestId: response.data.data._id
+          })
         }
     });
   }
@@ -214,12 +232,12 @@ export default class Home extends React.Component<Props, State> {
       <div className="home full">
         <OakDialog visible={this.state.isCreateRequestDialogOpen} toggleVisibility={this.toggleEditDialog}>
             <div className="dialog-body">
-                <OakTextField label="Title" data={this.state} id="searchTitle" handleChange={e => this.handleChange(e)} />
-                <OakTextField label="Description" data={this.state} id="searchDescription" handleChange={e => this.handleChange(e)} />
+                <OakText label="Title" data={this.state} id="searchTitle" handleChange={e => this.handleChange(e)} />
+                <OakText label="Description" data={this.state} id="searchDescription" handleChange={e => this.handleChange(e)} />
             </div>
             <div className="dialog-footer">
-                <button onClick={this.toggleEditDialog} className="default animate in right align-left"><i className="material-icons">close</i>Cancel</button>
-                <button onClick={this.addRequest} className="primary animate out right align-right"><i className="material-icons">double_arrow</i>Create Service Request</button>
+                <OakButton action={this.toggleEditDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                <OakButton action={this.addRequest} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Create Service Request</OakButton>
             </div>
         </OakDialog>
         <OakPrompt action={this.redirectToLogin} visible={this.state.isNotLoggedInPromptOpen} toggleVisibility={this.toggleNotLoggedInPrompt} text="You are not logged in. Do you want to login to submit a service request?" />
@@ -230,8 +248,8 @@ export default class Home extends React.Component<Props, State> {
 
           <div className='search-results'>
             <div className="action-bar">
-              <button className="primary animate in right align-left">Helpful</button>
-              <button className="primary animate in right align-right" onClick={this.notHelpful}>Not Helpful</button>
+              <OakButton theme="primary" action="" variant="animate in" align="left">Helpful</OakButton>
+              <OakButton theme="primary" variant="animate in" align="right" action={this.notHelpful}>Not Helpful</OakButton>
             </div>
             {this.state.searchResults && this.state.searchResults.map(item =>
               <div key={item.question} className="result-record">

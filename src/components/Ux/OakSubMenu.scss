@@ -1,0 +1,59 @@
+.oak-sub-menu {
+    user-select: none;
+    color: var(--color-body-invert);
+    .menuitem:hover, .label {
+        background-color: var(--color-body);
+    }
+    &.default {
+        .menuitem:hover, .label {
+            background-color: var(--color-body);
+        }
+        .label {
+            border-color: var(--color-body);
+        }
+    }
+    &.primary {
+        .menuitem:hover, .label {
+            background-color: var(--color-primary);
+        }
+        .label {
+            border-color: var(--color-primary);
+        }
+    }
+    &.secondary {
+        .menuitem:hover, .label {
+            background-color: var(--color-secondary);
+        }
+        .label {
+            border-color: var(--color-secondary);
+        }
+    }
+    .label {
+        border-radius: 3px;
+        border: 2px solid;
+        padding: 2px 6px;
+        cursor: pointer;
+        .material-icons {
+            vertical-align: middle;
+        }
+    }
+
+    .content {
+        display: none;
+        position: absolute;
+        background-color: var(--color-body-dim);
+        min-width: 160px;
+        border-radius: 6px;
+        // box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding: 6px 0px;
+        // z-index: 1;
+        &.active {
+            display: block;
+        }
+
+        .menuitem {
+            cursor: pointer;
+            padding: 6px 6px;
+        }
+    }
+}

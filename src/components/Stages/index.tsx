@@ -5,6 +5,7 @@ import { Authorization } from '../Types/GeneralTypes';
 import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
 import { constants } from '../Constants';
 import { sendMessage } from '../../events/MessageService';
+import OakButton from '../Ux/OakButton';
 
 interface Props {
     match: any,
@@ -92,14 +93,14 @@ export default class Stages extends Component<Props, State> {
         return (
             <div>
                 <div className="form">
-                    <button className="secondary animate out right align-left" onClick={ this.handleAddStage }><i className="material-icons">label_important</i>New Stage</button>
-                    <button className="primary animate out right align-center" onClick={this.saveStages}><i className="material-icons">save_alt</i>Save</button>
-                    <button className="default animate in right align-right" onClick={this.resetStages}><i className="material-icons">undo</i>Reset</button>
+                    <OakButton theme="secondary" variant="animate out" align="left" action={ this.handleAddStage }><i className="material-icons">label_important</i>New Stage</OakButton>
+                    <OakButton theme="primary" variant="animate out" align="center" action={this.saveStages}><i className="material-icons">save_alt</i>Save</OakButton>
+                    <OakButton theme="default" variant="animate in" align="right" action={this.resetStages}><i className="material-icons">undo</i>Reset</OakButton>
                     <div className="space-bottom-2"></div>
                     {this.state.stage && this.state.stage.map((item, idx) => (
                         <div className="stage-row" key={idx}>
                             <div><OakText  id="name" label={`Level ${idx+1}`} data={item} handleChange ={ (e) =>this.handleChangeStage(e, idx) } /></div>
-                            <div><button className="secondary animate in right space-bottom-2" onClick={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</button></div>
+                            <div className="space-bottom-2"><OakButton theme="secondary" variant="animate in" action={this.handleRemoveStage(idx)}><i className="material-icons">delete</i>Remove</OakButton></div>
                             </div>
                             ))}
                             {(!this.state.stage || this.state.stage.length === 0) && <div>No custom stages defined</div>}
