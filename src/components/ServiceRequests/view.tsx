@@ -247,7 +247,7 @@ export default class ServiceRequestView extends Component<Props, State> {
                                 </div>
                             </div>
                         ))}
-                        {newLogSection}
+                        {this.state.logs.length > 10 && newLogSection}
                         
                     </div>
                     <div className="dialog-footer">
