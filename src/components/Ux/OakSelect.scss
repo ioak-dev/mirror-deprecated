@@ -43,7 +43,18 @@
           --color-fg: var(--color-btn-tertiary-fg-hover);
         }
     }
-        
+
+    label {
+        font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+        display: block;
+        // bottom: 8px;
+        left: 10px;
+        position: relative;
+        font-size: 0.8em;
+        color: var(--color-body-invert-dim);
+        text-transform: capitalize;
+    }
+
     .select-button {
         border-radius: 3px;
         cursor: pointer;
@@ -149,17 +160,6 @@
     }
 
     min-width: 10px !important;
-}
-
-label {
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-    display: block;
-    // bottom: 8px;
-    left: 10px;
-    position: relative;
-    font-size: 0.8em;
-    color: var(--color-body-invert-dim);
-    text-transform: capitalize;
 }
 
 .select-palette {

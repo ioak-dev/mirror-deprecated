@@ -7,6 +7,7 @@ import OakButton from '../Ux/OakButton';
 import OakSelect from '../Ux/OakSelect';
 import { httpGet } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
+import OakCheckbox from '../Ux/OakCheckbox';
 
 interface Props {
     match: any,
@@ -28,7 +29,8 @@ interface State {
     logs: any
     log: any,
     newLog: any,
-    editDialogLabel: string
+    editDialogLabel: string,
+    support: any
 }
 
 export default class UserAdministrationView extends Component<Props, State> {
@@ -44,7 +46,8 @@ export default class UserAdministrationView extends Component<Props, State> {
             logs: [],
             log: '',
             newLog: false,
-            editDialogLabel: 'Add Comments'
+            editDialogLabel: 'Add Comments',
+            support: {}
         }
     }
 
@@ -108,7 +111,16 @@ export default class UserAdministrationView extends Component<Props, State> {
     handleChange = (event) => {
         this.setState({
             ...this.state,
-            [event.target.name]:[event.target.value]
+            [event.target.name]:event.target.value
+        })
+    }
+
+    handleSupportRoleChange = (event) => {
+        this.setState({
+            support: {
+                ...this.state.support,
+                [event.target.name]:event.target.value
+            }
         })
     }
    
@@ -120,7 +132,7 @@ export default class UserAdministrationView extends Component<Props, State> {
                         {this.state.user && 
                             <>
                                 <div className="typography-4">User Data</div>
-                                <div className="role-container">
+                                <div className="basic-data">
                                     <div className="label">Email</div>
                                     <div className="value">{this.state.user.email}</div>
                                     <div className="label">Full Name</div>
@@ -128,18 +140,13 @@ export default class UserAdministrationView extends Component<Props, State> {
                                 </div>
                                 <div className="typography-4 space-top-3">Administrative Roles</div>
                                 <div className="role-container">
-                                    <div className="label">Tenant Administrator</div>
-                                    <div className="value">Toggle switch</div>
-                                    <div className="label">User Administrator</div>
-                                    <div className="value">Toggle switch</div>
+                                    <OakCheckbox data={this.state} id="tenantAdministrator" label="Tenant Administrator" handleChange={this.handleChange} theme="primary" />
+                                    <OakCheckbox data={this.state} id="userAdministrator" label="User Administrator" handleChange={this.handleChange} theme="primary" />
                                 </div>
                                 <div className="typography-4 space-top-3">Support Roles</div>
                                 <div className="role-container">
-                                    {this.props.stages.map(stage =>
-                                        <>
-                                            <div className="label">{stage.name}</div>
-                                            <div className="value">Toggle switch</div>  
-                                        </>
+                                    {this.props.stages.map(stage => 
+                                            <OakCheckbox data={this.state.support} id={stage.name} label={stage.name} handleChange={this.handleSupportRoleChange} theme="primary" />
                                     )}
                                 </div>
                             </>

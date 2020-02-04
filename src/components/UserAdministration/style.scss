@@ -106,11 +106,16 @@
 .view-user {
     .role-container {
         display: grid;
-        grid-template-columns: auto auto;
+        grid-template-columns: auto;
         justify-content: left;
 
         .label, .value {
             padding: 10px;
+        }
+
+        .value {
+            display: flex;
+
         }
     }
 }
