@@ -3,6 +3,7 @@
     // width: 100%;
     
     input, textarea {
+        font-family: 'Open Sans', sans-serif;
         border-radius: 3px;
         width: 100%;
         color: var(--color-body-invert);
@@ -17,9 +18,9 @@
         // border-color: var(--color-body-dim);
 
         &:focus {
-            background-color: var(--color-body-invert-dim);
+            // background-color: var(--color-body-invert-dim);
             // border-color: var(--color-body-invert-dim);
-            color: var(--color-body);
+            // color: var(--color-body);
         }
 
         &.error {
@@ -32,12 +33,16 @@
         }
 
         &.disabled {
-            background-color: var(--color-body-dim-2);
+            background-color: var(--color-body-invert-dim);
+            color: var(--color-body-dim);
         }
     }
 
     textarea {
-        resize: vertical;
+        // height: 500px;
+        overflow-y: auto;
+        resize: none;
+        max-height: 200px;
     }
 
     label {
