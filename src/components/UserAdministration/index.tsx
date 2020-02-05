@@ -181,23 +181,19 @@ export default class UserAdministration extends Component<Props, State> {
 
     saveRequest = (request, edit=false) => {
         const that = this;
+        
         if (!request) {
             sendMessage('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
             return;
         }
         
-        if (isEmptyOrSpaces(request.title)) {
-            sendMessage('notification', true, {type: 'failure', message: 'Title is missing', duration: 5000});
+        if (request.roles.length == 0) {
+            sendMessage('notification', true, {type: 'failure', message: 'No Roles selected', duration: 5000});
             return;
-        }
-    
-        if (isEmptyOrSpaces(request.description)) {
-            sendMessage('notification', true, {type: 'failure', message: 'Description is missing', duration: 5000});
-            return;
-        }
+        } 
 
-        httpPut(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/main',
+        httpPut(constants.API_URL_USER + '/' + 
+        this.props.match.params.tenant + '/' + this.state.selectedUser._id,
         request,
         {
           headers: {

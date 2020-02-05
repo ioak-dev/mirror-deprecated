@@ -30,7 +30,8 @@ interface State {
     log: any,
     newLog: any,
     editDialogLabel: string,
-    support: any
+    support: any,
+    roles: any
 }
 
 export default class UserAdministrationView extends Component<Props, State> {
@@ -46,6 +47,7 @@ export default class UserAdministrationView extends Component<Props, State> {
             logs: [],
             log: '',
             newLog: false,
+            roles: [],
             editDialogLabel: 'Add Comments',
             support: {}
         }
@@ -108,6 +110,36 @@ export default class UserAdministrationView extends Component<Props, State> {
         })
     }
 
+    saveRequest = () => {
+        if(this.state['tenantAdministrator'] == 'true') {
+            this.setState({
+                ...this.state,
+                roles: this.state.roles.push('Tenant Administrator')
+            })
+        }
+        
+        if(this.state['userAdministrator'] == 'true'){
+            this.setState({
+                ...this.state,
+                roles: this.state.roles.push('User Administrator')
+            })
+        }
+        
+        if(!(Object.keys(this.state.support).length==0)){
+            this.setState({
+                ...this.state,
+                roles: this.state.roles.push(Object.keys(this.state.support))
+            })
+        }
+        
+        this.props.saveRequest({
+            id: this.state.user._id,
+            roles: this.state.roles
+        }, true)
+        this.toggleDialog()
+        this.initialize(this.props)
+    }
+
     handleChange = (event) => {
         this.setState({
             ...this.state,
@@ -153,7 +185,7 @@ export default class UserAdministrationView extends Component<Props, State> {
                         }
                     </div>
                     <div className="dialog-footer">
-                        Buttons
+                        <OakButton theme="primary" variant="outline" align="right" icon="save" action={this.saveRequest}>Save Changes</OakButton>
                     </div>
                 </OakDialog>
             </div>
