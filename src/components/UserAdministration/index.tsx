@@ -31,7 +31,8 @@ interface State{
     rowsPerPage: number,
     selectedUser: any,
     stages: any,
-    searchCriteria: string
+    searchCriteria: string,
+    isDialogOpen: boolean
 }
 
 export default class UserAdministration extends Component<Props, State> {
@@ -45,7 +46,8 @@ export default class UserAdministration extends Component<Props, State> {
             isEditDialogOpen: false,
             selectedUser: undefined,
             stages: [],
-            searchCriteria: ''
+            searchCriteria: '',
+            isDialogOpen: false
         }
     }
     componentDidMount(){
@@ -80,7 +82,8 @@ export default class UserAdministration extends Component<Props, State> {
 
     openUser = (user) => {
         this.setState({
-            selectedUser: user
+            selectedUser: user,
+            isDialogOpen: true
         })
     }
 
@@ -115,13 +118,6 @@ export default class UserAdministration extends Component<Props, State> {
         
     }
 
-    toggleEditDialog = () => {
-        this.setState({
-            isEditDialogOpen: !this.state.isEditDialogOpen,
-            selectedUser: undefined
-        })
-    }
-
     saveRequestEvent = () => {
         let stage = [...this.state.stages]
         this.saveRequest({
@@ -129,7 +125,6 @@ export default class UserAdministration extends Component<Props, State> {
             stage: stage[0]["name"],
             status:'assigned'
         })
-        this.toggleEditDialog()
     }
     
     clearRequest = () => {
@@ -145,38 +140,8 @@ export default class UserAdministration extends Component<Props, State> {
         this.clearRequest()
     }
 
-    addLog = (log) => {
-        const that = this;
-        if (isEmptyOrSpaces(log.comments[0])) {
-            sendMessage('notification', true, {type: 'failure', message: 'Nothing to add', duration: 5000});
-            return;
-        }
-        
-        httpPut(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/log' +'/' + log.id,
-        {
-            request_id:log.id,
-            comments: log.comments
-        },
-        {
-          headers: {
-            Authorization: this.props.authorization.token
-          }
-        })
-        .then(function(response) {
-            if (response.status === 200) {
-                sendMessage('notification', true, {type: 'success', message: 'Comments Added  Successfully', duration: 5000});
-                that.closeAllDialog();
-            }
-            that.closeAllDialog();
-            that.initializeRequest(that.props.authorization);
-             
-        })
-        .catch((error) => {
-            if (error.response.status === 401) {
-                that.props.logout(null, 'failure', 'Session expired. Login again');
-            }
-        })
+    toggleDialog = () => {
+        this.setState({isDialogOpen: !this.state.isDialogOpen});
     }
 
     saveRequest = (request, edit=false) => {
@@ -241,7 +206,7 @@ export default class UserAdministration extends Component<Props, State> {
     render() {
         return (
             <div className="user-administration boxed">
-                <UserAdministrationView {...this.props} saveRequest={this.saveRequest} addLog={this.addLog} user = {this.state.selectedUser} stages={this.state.stages} />
+                <UserAdministrationView {...this.props} isDialogOpen={this.state.isDialogOpen} toggleDialog={this.toggleDialog} saveRequest={this.saveRequest} user = {this.state.selectedUser} stages={this.state.stages} />
                 <ViewResolver sideLabel='More options'>
                     <View main>
                       <div className="search-bar">

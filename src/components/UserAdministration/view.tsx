@@ -18,18 +18,12 @@ interface Props {
     user: any,
     stages: any,
     saveRequest: Function,
-    addLog: Function
+    isDialogOpen: boolean,
+    toggleDialog: any
 }
 
 interface State {
     user: any,
-    isDialogOpen: boolean,
-    nextStage?: string,
-    previousStage?: any,
-    logs: any
-    log: any,
-    newLog: any,
-    editDialogLabel: string,
     support: any,
     roles: any
 }
@@ -38,17 +32,12 @@ export default class UserAdministrationView extends Component<Props, State> {
     constructor(props){
         super(props);
         this.state = {
-            isDialogOpen: false,
             user: {
                 title: '',
                 description: '',
                 priority: ''
             },
-            logs: [],
-            log: '',
-            newLog: false,
             roles: [],
-            editDialogLabel: 'Add Comments',
             support: {}
         }
     }
@@ -57,56 +46,6 @@ export default class UserAdministrationView extends Component<Props, State> {
         this.props.setProfile({
           ...this.props.profile,
           tenant: this.props.match.params.tenant
-        })
-
-        this.setState({
-            newLog:false
-        })
-        
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.user && this.state.user !== nextProps.user) {
-            this.setState({
-                user: nextProps.user,
-                isDialogOpen: true
-            })
-        }
-
-        if (nextProps.user) {
-            this.initialize(nextProps);
-        }
-
-    }
-
-    initialize = (props) => {
-        httpGet(constants.API_URL_USER + '/' + 
-            this.props.match.params.tenant + '/' + props.user._id,
-            {
-                headers:{Authorization: this.props.authorization.token}
-            })
-            .then((response) => {
-                this.setState({
-                    logs: response.data.data
-            })
-        })
-    }
-
-    clearRequest = () => {
-        this.setState({
-            user: undefined
-        })
-    }
-
-    toggleDialog = () => {
-        if (this.state.isDialogOpen) {
-            this.clearRequest();
-        }
-        this.setState({
-            isDialogOpen: !this.state.isDialogOpen,
-            newLog: false,
-            editDialogLabel: 'Add Comments'
-            // editDialogLabel: 'Add'
         })
     }
 
@@ -136,8 +75,7 @@ export default class UserAdministrationView extends Component<Props, State> {
             id: this.state.user._id,
             roles: this.state.roles
         }, true)
-        this.toggleDialog()
-        this.initialize(this.props)
+        this.props.toggleDialog();
     }
 
     handleChange = (event) => {
@@ -159,7 +97,7 @@ export default class UserAdministrationView extends Component<Props, State> {
     render() {
         return (
             <div className="view-user">
-                <OakDialog visible={this.state.isDialogOpen} toggleVisibility={this.toggleDialog} >
+                <OakDialog visible={this.props.isDialogOpen} toggleVisibility={this.props.toggleDialog} >
                     <div className="dialog-body">
                         {this.state.user && 
                             <>
