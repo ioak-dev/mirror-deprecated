@@ -54,7 +54,7 @@ export default class UserAdministrationView extends Component<Props, State> {
                 administrativeRoles[item] = nextProps.user.roles && nextProps.user.roles.indexOf(item) >= 0 ? true : false;
             });
             this.props.stages.forEach((item) => {
-                supportRoles[item] = nextProps.user.roles && nextProps.user.roles.indexOf(item) >= 0 ? true : false;
+                supportRoles[item.name] = nextProps.user.roles && nextProps.user.roles.indexOf(item.name) >= 0 ? true : false;
             });
             this.setState({
                 administrativeRoles: administrativeRoles,
@@ -64,31 +64,6 @@ export default class UserAdministrationView extends Component<Props, State> {
     }
 
     saveRequest = () => {
-        // if(this.state['tenantAdministrator'] == 'true') {
-        //     this.setState({
-        //         ...this.state,
-        //         roles: this.state.roles.push('Tenant Administrator')
-        //     })
-        // }
-        
-        // if(this.state['userAdministrator'] == 'true'){
-        //     this.setState({
-        //         ...this.state,
-        //         roles: this.state.roles.push('User Administrator')
-        //     })
-        // }
-        
-        // if(!(Object.keys(this.state.support).length==0)){
-        //     this.setState({
-        //         ...this.state,
-        //         roles: this.state.roles.push(Object.keys(this.state.support))
-        //     })
-        // }
-        
-        // this.props.saveRequest({
-        //     id: this.state.user._id,
-        //     roles: this.state.roles
-        // }, true)
         let roles: string[] = [];
         Object.keys(this.state.administrativeRoles).forEach(item => {
             if(this.state.administrativeRoles[item]) {

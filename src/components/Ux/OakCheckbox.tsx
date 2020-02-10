@@ -31,7 +31,7 @@ function OakCheckbox(props: Props) {
                 {/* <input type="checkbox" name={props.id} value={props.data[props.id]} />
                 <span className="checkbox-style"></span> */}
                 <label className="checkbox">
-                    <input type="checkbox" name={props.id} checked={props.data[props.id] ? true : false} id={props.id} onClick={(e) => handleChange(e)} />
+                    <input type="checkbox" name={props.id} checked={props.data[props.id] ? true : false} id={props.id} onChange={(e) => handleChange(e)} />
                     <label className="typography-5" htmlFor={props.id}>{props.label}</label>
                 </label>
                 {/* {props.label && (!props.labelPosition || props.labelPosition === 'right') && <div>
