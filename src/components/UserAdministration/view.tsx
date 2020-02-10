@@ -24,11 +24,13 @@ interface Props {
 
 interface State {
     user: any,
-    support: any,
-    roles: any
+    administrativeRoles: any,
+    supportRoles: any,
 }
 
 export default class UserAdministrationView extends Component<Props, State> {
+    administrativeRoles = ['tenantAdministrator', 'userAdministrator'];
+
     constructor(props){
         super(props);
         this.state = {
@@ -37,59 +39,90 @@ export default class UserAdministrationView extends Component<Props, State> {
                 description: '',
                 priority: ''
             },
-            roles: [],
-            support: {}
+            administrativeRoles: {},
+            supportRoles: {}
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.setProfile({
           ...this.props.profile,
           tenant: this.props.match.params.tenant
         })
     }
 
+    componentWillReceiveProps(nextProps) {
+        
+        if (nextProps && nextProps.user && nextProps.stages) {
+            let administrativeRoles = {};
+            let supportRoles = {};
+            this.administrativeRoles.forEach((item) => {
+                administrativeRoles[item] = nextProps.user.roles && nextProps.user.roles.indexOf(item) >= 0 ? true : false;
+            });
+            this.props.stages.forEach((item) => {
+                supportRoles[item] = nextProps.user.roles && nextProps.user.roles.indexOf(item) >= 0 ? true : false;
+            });
+            this.setState({
+                administrativeRoles: administrativeRoles,
+                supportRoles: supportRoles
+            });
+        }
+    }
+
     saveRequest = () => {
-        if(this.state['tenantAdministrator'] == 'true') {
-            this.setState({
-                ...this.state,
-                roles: this.state.roles.push('Tenant Administrator')
-            })
-        }
+        // if(this.state['tenantAdministrator'] == 'true') {
+        //     this.setState({
+        //         ...this.state,
+        //         roles: this.state.roles.push('Tenant Administrator')
+        //     })
+        // }
         
-        if(this.state['userAdministrator'] == 'true'){
-            this.setState({
-                ...this.state,
-                roles: this.state.roles.push('User Administrator')
-            })
-        }
+        // if(this.state['userAdministrator'] == 'true'){
+        //     this.setState({
+        //         ...this.state,
+        //         roles: this.state.roles.push('User Administrator')
+        //     })
+        // }
         
-        if(!(Object.keys(this.state.support).length==0)){
-            this.setState({
-                ...this.state,
-                roles: this.state.roles.push(Object.keys(this.state.support))
-            })
-        }
+        // if(!(Object.keys(this.state.support).length==0)){
+        //     this.setState({
+        //         ...this.state,
+        //         roles: this.state.roles.push(Object.keys(this.state.support))
+        //     })
+        // }
+        
+        // this.props.saveRequest({
+        //     id: this.state.user._id,
+        //     roles: this.state.roles
+        // }, true)
+        let roles: string[] = [];
+        Object.keys(this.state.administrativeRoles).forEach(item => {
+            if(this.state.administrativeRoles[item]) {
+                roles.push(item);
+            }
+        });
         
         this.props.saveRequest({
             id: this.state.user._id,
-            roles: this.state.roles
-        }, true)
+            roles: roles
+        }, true);
         this.props.toggleDialog();
-    }
-
-    handleChange = (event) => {
-        this.setState({
-            ...this.state,
-            [event.target.name]:event.target.value
-        })
     }
 
     handleSupportRoleChange = (event) => {
         this.setState({
-            support: {
-                ...this.state.support,
-                [event.target.name]:event.target.value
+            supportRoles: {
+                ...this.state.supportRoles,
+                [event.target.name]: event.target.value
+            }
+        })
+    }
+
+    handleAdministrativeRoleChange = (event) => {
+        this.setState({
+            administrativeRoles: {
+                ...this.state.administrativeRoles,
+                [event.target.name]: event.target.value
             }
         })
     }
@@ -110,13 +143,13 @@ export default class UserAdministrationView extends Component<Props, State> {
                                 </div>
                                 <div className="typography-4 space-top-3">Administrative Roles</div>
                                 <div className="role-container">
-                                    <OakCheckbox data={this.state} id="tenantAdministrator" label="Tenant Administrator" handleChange={this.handleChange} theme="primary" />
-                                    <OakCheckbox data={this.state} id="userAdministrator" label="User Administrator" handleChange={this.handleChange} theme="primary" />
+                                    <OakCheckbox data={this.state.administrativeRoles} id="tenantAdministrator" label="Tenant Administrator" handleChange={this.handleAdministrativeRoleChange} theme="primary" />
+                                    <OakCheckbox data={this.state.administrativeRoles} id="userAdministrator" label="User Administrator" handleChange={this.handleAdministrativeRoleChange} theme="primary" />
                                 </div>
                                 <div className="typography-4 space-top-3">Support Roles</div>
                                 <div className="role-container">
                                     {this.props.stages.map(stage => 
-                                            <OakCheckbox data={this.state.support} id={stage.name} label={stage.name} handleChange={this.handleSupportRoleChange} theme="primary" />
+                                            <OakCheckbox data={this.state.supportRoles} id={stage.name} label={stage.name} handleChange={this.handleSupportRoleChange} theme="primary" />
                                     )}
                                 </div>
                             </>
