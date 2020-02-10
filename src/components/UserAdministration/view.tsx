@@ -23,7 +23,6 @@ interface Props {
 }
 
 interface State {
-    user: any,
     administrativeRoles: any,
     supportRoles: any,
 }
@@ -34,11 +33,6 @@ export default class UserAdministrationView extends Component<Props, State> {
     constructor(props){
         super(props);
         this.state = {
-            user: {
-                title: '',
-                description: '',
-                priority: ''
-            },
             administrativeRoles: {},
             supportRoles: {}
         }
@@ -101,9 +95,14 @@ export default class UserAdministrationView extends Component<Props, State> {
                 roles.push(item);
             }
         });
+        Object.keys(this.state.supportRoles).forEach(item => {
+            if(this.state.supportRoles[item]) {
+                roles.push(item);
+            }
+        });
         
         this.props.saveRequest({
-            id: this.state.user._id,
+            id: this.props.user._id,
             roles: roles
         }, true);
         this.props.toggleDialog();
@@ -132,12 +131,12 @@ export default class UserAdministrationView extends Component<Props, State> {
             <div className="view-user">
                 <OakDialog visible={this.props.isDialogOpen} toggleVisibility={this.props.toggleDialog} >
                     <div className="dialog-body">
-                        {this.state.user && 
+                        {this.props.user && 
                             <>
                                 <div className="typography-4">User Data</div>
                                 <div className="basic-data">
                                     <div className="label">Email</div>
-                                    <div className="value">{this.state.user.email}</div>
+                                    <div className="value">{this.props.user.email}</div>
                                     <div className="label">Full Name</div>
                                     <div className="value">John Doe</div>
                                 </div>

@@ -156,9 +156,8 @@ export default class UserAdministration extends Component<Props, State> {
             sendMessage('notification', true, {type: 'failure', message: 'No Roles selected', duration: 5000});
             return;
         } 
-
         httpPut(constants.API_URL_USER + '/' + 
-        this.props.match.params.tenant + '/' + this.state.selectedUser._id,
+        this.props.match.params.tenant + '/',
         request,
         {
           headers: {
