@@ -148,7 +148,7 @@ export default class UserAdministrationView extends Component<Props, State> {
                                 <div className="typography-4 space-top-3">Support Roles</div>
                                 <div className="role-container">
                                     {this.props.stages.map(stage => 
-                                            <OakCheckbox data={this.state.supportRoles} id={stage.name} label={stage.name} handleChange={this.handleSupportRoleChange} theme="primary" />
+                                            <OakCheckbox key={stage.name} data={this.state.supportRoles} id={stage.name} label={stage.name} handleChange={this.handleSupportRoleChange} theme="primary" />
                                     )}
                                 </div>
                             </>
