@@ -11,13 +11,14 @@ import PropTypes from 'prop-types';
 import { withCookies } from 'react-cookie';
 import { connect } from 'react-redux';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
+import { getUser, addUser } from '../../actions/UserActions';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Backdrop from './Backdrop';
 import Notification from '../Notification';
 import Navigation from '../Navigation';
-import store from '../../store';
+import { httpGet } from '../Lib/RestTemplate';
 import { Authorization } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import Tenant from '../Tenant';
@@ -25,6 +26,7 @@ import Settings from './../Settings';
 import Faq from '../Faq';
 import ServiceRequests from '../ServiceRequests'
 import UserAdministration from '../UserAdministration';
+import { constants } from '../Constants';
 
 const themes = {
     'themecolor_1': getTheme('#69A7BF'),
@@ -54,6 +56,8 @@ interface Props {
     getAuth: Function,
     addAuth: Function,
     removeAuth: Function,
+    getUser: Function,
+    addUser: Function,
     cookies: any,
 
     // event: PropTypes.object,
@@ -72,6 +76,7 @@ class Content extends Component<Props, State> {
         super(props);
         this.props.getProfile();
         this.props.getAuth();
+        this.props.getUser();
 
         this.state = {
             authorization: {
@@ -79,6 +84,23 @@ class Content extends Component<Props, State> {
             },
             event: {},
             profile: {}
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.authorization && !this.props.authorization['token'] && nextProps.authorization.token && nextProps.profile.tenant) {
+            httpGet(constants.API_URL_USER + '/' + 
+            nextProps.profile.tenant + '/',
+            {
+                headers:{
+                Authorization: nextProps.authorization.token
+                }
+            })
+            .then((response) => {
+                console.log(response.data.data[0]);
+                this.props.addUser(response.data.data[0]);
+            })
+            
         }
     }
 
@@ -127,8 +149,9 @@ class Content extends Component<Props, State> {
 
 const mapStateToProps = (state: any) => ({
   authorization: state.authorization,
+  user: state.user,
   profile: state.profile//,
 //   event: state.event
 })
 
-export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, getProfile, setProfile })(withCookies(Content));
+export default connect(mapStateToProps, { getAuth, addAuth, removeAuth, getProfile, setProfile, getUser, addUser })(withCookies(Content));

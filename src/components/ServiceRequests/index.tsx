@@ -20,7 +20,8 @@ interface Props{
     setProfile: Function,
     profile: any,
     authorization: Authorization,
-    logout: Function
+    logout: Function,
+    user: any
 }
 
 interface State{

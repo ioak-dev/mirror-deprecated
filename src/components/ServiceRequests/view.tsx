@@ -17,7 +17,8 @@ interface Props {
     request: any,
     stages: any,
     saveRequest: Function,
-    addLog: Function
+    addLog: Function,
+    user: any
 }
 
 interface State {
@@ -73,13 +74,13 @@ export default class ServiceRequestView extends Component<Props, State> {
         }
 
         if (nextProps.request || nextProps.stages) {
-            this.findNextStage(nextProps);
+            if (this.props.user && this.props.user.roles && this.props.stages.some(r=> this.props.user.roles.indexOf(r.name) >= 0)) {
+                this.findNextStage(nextProps);
+            }
         }
-
-        
     }
 
-    findNextStage = (props) => {
+    findNextStage = (props) => {console.log('next stage');
         if (props.request && props.request.stage && props.stages && props.stages.length > 0) {
             let index = props.stages.findIndex(x => x.name === props.request.stage);
             if (props.stages.length > index + 1) {
