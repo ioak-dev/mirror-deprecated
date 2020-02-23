@@ -29,7 +29,8 @@ interface State {
     newuser: boolean,
     name: string,
     email: string,
-    password: string
+    password: string,
+    repeatpassword:string
 }
 
 class Login extends Component<Props, State> {
@@ -39,7 +40,8 @@ class Login extends Component<Props, State> {
             newuser: false,
             name:'',
             email:'',
-            password:''
+            password:'',
+            repeatpassword:''
         }
     }
 
@@ -146,7 +148,9 @@ class Login extends Component<Props, State> {
                             sendMessage('notification', true, {'type': 'success', message: 'Your account has been created. You can login now', duration: 3000});
                             that.setState({
                                 email:'',
-                                password:''
+                                password:'',
+                                name:'',
+                                repeatpassword:''
                             }); 
                             that.toggle();
                         }

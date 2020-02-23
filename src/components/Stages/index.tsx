@@ -25,6 +25,19 @@ export default class Stages extends Component<Props, State> {
     }
 
     componentDidMount(){
+        if(this.props.authorization.isAuth){
+            this.initializeStages(this.props.authorization)
+        }
+        
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.authorization){
+          this.initializeStages(this.props.authorization)
+        }
+    }
+    
+    initializeStages = (Authorization) =>{
         httpGet(constants.API_URL_STAGE + '/' + 
         this.props.match.params.tenant + '/', 
         {headers: {
@@ -37,7 +50,6 @@ export default class Stages extends Component<Props, State> {
             }).catch(() => {})
     }
 
-    
     handleAddStage = () => {
         this.setState({
             stage: this.state.stage.concat([{name: "" }])
@@ -77,16 +89,7 @@ export default class Stages extends Component<Props, State> {
         }
 
     resetStages = () => {
-        httpGet(constants.API_URL_STAGE + '/' + 
-        this.props.match.params.tenant + '/', 
-        {headers: {
-            Authorization: this.props.authorization.token
-        }}
-        ).then ((response) => {
-            this.setState({
-                stage: response.data
-                })
-                }).catch(() => {})
+        this.initializeStages(this.props.authorization)
     }
 
     render() {

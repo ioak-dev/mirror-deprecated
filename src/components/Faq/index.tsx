@@ -71,35 +71,6 @@ export default class Faq extends React.Component<Props, State> {
     }
   }
 
-  componentWillMount() {
-    // Temporary data for illustration of table
-    const rows = [
-      this.createData('1 Frozen yoghurt', 159, 6.0, 24, 4.0),
-      this.createData('2 Ice cream sandwich', 237, 9.0, 37, 4.3),
-      this.createData('3 Eclair', 262, 16.0, 24, 6.0),
-      this.createData('4 Cupcake', 305, 3.7, 67, 4.3),
-      this.createData('5 Gingerbread', 356, 16.0, 49, 3.9),
-      this.createData('6 Frozen yoghurt', 159, 6.0, 24, 4.0),
-      this.createData('7 Ice cream sandwich', 237, 9.0, 37, 4.3),
-      this.createData('8 Eclair', 262, 16.0, 24, 6.0),
-      this.createData('9 Cupcake', 305, 3.7, 67, 4.3),
-      this.createData('10 Gingerbread', 356, 16.0, 49, 3.9),
-      this.createData('11 Frozen yoghurt', 159, 6.0, 24, 4.0),
-      this.createData('12 Ice cream sandwich', 237, 9.0, 37, 4.3),
-      this.createData('13 Eclair', 262, 16.0, 24, 6.0),
-      this.createData('14 Cupcake', 305, 3.7, 67, 4.3),
-      this.createData('15 Gingerbread', 356, 16.0, 49, 3.9),
-    ];
-
-    this.setState({
-      data: rows
-    })
-  }
-
-  createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-
   componentDidMount(){
     if(this.props.authorization.isAuth){
       this.initializeFaq(this.props.authorization)
@@ -306,13 +277,6 @@ export default class Faq extends React.Component<Props, State> {
             <View main>
             {listview}
             <OakPagination totalRows={this.state.faq.length} onChangePage={this.onChangePage} label="Items per page" />
-            {/* Temporary for illustration */}
-            <OakTable material data={this.state.data} header={[{key: "name", label:"Name"},
-                                                      {key: "calories", label:"Calories", dtype: 'string'},
-                                                      {key: "fat", label:"Fat", dtype: 'number'},
-                                                      {key: "carbs", label:"Carbohydrates"},
-                                                      {key: "protein", label:"Protein"}]}/>
-            {/* Temporary for illustration */}
             </View>
             <View side>
               <div className="filter-container">

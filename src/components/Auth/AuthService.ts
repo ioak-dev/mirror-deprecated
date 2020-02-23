@@ -15,7 +15,8 @@ export function signup(data) {
     return httpPost(constants.API_URL+data.tenantName+constants.API_SIGNUP, {
         email: data.email,
         problem: encrypt(data.password, data.solution, data.salt),
-        solution: data.solution
+        solution: data.solution,
+        roles:[]
         }, null)
         .then(function(response) {
             return Promise.resolve(response.status);
