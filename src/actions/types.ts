@@ -7,3 +7,6 @@ export const SET_PROFILE = 'SET_PROFILE';
 
 export const GET_USER = 'GET_USER';
 export const ADD_USER = 'ADD_USER';
+
+export const FETCH_ARTICLE = 'FETCH_ARTICLE';
+export const FETCH_SERVICEREQUEST = 'FETCH_SERVICEREQUEST';

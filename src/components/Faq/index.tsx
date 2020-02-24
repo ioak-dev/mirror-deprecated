@@ -1,32 +1,33 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import './style.scss';
 import Link from './Link';
 import OakDialog from '../../oakui/OakDialog';
 import OakSelect from '../../oakui/OakSelect';
 import ViewResolver from '../../oakui/ViewResolver';
 import View from '../../oakui/View';
-import { Authorization } from '../Types/GeneralTypes';
-import { httpGet, httpDelete, httpPost, httpPut } from '../Lib/RestTemplate';
-import { constants } from '../Constants';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
 import Sidebar from '../../oakui/Sidebar';
-import OakTable from '../../oakui/OakTable';
 import OakPagination from '../../oakui/OakPagination';
 import OakPrompt from '../../oakui/OakPrompt';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
+import { fetchArticle, saveArticle, deleteArticle } from '../../actions/ArticleActions';
 
 interface Props{
   match: any,
   setProfile: Function,
   profile: any,
-  authorization: Authorization,
-  logout: Function
+  authorization: any,
+  logout: Function,
+  article: any,
+  fetchArticle: Function,
+  saveArticle: Function,
+  deleteArticle: Function
 }
 
 interface State{
-  faq: any,
   id?: string,
   category: any,
   question: string,
@@ -35,19 +36,16 @@ interface State{
   isEditDialogOpen:boolean,
   isDeleteDialogOpen:boolean,
   sidebarElements:any,
-  existingCategories: any,
   newCategory: String,
   data?: any,
   pageNo: number,
   rowsPerPage: number
 }
 
-export default class Faq extends React.Component<Props, State> {
+class Faq extends React.Component<Props, State> {
   constructor(props){
     super(props)
     this.state = {
-      faq:[],
-      existingCategories: [],
       isEditDialogOpen: false,
       isDeleteDialogOpen: false,
       id: undefined,
@@ -84,28 +82,13 @@ export default class Faq extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps){
-    if(nextProps.authorization){
+    if(nextProps.authorization && !this.props.authorization && !this.props.authorization.isAuth && nextProps.authorization.isAuth){
       this.initializeFaq(this.props.authorization)
     }
   }
 
   initializeFaq(authorization){
-    const that = this;
-    httpGet(constants.API_URL_FAQ + '/' + 
-    this.props.match.params.tenant + '/',
-      {
-        headers:{
-          Authorization: this.props.authorization.token
-        }
-      })
-      .then(function(response){
-        that.setState({
-          faq:response.data.faq,
-          existingCategories: response.data.category
-        });
-
-      })
-      
+    this.props.fetchArticle(this.props.match.params.tenant, authorization);
   }
 
   toggleEditDialog = () => {
@@ -150,25 +133,7 @@ export default class Faq extends React.Component<Props, State> {
   }
 
   deleteFaq = () => {
-    const that = this;
-    httpDelete(constants.API_URL_FAQ + '/' + this.props.match.params.tenant + '/' + this.state.id,
-    {
-      headers: {
-        Authorization: this.props.authorization.token
-      }
-    })
-        .then(function(response) {
-            if (response.status === 200) {
-                sendMessage('notification', true, {type: 'success', message: 'FAQ deleted', duration: 5000});
-                that.initializeFaq(that.props.authorization);
-            }
-        })
-        .catch((error) => {
-            if (error.response.status === 401) {
-                that.props.logout(null, 'failure', 'Session expired. Login again');
-            }
-        })
-
+    this.props.deleteArticle(this.props.match.params.tenant, this.props.authorization, this.state.id);
   }
 
   searchByWord = (faqName) =>{
@@ -201,27 +166,7 @@ export default class Faq extends React.Component<Props, State> {
         faq.answer = 'unsorted';
     }
 
-    httpPut(constants.API_URL_FAQ + '/' + 
-    this.props.match.params.tenant + '/',
-    faq,
-    {
-      headers: {
-        Authorization: this.props.authorization.token
-      }
-    })
-    .then(function(response) {
-        if (response.status === 200) {
-            sendMessage('notification', true, {type: 'success', message: 'FAQ created', duration: 5000});
-            that.toggleEditDialog();
-
-            that.initializeFaq(that.props.authorization);
-        }
-    })
-    .catch((error) => {
-        if (error.response.status === 401) {
-            that.props.logout(null, 'failure', 'Session expired. Login again');
-        }
-    })
+    this.props.saveArticle(this.props.match.params.tenant, this.props.authorization, faq);
 }
 
 
@@ -243,8 +188,8 @@ export default class Faq extends React.Component<Props, State> {
 
   render() {
     let view: any[] = [];
-    if (this.state.faq) {
-      view = this.state.faq.slice((this.state.pageNo - 1) * this.state.rowsPerPage, this.state.pageNo * this.state.rowsPerPage);
+    if (this.props.article.items) {
+      view = this.props.article.items.slice((this.state.pageNo - 1) * this.state.rowsPerPage, this.state.pageNo * this.state.rowsPerPage);
     }
     const listview = view.map(item => (
       <div key={item._id}>
@@ -256,7 +201,7 @@ export default class Faq extends React.Component<Props, State> {
       <div className="faq">
         <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
           <div className="dialog-body">
-          <div><OakSelect theme="default" label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.state.existingCategories} firstAction="<create new>" /></div>
+          <div><OakSelect theme="default" label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.props.article.categories} firstAction="<create new>" /></div>
           <div>
             {this.state.category === '<create new>' && <OakText label="Category name" data={this.state} id="newCategory" handleChange={e => this.handleChange(e)} />}
           </div>
@@ -276,7 +221,7 @@ export default class Faq extends React.Component<Props, State> {
         <ViewResolver sideLabel='More options'>
             <View main>
             {listview}
-            <OakPagination totalRows={this.state.faq.length} onChangePage={this.onChangePage} label="Items per page" />
+            <OakPagination totalRows={this.props.article.items.length} onChangePage={this.onChangePage} label="Items per page" />
             </View>
             <View side>
               <div className="filter-container">
@@ -293,3 +238,13 @@ export default class Faq extends React.Component<Props, State> {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  article: state.article,
+});
+
+export default connect(mapStateToProps, {
+  fetchArticle,
+  saveArticle,
+  deleteArticle,
+})(Faq);
