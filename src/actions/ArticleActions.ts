@@ -16,7 +16,7 @@ export const fetchArticle = (tenant, authorization) => dispatch => {
       .then((response) => {
           dispatch({
               type: FETCH_ARTICLE,
-              payload: {items: response.data.faq, categories: response.data.existingCategories}
+              payload: {items: response.data.faq, categories: response.data.category}
           })
       })
 };

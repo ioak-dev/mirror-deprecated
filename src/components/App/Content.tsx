@@ -22,7 +22,7 @@ import { Authorization } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import Tenant from '../Tenant';
 import Settings from './../Settings';
-import Faq from '../Faq';
+import ArticleController from '../Article/ArticleController';
 import ServiceRequests from '../ServiceRequests'
 import UserAdministration from '../UserAdministration';
 import { constants } from '../Constants';
@@ -96,7 +96,6 @@ const Content = (props: Props) => {
                 }
             })
             .then((response) => {
-                console.log(response.data.data[0]);
                 props.addUser(response.data.data[0]);
             })
             
@@ -129,7 +128,7 @@ const Content = (props: Props) => {
                             <Route path="/home" exact render={(propsLocal: any) => <Landing {...propsLocal} {...props} logout={() => logout} />} />
                             <Route path="/tenant" exact render={(propsLocal: any) => <Tenant {...propsLocal} {...props} logout={() => logout} />} />
                             <PrivateRoute path="/:tenant/settings" render={(propsLocal: any) => <Settings {...propsLocal} {...props} logout={() => logout} />} />
-                            <PrivateRoute path="/:tenant/faq" render={(propsLocal: any) => <Faq {...propsLocal} {...props} logout={() => logout} />} />
+                            <PrivateRoute path="/:tenant/article" render={(propsLocal: any) => <ArticleController {...propsLocal} {...props} logout={() => logout} />} />
                             <PrivateRoute path="/:tenant/servicerequests" render={(propsLocal: any) => <ServiceRequests {...propsLocal} {...props} logout={() => logout} />} />
                             <PrivateRoute path="/:tenant/useradministration" render={(propsLocal: any) => <UserAdministration {...propsLocal} {...props} logout={() => logout} />} />
                         </MuiThemeProvider>

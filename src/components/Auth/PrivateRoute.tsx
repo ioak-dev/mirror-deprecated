@@ -17,7 +17,6 @@ interface State {
 
 class PrivateRoute extends Component<Props, State> {
   componentWillMount() {
-    console.log(this.props);
     this.props.getAuth();
   }
 

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import './style.scss';
-import Link from './Link';
+import ArticleItem from './ArticleItem';
 import OakDialog from '../../oakui/OakDialog';
 import OakSelect from '../../oakui/OakSelect';
 import ViewResolver from '../../oakui/ViewResolver';
 import View from '../../oakui/View';
 import { isEmptyOrSpaces } from '../Utils';
-import { sendMessage } from '../../events/MessageService';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 import Sidebar from '../../oakui/Sidebar';
 import OakPagination from '../../oakui/OakPagination';
 import OakPrompt from '../../oakui/OakPrompt';
@@ -27,22 +27,9 @@ interface Props{
   deleteArticle: Function
 }
 
-interface State{
-  id?: string,
-  category: any,
-  question: string,
-  answer: string,
-  editDialogLabel: string,
-  isEditDialogOpen:boolean,
-  isDeleteDialogOpen:boolean,
-  sidebarElements:any,
-  newCategory: String,
-  data?: any,
-  pageNo: number,
-  rowsPerPage: number
-}
+const domain = 'article';
 
-const Faq = (props: Props) => {
+const ArticleController = (props: Props) => {
   const sidebarElements = {
     article: [
         {
@@ -66,6 +53,22 @@ const Faq = (props: Props) => {
   const [paginationPref, setPaginationPref] = useState({
     pageNo: 1,
     rowsPerPage: 6
+  });
+
+  useEffect(() => {
+    const eventBus = receiveMessage().subscribe(message => {
+      if (message.name === domain && message.signal) {
+        sendMessage('notification', true, {
+          type: 'success',
+          message: `${domain} ${message.data.action}`,
+          duration: 5000,
+        });
+        if (message.data.action !== 'deleted') {
+          setEditDialogOpen(!editDialogOpen);
+        }
+      }
+    });
+    return () => eventBus.unsubscribe();
   });
 
   useEffect(() => {
@@ -93,31 +96,30 @@ const Faq = (props: Props) => {
     }
   }, [editDialogOpen])
 
-  const editFaq = (faq) => {
-    console.log(faq);
+  const editArticle = (article) => {
     let categoryName = data.category
     if (categoryName === '<create new>') {
       categoryName = data.newCategory;
     }
     setEditDialogOpen(true);
     setData({
-      id: faq._id,
-      category: faq.category,
-      question: faq.question,
-      answer: faq.answer,
+      id: article._id,
+      category: article.category,
+      question: article.question,
+      answer: article.answer,
       newCategory: ''
     });
   }
 
-  const confirmDeleteFaq =(faqId) => {
+  const confirmDeleteFaq =(id) => {
     setData({
       ...data,
-      id: faqId
+      id: id
     });
     setDeleteDialogOpen(true);
   }
 
-  const deleteFaq = () => {
+  const deleteArticle = () => {
     props.deleteArticle(props.match.params.tenant, props.authorization, data.id);
   }
 
@@ -125,32 +127,32 @@ const Faq = (props: Props) => {
 
   }
 
-  const addFaq= () => {
+  const addArticle= () => {
     let category = data.category
     if (category === '<create new>') {
       category = data.newCategory;
     }
-    let faq = {
+    let article = {
         id: data.id,
         question: data.question,
         answer: data.answer,
         category: category
     }
-    if (isEmptyOrSpaces(faq.category)) {
+    if (isEmptyOrSpaces(article.category)) {
         sendMessage('notification', true, {type: 'failure', message: 'Category is missing', duration: 5000});
         return;
     }
 
-    if (isEmptyOrSpaces(faq.question)) {
+    if (isEmptyOrSpaces(article.question)) {
         sendMessage('notification', true, {type: 'failure', message: 'Question is missing', duration: 5000});
         return;
     }
 
-    if (isEmptyOrSpaces(faq.answer)) {
-        faq.answer = 'unsorted';
+    if (isEmptyOrSpaces(article.answer)) {
+      article.answer = 'unsorted';
     }
 
-    props.saveArticle(props.match.params.tenant, props.authorization, faq);
+    props.saveArticle(props.match.params.tenant, props.authorization, article);
   }
 
   const handleChange = (event) => {
@@ -175,12 +177,12 @@ const Faq = (props: Props) => {
   }
   const listview = view.map(item => (
     <div key={item._id}>
-      <Link id={item._id} faq={item} editFaq={editFaq} confirmDeleteFaq={() => confirmDeleteFaq(item._id)} search={() => searchByWord(item._id)}></Link>
+      <ArticleItem id={item._id} article={item} editArticle={editArticle} confirmDeleteFaq={() => confirmDeleteFaq(item._id)} search={() => searchByWord(item._id)}></ArticleItem>
       <br />
     </div>
   ))
   return (
-    <div className="faq">
+    <div className="article">
       <OakDialog visible={editDialogOpen} toggleVisibility={() => setEditDialogOpen(!editDialogOpen)}>
         <div className="dialog-body">
         <div><OakSelect theme="default" label="Category" data={data} id="category" handleChange={e => handleChange(e)} elements={props.article.categories} firstAction="<create new>" /></div>
@@ -193,17 +195,17 @@ const Faq = (props: Props) => {
         </div>
         <div className="dialog-footer">
           <OakButton action={() => setEditDialogOpen(!editDialogOpen)} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
-          <OakButton action={() => addFaq()} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Create</OakButton>
+          <OakButton action={() => addArticle()} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Create</OakButton>
         </div>
       </OakDialog>
       
     {deleteDialogOpen}
-      <OakPrompt action={() => deleteFaq()} visible={deleteDialogOpen} toggleVisibility={() => setDeleteDialogOpen(!deleteDialogOpen)} />
+      <OakPrompt action={() => deleteArticle()} visible={deleteDialogOpen} toggleVisibility={() => setDeleteDialogOpen(!deleteDialogOpen)} />
 
       <ViewResolver sideLabel='More options'>
           <View main>
-          {listview}
           <OakPagination totalRows={props.article.items.length} onChangePage={onChangePage} label="Items per page" />
+          {listview}
           </View>
           <View side>
             <div className="filter-container">
@@ -228,4 +230,4 @@ export default connect(mapStateToProps, {
   fetchArticle,
   saveArticle,
   deleteArticle,
-})(Faq);
+})(ArticleController);
