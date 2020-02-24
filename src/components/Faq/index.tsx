@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import './style.scss';
 import Link from './Link';
@@ -42,114 +42,98 @@ interface State{
   rowsPerPage: number
 }
 
-class Faq extends React.Component<Props, State> {
-  constructor(props){
-    super(props)
-    this.state = {
-      isEditDialogOpen: false,
-      isDeleteDialogOpen: false,
-      id: undefined,
-      category: '',
-      question: '',
-      answer: '',
-      newCategory: '',
-      editDialogLabel: 'Article',
-      pageNo: 1,
-      rowsPerPage: 6,
+const Faq = (props: Props) => {
+  const sidebarElements = {
+    article: [
+        {
+            label: 'New article',
+            action: () => setEditDialogOpen(!editDialogOpen),
+            icon: 'add'
+        }
+    ]
+  };
 
-      sidebarElements: {
-        article: [
-            {
-                label: 'New article',
-                action: this.toggleEditDialog,
-                icon: 'add'
-            }
-        ]
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [data, setData] = useState({
+    id: undefined,
+    category: '',
+    question: '',
+    answer: '',
+    newCategory: '',
+  });
+
+  const [paginationPref, setPaginationPref] = useState({
+    pageNo: 1,
+    rowsPerPage: 6
+  });
+
+  useEffect(() => {
+    if(props.authorization.isAuth){ 
+      props.fetchArticle(props.match.params.tenant, props.authorization);
     }
+    props.setProfile({...props.profile, tenant: props.match.params.tenant});
+  }, []);
+
+  useEffect(() => {
+    if(props.authorization.isAuth){
+      props.fetchArticle(props.match.params.tenant, props.authorization);
     }
-  }
+  }, [props.authorization.isAuth]);
 
-  componentDidMount(){
-    if(this.props.authorization.isAuth){
-      this.initializeFaq(this.props.authorization)
-    }
-
-    this.props.setProfile({
-      ...this.props.profile,
-      tenant: this.props.match.params.tenant
-    })
-
-  }
-
-  componentWillReceiveProps(nextProps){
-    if(nextProps.authorization && !this.props.authorization && !this.props.authorization.isAuth && nextProps.authorization.isAuth){
-      this.initializeFaq(this.props.authorization)
-    }
-  }
-
-  initializeFaq(authorization){
-    this.props.fetchArticle(this.props.match.params.tenant, authorization);
-  }
-
-  toggleEditDialog = () => {
-    this.setState({
-        isEditDialogOpen: !this.state.isEditDialogOpen,
+  useEffect(() => {
+    if (!editDialogOpen) {
+      setData({
         id: undefined,
         category: '',
         question: '',
         answer: '',
-        editDialogLabel: 'Add'
-    })
-  }
-
-  toggleDeleteDialog = () => {
-    this.setState({
-        isDeleteDialogOpen: !this.state.isDeleteDialogOpen
-    })
-  }
-
-  editFaq = (faq) => {
-    let category = this.state.category
-    if (category === '<create new>') {
-      category = this.state.newCategory;
+        newCategory: ''
+      })
     }
-    
-    this.setState({
-      isEditDialogOpen: true,
+  }, [editDialogOpen])
+
+  const editFaq = (faq) => {
+    console.log(faq);
+    let categoryName = data.category
+    if (categoryName === '<create new>') {
+      categoryName = data.newCategory;
+    }
+    setEditDialogOpen(true);
+    setData({
       id: faq._id,
       category: faq.category,
       question: faq.question,
       answer: faq.answer,
-      editDialogLabel: 'Save'
-    })
+      newCategory: ''
+    });
   }
 
-  confirmDeleteFaq =(faqId) => {
-    this.setState({
-      isDeleteDialogOpen: true,
-      id: faqId,
-      editDialogLabel: 'Delete'   
-    })
+  const confirmDeleteFaq =(faqId) => {
+    setData({
+      ...data,
+      id: faqId
+    });
+    setDeleteDialogOpen(true);
   }
 
-  deleteFaq = () => {
-    this.props.deleteArticle(this.props.match.params.tenant, this.props.authorization, this.state.id);
+  const deleteFaq = () => {
+    props.deleteArticle(props.match.params.tenant, props.authorization, data.id);
   }
 
-  searchByWord = (faqName) =>{
+  const searchByWord = (faqName) =>{
 
   }
 
-  addFaq= () => {
-    const that = this;
-    let category = this.state.category
+  const addFaq= () => {
+    let category = data.category
     if (category === '<create new>') {
-      category = this.state.newCategory;
+      category = data.newCategory;
     }
     let faq = {
-        id: this.state.id,
-        question: this.state.question,
-        answer: this.state.answer,
+        id: data.id,
+        question: data.question,
+        answer: data.answer,
         category: category
     }
     if (isEmptyOrSpaces(faq.category)) {
@@ -166,77 +150,74 @@ class Faq extends React.Component<Props, State> {
         faq.answer = 'unsorted';
     }
 
-    this.props.saveArticle(this.props.match.params.tenant, this.props.authorization, faq);
-}
+    props.saveArticle(props.match.params.tenant, props.authorization, faq);
+  }
 
-
-  handleChange = (event) => {
-    this.setState(
+  const handleChange = (event) => {
+    setData(
         {
-            ...this.state,
+            ...data,
             [event.target.name]: event.target.value
         }
     )
   }
 
-  onChangePage = (pageNo: number, rowsPerPage: number) => {
-      this.setState({
+  const onChangePage = (pageNo: number, rowsPerPage: number) => {
+      setPaginationPref({
           pageNo: pageNo,
           rowsPerPage: rowsPerPage
       });
   }
 
-  render() {
-    let view: any[] = [];
-    if (this.props.article.items) {
-      view = this.props.article.items.slice((this.state.pageNo - 1) * this.state.rowsPerPage, this.state.pageNo * this.state.rowsPerPage);
-    }
-    const listview = view.map(item => (
-      <div key={item._id}>
-        <Link id={item._id} faq={item} editFaq={this.editFaq} confirmDeleteFaq={this.confirmDeleteFaq} search={this.searchByWord}></Link>
-        <br />
-      </div>
-    ))
-    return (
-      <div className="faq">
-        <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
-          <div className="dialog-body">
-          <div><OakSelect theme="default" label="Category" data={this.state} id="category" handleChange={e => this.handleChange(e)} elements={this.props.article.categories} firstAction="<create new>" /></div>
-          <div>
-            {this.state.category === '<create new>' && <OakText label="Category name" data={this.state} id="newCategory" handleChange={e => this.handleChange(e)} />}
-          </div>
-            
-            <OakText label="Question" data={this.state} id="question" handleChange={e => this.handleChange(e)} />
-            <OakText label="Answer" data={this.state} id="answer" handleChange={e => this.handleChange(e)} />
-          </div>
-          <div className="dialog-footer">
-            <OakButton action={this.toggleEditDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
-            <OakButton action={this.addFaq} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
-          </div>
-        </OakDialog>
-        
-      {this.state.isDeleteDialogOpen}
-        <OakPrompt action={this.deleteFaq} visible={this.state.isDeleteDialogOpen} toggleVisibility={this.toggleDeleteDialog} />
-
-        <ViewResolver sideLabel='More options'>
-            <View main>
-            {listview}
-            <OakPagination totalRows={this.props.article.items.length} onChangePage={this.onChangePage} label="Items per page" />
-            </View>
-            <View side>
-              <div className="filter-container">
-                  <div className="section-main">
-                    <Sidebar label="Article" elements={this.state.sidebarElements['article']} icon="add" animate />
-                    <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate>
-                      Search content goes here
-                    </Sidebar>
-                  </div>
-              </div>
-            </View>
-        </ViewResolver>
-      </div>
-    );
+  let view: any[] = [];
+  if (props.article.items) {
+    view = props.article.items.slice((paginationPref.pageNo - 1) * paginationPref.rowsPerPage, paginationPref.pageNo * paginationPref.rowsPerPage);
   }
+  const listview = view.map(item => (
+    <div key={item._id}>
+      <Link id={item._id} faq={item} editFaq={editFaq} confirmDeleteFaq={() => confirmDeleteFaq(item._id)} search={() => searchByWord(item._id)}></Link>
+      <br />
+    </div>
+  ))
+  return (
+    <div className="faq">
+      <OakDialog visible={editDialogOpen} toggleVisibility={() => setEditDialogOpen(!editDialogOpen)}>
+        <div className="dialog-body">
+        <div><OakSelect theme="default" label="Category" data={data} id="category" handleChange={e => handleChange(e)} elements={props.article.categories} firstAction="<create new>" /></div>
+        <div>
+          {data.category === '<create new>' && <OakText label="Category name" data={data} id="newCategory" handleChange={e => handleChange(e)} />}
+        </div>
+          
+          <OakText label="Question" data={data} id="question" handleChange={e => handleChange(e)} />
+          <OakText label="Answer" data={data} id="answer" handleChange={e => handleChange(e)} />
+        </div>
+        <div className="dialog-footer">
+          <OakButton action={() => setEditDialogOpen(!editDialogOpen)} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+          <OakButton action={() => addFaq()} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Create</OakButton>
+        </div>
+      </OakDialog>
+      
+    {deleteDialogOpen}
+      <OakPrompt action={() => deleteFaq()} visible={deleteDialogOpen} toggleVisibility={() => setDeleteDialogOpen(!deleteDialogOpen)} />
+
+      <ViewResolver sideLabel='More options'>
+          <View main>
+          {listview}
+          <OakPagination totalRows={props.article.items.length} onChangePage={onChangePage} label="Items per page" />
+          </View>
+          <View side>
+            <div className="filter-container">
+                <div className="section-main">
+                  <Sidebar label="Article" elements={sidebarElements['article']} icon="add" animate />
+                  <Sidebar label="Search" elements={sidebarElements['search']} icon="search" animate>
+                    Search content goes here
+                  </Sidebar>
+                </div>
+            </div>
+          </View>
+      </ViewResolver>
+    </div>
+  );
 }
 
 const mapStateToProps = state => ({
