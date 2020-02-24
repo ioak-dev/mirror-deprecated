@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
-import OakTable from '../Ux/OakTable';
+import OakTable from '../../oakui/OakTable';
 import { Authorization } from '../Types/GeneralTypes';
 import './style.scss'
-import ViewResolver from '../Ux/ViewResolver';
-import View from '../Ux/View';
-import Sidebar from '../Ux/Sidebar';
+import ViewResolver from '../../oakui/ViewResolver';
+import View from '../../oakui/View';
+import Sidebar from '../../oakui/Sidebar';
 import { httpGet, httpPut } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
-import OakDialog from '../Ux/OakDialog';
+import OakDialog from '../../oakui/OakDialog';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
 import UserAdministrationView from './view';
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 
 
 interface Props{
@@ -220,8 +220,7 @@ export default class UserAdministration extends Component<Props, State> {
                                 {key:"email", label:"Email"},
                                 {key:"status", label:"Status"},
                                 {key:"roles", label:"Roles"},
-                                {key:"action", label:"Action"}]} >
-                        </OakTable>                    
+                                {key:"action", label:"Action"}]} />
                     </View>
                 </ViewResolver>
                                

@@ -7,9 +7,9 @@ import mirror_white_small from '../../images/mirror_white_small.svg';
 import mirror_black from '../../images/mirror_black.svg';
 import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
-import SearchBar from '../Ux/SearchBar';
+import SearchBar from '../../oakui/SearchBar';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
-import OakButton from '../Ux/OakButton';
+import OakButton from '../../oakui/OakButton';
 // import SearchBar from '../Ux/SearchBar';
 
 interface Props {    

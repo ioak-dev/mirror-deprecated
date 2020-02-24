@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import './style.scss';
-import OakText from '../Ux/OakText';
+import OakText from '../../oakui/OakText';
 import { Authorization } from '../Types/GeneralTypes';
 import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
 import { constants } from '../Constants';
 import { sendMessage } from '../../events/MessageService';
-import OakButton from '../Ux/OakButton';
+import OakButton from '../../oakui/OakButton';
 
 interface Props {
     match: any,

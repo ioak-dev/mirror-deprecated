@@ -1,12 +1,12 @@
 import React from 'react';
 import './style.scss';
-import OakText from '../Ux/OakText';
+import OakText from '../../oakui/OakText';
 import { sendMessage } from '../../events/MessageService';
 import { sentTenantUrl } from './TenantService'
 import {preSignup, createTenant } from '../Auth/AuthService'
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { isEmptyOrSpaces } from '../Utils';
-import OakButton from '../Ux/OakButton';
+import OakButton from '../../oakui/OakButton';
 
 interface Props {
   getProfile: Function,

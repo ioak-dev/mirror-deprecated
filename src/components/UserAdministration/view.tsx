@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { Authorization } from '../Types/GeneralTypes';
 import './style.scss'
-import OakDialog from '../Ux/OakDialog';
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
-import OakSelect from '../Ux/OakSelect';
+import OakDialog from '../../oakui/OakDialog';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
+import OakSelect from '../../oakui/OakSelect';
 import { httpGet } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
-import OakCheckbox from '../Ux/OakCheckbox';
+import OakCheckbox from '../../oakui/OakCheckbox';
 
 interface Props {
     match: any,

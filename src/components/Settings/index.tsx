@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './style.scss';
 import { sendMessage } from '../../events/MessageService';
-import OakText from '../Ux/OakText';
+import OakText from '../../oakui/OakText';
 import { getTenant } from '../Tenant/TenantService';
 import { Authorization } from '../Types/GeneralTypes';
-import ViewResolver from '../Ux/ViewResolver';
-import View from '../Ux/View';
-import Sidebar from '../Ux/Sidebar';
+import ViewResolver from '../../oakui/ViewResolver';
+import View from '../../oakui/View';
+import Sidebar from '../../oakui/Sidebar';
 import { any } from 'prop-types';
 import Stages from '../Stages/index';
 

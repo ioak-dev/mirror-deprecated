@@ -4,11 +4,11 @@ import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import {withCookies} from 'react-cookie';
 import './Login.scss';
 import { Authorization } from '../Types/GeneralTypes';
-import OakText from '../Ux/OakText';
+import OakText from '../../oakui/OakText';
 import { sendMessage } from '../../events/MessageService';
 import {signinWithJwt, signin, preSignin,sentPasswordChangeEmail, preSignup, signup} from './AuthService';
 import {isEmptyOrSpaces} from "../Utils";
-import OakButton from '../Ux/OakButton';
+import OakButton from '../../oakui/OakButton';
 
 const queryString = require('query-string');
 

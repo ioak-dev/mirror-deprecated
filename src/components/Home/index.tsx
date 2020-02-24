@@ -1,18 +1,18 @@
 import React from 'react';
 import './style.scss';
 import cover from '../../images/cover.jpg';
-import SearchBar from '../Ux/SearchBar';
+import SearchBar from '../../oakui/SearchBar';
 import { constants } from '../Constants';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import { searchTextChangedEvent$, searchEvent$ } from '../../events/SearchEvent';
 import { getBanner } from '../Tenant/TenantService';
 import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
 import { Authorization } from '../Types/GeneralTypes';
-import OakDialog from '../Ux/OakDialog';
+import OakDialog from '../../oakui/OakDialog';
 import { isEmptyOrSpaces } from '../Utils';
-import OakPrompt from '../Ux/OakPrompt';
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import OakPrompt from '../../oakui/OakPrompt';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 
 const pageYOffsetCutoff = 10;
 
@@ -161,6 +161,10 @@ export default class Home extends React.Component<Props, State> {
     }
   }
 
+  helpful = () => {
+    console.log('not implemented');
+  }
+
   toggleEditDialog = () => {
       this.setState({
           isCreateRequestDialogOpen: !this.state.isCreateRequestDialogOpen
@@ -248,7 +252,7 @@ export default class Home extends React.Component<Props, State> {
 
           <div className='search-results'>
             <div className="action-bar">
-              <OakButton theme="primary" action="" variant="animate in" align="left">Helpful</OakButton>
+              <OakButton theme="primary" action={this.helpful} variant="animate in" align="left">Helpful</OakButton>
               <OakButton theme="primary" variant="animate in" align="right" action={this.notHelpful}>Not Helpful</OakButton>
             </div>
             {this.state.searchResults && this.state.searchResults.map(item =>

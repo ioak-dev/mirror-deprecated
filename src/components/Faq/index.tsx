@@ -1,21 +1,21 @@
 import React from 'react';
 import './style.scss';
 import Link from './Link';
-import OakDialog from '../Ux/OakDialog';
-import OakSelect from '../Ux/OakSelect';
-import ViewResolver from '../Ux/ViewResolver';
-import View from '../Ux/View';
+import OakDialog from '../../oakui/OakDialog';
+import OakSelect from '../../oakui/OakSelect';
+import ViewResolver from '../../oakui/ViewResolver';
+import View from '../../oakui/View';
 import { Authorization } from '../Types/GeneralTypes';
 import { httpGet, httpDelete, httpPost, httpPut } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage } from '../../events/MessageService';
-import Sidebar from '../Ux/Sidebar';
-import OakTable from '../Ux/OakTable';
-import OakPagination from '../Ux/OakPagination';
-import OakPrompt from '../Ux/OakPrompt';
-import OakText from '../Ux/OakText';
-import OakButton from '../Ux/OakButton';
+import Sidebar from '../../oakui/Sidebar';
+import OakTable from '../../oakui/OakTable';
+import OakPagination from '../../oakui/OakPagination';
+import OakPrompt from '../../oakui/OakPrompt';
+import OakText from '../../oakui/OakText';
+import OakButton from '../../oakui/OakButton';
 
 interface Props{
   match: any,

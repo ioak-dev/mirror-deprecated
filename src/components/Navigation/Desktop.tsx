@@ -7,8 +7,8 @@ import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 // import SearchBar from '../Ux/SearchBar';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
-import SearchBar from '../Ux/SearchBar';
-import OakButton from '../Ux/OakButton';
+import SearchBar from '../../oakui/SearchBar';
+import OakButton from '../../oakui/OakButton';
 
 interface Props {    
     sendEvent: Function,

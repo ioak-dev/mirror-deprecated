@@ -1,8 +1,8 @@
 import React from 'react';
 import './style.scss';
 import { NavLink } from 'react-router-dom';
-import OakSubMenu from '../Ux/OakSubMenu';
-import OakButton from '../Ux/OakButton';
+import OakSubMenu from '../../oakui/OakSubMenu';
+import OakButton from '../../oakui/OakButton';
 
 interface Props {
 }

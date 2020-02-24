@@ -27,7 +27,7 @@
     display: none;
   }
   .view-content {
-    padding-right: 50px;
+    padding: 50px;
     padding-top: calc(var(--height-nav) + 20px);
 
     &.side-present {
@@ -69,20 +69,16 @@
     display: none;
   }
 
-  .view-main {
-    margin-top: var(--height-nav);
-  }
-
   .slider {
     --topbar-height: 30px;
     width: 100vw;
     overflow: hidden;
-    // margin-top: var(--height-nav);
+    margin-top: var(--height-nav);
     &.hide {
       height: var(--topbar-height);
     }
     &.show {
-      height: calc(100vh);
+      height: calc(100vh - var(--height-nav));
       overflow-y: auto;
     }
     transition: all 0.4s ease-in-out;
@@ -91,18 +87,16 @@
     .topbar {
       position: fixed;
       width: 100vw;
-      background-color: var(--color-secondary);
+      background-color: var(--color-tertiary);
       display: grid;
       justify-content: center;
       height: var(--topbar-height);
       align-items: center;
       align-content: center;
       z-index: 1;
-      margin-top: var(--height-nav);
     }
 
     .view-side {
-      margin-top: var(--height-nav);
       padding-top: var(--topbar-height);
     }
   
