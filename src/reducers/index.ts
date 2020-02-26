@@ -3,10 +3,12 @@ import AuthReducer from './AuthReducer';
 import ProfileReducer from './ProfileReducer';
 import UserReducer from './UserReducer';
 import ArticleReducer from './ArticleReducer';
+import RequestReducer from './RequestReducer';
 
 export default combineReducers({
     authorization: AuthReducer,
     profile: ProfileReducer,
     user: UserReducer,
-    article: ArticleReducer
+    article: ArticleReducer,
+    request: RequestReducer
 })

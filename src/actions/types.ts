@@ -9,4 +9,4 @@ export const GET_USER = 'GET_USER';
 export const ADD_USER = 'ADD_USER';
 
 export const FETCH_ARTICLE = 'FETCH_ARTICLE';
-export const FETCH_SERVICEREQUEST = 'FETCH_SERVICEREQUEST';
+export const FETCH_REQUEST = 'FETCH_REQUEST';
