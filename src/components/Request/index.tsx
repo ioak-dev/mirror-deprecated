@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
 import OakTable from '../../oakui/OakTable';
 import { Authorization } from '../Types/GeneralTypes';
 import './style.scss'
@@ -9,11 +10,11 @@ import { httpGet, httpPut } from '../Lib/RestTemplate';
 import { constants } from '../Constants';
 import OakDialog from '../../oakui/OakDialog';
 import { isEmptyOrSpaces } from '../Utils';
-import { sendMessage } from '../../events/MessageService';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 import ServiceRequestView from './view';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
-
+import { fetchRequest, saveRequest, deleteRequest } from '../../actions/RequestActions';
 
 interface Props{
     match: any,
@@ -21,192 +22,116 @@ interface Props{
     profile: any,
     authorization: Authorization,
     logout: Function,
-    user: any
+    user: any,
+    request: any,
+    fetchRequest: Function,
+    saveRequest: Function,
+    deleteRequest: Function
 }
 
-interface State{
-    data?: any,
-    sidebarElements: any,
-    isEditDialogOpen:boolean,
-    editDialogLabel: string,
-    pageNo: number,
-    rowsPerPage: number,
-    title: string,
-    description: string,
-    selectedRequest: any,
-    stages: any
-}
+const domain = "servicerequests";
 
-export default class ServiceRequests extends Component<Props, State> {
-    constructor(props){
-        super(props)
-        this.state = {
-            data: [],
-            pageNo: 1,
-            rowsPerPage: 6,
-            isEditDialogOpen: false,
-            editDialogLabel: 'Service Request',
-            title:'',
-            description:'',
-            selectedRequest: undefined,
-            stages: [],
-
-            sidebarElements: {
-                serviceRequest: [
-                    {
-                        label: 'New Request',
-                        action: this.toggleEditDialog,
-                        icon: 'add'
-                    }
-                ]
+const Request = (props: Props) => {
+    const sidebarElements = {
+        serviceRequest: [
+            {
+                label: 'New Request',
+                action: () => toggleNewDialog(),
+                icon: 'add'
             }
-        }
-    }
-    componentDidMount(){
-        if(this.props.authorization.isAuth){
-          this.initializeRequest(this.props.authorization)
+        ]
+    };
+    const emptyRequest = {title: '', description: '', priority: 'Low', status:'assigned'};
+
+    const [newDialogOpen, setNewDialogOpen] = useState(false);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+    const [selectedRequest, setSelectedRequest] = useState({});
+    const [data, setData] = useState(emptyRequest);
+    const [view, setView] = useState([{}]);
+    const [stages, setStages] = useState([]);
+
+    useEffect(() => {
+        const eventBus = receiveMessage().subscribe(message => {
+          if (message.name === domain && message.signal) {
+            sendMessage('notification', true, {
+              type: 'success',
+              message: `${domain} ${message.data.action}`,
+              duration: 5000,
+            });
+            if (message.data.action === 'created') {
+              setNewDialogOpen(false);
+            } else if (message.data.action === 'updated') {
+              setEditDialogOpen(false);
+            }
+          }
+        });
+        return () => eventBus.unsubscribe();
+      });
+
+    useEffect(() => {
+        if(props.authorization.isAuth) {
+            props.fetchRequest(props.match.params.tenant, props.authorization);
         }
     
-        this.props.setProfile({
-          ...this.props.profile,
-          tenant: this.props.match.params.tenant
-        })
+        props.setProfile({...props.profile, tenant: props.match.params.tenant});
 
-        httpGet(constants.API_URL_STAGE + '/' + this.props.match.params.tenant + '/', 
+        httpGet(constants.API_URL_STAGE + '/' + props.match.params.tenant + '/', 
             {headers: {
-                Authorization: this.props.authorization.token
+                Authorization: props.authorization.token
             }}
             ).then ((response) => {
-                this.setState({
-                    stages: response.data.stage
-                })
+                setStages(response.data.stage);
             }).catch((error) => {
                 console.log(error);
-            })
-    
-    }
-
-    componentWillReceiveProps(nextProps){
-        if(nextProps.authorization){
-          this.initializeRequest(this.props.authorization)
-        }
+            }
+        );
+    }, []);
+  
+    useEffect(() => {
+      if(props.authorization.isAuth){
+        props.fetchRequest(props.match.params.tenant, props.authorization);
       }
+    }, [props.authorization.isAuth]);
 
-    openRequest = (request) => {
-        this.setState({
-            selectedRequest: request
-        })
-    }
-
-    initializeRequest(authorization) {
-        const that = this;
-        
-        httpGet(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/main',
-        {
-            headers:{
-                Authorization: this.props.authorization.token
+    useEffect(() => {
+        let list: any[] = [];
+        props.request.items.forEach((item) => {
+            if (item.status === 'assigned') {
+                item.status = <div className="tag-2"><span>{'Assigned_to_' + item.stage}</span></div>
+            } else if (item.status === 'progress') {
+                item.status = <div className="tag-4"><span>{'In_progress_with ' + item.stage}</span></div>
+            } else if (item.status === 'resolved') {
+                item.status = <div className="tag-5"><span>Resolved</span></div>
             }
-        })
-        .then((response) => {
-            let list: any[] = [];
-            response.data.data.forEach((item) => {
-                if (item.status === 'assigned') {
-                    item.status = <div className="tag-2"><span>{'Assigned_to_' + item.stage}</span></div>
-                } else if (item.status === 'progress') {
-                    item.status = <div className="tag-4"><span>{'In_progress_with ' + item.stage}</span></div>
-                } else if (item.status === 'resolved') {
-                    item.status = <div className="tag-5"><span>Resolved</span></div>
-                }
 
-                list.push({
-                    ...item, 
-                    action: 
-                    <>
-                        <OakButton theme="primary" variant="block" align="left" action={() => this.openRequest(item)} icon="open_in_new"></OakButton>
-                        {item.status === 'resolved' && 
-                            <OakButton theme="default" variant="block" align="right" action=""><i className="material-icons">archive</i></OakButton>}
-                    </>
-                })
+            list.push({
+                ...item,
+                action: 
+                <>
+                    <OakButton theme="primary" variant="block" align="left" action={() => openEditDialog(item)} icon="open_in_new"></OakButton>
+                    {item.status === 'resolved' && 
+                        <OakButton theme="default" variant="block" align="right" action=""><i className="material-icons">archive</i></OakButton>}
+                </>
             })
-            this.setState({
-                data: list
-            });
         })
-        
+        setView(list);
+    }, [props.request.items]);
+
+    const toggleNewDialog = () => {
+        setNewDialogOpen(!newDialogOpen);
+        setSelectedRequest(emptyRequest);
     }
 
-    toggleEditDialog = () => {
-        this.setState({
-            isEditDialogOpen: !this.state.isEditDialogOpen,
-            editDialogLabel: 'Create Service Request',
-            selectedRequest: undefined
-        })
+    const toggleEditDialog = () => {
+        setEditDialogOpen(!editDialogOpen);
     }
 
-    saveRequestEvent = () => {
-        let stage = [...this.state.stages]
-        this.saveRequest({
-            title: this.state.title,
-            description: this.state.description,
-            priority: 'Low',
-            stage: stage[0]["name"],
-            status:'assigned'
-        })
-        this.toggleEditDialog()
-    }
-    
-    clearRequest = () => {
-        this.setState({
-            title: '',
-            description: ''
-        })
+    const openEditDialog = (requestInput) => {
+        setEditDialogOpen(true);
+        setSelectedRequest(requestInput);
     }
 
-    closeAllDialog = () => {
-        this.setState({
-            isEditDialogOpen:false,
-            selectedRequest:undefined
-        })
-        this.clearRequest()
-    }
-
-    addLog = (log) => {
-        const that = this;
-        if (isEmptyOrSpaces(log.comments[0])) {
-            sendMessage('notification', true, {type: 'failure', message: 'Nothing to add', duration: 5000});
-            return;
-        }
-        
-        httpPut(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/log' +'/' + log.id,
-        {
-            request_id:log.id,
-            comments: log.comments
-        },
-        {
-          headers: {
-            Authorization: this.props.authorization.token
-          }
-        })
-        .then(function(response) {
-            if (response.status === 200) {
-                sendMessage('notification', true, {type: 'success', message: 'Comments Added  Successfully', duration: 5000});
-                that.closeAllDialog();
-            }
-            that.closeAllDialog();
-            that.initializeRequest(that.props.authorization);
-             
-        })
-        .catch((error) => {
-            if (error.response.status === 401) {
-                that.props.logout(null, 'failure', 'Session expired. Login again');
-            }
-        })
-    }
-
-    saveRequest = (request, edit=false) => {
-        const that = this;
+    const saveRequest = (request, edit=false) => {
         if (!request) {
             sendMessage('notification', true, {type: 'failure', message: 'Unknown error', duration: 5000});
             return;
@@ -221,85 +146,64 @@ export default class ServiceRequests extends Component<Props, State> {
             sendMessage('notification', true, {type: 'failure', message: 'Description is missing', duration: 5000});
             return;
         }
-
-        httpPut(constants.API_URL_SR + '/' + 
-        this.props.match.params.tenant + '/main',
-        request,
-        {
-          headers: {
-            Authorization: this.props.authorization.token
-          }
-        })
-        .then(function(response) {
-            if (response.status === 200) {
-                if (edit) {
-                    sendMessage('notification', true, {type: 'success', message: 'Request edited', duration: 5000});
-                    that.closeAllDialog();
-                } else {
-                    sendMessage('notification', true, {type: 'success', message: 'Request created', duration: 5000});
-                    that.closeAllDialog();
-                }
-                that.closeAllDialog();
-                that.initializeRequest(that.props.authorization);
-            }
-            
-        })
-        .catch((error) => {
-            if (error.response.status === 401) {
-                that.props.logout(null, 'failure', 'Session expired. Login again');
-            }
-        })
+        const requestAToSave = edit ? request : {...request, stage: stages[0]["name"]};
+        props.saveRequest(props.match.params.tenant, props.authorization, requestAToSave);
+        setSelectedRequest(requestAToSave);
     }
 
-    handleChange = (event) => {
-        this.setState(
-            {
-                ...this.state,
-                [event.target.name]: event.target.value
-            }
-        )
+    const handleChange = (event) => {
+        setData({...data, [event.target.name]: event.target.value});
     }
 
-    render() {
-        return (
-            <div className="requests">
-                <OakDialog visible={this.state.isEditDialogOpen} toggleVisibility={this.toggleEditDialog}>
-                    <div className="dialog-body">
-                        <OakText label="Title" data={this.state} id="title" handleChange={e => this.handleChange(e)} />
-                        <OakText label="Description" data={this.state} id="description" handleChange={e => this.handleChange(e)} />
-                    </div>
-                    <div className="dialog-footer">
-                        <OakButton action={this.toggleEditDialog} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
-                        <OakButton action={this.saveRequestEvent} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>{this.state.editDialogLabel}</OakButton>
-                    </div>
-                </OakDialog>
-                <ServiceRequestView {...this.props} saveRequest={this.saveRequest} addLog={this.addLog} request = {this.state.selectedRequest} stages={this.state.stages} />
-                <ViewResolver sideLabel='More options'>
-                    <View main>
-                        <OakTable material
-                        data={this.state.data} header={[
-                                {key:"_id", label:"Request Number"},
-                                {key:"title", label:"Title"},
-                                {key:"description", label:"Description"},
-                                {key:"status", label:"Status"},
-                                {key:"category", label:"Category"},
-                                {key:"priority", label:"Priority"},
-                                {key:"createdAt", label:"Opened On", dtype: "date"},
-                                {key:"action", label:"Action"}]} />
-                    </View>
-                    <View side>
-                        <div className="filter-container">
-                            <div className="section-main">
-                                <Sidebar label="Service Request" elements={this.state.sidebarElements['serviceRequest']} icon="add" animate />
-                                <Sidebar label="Search" elements={this.state.sidebarElements['search']} icon="search" animate>
-                                    Search content goes here
-                                </Sidebar>
-                            </div>
+    return (
+        <div className="requests">
+            <OakDialog visible={newDialogOpen} toggleVisibility={() => toggleNewDialog()}>
+                <div className="dialog-body">
+                    <OakText label="Title" data={data} id="title" handleChange={e => handleChange(e)} />
+                    <OakText label="Description" data={data} id="description" handleChange={e => handleChange(e)} />
+                </div>
+                <div className="dialog-footer">
+                    <OakButton action={() => toggleNewDialog()} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
+                    <OakButton action={() => saveRequest({...emptyRequest, title: data.title, description: data.description}, false)} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Save</OakButton>
+                </div>
+            </OakDialog>
+            <ServiceRequestView {...props} editDialogOpen={editDialogOpen} toggleEditDialog={toggleEditDialog} saveRequest={saveRequest} request = {selectedRequest} stages={stages} />
+            <ViewResolver sideLabel='More options'>
+                <View main>
+                    <OakTable material
+                    data={view} header={[
+                            {key:"_id", label:"Request Number"},
+                            {key:"title", label:"Title"},
+                            {key:"description", label:"Description"},
+                            {key:"status", label:"Status"},
+                            {key:"category", label:"Category"},
+                            {key:"priority", label:"Priority"},
+                            {key:"createdAt", label:"Opened On", dtype: "date"},
+                            {key:"action", label:"Action"}]} />
+                </View>
+                <View side>
+                    <div className="filter-container">
+                        <div className="section-main">
+                            <Sidebar label="Service Request" elements={sidebarElements['serviceRequest']} icon="add" animate />
+                            <Sidebar label="Search" elements={sidebarElements['search']} icon="search" animate>
+                                Search content goes here
+                            </Sidebar>
                         </div>
-                    </View>
-                </ViewResolver>
-                               
-            </div>
-        )
-    }
+                    </div>
+                </View>
+            </ViewResolver>
+                            
+        </div>
+    )
 }
+
+const mapStateToProps = state => ({
+    request: state.request,
+  });
+  
+  export default connect(mapStateToProps, {
+    fetchRequest,
+    saveRequest,
+    deleteRequest
+  })(Request);
+  

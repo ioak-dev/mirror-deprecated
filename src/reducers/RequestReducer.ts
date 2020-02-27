@@ -1,7 +1,8 @@
 import { FETCH_REQUEST } from '../actions/types';
 
 const initialState = {
-  items: []
+  items: [],
+  logs: []
 };
 
 export default function(state = initialState, action) {
