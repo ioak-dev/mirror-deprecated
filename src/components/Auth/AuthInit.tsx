@@ -1,44 +1,37 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { withCookies, ReactCookieProps } from 'react-cookie';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
-import PropTypes from 'prop-types';
-import {withCookies, ReactCookieProps} from 'react-cookie';
 import { Authorization } from '../Types/GeneralTypes';
 
 interface Props extends ReactCookieProps {
-    authorization: Authorization,
-    addAuth: Function,
-    getAuth: Function,
-    removeAuth: Function,
-    cookies: any
+  authorization: Authorization;
+  addAuth: Function;
+  getAuth: Function;
+  removeAuth: Function;
+  cookies: any;
 }
 
-interface State {
-
-}
-
-class AuthInit extends Component<Props, State> {
-    componentWillMount() {
-        if (!this.props.authorization.isAuth && this.props.cookies.get('isAuth')) {
-            this.props.addAuth({
-                isAuth: true,
-                token: this.props.cookies.get('token'),
-                secret: this.props.cookies.get('secret'),
-                name: this.props.cookies.get('name')
-            });
-        }
-        this.props.getAuth();
+const AuthInit = (props: Props) => {
+  useEffect(() => {
+    if (!props.authorization.isAuth && props.cookies.get('isAuth')) {
+      props.addAuth({
+        isAuth: true,
+        token: props.cookies.get('token'),
+        secret: props.cookies.get('secret'),
+        name: props.cookies.get('name'),
+      });
     }
+    props.getAuth();
+  }, [props.authorization.isAuth]);
 
-    render() {
-        return (
-            <></>
-        )
-    }
-}
+  return <></>;
+};
 
 const mapStateToProps = state => ({
-    authorization: state.authorization
-})
+  authorization: state.authorization,
+});
 
-export default connect(mapStateToProps, { getAuth, addAuth, removeAuth })(withCookies(AuthInit));
+export default connect(mapStateToProps, { getAuth, addAuth, removeAuth })(
+  withCookies(AuthInit)
+);

@@ -63,7 +63,7 @@
                 margin-right: 15px;
                 padding-left: 2px;
                 padding-right: 2px;
-                text-transform: uppercase;
+                // text-transform: uppercase;
 
                 &.active {
                     color: var(--color-body);
@@ -308,5 +308,9 @@
                 background-color: var(--color-themecolor-4);
             }
         }
+    }
+
+    .navitem {
+        white-space: nowrap;
     }
 }
