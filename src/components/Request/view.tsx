@@ -76,19 +76,21 @@ const ServiceRequestView = (props: Props) => {
     }, [props.request?._id]);
 
     useEffect(() => {
-        setData({...data, request: props.request});
+        let nextStageToAssign = '';
         if (props.user && props.user.roles && props.stages.some(r=> props.user.roles.indexOf(r.name) >= 0)) {
-            findNextStage();
+            nextStageToAssign = findNextStage();
         }
+        setData({...data, request: props.request, nextStage: nextStageToAssign});
     }, [props.request]);
 
     const findNextStage = () => {
         if (props.request && props.request.stage && props.stages && props.stages.length > 0) {
             let index = props.stages.findIndex(x => x.name === props.request.stage);
             if (props.stages.length > index + 1) {
-                setData({...data, nextStage: props.stages[index + 1].name});
-            } else {
-                setData({...data, nextStage: ''});
+                return props.stages[index + 1].name
+            }
+            else {
+                return '';
             }
         }
     }
@@ -103,10 +105,6 @@ const ServiceRequestView = (props: Props) => {
             return;
         }
         props.saveRequestLog(props.match.params.tenant, props.authorization, log);
-    }
-
-    const clearRequest = () => {
-        setData({...data, request: emptyRequest, log: ''});
     }
 
     const handleRequestChange = (event) => {

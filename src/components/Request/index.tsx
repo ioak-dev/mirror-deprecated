@@ -15,6 +15,7 @@ import ServiceRequestView from './view';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
 import { fetchRequest, saveRequest, deleteRequest } from '../../actions/RequestActions';
+import { fetchStage } from '../../actions/StageActions';
 
 interface Props{
     match: any,
@@ -26,7 +27,9 @@ interface Props{
     request: any,
     fetchRequest: Function,
     saveRequest: Function,
-    deleteRequest: Function
+    deleteRequest: Function,
+    stage: any,
+    fetchStage: Function
 }
 
 const domain = "servicerequests";
@@ -48,7 +51,6 @@ const Request = (props: Props) => {
     const [selectedRequest, setSelectedRequest] = useState({});
     const [data, setData] = useState(emptyRequest);
     const [view, setView] = useState([{}]);
-    const [stages, setStages] = useState([]);
 
     useEffect(() => {
         const eventBus = receiveMessage().subscribe(message => {
@@ -72,19 +74,8 @@ const Request = (props: Props) => {
         if(props.authorization.isAuth) {
             props.fetchRequest(props.match.params.tenant, props.authorization);
         }
-    
+        props.fetchStage(props.match.params.tenant, props.authorization);
         props.setProfile({...props.profile, tenant: props.match.params.tenant});
-
-        httpGet(constants.API_URL_STAGE + '/' + props.match.params.tenant + '/', 
-            {headers: {
-                Authorization: props.authorization.token
-            }}
-            ).then ((response) => {
-                setStages(response.data.stage);
-            }).catch((error) => {
-                console.log(error);
-            }
-        );
     }, []);
   
     useEffect(() => {
@@ -146,9 +137,9 @@ const Request = (props: Props) => {
             sendMessage('notification', true, {type: 'failure', message: 'Description is missing', duration: 5000});
             return;
         }
-        const requestAToSave = edit ? request : {...request, stage: stages[0]["name"]};
-        props.saveRequest(props.match.params.tenant, props.authorization, requestAToSave);
-        setSelectedRequest(requestAToSave);
+        const requestToSave = edit ? request : {...request, stage: props.stage?.data[0]["name"]};
+        props.saveRequest(props.match.params.tenant, props.authorization, requestToSave);
+        setSelectedRequest(requestToSave);
     }
 
     const handleChange = (event) => {
@@ -167,7 +158,7 @@ const Request = (props: Props) => {
                     <OakButton action={() => saveRequest({...emptyRequest, title: data.title, description: data.description}, false)} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Save</OakButton>
                 </div>
             </OakDialog>
-            <ServiceRequestView {...props} editDialogOpen={editDialogOpen} toggleEditDialog={toggleEditDialog} saveRequest={saveRequest} request = {selectedRequest} stages={stages} />
+            <ServiceRequestView {...props} editDialogOpen={editDialogOpen} toggleEditDialog={toggleEditDialog} saveRequest={saveRequest} request = {selectedRequest} stages={props.stage?.data} />
             <ViewResolver sideLabel='More options'>
                 <View main>
                     <OakTable material
@@ -199,11 +190,13 @@ const Request = (props: Props) => {
 
 const mapStateToProps = state => ({
     request: state.request,
+    stage: state.stage
   });
   
   export default connect(mapStateToProps, {
     fetchRequest,
     saveRequest,
-    deleteRequest
+    deleteRequest,
+    fetchStage
   })(Request);
   
