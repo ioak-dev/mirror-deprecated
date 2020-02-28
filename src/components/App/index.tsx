@@ -8,9 +8,9 @@ import Content from './Content';
 
 const App = props => {
   return (
-      <Provider store={store}>
-        <Content {...props} />
-      </Provider>
+    <Provider store={store}>
+      <Content {...props} />
+    </Provider>
   );
 };
 

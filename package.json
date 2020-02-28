@@ -17,6 +17,7 @@
     "crypto-js": "^3.1.9-1",
     "fabric": "^3.4.0",
     "ioak-sjcl": "^1.0.8-a",
+    "prop-types": "^15.7.2",
     "query-string": "^6.8.3",
     "react": "^16.12.0",
     "react-cookie": "^4.0.1",
@@ -44,6 +45,19 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss,html}": [
+      "npm run pretty:quick",
+      "npm run lint:fix",
+      "git add"
+    ]
   },
   "browserslist": {
     "production": [

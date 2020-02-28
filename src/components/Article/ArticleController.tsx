@@ -13,18 +13,22 @@ import OakPagination from '../../oakui/OakPagination';
 import OakPrompt from '../../oakui/OakPrompt';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
-import { fetchArticle, saveArticle, deleteArticle } from '../../actions/ArticleActions';
+import {
+  fetchArticle,
+  saveArticle,
+  deleteArticle,
+} from '../../actions/ArticleActions';
 
-interface Props{
-  match: any,
-  setProfile: Function,
-  profile: any,
-  authorization: any,
-  logout: Function,
-  article: any,
-  fetchArticle: Function,
-  saveArticle: Function,
-  deleteArticle: Function
+interface Props {
+  match: any;
+  setProfile: Function;
+  profile: any;
+  authorization: any;
+  logout: Function;
+  article: any;
+  fetchArticle: Function;
+  saveArticle: Function;
+  deleteArticle: Function;
 }
 
 const domain = 'article';
@@ -32,12 +36,12 @@ const domain = 'article';
 const ArticleController = (props: Props) => {
   const sidebarElements = {
     article: [
-        {
-            label: 'New article',
-            action: () => setEditDialogOpen(!editDialogOpen),
-            icon: 'add'
-        }
-    ]
+      {
+        label: 'New article',
+        action: () => setEditDialogOpen(!editDialogOpen),
+        icon: 'add',
+      },
+    ],
   };
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -52,7 +56,7 @@ const ArticleController = (props: Props) => {
 
   const [paginationPref, setPaginationPref] = useState({
     pageNo: 1,
-    rowsPerPage: 6
+    rowsPerPage: 6,
   });
 
   useEffect(() => {
@@ -72,14 +76,14 @@ const ArticleController = (props: Props) => {
   });
 
   useEffect(() => {
-    if(props.authorization.isAuth){ 
+    if (props.authorization.isAuth) {
       props.fetchArticle(props.match.params.tenant, props.authorization);
     }
-    props.setProfile({...props.profile, tenant: props.match.params.tenant});
+    props.setProfile({ ...props.profile, tenant: props.match.params.tenant });
   }, []);
 
   useEffect(() => {
-    if(props.authorization.isAuth){
+    if (props.authorization.isAuth) {
       props.fetchArticle(props.match.params.tenant, props.authorization);
     }
   }, [props.authorization.isAuth]);
@@ -91,13 +95,13 @@ const ArticleController = (props: Props) => {
         category: '',
         question: '',
         answer: '',
-        newCategory: ''
-      })
+        newCategory: '',
+      });
     }
-  }, [editDialogOpen])
+  }, [editDialogOpen]);
 
-  const editArticle = (article) => {
-    let categoryName = data.category
+  const editArticle = article => {
+    let categoryName = data.category;
     if (categoryName === '<create new>') {
       categoryName = data.newCategory;
     }
@@ -107,45 +111,57 @@ const ArticleController = (props: Props) => {
       category: article.category,
       question: article.question,
       answer: article.answer,
-      newCategory: ''
+      newCategory: '',
     });
-  }
+  };
 
-  const confirmDeleteFaq =(id) => {
+  const confirmDeleteFaq = id => {
     setData({
       ...data,
-      id: id
+      id,
     });
     setDeleteDialogOpen(true);
-  }
+  };
 
   const deleteArticle = () => {
-    props.deleteArticle(props.match.params.tenant, props.authorization, data.id);
-  }
+    props.deleteArticle(
+      props.match.params.tenant,
+      props.authorization,
+      data.id
+    );
+  };
 
-  const searchByWord = (faqName) =>{
+  const searchByWord = faqName => {
+    console.log('not implemented');
+  };
 
-  }
-
-  const addArticle= () => {
-    let category = data.category
+  const addArticle = () => {
+    let { category } = data;
     if (category === '<create new>') {
       category = data.newCategory;
     }
-    let article = {
-        id: data.id,
-        question: data.question,
-        answer: data.answer,
-        category: category
-    }
+    const article = {
+      id: data.id,
+      question: data.question,
+      answer: data.answer,
+      category,
+    };
     if (isEmptyOrSpaces(article.category)) {
-        sendMessage('notification', true, {type: 'failure', message: 'Category is missing', duration: 5000});
-        return;
+      sendMessage('notification', true, {
+        type: 'failure',
+        message: 'Category is missing',
+        duration: 5000,
+      });
+      return;
     }
 
     if (isEmptyOrSpaces(article.question)) {
-        sendMessage('notification', true, {type: 'failure', message: 'Question is missing', duration: 5000});
-        return;
+      sendMessage('notification', true, {
+        type: 'failure',
+        message: 'Question is missing',
+        duration: 5000,
+      });
+      return;
     }
 
     if (isEmptyOrSpaces(article.answer)) {
@@ -153,74 +169,138 @@ const ArticleController = (props: Props) => {
     }
 
     props.saveArticle(props.match.params.tenant, props.authorization, article);
-  }
+  };
 
-  const handleChange = (event) => {
-    setData(
-        {
-            ...data,
-            [event.target.name]: event.target.value
-        }
-    )
-  }
+  const handleChange = event => {
+    setData({
+      ...data,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   const onChangePage = (pageNo: number, rowsPerPage: number) => {
-      setPaginationPref({
-          pageNo: pageNo,
-          rowsPerPage: rowsPerPage
-      });
-  }
+    setPaginationPref({
+      pageNo,
+      rowsPerPage,
+    });
+  };
 
   let view: any[] = [];
   if (props.article.items) {
-    view = props.article.items.slice((paginationPref.pageNo - 1) * paginationPref.rowsPerPage, paginationPref.pageNo * paginationPref.rowsPerPage);
+    view = props.article.items.slice(
+      (paginationPref.pageNo - 1) * paginationPref.rowsPerPage,
+      paginationPref.pageNo * paginationPref.rowsPerPage
+    );
   }
   const listview = view.map(item => (
     <div key={item._id}>
-      <ArticleItem id={item._id} article={item} editArticle={editArticle} confirmDeleteFaq={() => confirmDeleteFaq(item._id)} search={() => searchByWord(item._id)}></ArticleItem>
+      <ArticleItem
+        id={item._id}
+        article={item}
+        editArticle={editArticle}
+        confirmDeleteFaq={() => confirmDeleteFaq(item._id)}
+        search={() => searchByWord(item._id)}
+      />
       <br />
     </div>
-  ))
+  ));
   return (
     <div className="article">
-      <OakDialog visible={editDialogOpen} toggleVisibility={() => setEditDialogOpen(!editDialogOpen)}>
+      <OakDialog
+        visible={editDialogOpen}
+        toggleVisibility={() => setEditDialogOpen(!editDialogOpen)}
+      >
         <div className="dialog-body">
-        <div><OakSelect theme="default" label="Category" data={data} id="category" handleChange={e => handleChange(e)} elements={props.article.categories} firstAction="<create new>" /></div>
-        <div>
-          {data.category === '<create new>' && <OakText label="Category name" data={data} id="newCategory" handleChange={e => handleChange(e)} />}
-        </div>
-          
-          <OakText label="Question" data={data} id="question" handleChange={e => handleChange(e)} />
-          <OakText label="Answer" data={data} id="answer" handleChange={e => handleChange(e)} />
+          <div>
+            <OakSelect
+              theme="default"
+              label="Category"
+              data={data}
+              id="category"
+              handleChange={e => handleChange(e)}
+              elements={props.article.categories}
+              firstAction="<create new>"
+            />
+          </div>
+          <div>
+            {data.category === '<create new>' && (
+              <OakText
+                label="Category name"
+                data={data}
+                id="newCategory"
+                handleChange={e => handleChange(e)}
+              />
+            )}
+          </div>
+
+          <OakText
+            label="Question"
+            data={data}
+            id="question"
+            handleChange={e => handleChange(e)}
+          />
+          <OakText
+            label="Answer"
+            data={data}
+            id="answer"
+            handleChange={e => handleChange(e)}
+          />
         </div>
         <div className="dialog-footer">
-          <OakButton action={() => setEditDialogOpen(!editDialogOpen)} theme="default" variant="animate in" align="left"><i className="material-icons">close</i>Cancel</OakButton>
-          <OakButton action={() => addArticle()} theme="primary" variant="animate out" align="right"><i className="material-icons">double_arrow</i>Create</OakButton>
+          <OakButton
+            action={() => setEditDialogOpen(!editDialogOpen)}
+            theme="default"
+            variant="animate in"
+            align="left"
+          >
+            <i className="material-icons">close</i>Cancel
+          </OakButton>
+          <OakButton
+            action={() => addArticle()}
+            theme="primary"
+            variant="animate out"
+            align="right"
+          >
+            <i className="material-icons">double_arrow</i>Create
+          </OakButton>
         </div>
       </OakDialog>
-      
-    {deleteDialogOpen}
-      <OakPrompt action={() => deleteArticle()} visible={deleteDialogOpen} toggleVisibility={() => setDeleteDialogOpen(!deleteDialogOpen)} />
 
-      <ViewResolver sideLabel='More options'>
-          <View main>
-          <OakPagination totalRows={props.article.items.length} onChangePage={onChangePage} label="Items per page" />
+      {deleteDialogOpen}
+      <OakPrompt
+        action={() => deleteArticle()}
+        visible={deleteDialogOpen}
+        toggleVisibility={() => setDeleteDialogOpen(!deleteDialogOpen)}
+      />
+
+      <ViewResolver sideLabel="More options">
+        <View main>
+          <OakPagination
+            totalRows={props.article.items.length}
+            onChangePage={onChangePage}
+            label="Items per page"
+          />
           {listview}
-          </View>
-          <View side>
-            <div className="filter-container">
-                <div className="section-main">
-                  <Sidebar label="Article" elements={sidebarElements['article']} icon="add" animate />
-                  <Sidebar label="Search" elements={sidebarElements['search']} icon="search" animate>
-                    Search content goes here
-                  </Sidebar>
-                </div>
+        </View>
+        <View side>
+          <div className="filter-container">
+            <div className="section-main">
+              <Sidebar
+                label="Article"
+                elements={sidebarElements.article}
+                icon="add"
+                animate
+              />
+              <Sidebar label="Search" icon="search" animate>
+                Search content goes here
+              </Sidebar>
             </div>
-          </View>
+          </div>
+        </View>
       </ViewResolver>
     </div>
   );
-}
+};
 
 const mapStateToProps = state => ({
   article: state.article,

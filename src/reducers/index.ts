@@ -7,10 +7,10 @@ import RequestReducer from './RequestReducer';
 import StageReducer from './StageReducer';
 
 export default combineReducers({
-    authorization: AuthReducer,
-    profile: ProfileReducer,
-    user: UserReducer,
-    article: ArticleReducer,
-    request: RequestReducer,
-    stage: StageReducer
-})
+  authorization: AuthReducer,
+  profile: ProfileReducer,
+  user: UserReducer,
+  article: ArticleReducer,
+  request: RequestReducer,
+  stage: StageReducer,
+});

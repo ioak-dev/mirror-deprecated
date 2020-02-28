@@ -1,7 +1,7 @@
 import { FETCH_STAGE } from '../actions/types';
 
 const initialState = {
-  data: []
+  data: [],
 };
 
 export default function(state = initialState, action) {
