@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.scss';
 import OakText from '../../oakui/OakText';
 import { sendMessage } from '../../events/MessageService';
 import { sentTenantUrl } from './TenantService'
 import {preSignup, createTenant } from '../Auth/AuthService'
-import { Authorization, Profile } from '../Types/GeneralTypes';
+import { Profile } from '../Types/GeneralTypes';
 import { isEmptyOrSpaces } from '../Utils';
 import OakButton from '../../oakui/OakButton';
 
@@ -30,46 +30,40 @@ interface State {
     jwtPassword:boolean
   }
 }
-export default class Tenant extends React.Component<Props, State> {
 
-  constructor(props: Props) {
-    super(props);
-    this.props.getProfile();
-    this.state = {
-      name: '',
-      email: '',
-      password: '',
-      repeatPassword: '',
-      jwtPassword:'',
-      banner: null,
-      pageNo: 1,
-      created: false,
-      errorFields: {
-        name: false,
-        email: false,
-        password: false,
-        repeatPassword: false,
-        jwtPassword: false
-      }
-    }
+const Tenant = (props: Props) => {
+
+  const [data, setData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    repeatPassword: '',
+    jwtPassword:'',
+    pageNo: 1,
+    created: false
+  });
+
+  const [banner, setBanner] = useState<null | {name: any}>(null);
+
+  const [errorFields, setErrorFields] = useState({
+    name: false,
+    email: false,
+    password: false,
+    repeatPassword: false,
+    jwtPassword: false
+  });
+
+  useEffect(() => {
+    props.getProfile(); 
+  }, []);
+
+  const handleChange = (event) => {
+    setData({...data, [event.currentTarget.name]: event.currentTarget.value});
   }
 
-  handleChange = (event) => {
-      this.setState(
-          {
-              ...this.state,
-              [event.currentTarget.name]: event.currentTarget.value,
-              errorFields: {
-                ...this.state.errorFields,
-                [event.currentTarget.name]: false
-              }
-          }
-      )
-  }
-
-  sentTenantUrl =() =>{
+  const sentTenantUrlAction =() =>{
     sentTenantUrl({
-      name: this.state.name,
+      name: data.name,
       })
       .then((response: any) => {
           if (response === 200) {
@@ -83,47 +77,40 @@ export default class Tenant extends React.Component<Props, State> {
       })
   }
 
-  clearError() {
-    this.setState({
-      errorFields: {
+  const clearError = () => {
+    setErrorFields({
         name: false,
         email: false,
         password: false,
         repeatPassword: false,
         jwtPassword:false
-      }
-    })
+      });
   }
 
-  setError(fieldName) {
-    this.setState({
-      errorFields: {
-        ...this.state.errorFields,
-        [fieldName]: true
-      }
-    })
+  const setError = (fieldName) => {
+    setErrorFields({...errorFields, [fieldName]: true});
   }
 
-  validate() {
-    if (isEmptyOrSpaces(this.state.name)) {
-      this.setError('name');
+  const validate = () => {
+    if (isEmptyOrSpaces(data.name)) {
+      setError('name');
       sendMessage('notification', true, {type: 'failure', message: 'Tenant name cannot be empty', duration: 3000});
       return false;
     }
-    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email))) {
-      this.setError('email');
+    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email))) {
+      setError('email');
       sendMessage('notification', true, {type: 'failure', message: 'Email ID is invalid', duration: 3000});
       return false;
     } 
     
-    if (isEmptyOrSpaces(this.state.password)){
-      this.setError('password');
+    if (isEmptyOrSpaces(data.password)){
+      setError('password');
       sendMessage('notification', true, {'type': 'failure', message: 'Password cannot be empty', duration: 3000});
       return false;
     }
 
-    if (this.state.password !== this.state.repeatPassword){
-      this.setError('repeatPassword');
+    if (data.password !== data.repeatPassword){
+      setError('repeatPassword');
       sendMessage('notification', true, {'type': 'failure', message: 'Password and repeat password should be same', duration: 3000});
       return false;
     }
@@ -131,43 +118,40 @@ export default class Tenant extends React.Component<Props, State> {
     return true;
   }
 
-  submit = (event) => {
+  const submit = (event) => {
     event.preventDefault();
     sendMessage('spinner');
-    const that = this;
-    this.clearError();
+    clearError();
     
-    if (!this.validate()) {
+    if (!validate()) {
       return;
     }
 
-    preSignup({name:that.state.name}).then((response) => {
+    preSignup({name: data.name}).then((response) => {
       if (response.status === 200) {
-        this.createTenant(response.data);
+        createTenantAction(response.data);
       }
     });
   }
 
-  handleImageChange = (e) => {
-    this.setState({
-      banner: e.target.files[0]
-    })
+  const handleImageChange = (e) => {
+    setBanner(e.target.files[0]);
   };
 
-  createTenant = (preSignupData) => {
+  const createTenantAction = (preSignupData) => {
     createTenant({
-      tenantName: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      jwtPassword:this.state.jwtPassword,
+      tenantName: data.name,
+      email: data.email,
+      password: data.password,
+      jwtPassword:data.jwtPassword,
       solution: preSignupData.solution,
       salt: preSignupData.salt,
-      banner: this.state.banner
+      banner: banner
     })
     .then((response) => {
       if (response.status === 200) {
         sendMessage('notification', true, {'type': 'success', message: 'Tenant has been created. You can proceed now', duration: 3000});
-        this.setState({pageNo: this.state.pageNo+1, created: true});
+        setData({...data, pageNo: data.pageNo+1, created: true});
       } else {
         sendMessage('notification', true, {message: 'We are facing some problem, please try after sometime', duration: 3000});
         return
@@ -177,33 +161,33 @@ export default class Tenant extends React.Component<Props, State> {
     });
   }
 
-  gotoTenantPage = () => {
-    this.props.history.push("/" + this.state.name + "/home");
+  const gotoTenantPage = () => {
+    props.history.push("/" + data.name + "/home");
   }
 
-  render() {
-    return (
-      <div className="tenant boxed">
-        {!this.state.created && <div className="typography-3 space-bottom-4">Tenant creation</div>}
-        {this.state.created && <div className="typography-3 space-bottom-4">Tenant [{this.state.name}] available now</div>}
-        {this.state.pageNo === 1 && <div className="form">
-          <OakText id="name" data={this.state} label="Tenant Name"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
-          <OakText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
-          <OakText id="password" type="password" data={this.state} label="Administrator Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
-          <OakText id="repeatPassword" type="password" data={this.state} label="Repeat Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
-          <OakText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
-          <label className="file-upload space-top-1 space-bottom-4">
-            <input type="file" accept="image/png, image/jpeg" onChange={this.handleImageChange} required/>
-            <i className="material-icons">add_photo_alternate</i>
-            {!this.state.banner && "Choose Banner/Cover Image"}
-            {this.state.banner && this.state.banner.name}
-          </label>
-          <div className="action">
-            <OakButton theme="primary" variant="animate in" action={this.submit}>Create Tenant</OakButton>
-          </div>
-        </div>}
-        {this.state.created && <OakButton theme="primary" variant="animate out" action={this.gotoTenantPage}>Take me to my tenant</OakButton>}
-      </div>
-    );
-  }
+  return (
+    <div className="tenant boxed">
+      {!data.created && <div className="typography-3 space-bottom-4">Tenant creation</div>}
+      {data.created && <div className="typography-3 space-bottom-4">Tenant [{data.name}] available now</div>}
+      {data.pageNo === 1 && <div className="form">
+        <OakText id="name" data={data} label="Tenant Name"  handleChange={e => handleChange(e)} errorFields={errorFields}></OakText>
+        <OakText id="email" data={data} label="Administrator Email"  handleChange={e => handleChange(e)} errorFields={errorFields}></OakText>
+        <OakText id="password" type="password" data={data} label="Administrator Password"  handleChange={e => handleChange(e)} errorFields={errorFields}></OakText>
+        <OakText id="repeatPassword" type="password" data={data} label="Repeat Password"  handleChange={e => handleChange(e)} errorFields={errorFields}></OakText>
+        <OakText id="jwtPassword" type="password" data={data} label="JWT Password"  handleChange={e => handleChange(e)} errorFields={errorFields}></OakText>
+        <label className="file-upload space-top-1 space-bottom-4">
+          <input type="file" accept="image/png, image/jpeg" onChange={handleImageChange} required/>
+          <i className="material-icons">add_photo_alternate</i>
+          {!banner && "Choose Banner/Cover Image"}
+          {banner && banner.name}
+        </label>
+        <div className="action">
+          <OakButton theme="primary" variant="animate in" action={submit}>Create Tenant</OakButton>
+        </div>
+      </div>}
+      {data.created && <OakButton theme="primary" variant="animate out" action={gotoTenantPage}>Take me to my tenant</OakButton>}
+    </div>
+  );
 }
+
+export default Tenant;

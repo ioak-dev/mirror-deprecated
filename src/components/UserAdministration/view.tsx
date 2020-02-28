@@ -1,12 +1,8 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Authorization } from '../Types/GeneralTypes';
 import './style.scss'
 import OakDialog from '../../oakui/OakDialog';
-import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
-import OakSelect from '../../oakui/OakSelect';
-import { httpGet } from '../Lib/RestTemplate';
-import { constants } from '../Constants';
 import OakCheckbox from '../../oakui/OakCheckbox';
 
 interface Props {
@@ -17,123 +13,111 @@ interface Props {
     logout: Function,
     user: any,
     stages: any,
-    saveRequest: Function,
+    saveUser: Function,
     isDialogOpen: boolean,
     toggleDialog: any
 }
 
-interface State {
-    administrativeRoles: any,
-    supportRoles: any,
-}
+const UserAdministrationView = (props: Props) => {
+    const administrativeRolesList = ['tenantAdministrator', 'userAdministrator'];
 
-export default class UserAdministrationView extends Component<Props, State> {
-    administrativeRoles = ['tenantAdministrator', 'userAdministrator'];
+    const [data, setData] = useState({
+        administrativeRoles: {},
+        supportRoles: {}
+    });
 
-    constructor(props){
-        super(props);
-        this.state = {
-            administrativeRoles: {},
-            supportRoles: {}
-        }
-    }
+    useEffect(() => {    
+        props.setProfile({...props.profile, tenant: props.match.params.tenant});
+    }, []);
 
-    componentDidMount() {
-        this.props.setProfile({
-          ...this.props.profile,
-          tenant: this.props.match.params.tenant
-        })
-    }
-
-    componentWillReceiveProps(nextProps) {
-        
-        if (nextProps && nextProps.user && nextProps.stages) {
+    useEffect(() => {
+        if (props.user && props.stages) {
             let administrativeRoles = {};
             let supportRoles = {};
-            this.administrativeRoles.forEach((item) => {
-                administrativeRoles[item] = nextProps.user.roles && nextProps.user.roles.indexOf(item) >= 0 ? true : false;
+            administrativeRolesList.forEach((item) => {
+                administrativeRoles[item] = props.user.roles && props.user.roles.indexOf(item) >= 0 ? true : false;
             });
-            this.props.stages.forEach((item) => {
-                supportRoles[item.name] = nextProps.user.roles && nextProps.user.roles.indexOf(item.name) >= 0 ? true : false;
+            props.stages.forEach((item) => {
+                supportRoles[item.name] = props.user.roles && props.user.roles.indexOf(item.name) >= 0 ? true : false;
             });
-            this.setState({
+            setData({...data, 
                 administrativeRoles: administrativeRoles,
                 supportRoles: supportRoles
             });
         }
-    }
+    }, [props.user, props.stages])
 
-    saveRequest = () => {
+    const saveRequest = () => {
         let roles: string[] = [];
-        Object.keys(this.state.administrativeRoles).forEach(item => {
-            if(this.state.administrativeRoles[item]) {
+        Object.keys(data.administrativeRoles).forEach(item => {
+            if(data.administrativeRoles[item]) {
                 roles.push(item);
             }
         });
-        Object.keys(this.state.supportRoles).forEach(item => {
-            if(this.state.supportRoles[item]) {
+        Object.keys(data.supportRoles).forEach(item => {
+            if(data.supportRoles[item]) {
                 roles.push(item);
             }
         });
         
-        this.props.saveRequest({
-            id: this.props.user._id,
+        props.saveUser({
+            id: props.user._id,
             roles: roles
         }, true);
-        this.props.toggleDialog();
+        props.toggleDialog();
     }
 
-    handleSupportRoleChange = (event) => {
-        this.setState({
+    const handleSupportRoleChange = (event) => {
+        setData({...data,
             supportRoles: {
-                ...this.state.supportRoles,
+                ...data.supportRoles,
                 [event.target.name]: event.target.value
             }
-        })
+        });
     }
 
-    handleAdministrativeRoleChange = (event) => {
-        this.setState({
+    const handleAdministrativeRoleChange = (event) => {
+        setData({...data,
             administrativeRoles: {
-                ...this.state.administrativeRoles,
+                ...data.administrativeRoles,
                 [event.target.name]: event.target.value
             }
-        })
+        });
     }
    
-    render() {
-        return (
-            <div className="view-user">
-                <OakDialog visible={this.props.isDialogOpen} toggleVisibility={this.props.toggleDialog} >
-                    <div className="dialog-body">
-                        {this.props.user && 
-                            <>
-                                <div className="typography-4">User Data</div>
-                                <div className="basic-data">
-                                    <div className="label">Email</div>
-                                    <div className="value">{this.props.user.email}</div>
-                                    <div className="label">Full Name</div>
-                                    <div className="value">John Doe</div>
-                                </div>
-                                <div className="typography-4 space-top-3">Administrative Roles</div>
-                                <div className="role-container">
-                                    <OakCheckbox data={this.state.administrativeRoles} id="tenantAdministrator" label="Tenant Administrator" handleChange={this.handleAdministrativeRoleChange} theme="primary" />
-                                    <OakCheckbox data={this.state.administrativeRoles} id="userAdministrator" label="User Administrator" handleChange={this.handleAdministrativeRoleChange} theme="primary" />
-                                </div>
-                                <div className="typography-4 space-top-3">Support Roles</div>
-                                <div className="role-container">
-                                    {this.props.stages.map(stage => 
-                                            <OakCheckbox key={stage.name} data={this.state.supportRoles} id={stage.name} label={stage.name} handleChange={this.handleSupportRoleChange} theme="primary" />
-                                    )}
-                                </div>
-                            </>
-                        }
-                    </div>
-                    <div className="dialog-footer">
-                        <OakButton theme="primary" variant="outline" align="right" icon="save" action={this.saveRequest}>Save Changes</OakButton>
-                    </div>
-                </OakDialog>
-            </div>
-        )
-    }
+    return (
+        <div className="view-user">
+            <OakDialog visible={props.isDialogOpen} toggleVisibility={props.toggleDialog} >
+                <div className="dialog-body">
+                    {props.user && 
+                        <>
+                            <div className="typography-4">User Data</div>
+                            <div className="basic-data">
+                                <div className="label">Email</div>
+                                <div className="value">{props.user.email}</div>
+                                <div className="label">Full Name</div>
+                                <div className="value">John Doe</div>
+                            </div>
+                            <div className="typography-4 space-top-3">Administrative Roles</div>
+                            <div className="role-container">
+                                <OakCheckbox data={data.administrativeRoles} id="tenantAdministrator" label="Tenant Administrator" handleChange={handleAdministrativeRoleChange} theme="primary" />
+                                <OakCheckbox data={data.administrativeRoles} id="userAdministrator" label="User Administrator" handleChange={handleAdministrativeRoleChange} theme="primary" />
+                            </div>
+                            <div className="typography-4 space-top-3">Support Roles</div>
+                            <div className="role-container">
+                                {props.stages.map(stage => 
+                                        <OakCheckbox key={stage.name} data={data.supportRoles} id={stage.name} label={stage.name} handleChange={handleSupportRoleChange} theme="primary" />
+                                )}
+                            </div>
+                        </>
+                    }
+                </div>
+                <div className="dialog-footer">
+                    <OakButton theme="primary" variant="outline" align="right" icon="save" action={saveRequest}>Save Changes</OakButton>
+                </div>
+            </OakDialog>
+        </div>
+    )
 }
+
+export default UserAdministrationView;

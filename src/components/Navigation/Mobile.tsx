@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-
+import React, { useEffect, useState } from 'react';
 import './style.scss';
 import mirror_white from '../../images/mirror_white.svg';
 import mirror_white_small from '../../images/mirror_white_small.svg';
@@ -8,7 +6,7 @@ import mirror_black from '../../images/mirror_black.svg';
 import Links from './Links';
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import SearchBar from '../../oakui/SearchBar';
-import { receiveMessage, sendMessage } from '../../events/MessageService';
+import { receiveMessage } from '../../events/MessageService';
 import OakButton from '../../oakui/OakButton';
 // import SearchBar from '../Ux/SearchBar';
 
@@ -26,77 +24,66 @@ interface Props {
     toggleSettings: any
 }
 
-interface State {
-    menu: boolean,
-    showSearchBar: boolean
-}
+const Mobile = (props: Props) => {
+    
+    const [data, setData] = useState({
+        showSearchBar: false,
+        menu: false});
 
-class Mobile extends Component<Props, State> {
-    constructor(props) {
-        super(props);
-        this.props.getProfile();
-        this.state = {
-            showSearchBar: false,
-            menu: false
-        }
-    }
+    useEffect(() => {    
+        props.getProfile();
+    }, []);
 
-    componentDidMount() {
+    useEffect(() => {    
         receiveMessage().subscribe(message => {
             if (message.name === 'show-navbar-element') {
-                this.setState({
-                    showSearchBar: message.signal
-                })
+                setData({...data, showSearchBar: message.signal});
             }
         });
+    }, []);
+
+    const toggleMenu = () => {
+        setData({...data, menu: !data.menu});
     }
 
-    toggleMenu = () => {
-        this.setState({
-            menu: !this.state.menu
-        })
+    const signin = (type) => {
+        props.login(type);
     }
 
-    signin = (type) => {
-        this.props.login(type);
-    }
-
-    render() {
-        return (
-            <>
-            <div className={(this.props.transparent ? "navbar mobile transparent" : "navbar mobile")}>
-                <div className="left">
-                    {!this.state.showSearchBar && !this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white} alt="Mirror logo" />}
-                    {!this.state.showSearchBar && (this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white} alt="Mirror logo" />}
-                    {this.state.showSearchBar && !this.props.transparent && this.props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white_small} alt="Mirror logo" />}
-                    {this.state.showSearchBar && (this.props.transparent || this.props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white_small} alt="Mirror logo" />}
-                    {this.state.showSearchBar && <SearchBar alt />}
-                    {/* links */}
-                </div>
-                <div className="right">
-                    {/* <div className="settings-icon" onClick={this.props.toggleSettings}><i className="material-icons">settings</i></div> */}
-                    <div className={(this.state.menu ? "menu active" : "menu")} onClick={this.toggleMenu}><div></div></div>
-                    {/* action login */}
-                </div>
+    return (
+        <>
+        <div className={(props.transparent ? "navbar mobile transparent" : "navbar mobile")}>
+            <div className="left">
+                {!data.showSearchBar && !props.transparent && props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white} alt="Mirror logo" />}
+                {!data.showSearchBar && (props.transparent || props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white} alt="Mirror logo" />}
+                {data.showSearchBar && !props.transparent && props.profile.theme === 'theme_light' && <img className="logo" src={mirror_white_small} alt="Mirror logo" />}
+                {data.showSearchBar && (props.transparent || props.profile.theme === 'theme_dark') && <img className="logo" src={mirror_white_small} alt="Mirror logo" />}
+                {data.showSearchBar && <SearchBar alt />}
+                {/* links */}
             </div>
-            <div className={(this.state.menu ? "slider show" : "slider hide")} onClick={this.toggleMenu}>
-                <div className={(this.state.menu ? "container": "container hidetext")} onClick={this.toggleMenu}>
-                    <div className="action">
-                        {/* <div className="settings-icon" onClick={this.props.toggleSettings}>
-                            {this.props.authorization.isAuth && <OakButton invert variant="animate in" small action={this.props.toggleSettings}><i className="material-icons">brush</i>Action 1</OakButton>}
-                        </div> */}
-                        <div className="buttons">
-                            {this.props.authorization.isAuth && <OakButton invert variant="animate in" small action={this.props.logout()}><i className="material-icons">power_settings_new</i>Logout</OakButton>}
-                            {!this.props.authorization.isAuth && <OakButton invert variant="animate in" small action={() => this.signin('signin')}><i className="material-icons">person</i>Login</OakButton>}
-                            {!this.props.authorization.isAuth && <OakButton invert variant="animate in" small action={() => this.signin('signup')}><i className="material-icons">person_add</i>Signup</OakButton>}
-                        </div>
+            <div className="right">
+                {/* <div className="settings-icon" onClick={props.toggleSettings}><i className="material-icons">settings</i></div> */}
+                <div className={(data.menu ? "menu active" : "menu")} onClick={toggleMenu}><div></div></div>
+                {/* action login */}
+            </div>
+        </div>
+        <div className={(data.menu ? "slider show" : "slider hide")} onClick={toggleMenu}>
+            <div className={(data.menu ? "container": "container hidetext")} onClick={toggleMenu}>
+                <div className="action">
+                    {/* <div className="settings-icon" onClick={props.toggleSettings}>
+                        {props.authorization.isAuth && <OakButton invert variant="animate in" small action={props.toggleSettings}><i className="material-icons">brush</i>Action 1</OakButton>}
+                    </div> */}
+                    <div className="buttons">
+                        {props.authorization.isAuth && <OakButton invert variant="animate in" small action={props.logout()}><i className="material-icons">power_settings_new</i>Logout</OakButton>}
+                        {!props.authorization.isAuth && <OakButton invert variant="animate in" small action={() => signin('signin')}><i className="material-icons">person</i>Login</OakButton>}
+                        {!props.authorization.isAuth && <OakButton invert variant="animate in" small action={() => signin('signup')}><i className="material-icons">person_add</i>Signup</OakButton>}
                     </div>
-                    <Links authorization={this.props.authorization} profile={this.props.profile}/>
                 </div>
+                <Links authorization={props.authorization} profile={props.profile}/>
             </div>
-            </>
-        );
-    }
+        </div>
+        </>
+    );
 }
 
 export default Mobile;

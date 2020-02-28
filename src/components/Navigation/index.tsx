@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {withRouter} from 'react-router'
 import { getProfile, setProfile } from '../../actions/ProfileActions';
@@ -9,7 +9,7 @@ import Desktop from './Desktop';
 import Mobile from './Mobile';
 
 import { Authorization, Profile } from '../Types/GeneralTypes';
-import { sendMessage, receiveMessage } from '../../events/MessageService';
+import { receiveMessage } from '../../events/MessageService';
 
 interface Props {    
     sendEvent: Function,
@@ -30,102 +30,81 @@ interface Props {
     match: any
 }
 
-interface State {
-    visible: boolean,
-    mobilemenu: string,
-    chooseTheme: boolean,
-    showSettings: boolean,
-    transparentNavBar: boolean,
-    firstLoad: boolean
-}
+const Navigation = (props: Props) => {
 
-class Navigation extends Component<Props, State> {
-    constructor(props) {
-        super(props);
-        this.props.getProfile();
-        this.state = {
-            visible: false,
-            mobilemenu: 'hide',
-            chooseTheme: false,
-            showSettings: false,
-            transparentNavBar: false,
-            firstLoad: true
-        }
-    }
+    const [data, setData] = useState({
+        visible: false,
+        mobilemenu: 'hide',
+        chooseTheme: false,
+        showSettings: false,
+        transparentNavBar: false,
+        firstLoad: true
+    });
 
-    componentDidMount() {
+    useEffect(() => {    
+        props.getProfile();
+    }, []);
+
+    useEffect(() => {
         receiveMessage().subscribe(message => {
             if (message.name === 'navbar-transparency') {
-                this.setState({
-                    transparentNavBar: message.signal
-                })
+                setData({...data, transparentNavBar: message.signal});
             }
             if (message.name === 'loggedin') {
-                // this.props.reloadProfile(nextProps.authorization);
-                this.setState({
-                    firstLoad: false
-                })
+                // props.reloadProfile(nextProps.authorization);
+                setData({...data, firstLoad: false});
             }
         })
-    }
+    }, []);
 
-    
-
-    componentWillReceiveProps(nextProps) {
-        if (this.state.firstLoad && nextProps.authorization && nextProps.authorization.isAuth) {
-            // this.props.reloadProfile(nextProps.authorization);
-            this.setState({
-                firstLoad: false
-            })
+    useEffect(() => {
+        if (data.firstLoad && props.authorization && props.authorization.isAuth) {
+            setData({...data, firstLoad: false});
         }
-    }
+    }, [props.authorization.isAuth]);
 
-    toggleDarkMode = () => {
-        if (this.props.profile.theme === 'theme_dark') {
-            this.props.setProfile({
-                ...this.props.profile,
+    const toggleDarkMode = () => {
+        if (props.profile.theme === 'theme_dark') {
+            props.setProfile({
+                ...props.profile,
                 theme: 'theme_light'
             })   
         } else  {
-            this.props.setProfile({
-                ...this.props.profile,
+            props.setProfile({
+                ...props.profile,
                 theme: 'theme_dark'
             })   
         }
     }
 
-    changeTextSize = (size) => {
-        this.props.setProfile({
-            ...this.props.profile,
+    const changeTextSize = (size) => {
+        props.setProfile({
+            ...props.profile,
             textSize: size
         })
     }
 
-    changeThemeColor = (color) => {
-        this.props.setProfile({
-            ...this.props.profile,
+    const changeThemeColor = (color) => {
+        props.setProfile({
+            ...props.profile,
             themeColor: color
         })
     }
 
-    login = (type) => {
-        this.props.history.push('/' + this.props.profile.tenant + '/login?type=' + type);
+    const login = (type) => {
+        props.history.push('/' + props.profile.tenant + '/login?type=' + type);
     }
 
-    toggleSettings = () => {
-        this.setState({
-            showSettings: !this.state.showSettings
-        })
+    const toggleSettings = () => {
+        setData({...data, showSettings: !data.showSettings});
     }
 
-    render() {
-        return (
-            <div className="nav">
-                <Desktop {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
-                <Mobile {...this.props} logout={this.props.logout} login={this.login} toggleSettings={this.toggleSettings} transparent={this.state.transparentNavBar} />
-            </div>
-        );
-    }
+    return (
+        <div className="nav">
+            <Desktop {...props} logout={props.logout} login={login} toggleSettings={toggleSettings} transparent={data.transparentNavBar} />
+            <Mobile {...props} logout={props.logout} login={login} toggleSettings={toggleSettings} transparent={data.transparentNavBar} />
+        </div>
+    );
 }
 
 const mapStateToProps = state => ({

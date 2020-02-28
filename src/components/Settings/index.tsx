@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.scss';
 import { sendMessage } from '../../events/MessageService';
 import OakText from '../../oakui/OakText';
@@ -18,170 +18,134 @@ interface Props {
     authorization: Authorization
 }
 
-interface State { 
-  name: string,
-  email: string,
-  jwtPassword:string,
-  banner: any,
-  errorFields: {
-    name: boolean,
-    email: boolean,
-    jwtPassword:boolean
-  },
-
-  section: String,
-
-  sidebarElements: any
-}
-
-class Settings extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-          name: '',
-          email: '',
-          jwtPassword:'',
-          banner: null,
-          errorFields: {
-            name: false,
-            email: false,
-            jwtPassword: false
-          },
-          section: 'tenantProfile',
-          
-          sidebarElements: {
-            tenant: [
-                {
-                    label: 'Profile',
-                    action: () => this.chooseSection('tenantProfile'),
-                    icon: 'home'
-                },
-                {
-                    label:'Support levels',
-                    action: () => this.chooseSection('stage'),
-                    icon:'fast_forward'
-                },
-                {
-                    label:'Training dataset',
-                    action: () => this.chooseSection('trainingDataset'),
-                    icon:'bubble_chart'
-                },
-                {
-                    label:'Article categories',
-                    action: () => this.chooseSection('articleCategories'),
-                    icon:'compare'
-                }
-            ],
-            myProfile: [
-                {
-                    label: 'Profile',
-                    action: () => this.chooseSection('userProfile'),
-                    icon: 'person'
-                },
-                {
-                    label: 'Password',
-                    action: () => this.chooseSection('userPassword'),
-                    icon: 'security'
-                }
-            ]
-          }
-        }
-    }
-
-    componentDidMount() {
-      this.props.setProfile({
-        ...this.props.profile,
-        tenant: this.props.match.params.tenant
-      })
-
-        getTenant(this.props.match.params.tenant,  {
-            headers: {
-                Authorization: this.props.authorization.token
+const Settings = (props: Props) => {
+    const sidebarElements = {
+        tenant: [
+            {
+                label: 'Profile',
+                action: () => chooseSection('tenantProfile'),
+                icon: 'home'
+            },
+            {
+                label:'Support levels',
+                action: () => chooseSection('stage'),
+                icon:'fast_forward'
+            },
+            {
+                label:'Training dataset',
+                action: () => chooseSection('trainingDataset'),
+                icon:'bubble_chart'
+            },
+            {
+                label:'Article categories',
+                action: () => chooseSection('articleCategories'),
+                icon:'compare'
             }
-        }).then ((response) => {
-            this.setState({
-                name: response.data.name,
-                email: response.data.ownerEmail,
-                jwtPassword: response.data.jwtPassword
-            })
-        }).catch(() => {
-        })
-    }
+        ],
+        myProfile: [
+            {
+                label: 'Profile',
+                action: () => chooseSection('userProfile'),
+                icon: 'person'
+            },
+            {
+                label: 'Password',
+                action: () => chooseSection('userPassword'),
+                icon: 'security'
+            }
+        ]
+      };
 
-    chooseSection = (section: String) => {
-        this.setState({
-            section: section
-        });
+    const [data, setData] = useState({ name: '',
+        email: '',
+        jwtPassword:'',
+        banner: any,
+        errorFields: {
+        name: false,
+        email: false,
+        jwtPassword: false
+        },
+        section: 'tenantProfile'
+    });
+
+    useEffect(() => {
+        if(props.authorization.isAuth) {
+            getTenant(props.match.params.tenant,  {
+                headers: {
+                    Authorization: props.authorization.token
+                }
+            }).then ((response) => {
+                setData({...data,
+                    name: response.data.name,
+                    email: response.data.ownerEmail,
+                    jwtPassword: response.data.jwtPassword
+                })
+            }).catch(() => {
+            })
+        }
+    
+        props.setProfile({...props.profile, tenant: props.match.params.tenant});
+    }, []);
+
+    const chooseSection = (section) => {
+        setData({...data, section: section});
         sendMessage('sidebar', false);
     }
 
-    handleImageChange = (e) => {
-      this.setState({
-        banner: e.target.files[0]
-      })
+    const handleImageChange = (e) => {
+      setData({...data, banner: e.target.files[0]});
     }
 
-    handleChange = (event) => {
-        this.setState(
-            {
-                ...this.state,
-                [event.currentTarget.name]: event.currentTarget.value,
-                errorFields: {
-                  ...this.state.errorFields,
-                  [event.currentTarget.name]: false
-                }
-            }
-        )
+    const handleChange = (event) => {
+        setData({...data, [event.currentTarget.name]: event.currentTarget.value});
     }
 
-    render() {
-        return (
-            <div className="settings">
-                
-                <ViewResolver sideLabel='More options'>
-                    <View main>
-                        {this.state.section === 'tenantProfile' && 
-                        <>
-                        <div className="typography-3 space-bottom-2">Tenant Profile</div>
-                        <div className="form">
-                            <OakText id="email" data={this.state} label="Administrator Email"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
-                            <OakText id="jwtPassword" type="password" data={this.state} label="JWT Password"  handleChange={e => this.handleChange(e)} errorFields={this.state.errorFields}></OakText>
-                            <label className="file-upload space-top-1 space-bottom-4">
-                                <input type="file" accept="image/png, image/jpeg" onChange={this.handleImageChange} required/>
-                                <i className="material-icons">add_photo_alternate</i>
-                                {!this.state.banner && "Choose Banner/Cover Image"}
-                                {this.state.banner && this.state.banner.name}
-                            </label>
-                        </div>
-                        </>}
+    return (
+        <div className="settings">
+            
+            <ViewResolver sideLabel='More options'>
+                <View main>
+                    {data.section === 'tenantProfile' && 
+                    <>
+                    <div className="typography-3 space-bottom-2">Tenant Profile</div>
+                    <div className="form">
+                        <OakText id="email" data={data} label="Administrator Email"  handleChange={e => handleChange(e)} errorFields={data.errorFields}></OakText>
+                        <OakText id="jwtPassword" type="password" data={data} label="JWT Password"  handleChange={e => handleChange(e)} errorFields={data.errorFields}></OakText>
+                        <label className="file-upload space-top-1 space-bottom-4">
+                            <input type="file" accept="image/png, image/jpeg" onChange={handleImageChange} required/>
+                            <i className="material-icons">add_photo_alternate</i>
+                            {!data.banner && "Choose Banner/Cover Image"}
+                            {data.banner && data.banner.name}
+                        </label>
+                    </div>
+                    </>}
 
-                        {this.state.section === 'stage' &&
-                        <div className="stage">
-                           <Stages match={this.props.match} authorization = {this.props.authorization} />   
-                        </div>}
+                    {data.section === 'stage' &&
+                    <div className="stage">
+                        <Stages match={props.match} authorization = {props.authorization} />   
+                    </div>}
 
-                        {this.state.section === 'userProfile' && 
-                        <>
-                        <div className="typography-3 space-bottom-2">User Profile</div>
-                        </>}
+                    {data.section === 'userProfile' && 
+                    <>
+                    <div className="typography-3 space-bottom-2">User Profile</div>
+                    </>}
 
-                        {this.state.section === 'userPassword' && 
-                        <>
-                        <div className="typography-3 space-bottom-2">Change Login Password</div>
-                        </>}
-                    </View>
-                    <View side>
-                            <div className="filter-container">
-                                <div className="section-main">
-                                    <Sidebar label="Tenant" elements={this.state.sidebarElements['tenant']} icon="home" animate />
-                                    <Sidebar label="My Profile" elements={this.state.sidebarElements['myProfile']} icon="account_circle" animate />
-                                </div>
+                    {data.section === 'userPassword' && 
+                    <>
+                    <div className="typography-3 space-bottom-2">Change Login Password</div>
+                    </>}
+                </View>
+                <View side>
+                        <div className="filter-container">
+                            <div className="section-main">
+                                <Sidebar label="Tenant" elements={sidebarElements['tenant']} icon="home" animate />
+                                <Sidebar label="My Profile" elements={sidebarElements['myProfile']} icon="account_circle" animate />
                             </div>
-                    </View>
-                </ViewResolver>
-            </div>
-        );
-    }
+                        </div>
+                </View>
+            </ViewResolver>
+        </div>
+    );
 }
 
 export default Settings;

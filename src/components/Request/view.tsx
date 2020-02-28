@@ -39,7 +39,6 @@ interface State {
 }
 
 const domainLog = 'servicerequests log';
-const domain = 'servicerequests';
 
 const emptyRequest = {
     _id: '',
