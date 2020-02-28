@@ -1,6 +1,7 @@
-import { GET_USER, ADD_USER } from '../actions/types';
+import { GET_USER, ADD_USER, FETCH_ALL_USERS } from '../actions/types';
 
 const initialState = {
+    users: []
 }
 
 export default function(state = initialState, action) {
@@ -12,6 +13,12 @@ export default function(state = initialState, action) {
             };
         case ADD_USER:
             console.log('ADD_USER reducer');
+            return {
+                ...state,
+                ...action.payload
+            };
+        case FETCH_ALL_USERS:
+            console.log('FETCH_ALL_USERS reducer');
             return {
                 ...state,
                 ...action.payload

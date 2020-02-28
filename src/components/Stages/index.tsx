@@ -1,46 +1,54 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux';
 import './style.scss';
 import OakText from '../../oakui/OakText';
 import { Authorization } from '../Types/GeneralTypes';
-import { httpGet, httpPost, httpPut } from "../Lib/RestTemplate";
-import { constants } from '../Constants';
-import { sendMessage } from '../../events/MessageService';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 import OakButton from '../../oakui/OakButton';
+import { fetchStage, saveStage } from '../../actions/StageActions';
 
 interface Props {
     match: any,
-    authorization: Authorization
+    authorization: Authorization,
+    stage: any,
+    fetchStage: Function,
+    saveStage: Function
 }
 
-interface State { 
-    stage: any
-}
-    
+const domain = "stages";
+
 const Stages = (props: Props) => {
     const [stage, setStage] = useState([{name: ''}]);
 
+
+    useEffect(() => {
+        const eventBus = receiveMessage().subscribe(message => {
+          if (message.name === domain && message.signal) {
+            sendMessage('notification', true, {
+              type: 'success',
+              message: `${domain} ${message.data.action}`,
+              duration: 5000,
+            });
+          }
+        });
+        return () => eventBus.unsubscribe();
+      });
+
     useEffect(() => {
         if(props.authorization.isAuth){
-            initializeStages();
+            props.fetchStage(props.match.params.tenant, props.authorization);
         }
     }, []);
 
     useEffect(() => {
         if(props.authorization.isAuth){
-            initializeStages();
+            props.fetchStage(props.match.params.tenant, props.authorization);
         }
     }, [props.authorization.isAuth]);
-    
-    const initializeStages = () =>{
-        httpGet(constants.API_URL_STAGE + '/' + 
-        props.match.params.tenant + '/', 
-        {headers: {
-            Authorization: props.authorization.token
-        }}
-        ).then ((response) => {
-            setStage(response.data.stage);
-        }).catch(() => {})
-    }
+
+    useEffect(() => {
+        setStage(props.stage.data);
+    }, [props.stage])
 
     const handleAddStage = () => {
         setStage(stage.concat([{name: "" }]));
@@ -57,21 +65,7 @@ const Stages = (props: Props) => {
     } 
 
     const saveStages = () => {
-        return httpPut(constants.API_URL_STAGE + '/' + props.match.params.tenant + '/', 
-        stage ,{
-            headers: {
-                Authorization: props.authorization.token
-                }
-            })
-            .then((response) => {
-                if (response.status === 200) {
-                    sendMessage('notification', true, {message: 'Stages Updated successfully', type: 'success', duration: 3000});
-                } else if (response.status === 500) {
-                    sendMessage('notification', true, {message: 'Stages Updation failed', type: 'failure', duration: 3000});
-                } else {
-                    sendMessage('notification', true, {message: 'Unknown response from server. Please try again or at a later time', type: 'failure', duration: 3000});
-                }
-        })
+        props.saveStage(props.match.params.tenant, props.authorization, stage);
     }
 
     return (
@@ -79,7 +73,7 @@ const Stages = (props: Props) => {
             <div className="form">
                 <OakButton theme="secondary" variant="animate out" align="left" action={ handleAddStage }><i className="material-icons">label_important</i>New Stage</OakButton>
                 <OakButton theme="primary" variant="animate out" align="center" action={saveStages}><i className="material-icons">save_alt</i>Save</OakButton>
-                <OakButton theme="default" variant="animate in" align="right" action={initializeStages}><i className="material-icons">undo</i>Reset</OakButton>
+                <OakButton theme="default" variant="animate in" align="right" action={() => props.fetchStage(props.match.params.tenant, props.authorization)}><i className="material-icons">undo</i>Reset</OakButton>
                 <div className="space-bottom-2"></div>
                     {stage?.map((item, idx) => (
                         <div className="stage-row" key={idx}>
@@ -93,4 +87,11 @@ const Stages = (props: Props) => {
     )
 }
 
-export default Stages;
+const mapStateToProps = state => ({
+    stage: state.stage
+});
+
+export default connect(mapStateToProps, {
+fetchStage, saveStage
+})(Stages);
+  

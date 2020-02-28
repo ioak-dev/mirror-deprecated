@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
 import OakTable from '../../oakui/OakTable';
 import { Authorization } from '../Types/GeneralTypes';
 import './style.scss'
 import ViewResolver from '../../oakui/ViewResolver';
 import View from '../../oakui/View';
-import { httpGet, httpPut } from '../Lib/RestTemplate';
-import { constants } from '../Constants';
-import { sendMessage } from '../../events/MessageService';
+import { sendMessage, receiveMessage } from '../../events/MessageService';
 import UserAdministrationView from './view';
 import OakText from '../../oakui/OakText';
 import OakButton from '../../oakui/OakButton';
+import { fetchAllUsers, saveUser } from '../../actions/UserActions';
+import { fetchStage } from '../../actions/StageActions';
 
 interface Props{
     match: any,
     setProfile: Function,
     profile: any,
     authorization: Authorization,
-    logout: Function
+    logout: Function,
+    user: any,
+    fetchAllUsers: Function,
+    saveUser: Function,
+    stage: any,
+    fetchStage: Function
 }
+
+const domain = 'user';
 
 const UserAdministration = (props: Props) => {
     const [paginationPref, setPaginationPref] = useState({
@@ -30,32 +38,33 @@ const UserAdministration = (props: Props) => {
     const [items, setItems] = useState<undefined | any[]>([{}]);
     const [view, setView] = useState<undefined | any[]>([{}]);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [stages, setStages] = useState([]);
     const [selectedUser, setSelectedUser] = useState<null | {}>(null);
 
     useEffect(() => {
+        const eventBus = receiveMessage().subscribe(message => {
+          if (message.name === domain && message.signal) {
+            sendMessage('notification', true, {
+              type: 'success',
+              message: `${domain} ${message.data.action}`,
+              duration: 5000,
+            });
+          }
+        });
+        return () => eventBus.unsubscribe();
+      });
+
+    useEffect(() => {
         if(props.authorization.isAuth) {
-            initializeRequest(props.authorization)
+            initializeRequest()
         }
     
         props.setProfile({...props.profile, tenant: props.match.params.tenant});
-
-        httpGet(constants.API_URL_STAGE + '/' + props.match.params.tenant + '/', 
-            {headers: {
-                Authorization: props.authorization.token
-            }}
-            ).then ((response) => {
-                setStages(response.data.stage);
-            }).catch((error) => {
-                console.log(error);
-            }
-        );
     }, []);
   
     useEffect(() => {
-    if(props.authorization.isAuth){
-        initializeRequest(props.authorization)
-    }
+        if(props.authorization.isAuth){
+            initializeRequest()
+        }
     }, [props.authorization.isAuth]);
 
     const openUser = (user) => {
@@ -63,37 +72,26 @@ const UserAdministration = (props: Props) => {
         setDialogOpen(true);
     }
 
-    const initializeRequest = (authorization) => {
-        
-        httpGet(constants.API_URL_USER + '/' + 
-        props.match.params.tenant + "/all",
-        {
-            headers:{
-                Authorization: props.authorization.token
-            }
-        })
-        .then((response) => {
-            let list: any[] = [];
-            response.data.data.forEach((item) => {
-                list.push({
-                    ...item, 
-                    action: 
-                    <>
-                        <OakButton theme="primary" variant="block" align="left" action={() => openUser(item)} icon="open_in_new"></OakButton>
-                        {item.status === 'resolved' && 
-                            <OakButton theme="default" variant="block" align="right" action=""><i className="material-icons">archive</i></OakButton>}
-                    </>
-                })
+    useEffect(() => {
+        let list: any[] = [];
+        props.user.users.forEach((item) => {
+            list.push({
+                ...item, 
+                action: 
+                <>
+                    <OakButton theme="primary" variant="block" align="left" action={() => openUser(item)} icon="open_in_new"></OakButton>
+                    {item.status === 'resolved' && 
+                        <OakButton theme="default" variant="block" align="right" action=""><i className="material-icons">archive</i></OakButton>}
+                </>
             })
-            setItems(list);
-            setView(list);
         })
-        
-    }
+        setItems(list);
+        setView(list);
+    }, [props.user]);
 
-    const closeAllDialog = () => {
-        setSelectedUser(null);
-        setDialogOpen(false);
+    const initializeRequest = () => {
+        props.fetchAllUsers(props.match.params.tenant, props.authorization);
+        props.fetchStage(props.match.params.tenant, props.authorization);
     }
 
     const saveUser = (user, edit=false) => {
@@ -106,34 +104,9 @@ const UserAdministration = (props: Props) => {
         if (user.roles.length == 0) {
             sendMessage('notification', true, {type: 'failure', message: 'No Roles selected', duration: 5000});
             return;
-        } 
-        httpPut(constants.API_URL_USER + '/' + 
-        props.match.params.tenant + '/',
-        user,
-        {
-          headers: {
-            Authorization: props.authorization.token
-          }
-        })
-        .then(function(response) {
-            if (response.status === 200) {
-                if (edit) {
-                    sendMessage('notification', true, {type: 'success', message: 'Request edited', duration: 5000});
-                    closeAllDialog();
-                } else {
-                    sendMessage('notification', true, {type: 'success', message: 'Request created', duration: 5000});
-                    closeAllDialog();
-                }
-                closeAllDialog();
-                initializeRequest(props.authorization);
-            }
-            
-        })
-        .catch((error) => {
-            if (error.response.status === 401) {
-                props.logout(null, 'failure', 'Session expired. Login again');
-            }
-        })
+        }
+
+        props.saveUser(props.match.params.tenant, props.authorization, user);
     }
 
     const find = (event) => {
@@ -145,7 +118,7 @@ const UserAdministration = (props: Props) => {
 
     return (
         <div className="user-administration boxed">
-            <UserAdministrationView {...props} isDialogOpen={dialogOpen} toggleDialog={() => setDialogOpen(!dialogOpen)} saveUser={saveUser} user = {selectedUser} stages={stages} />
+            <UserAdministrationView {...props} isDialogOpen={dialogOpen} toggleDialog={() => setDialogOpen(!dialogOpen)} saveUser={saveUser} user = {selectedUser} stages={props.stage.data} />
             <ViewResolver sideLabel='More options'>
                 <View main>
                     <div className="search-bar">
@@ -167,4 +140,14 @@ const UserAdministration = (props: Props) => {
     )
 }
 
-export default UserAdministration;
+const mapStateToProps = state => ({
+    user: state.user,
+    stage: state.stage
+  });
+  
+  export default connect(mapStateToProps, {
+    fetchAllUsers,
+    saveUser,
+    fetchStage
+  })(UserAdministration);
+  

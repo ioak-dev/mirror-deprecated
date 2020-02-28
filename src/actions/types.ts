@@ -10,3 +10,5 @@ export const ADD_USER = 'ADD_USER';
 
 export const FETCH_ARTICLE = 'FETCH_ARTICLE';
 export const FETCH_REQUEST = 'FETCH_REQUEST';
+export const FETCH_STAGE = 'FETCH_STAGE';
+export const FETCH_ALL_USERS = 'FETCH_ALL_USERS';
