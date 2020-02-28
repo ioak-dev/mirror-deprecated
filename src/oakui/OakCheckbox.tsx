@@ -1,5 +1,5 @@
 import React from 'react';
-import './OakCheckbox.scss';
+import './styles/oak-checkbox.scss';
 
 interface Props {
   label?: string;

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import OakTable from '../../oakui/OakTable';
 import { Authorization } from '../Types/GeneralTypes';
 import './style.scss';
-import ViewResolver from '../../oakui/ViewResolver';
-import View from '../../oakui/View';
+import OakViewResolver from '../../oakui/OakViewResolver';
+import OakView from '../../oakui/OakView';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
 import UserAdministrationView from './view';
 import OakText from '../../oakui/OakText';
@@ -150,8 +150,8 @@ const UserAdministration = (props: Props) => {
         user={selectedUser}
         stages={props.stage.data}
       />
-      <ViewResolver sideLabel="More options">
-        <View main>
+      <OakViewResolver sideLabel="More options">
+        <OakView main>
           <div className="search-bar">
             <div />
             <div>
@@ -178,8 +178,8 @@ const UserAdministration = (props: Props) => {
               { key: 'action', label: 'Action' },
             ]}
           />
-        </View>
-      </ViewResolver>
+        </OakView>
+      </OakViewResolver>
     </div>
   );
 };

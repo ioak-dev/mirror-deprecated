@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import OakTable from '../../oakui/OakTable';
 import { Authorization } from '../Types/GeneralTypes';
 import './style.scss';
-import ViewResolver from '../../oakui/ViewResolver';
-import View from '../../oakui/View';
-import Sidebar from '../../oakui/Sidebar';
+import OakViewResolver from '../../oakui/OakViewResolver';
+import OakView from '../../oakui/OakView';
+import OakSidebar from '../../oakui/OakSidebar';
 import OakDialog from '../../oakui/OakDialog';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
@@ -254,8 +254,8 @@ const Request = (props: Props) => {
         request={selectedRequest}
         stages={props.stage?.data}
       />
-      <ViewResolver sideLabel="More options">
-        <View main>
+      <OakViewResolver sideLabel="More options">
+        <OakView main>
           <OakTable
             material
             data={view}
@@ -270,23 +270,23 @@ const Request = (props: Props) => {
               { key: 'action', label: 'Action' },
             ]}
           />
-        </View>
-        <View side>
+        </OakView>
+        <OakView side>
           <div className="filter-container">
             <div className="section-main">
-              <Sidebar
+              <OakSidebar
                 label="Service Request"
                 elements={sidebarElements.serviceRequest}
                 icon="add"
                 animate
               />
-              <Sidebar label="Search" icon="search" animate>
+              <OakSidebar label="Search" icon="search" animate>
                 Search content goes here
-              </Sidebar>
+              </OakSidebar>
             </div>
           </div>
-        </View>
-      </ViewResolver>
+        </OakView>
+      </OakViewResolver>
     </div>
   );
 };

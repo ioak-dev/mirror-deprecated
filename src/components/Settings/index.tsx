@@ -5,9 +5,9 @@ import { sendMessage } from '../../events/MessageService';
 import OakText from '../../oakui/OakText';
 import { getTenant } from '../Tenant/TenantService';
 import { Authorization } from '../Types/GeneralTypes';
-import ViewResolver from '../../oakui/ViewResolver';
-import View from '../../oakui/View';
-import Sidebar from '../../oakui/Sidebar';
+import OakViewResolver from '../../oakui/OakViewResolver';
+import OakView from '../../oakui/OakView';
+import OakSidebar from '../../oakui/OakSidebar';
 import Stages from '../Stages/index';
 
 interface Props {
@@ -102,8 +102,8 @@ const Settings = (props: Props) => {
 
   return (
     <div className="settings">
-      <ViewResolver sideLabel="More options">
-        <View main>
+      <OakViewResolver sideLabel="More options">
+        <OakView main>
           {data.section === 'tenantProfile' && (
             <>
               <div className="typography-3 space-bottom-2">Tenant Profile</div>
@@ -157,17 +157,17 @@ const Settings = (props: Props) => {
               </div>
             </>
           )}
-        </View>
-        <View side>
+        </OakView>
+        <OakView side>
           <div className="filter-container">
             <div className="section-main">
-              <Sidebar
+              <OakSidebar
                 label="Tenant"
                 elements={sidebarElements.tenant}
                 icon="home"
                 animate
               />
-              <Sidebar
+              <OakSidebar
                 label="My Profile"
                 elements={sidebarElements.myProfile}
                 icon="account_circle"
@@ -175,8 +175,8 @@ const Settings = (props: Props) => {
               />
             </div>
           </div>
-        </View>
-      </ViewResolver>
+        </OakView>
+      </OakViewResolver>
     </div>
   );
 };

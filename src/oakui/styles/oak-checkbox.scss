@@ -27,7 +27,7 @@
   }
 
   .container {
-    .checkbox input[type="checkbox"] {
+    .checkbox input[type='checkbox'] {
       opacity: 0;
     }
 
@@ -43,7 +43,7 @@
     .checkbox label::before,
     .checkbox label::after {
       position: absolute;
-      content: "";
+      content: '';
 
       /*Needed for the line-height to take effect*/
       display: inline-block;
@@ -51,7 +51,7 @@
     }
 
     /*Outer box of the fake checkbox*/
-    .checkbox label::before{
+    .checkbox label::before {
       border-radius: var(--ocb-variant-radius);
       height: 20px;
       width: 20px;
@@ -80,22 +80,22 @@
     }
 
     /*Hide the checkmark by default*/
-    .checkbox input[type="checkbox"] + label::after {
+    .checkbox input[type='checkbox'] + label::after {
       content: none;
     }
 
     /*Unhide on the checked state*/
-    .checkbox input[type="checkbox"]:checked + label::after {
-      content: "";
+    .checkbox input[type='checkbox']:checked + label::after {
+      content: '';
       color: var(--color-body);
     }
 
     /*Adding focus styles on the outer-box of the fake checkbox*/
-    .checkbox input[type="checkbox"]:focus + label::before {
+    .checkbox input[type='checkbox']:focus + label::before {
       // outline: rgb(59, 153, 252) auto 5px;
     }
 
-    .checkbox input[type="checkbox"]:checked + label::before {
+    .checkbox input[type='checkbox']:checked + label::before {
       // outline: rgb(59, 153, 252) auto 5px;
       background-color: var(--ocb-theme-bg);
       border: 1.5px solid var(--ocb-theme-bg);

@@ -1,5 +1,5 @@
 import React from 'react';
-import './oak-text-slide.scss';
+import './styles/oak-text-slide.scss';
 
 interface Props {
   label: string;

@@ -4,11 +4,11 @@ import './style.scss';
 import ArticleItem from './ArticleItem';
 import OakDialog from '../../oakui/OakDialog';
 import OakSelect from '../../oakui/OakSelect';
-import ViewResolver from '../../oakui/ViewResolver';
-import View from '../../oakui/View';
+import OakViewResolver from '../../oakui/OakViewResolver';
+import OakView from '../../oakui/OakView';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
-import Sidebar from '../../oakui/Sidebar';
+import OakSidebar from '../../oakui/OakSidebar';
 import OakPagination from '../../oakui/OakPagination';
 import OakPrompt from '../../oakui/OakPrompt';
 import OakText from '../../oakui/OakText';
@@ -273,31 +273,31 @@ const ArticleController = (props: Props) => {
         toggleVisibility={() => setDeleteDialogOpen(!deleteDialogOpen)}
       />
 
-      <ViewResolver sideLabel="More options">
-        <View main>
+      <OakViewResolver sideLabel="More options">
+        <OakView main>
           <OakPagination
             totalRows={props.article.items.length}
             onChangePage={onChangePage}
             label="Items per page"
           />
           {listview}
-        </View>
-        <View side>
+        </OakView>
+        <OakView side>
           <div className="filter-container">
             <div className="section-main">
-              <Sidebar
+              <OakSidebar
                 label="Article"
                 elements={sidebarElements.article}
                 icon="add"
                 animate
               />
-              <Sidebar label="Search" icon="search" animate>
+              <OakSidebar label="Search" icon="search" animate>
                 Search content goes here
-              </Sidebar>
+              </OakSidebar>
             </div>
           </div>
-        </View>
-      </ViewResolver>
+        </OakView>
+      </OakViewResolver>
     </div>
   );
 };
