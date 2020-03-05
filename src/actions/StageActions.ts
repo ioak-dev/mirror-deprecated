@@ -3,7 +3,7 @@ import constants from '../components/Constants';
 import { FETCH_STAGE } from './types';
 import { sendMessage } from '../events/MessageService';
 
-const domain = 'stages';
+const domain = 'stage';
 
 export const fetchStage = (tenant, authorization) => dispatch => {
   httpGet(`${constants.API_URL_STAGE}/${tenant}/`, {
@@ -39,7 +39,7 @@ export const saveStage = (tenant, authorization, payload) => dispatch => {
 };
 
 export const deleteStage = (tenant, authorization, id) => dispatch => {
-  httpDelete(`${constants.API_URL_FAQ}/${tenant}/${id}`, {
+  httpDelete(`${constants.API_URL_STAGE}/${tenant}/${id}`, {
     headers: {
       Authorization: authorization.token,
     },
