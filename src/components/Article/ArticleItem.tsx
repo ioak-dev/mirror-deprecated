@@ -4,7 +4,6 @@ import './style.scss';
 interface Props {
   editArticle: Function;
   confirmDeleteFaq: Function;
-  search: Function;
   article: any;
   id: string;
 }
@@ -34,13 +33,6 @@ const ArticleItem = (props: Props) => {
         <div className="item-content">
           <div className="title typography-4">{props.article.question}</div>
           <div className="typography-6">{props.article.answer}</div>
-          <div
-            className="tag"
-            key={props.article.category}
-            onClick={() => props.search(props.article.category)}
-          >
-            {props.article.category}
-          </div>
         </div>
       </div>
     </div>
