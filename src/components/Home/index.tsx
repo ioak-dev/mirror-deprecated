@@ -209,7 +209,7 @@ export default class Home extends React.Component<Props, State> {
       title: this.state.searchTitle,
       description: this.state.searchDescription,
       priority: 'Low',
-      stage: stage[0].name,
+      stage: stage[0]._id,
       status: 'assigned',
     };
     if (isEmptyOrSpaces(request.title)) {

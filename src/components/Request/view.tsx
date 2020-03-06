@@ -101,7 +101,7 @@ const ServiceRequestView = (props: Props) => {
       props.stages &&
       props.stages.length > 0
     ) {
-      const index = props.stages.findIndex(x => x.name === props.request.stage);
+      const index = props.stages.findIndex(x => x._id === props.request.stage);
       if (props.stages.length > index + 1) {
         return props.stages[index + 1].name;
       }
@@ -163,8 +163,8 @@ const ServiceRequestView = (props: Props) => {
           description: data.request.description,
           priority: data.request.priority,
           updateTime: new Date().toLocaleString(),
-          stage,
-          previousStage: props.stages[index - 1].name,
+          stage: props.stages[index]._id,
+          previousStage: props.stages[index - 1]._id,
           assignedTo: props.match.params.tenant,
         },
         true
