@@ -46,13 +46,12 @@ const Request = (props: Props) => {
   const [newDialogOpen, setNewDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState({});
+  const [searchCriteria, setSearchCriteria] = useState('');
   const [data, setData] = useState({
     title: '',
     description: '',
-    searchCriteria: '',
   });
   const [view, setView] = useState<undefined | any[]>([{}]);
-  const [items, setItems] = useState<undefined | any[]>([{}]);
 
   useEffect(() => {
     const eventBus = receiveMessage().subscribe(message => {
@@ -87,10 +86,7 @@ const Request = (props: Props) => {
   }, [props.authorization.isAuth]);
 
   useEffect(() => {
-    const stageList: any[] = [];
-    props.stage?.data.forEach(stageData => {
-      stageList.push(stageData.name);
-    });
+    const stageList = findStage();
     const list: any[] = [];
     props.request.items.forEach(item => {
       const index = props.stage.data.findIndex(x => x._id === item.stage);
@@ -139,9 +135,23 @@ const Request = (props: Props) => {
         ),
       });
     });
-    setItems(list);
     setView(list);
   }, [props.request.items, props.stage?.data]);
+
+  useEffect(() => {
+    const result = searchCriteria
+      ? view?.filter(item => item.title.toLowerCase().includes(searchCriteria))
+      : props.request.items;
+    setView(result);
+  }, [props.request.items, searchCriteria]);
+
+  const findStage = () => {
+    const stageList: any[] = [];
+    props.stage?.data.forEach(stageData => {
+      stageList.push(stageData.name);
+    });
+    return stageList;
+  };
 
   const toggleNewDialog = () => {
     setNewDialogOpen(!newDialogOpen);
@@ -199,13 +209,8 @@ const Request = (props: Props) => {
     setData({ ...data, [event.target.name]: event.target.value });
   };
 
-  const find = event => {
-    setView(
-      items?.filter(
-        item => item.title.toLowerCase().indexOf(event.target.value) !== -1
-      )
-    );
-    setData({ ...data, searchCriteria: event.target.value });
+  const handleSearchCriteriaChange = event => {
+    setSearchCriteria(event.target.value);
   };
 
   return (
@@ -280,12 +285,17 @@ const Request = (props: Props) => {
               <OakText
                 label="Search"
                 data={data}
-                handleChange={find}
+                handleChange={handleSearchCriteriaChange}
                 id="searchCriteria"
               />
             </div>
             <div className="clear">
-              <OakButton theme="default" variant="block" icon="clear" />
+              <OakButton
+                action={() => setSearchCriteria('')}
+                theme="default"
+                variant="block"
+                icon="clear"
+              />
             </div>
           </div>
           <OakTable

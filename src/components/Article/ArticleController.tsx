@@ -35,16 +35,15 @@ const domain = 'article';
 const ArticleController = (props: Props) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [searchCriteria, setSearchCriteria] = useState('');
   const [data, setData] = useState({
     id: undefined,
     category: '',
     question: '',
     answer: '',
     newCategory: '',
-    searchCriteria: '',
   });
   const [items, setItems] = useState<undefined | any[]>([{}]);
-  const [list, setList] = useState<undefined | any[]>([{}]);
   const [paginationPref, setPaginationPref] = useState({
     pageNo: 1,
     rowsPerPage: 6,
@@ -87,15 +86,23 @@ const ArticleController = (props: Props) => {
         question: '',
         answer: '',
         newCategory: '',
-        searchCriteria: '',
       });
     }
   }, [editDialogOpen]);
 
   useEffect(() => {
-    setList(props.article.items);
     setItems(props.article.items);
   }, [props.article.items]);
+
+  useEffect(() => {
+    const result = searchCriteria
+      ? props.article.items.filter(
+          item => item.question.toLowerCase().indexOf(searchCriteria) !== -1
+        )
+      : props.article.items;
+    setItems(result);
+  }, [props.article.items, searchCriteria]);
+
   const editArticle = article => {
     let categoryName = data.category;
     if (categoryName === '<create new>') {
@@ -108,7 +115,6 @@ const ArticleController = (props: Props) => {
       question: article.question,
       answer: article.answer,
       newCategory: '',
-      searchCriteria: '',
     });
   };
 
@@ -178,18 +184,13 @@ const ArticleController = (props: Props) => {
     });
   };
 
-  const find = event => {
-    setList(
-      items?.filter(
-        item => item.question.toLowerCase().indexOf(event.target.value) !== -1
-      )
-    );
-    setData({ ...data, searchCriteria: event.target.value });
+  const handleSearchCriteriaChange = event => {
+    setSearchCriteria(event.target.value);
   };
 
   let view: any[] = [];
-  if (list) {
-    view = list.slice(
+  if (items) {
+    view = items.slice(
       (paginationPref.pageNo - 1) * paginationPref.rowsPerPage,
       paginationPref.pageNo * paginationPref.rowsPerPage
     );
@@ -289,13 +290,18 @@ const ArticleController = (props: Props) => {
             <div>
               <OakText
                 label="Search"
-                data={data}
-                handleChange={find}
+                data={searchCriteria}
+                handleChange={handleSearchCriteriaChange}
                 id="searchCriteria"
               />
             </div>
             <div className="clear">
-              <OakButton theme="default" variant="block" icon="clear" />
+              <OakButton
+                action={() => setSearchCriteria('')}
+                theme="default"
+                variant="block"
+                icon="clear"
+              />
             </div>
           </div>
           <OakPagination
