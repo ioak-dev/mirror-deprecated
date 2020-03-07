@@ -8,7 +8,6 @@ import OakViewResolver from '../../oakui/OakViewResolver';
 import OakView from '../../oakui/OakView';
 import { isEmptyOrSpaces } from '../Utils';
 import { sendMessage, receiveMessage } from '../../events/MessageService';
-import OakSidebar from '../../oakui/OakSidebar';
 import OakPagination from '../../oakui/OakPagination';
 import OakPrompt from '../../oakui/OakPrompt';
 import OakText from '../../oakui/OakText';
@@ -34,18 +33,9 @@ interface Props {
 const domain = 'article';
 
 const ArticleController = (props: Props) => {
-  const sidebarElements = {
-    article: [
-      {
-        label: 'New article',
-        action: () => setEditDialogOpen(!editDialogOpen),
-        icon: 'add',
-      },
-    ],
-  };
-
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [searchCriteria, setSearchCriteria] = useState('');
   const [data, setData] = useState({
     id: undefined,
     category: '',
@@ -53,7 +43,7 @@ const ArticleController = (props: Props) => {
     answer: '',
     newCategory: '',
   });
-
+  const [items, setItems] = useState<undefined | any[]>([{}]);
   const [paginationPref, setPaginationPref] = useState({
     pageNo: 1,
     rowsPerPage: 6,
@@ -100,6 +90,15 @@ const ArticleController = (props: Props) => {
     }
   }, [editDialogOpen]);
 
+  useEffect(() => {
+    const result = searchCriteria
+      ? props.article.items.filter(
+          item => item.question.toLowerCase().indexOf(searchCriteria) !== -1
+        )
+      : props.article.items;
+    setItems(result);
+  }, [props.article.items, searchCriteria]);
+
   const editArticle = article => {
     let categoryName = data.category;
     if (categoryName === '<create new>') {
@@ -129,10 +128,6 @@ const ArticleController = (props: Props) => {
       props.authorization,
       data.id
     );
-  };
-
-  const searchByWord = faqName => {
-    console.log('not implemented');
   };
 
   const addArticle = () => {
@@ -185,9 +180,13 @@ const ArticleController = (props: Props) => {
     });
   };
 
+  const handleSearchCriteriaChange = event => {
+    setSearchCriteria(event.target.value);
+  };
+
   let view: any[] = [];
-  if (props.article.items) {
-    view = props.article.items.slice(
+  if (items) {
+    view = items.slice(
       (paginationPref.pageNo - 1) * paginationPref.rowsPerPage,
       paginationPref.pageNo * paginationPref.rowsPerPage
     );
@@ -199,7 +198,6 @@ const ArticleController = (props: Props) => {
         article={item}
         editArticle={editArticle}
         confirmDeleteFaq={() => confirmDeleteFaq(item._id)}
-        search={() => searchByWord(item._id)}
       />
       <br />
     </div>
@@ -275,27 +273,39 @@ const ArticleController = (props: Props) => {
 
       <OakViewResolver sideLabel="More options">
         <OakView main>
+          <OakButton
+            action={() => setEditDialogOpen(!editDialogOpen)}
+            theme="primary"
+            variant="animate out"
+            align="right"
+          >
+            <i className="material-icons">double_arrow</i>New Request
+          </OakButton>
+          <div className="search-bar">
+            <div />
+            <div>
+              <OakText
+                label="Search"
+                data={searchCriteria}
+                handleChange={handleSearchCriteriaChange}
+                id="searchCriteria"
+              />
+            </div>
+            <div className="clear">
+              <OakButton
+                action={() => setSearchCriteria('')}
+                theme="default"
+                variant="block"
+                icon="clear"
+              />
+            </div>
+          </div>
           <OakPagination
             totalRows={props.article.items.length}
             onChangePage={onChangePage}
             label="Items per page"
           />
           {listview}
-        </OakView>
-        <OakView side>
-          <div className="filter-container">
-            <div className="section-main">
-              <OakSidebar
-                label="Article"
-                elements={sidebarElements.article}
-                icon="add"
-                animate
-              />
-              <OakSidebar label="Search" icon="search" animate>
-                Search content goes here
-              </OakSidebar>
-            </div>
-          </div>
         </OakView>
       </OakViewResolver>
     </div>

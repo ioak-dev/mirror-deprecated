@@ -2,20 +2,21 @@ import React from 'react';
 import './style.scss';
 
 interface Props {
-  editArticle: Function;
-  confirmDeleteFaq: Function;
-  article: any;
+  editStage: Function;
+  confirmDeleteStage: Function;
+  stage: any;
   id: string;
+  index: number;
 }
 
-const ArticleItem = (props: Props) => {
+const StageItem = (props: Props) => {
   return (
-    <div className="article-record">
+    <div className="stage-record">
       <div className="item-container">
         <div className="item-actions">
           <div className="item-edit">
             <i
-              onClick={() => props.editArticle(props.article)}
+              onClick={() => props.editStage(props.stage)}
               className="material-icons"
             >
               edit
@@ -23,7 +24,7 @@ const ArticleItem = (props: Props) => {
           </div>
           <div className="item-delete">
             <i
-              onClick={() => props.confirmDeleteFaq(props.article._id)}
+              onClick={() => props.confirmDeleteStage(props.stage._id)}
               className="material-icons"
             >
               delete
@@ -31,12 +32,12 @@ const ArticleItem = (props: Props) => {
           </div>
         </div>
         <div className="item-content">
-          <div className="title typography-4">{props.article.question}</div>
-          <div className="typography-6">{props.article.answer}</div>
+          <div className="title typography-6">Stage {props.index + 1} : </div>
+          <div className="title typography-4">{props.stage.name}</div>
         </div>
       </div>
     </div>
   );
 };
 
-export default ArticleItem;
+export default StageItem;
