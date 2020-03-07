@@ -84,7 +84,7 @@ const StageController = (props: Props) => {
   };
 
   const confirmDeleteStage = id => {
-    if (Object.keys(data).length <= 1) {
+    if (Object.keys(data).length === 1) {
       setDeleteDialogOpen(false);
       return;
     }

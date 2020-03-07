@@ -8,7 +8,7 @@ import { Authorization } from '../Types/GeneralTypes';
 import OakViewResolver from '../../oakui/OakViewResolver';
 import OakView from '../../oakui/OakView';
 import OakSidebar from '../../oakui/OakSidebar';
-import StagesController from '../Stages/StagesController';
+import StageController from '../Stages/StageController';
 
 interface Props {
   match: any;
@@ -140,7 +140,7 @@ const Settings = (props: Props) => {
 
           {data.section === 'stage' && (
             <div className="stage">
-              <StagesController
+              <StageController
                 match={props.match}
                 authorization={props.authorization}
               />

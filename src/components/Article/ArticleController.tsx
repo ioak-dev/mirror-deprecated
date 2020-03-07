@@ -91,10 +91,6 @@ const ArticleController = (props: Props) => {
   }, [editDialogOpen]);
 
   useEffect(() => {
-    setItems(props.article.items);
-  }, [props.article.items]);
-
-  useEffect(() => {
     const result = searchCriteria
       ? props.article.items.filter(
           item => item.question.toLowerCase().indexOf(searchCriteria) !== -1
