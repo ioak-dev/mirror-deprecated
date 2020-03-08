@@ -141,6 +141,7 @@ const ServiceRequestView = (props: Props) => {
   };
 
   const saveRequest = () => {
+    let localStage: any;
     props.saveRequest(
       {
         id: data.request._id,
@@ -148,6 +149,8 @@ const ServiceRequestView = (props: Props) => {
         description: data.request.description,
         priority: data.request.priority,
         assignedTo: props.match.params.tenant,
+        stage: localStage ? props.request.stage : props.request.previousStage,
+        previousStage: localStage ? props.request.previousStage : '',
       },
       true
     );
@@ -170,6 +173,37 @@ const ServiceRequestView = (props: Props) => {
         true
       );
     }
+  };
+
+  const resolveRequest = () => {
+    props.saveRequest(
+      {
+        id: data.request._id,
+        title: data.request.title,
+        description: data.request.description,
+        priority: data.request.priority,
+        updateTime: new Date().toLocaleString(),
+        status: 'resolved',
+        assignedTo: props.match.params.tenant,
+      },
+      true
+    );
+  };
+
+  const assignToUser = () => {
+    props.saveRequest(
+      {
+        id: data.request._id,
+        title: data.request.title,
+        description: data.request.description,
+        priority: data.request.priority,
+        updateTime: new Date().toLocaleString(),
+        stage: '',
+        previousStage: props.request.stage,
+        assignedTo: props.match.params.tenant,
+      },
+      true
+    );
   };
 
   const newLogSection = (
@@ -283,28 +317,50 @@ const ServiceRequestView = (props: Props) => {
             ))}
           {props.requestLog.logs.length > 10 && newLogSection}
         </div>
-        <div className="dialog-footer">
-          {data.nextStage && (
+        {!(props.request.status === Object('Resolved')) && (
+          <div className="dialog-footer">
+            {data.nextStage && (
+              <OakButton
+                theme="primary"
+                variant="outline"
+                align="left"
+                icon="person_add"
+                action={() => nextStage(data.nextStage)}
+              >
+                Assign to {data.nextStage}
+              </OakButton>
+            )}
+            {props.request.stage && (
+              <OakButton
+                theme="primary"
+                variant="outline"
+                align="right"
+                icon="person_add"
+                action={() => assignToUser()}
+              >
+                Assign to User
+              </OakButton>
+            )}
             <OakButton
               theme="primary"
               variant="outline"
-              align="left"
-              icon="person_add"
-              action={() => nextStage(data.nextStage)}
+              align="right"
+              icon="save"
+              action={saveRequest}
             >
-              Assign to {data.nextStage}
+              Save Changes
             </OakButton>
-          )}
-          <OakButton
-            theme="primary"
-            variant="outline"
-            align="right"
-            icon="save"
-            action={saveRequest}
-          >
-            Save Changes
-          </OakButton>
-        </div>
+            <OakButton
+              theme="primary"
+              variant="outline"
+              align="right"
+              icon="save"
+              action={resolveRequest}
+            >
+              Resolve Request
+            </OakButton>
+          </div>
+        )}
       </OakDialog>
     </div>
   );

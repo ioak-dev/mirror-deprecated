@@ -82,6 +82,7 @@ const Request = (props: Props) => {
   useEffect(() => {
     if (props.authorization.isAuth) {
       props.fetchRequest(props.match.params.tenant, props.authorization);
+      props.fetchStage(props.match.params.tenant, props.authorization);
     }
   }, [props.authorization.isAuth]);
 
@@ -89,17 +90,17 @@ const Request = (props: Props) => {
     const stageList = findStage();
     const list: any[] = [];
     props.request.items.forEach(item => {
-      const index = props.stage.data.findIndex(x => x._id === item.stage);
-      if (item.status === 'assigned') {
+      if (item.status === 'assigned' && item.stage) {
+        const index = props.stage.data.findIndex(x => x._id === item.stage);
         item.status = (
           <div className="tag-2">
             <span>{`Assigned_to_${stageList[index]}`}</span>
           </div>
         );
-      } else if (item.status === 'progress') {
+      } else if (item.status === 'assigned' && !item.stage) {
         item.status = (
           <div className="tag-4">
-            <span>{`In_progress_with ${stageList[index]}`}</span>
+            <span>{`Assigned_to ${item.createdBy}`}</span>
           </div>
         );
       } else if (item.status === 'resolved') {
@@ -135,8 +136,9 @@ const Request = (props: Props) => {
         ),
       });
     });
+    console.log(list);
     setView(list);
-  }, [props.request.items, props.stage?.data]);
+  }, [props.request.items, props.stage.data]);
 
   useEffect(() => {
     const result = searchCriteria
