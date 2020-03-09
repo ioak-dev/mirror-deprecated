@@ -16,6 +16,7 @@ const StageItem = (props: Props) => {
         <div className="item-actions">
           <div className="item-edit">
             <i
+              data-test="stage-edit"
               onClick={() => props.editStage(props.stage)}
               className="material-icons"
             >
@@ -24,6 +25,7 @@ const StageItem = (props: Props) => {
           </div>
           <div className="item-delete">
             <i
+              data-test="stage-delete"
               onClick={() => props.confirmDeleteStage(props.stage._id)}
               className="material-icons"
             >

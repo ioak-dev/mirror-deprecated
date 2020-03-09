@@ -15,6 +15,7 @@ const ArticleItem = (props: Props) => {
         <div className="item-actions">
           <div className="item-edit">
             <i
+              data-test="article-edit"
               onClick={() => props.editArticle(props.article)}
               className="material-icons"
             >
@@ -23,6 +24,7 @@ const ArticleItem = (props: Props) => {
           </div>
           <div className="item-delete">
             <i
+              data-test="article-delete"
               onClick={() => props.confirmDeleteFaq(props.article._id)}
               className="material-icons"
             >
