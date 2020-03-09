@@ -1,19 +1,18 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './style.scss';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 
 const Notification = () => {
   const [spinner, setSpinner] = useState(false);
-  const [notification, setNotification] = useState<null | {
-    type: string;
-    message: string;
-  }>(null);
+  const [notification, setNotification] = useState<
+    { type?: string; message?: any } | undefined
+  >(undefined);
 
   useEffect(() => {
     const eventBus = receiveMessage().subscribe(message => {
       if (message.name === 'notification') {
         if (!message.signal) {
-          setNotification(null);
+          setNotification(undefined);
         } else {
           setNotification(message.data);
           setSpinner(false);
@@ -40,7 +39,7 @@ const Notification = () => {
           <div className="message">{notification?.message}</div>
         </div>
       )}
-      {spinner && <div className="lds-dual-ring" />}
+      {spinner && <div data-test="spinner" className="lds-dual-ring" />}
     </>
   );
 };
