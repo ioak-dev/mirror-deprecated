@@ -32,9 +32,8 @@ const UserAdministration = (props: Props) => {
     pageNo: 1,
     rowsPerPage: 6,
   });
-  const [data, setData] = useState({
-    searchCriteria: '',
-  });
+
+  const [searchCriteria, setSearchCriteria] = useState('');
   const [items, setItems] = useState<undefined | any[]>([{}]);
   const [view, setView] = useState<undefined | any[]>([{}]);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -75,6 +74,8 @@ const UserAdministration = (props: Props) => {
   useEffect(() => {
     const list: any[] = [];
     props.user.users.forEach(item => {
+      const roleList = findRole(item.roles);
+      item.roles = roleList;
       list.push({
         ...item,
         action: (
@@ -86,23 +87,36 @@ const UserAdministration = (props: Props) => {
               action={() => openUser(item)}
               icon="open_in_new"
             />
-            {item.status === 'resolved' && (
-              <OakButton
-                theme="default"
-                variant="block"
-                align="right"
-                action=""
-              >
-                <i className="material-icons">archive</i>
-              </OakButton>
-            )}
           </>
         ),
       });
     });
     setItems(list);
     setView(list);
-  }, [props.user]);
+  }, [props.user.users]);
+
+  useEffect(() => {
+    const result = searchCriteria
+      ? props.user.users.filter(
+          item => item.email.toLowerCase().indexOf(searchCriteria) !== -1
+        )
+      : items;
+    setView(result);
+  }, [props.user, props.stage.data, searchCriteria]);
+
+  const findRole = roles => {
+    const stageList: any[] = [];
+    const roleList: any[] = [];
+    let index = 0;
+    props.stage?.data.forEach(stageData => {
+      stageList.push(stageData.name);
+    });
+    roles.forEach(item => {
+      index = props.stage?.data.findIndex(x => x._id === item);
+      roleList.push(index >= 0 ? stageList[index] : item);
+    });
+    return roleList;
+  };
 
   const initializeRequest = () => {
     props.fetchAllUsers(props.match.params.tenant, props.authorization);
@@ -127,17 +141,11 @@ const UserAdministration = (props: Props) => {
       });
       return;
     }
-
     props.saveUser(props.match.params.tenant, props.authorization, user);
   };
 
-  const find = event => {
-    setView(
-      items?.filter(
-        item => item.email.toLowerCase().indexOf(event.target.value) !== -1
-      )
-    );
-    setData({ ...data, searchCriteria: event.target.value });
+  const handleSearchCriteriaChange = event => {
+    setSearchCriteria(event.target.value);
   };
 
   return (
@@ -157,8 +165,8 @@ const UserAdministration = (props: Props) => {
             <div>
               <OakText
                 label="Search"
-                data={data}
-                handleChange={find}
+                data={searchCriteria}
+                handleChange={handleSearchCriteriaChange}
                 id="searchCriteria"
               />
             </div>

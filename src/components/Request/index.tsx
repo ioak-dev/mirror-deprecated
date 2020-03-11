@@ -136,7 +136,6 @@ const Request = (props: Props) => {
         ),
       });
     });
-    console.log(list);
     setView(list);
   }, [props.request.items, props.stage.data]);
 
