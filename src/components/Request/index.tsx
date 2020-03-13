@@ -277,8 +277,9 @@ const Request = (props: Props) => {
             theme="primary"
             variant="animate out"
             align="right"
+            icon="double_arrow"
           >
-            <i className="material-icons">double_arrow</i>New Request
+            New Request
           </OakButton>
           <div className="search-bar">
             <div />

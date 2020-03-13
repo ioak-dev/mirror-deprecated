@@ -106,6 +106,7 @@ const Navigation = (props: Props) => {
         login={login}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
+        toggleDarkMode={toggleDarkMode}
       />
       <Mobile
         {...props}
@@ -113,6 +114,7 @@ const Navigation = (props: Props) => {
         login={login}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
+        toggleDarkMode={toggleDarkMode}
       />
     </div>
   );

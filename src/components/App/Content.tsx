@@ -112,7 +112,9 @@ const Content = (props: Props) => {
   };
 
   return (
-    <div className="App">
+    <div
+      className={`App ${props.profile.theme} ${props.profile.textSize} ${props.profile.themeColor}`}
+    >
       <HashRouter>
         <AuthInit />
         <Backdrop />

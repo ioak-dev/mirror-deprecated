@@ -17,6 +17,7 @@ interface Props {
   removeAuth: Function;
   authorization: Authorization;
   getProfile: Function;
+  toggleDarkMode: Function;
   profile: Profile;
   login: Function;
   transparent: boolean;
@@ -61,7 +62,7 @@ const Mobile = (props: Props) => {
           {!data.showSearchBar &&
             !props.transparent &&
             props.profile.theme === 'theme_light' && (
-              <img className="logo" src={mirrorWhite} alt="Mirror logo" />
+              <img className="logo" src={mirrorBlack} alt="Mirror logo" />
             )}
           {!data.showSearchBar &&
             (props.transparent || props.profile.theme === 'theme_dark') && (
@@ -104,18 +105,12 @@ const Mobile = (props: Props) => {
                     </div> */}
             <div className="buttons">
               {props.authorization.isAuth && (
-                <OakButton
-                  invert
-                  variant="animate in"
-                  small
-                  action={props.logout()}
-                >
+                <OakButton variant="animate in" small action={props.logout()}>
                   <i className="material-icons">power_settings_new</i>Logout
                 </OakButton>
               )}
               {!props.authorization.isAuth && (
                 <OakButton
-                  invert
                   variant="animate in"
                   small
                   action={() => signin('signin')}
@@ -125,7 +120,6 @@ const Mobile = (props: Props) => {
               )}
               {!props.authorization.isAuth && (
                 <OakButton
-                  invert
                   variant="animate in"
                   small
                   action={() => signin('signup')}
@@ -136,6 +130,14 @@ const Mobile = (props: Props) => {
             </div>
           </div>
           <Links authorization={props.authorization} profile={props.profile} />
+          <div className="dark-mode">
+            <i
+              className="material-icons"
+              onClick={() => props.toggleDarkMode()}
+            >
+              brightness_6
+            </i>
+          </div>
         </div>
       </div>
     </>

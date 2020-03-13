@@ -17,6 +17,7 @@ interface Props {
   removeAuth: Function;
   authorization: Authorization;
   getProfile: Function;
+  toggleDarkMode: Function;
   profile: Profile;
   login: Function;
   transparent: boolean;
@@ -51,21 +52,25 @@ const Desktop = (props: Props) => {
     >
       <div className="left">
         {!props.transparent && props.profile.theme === 'theme_light' && (
-          <img className="logo" src={mirrorWhite} alt="Curate logo" />
+          <img className="logo" src={mirrorBlack} alt="Mirror logo" />
         )}
         {(props.transparent || props.profile.theme === 'theme_dark') && (
-          <img className="logo" src={mirrorWhite} alt="Curate logo" />
+          <img className="logo" src={mirrorWhite} alt="Mirror logo" />
         )}
         <Links authorization={props.authorization} profile={props.profile} />
         {showSearchBar && <SearchBar alt />}
       </div>
       <div className="right">
+        <div className="dark-mode">
+          <i className="material-icons" onClick={() => props.toggleDarkMode()}>
+            brightness_6
+          </i>
+        </div>
         <div className="action">
           {props.authorization.isAuth && (
             <OakButton
               theme="primary"
               variant="animate out"
-              invert
               small
               action={props.logout()}
             >
@@ -76,7 +81,6 @@ const Desktop = (props: Props) => {
             <OakButton
               theme="primary"
               variant="animate in"
-              invert
               align="left"
               small
               action={() => signin('signin')}
@@ -88,7 +92,6 @@ const Desktop = (props: Props) => {
             <OakButton
               theme="primary"
               variant="animate in"
-              invert
               align="right"
               small
               action={() => signin('signup')}
