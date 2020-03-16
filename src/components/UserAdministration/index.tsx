@@ -33,7 +33,7 @@ const UserAdministration = (props: Props) => {
     rowsPerPage: 6,
   });
 
-  const [searchCriteria, setSearchCriteria] = useState('');
+  const [searchPref, setSearchPref] = useState({ text: '' });
   const [items, setItems] = useState<undefined | any[]>([{}]);
   const [view, setView] = useState<undefined | any[]>([{}]);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -96,13 +96,15 @@ const UserAdministration = (props: Props) => {
   }, [props.user.users]);
 
   useEffect(() => {
-    const result = searchCriteria
-      ? props.user.users.filter(
-          item => item.email.toLowerCase().indexOf(searchCriteria) !== -1
-        )
+    applySearch();
+  }, [searchPref, items]);
+
+  const applySearch = () => {
+    const result = searchPref.text
+      ? view?.filter(item => item.email.toLowerCase().includes(searchPref.text))
       : items;
     setView(result);
-  }, [props.user, props.stage.data, searchCriteria]);
+  };
 
   const findRole = roles => {
     const stageList: any[] = [];
@@ -133,23 +135,15 @@ const UserAdministration = (props: Props) => {
       return;
     }
 
-    if (user.roles.length === 0) {
-      sendMessage('notification', true, {
-        type: 'failure',
-        message: 'No Roles selected',
-        duration: 5000,
-      });
-      return;
-    }
     props.saveUser(props.match.params.tenant, props.authorization, user);
   };
 
-  const handleSearchCriteriaChange = event => {
-    setSearchCriteria(event.target.value);
+  const handleSearchPref = event => {
+    setSearchPref({ ...searchPref, [event.target.name]: event.target.value });
   };
 
   return (
-    <div className="user-administration boxed">
+    <div className="user-administration">
       <UserAdministrationView
         {...props}
         isDialogOpen={dialogOpen}
@@ -158,20 +152,25 @@ const UserAdministration = (props: Props) => {
         user={selectedUser}
         stages={props.stage.data}
       />
-      <OakViewResolver sideLabel="More options">
+      <OakViewResolver>
         <OakView main>
           <div className="search-bar">
             <div />
             <div>
               <OakText
                 label="Search"
-                data={searchCriteria}
-                handleChange={handleSearchCriteriaChange}
-                id="searchCriteria"
+                data={searchPref}
+                handleChange={handleSearchPref}
+                id="text"
               />
             </div>
             <div className="clear">
-              <OakButton theme="default" variant="block" icon="clear" />
+              <OakButton
+                action={() => setSearchPref({ ...searchPref, text: '' })}
+                theme="default"
+                variant="block"
+                icon="clear"
+              />
             </div>
           </div>
           <OakTable

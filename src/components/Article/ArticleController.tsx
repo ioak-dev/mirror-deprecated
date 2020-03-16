@@ -274,16 +274,7 @@ const ArticleController = (props: Props) => {
 
       <OakViewResolver sideLabel="More options">
         <OakView main>
-          <OakButton
-            action={() => setEditDialogOpen(!editDialogOpen)}
-            theme="primary"
-            variant="animate out"
-            align="right"
-          >
-            <i className="material-icons">double_arrow</i>New Request
-          </OakButton>
           <div className="search-bar">
-            <div />
             <div>
               <OakText
                 label="Search"
@@ -299,6 +290,16 @@ const ArticleController = (props: Props) => {
                 variant="block"
                 icon="clear"
               />
+            </div>
+            <div>
+              <OakButton
+                action={() => setEditDialogOpen(!editDialogOpen)}
+                theme="primary"
+                variant="animate out"
+                align="right"
+              >
+                <i className="material-icons">double_arrow</i>Add New Article
+              </OakButton>
             </div>
           </div>
           <OakPagination
