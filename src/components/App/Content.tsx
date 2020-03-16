@@ -116,7 +116,7 @@ const Content = (props: Props) => {
       className={`App ${props.profile.theme} ${props.profile.textSize} ${props.profile.themeColor}`}
     >
       <HashRouter>
-        <AuthInit />
+        <AuthInit profile={props.profile} />
         <Backdrop />
         <div className="body">
           <div className="body-content">
@@ -130,7 +130,7 @@ const Content = (props: Props) => {
                 )}
               />
               <Route
-                path="/:tenant/login"
+                path="/login"
                 render={(propsLocal: any) => (
                   <Login {...propsLocal} {...props} logout={() => logout} />
                 )}
