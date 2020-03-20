@@ -69,7 +69,7 @@ const ArticleController = (props: Props) => {
     if (props.authorization.isAuth) {
       props.fetchArticle(props.match.params.tenant, props.authorization);
     }
-    console.log(props.match.params.tenant);
+    console.log(props.profile);
     props.setProfile({ ...props.profile, tenant: props.match.params.tenant });
   }, []);
 

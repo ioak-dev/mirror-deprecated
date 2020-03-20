@@ -23,21 +23,12 @@ interface Props {
 }
 
 const Login = (props: Props) => {
-  const [data, setData] = useState({
-    newuser: false,
-    name: '',
-    email: '',
-    password: '',
-    repeatpassword: '',
-    resetCode: '',
-  });
-
   useEffect(() => {
+    console.log('INSIDE LOGIN');
+    props.setProfile({...props.profile, loginPage: true});
+    console.log(props.profile.loginPage);
     if (props.location.search) {
       const query = queryString.parse(props.location.search);
-      if (query && query.type === 'signup') {
-        setData({ ...data, newuser: true });
-      }
       httpGet(
         `/auth/${query.space}/session/${query.authKey}`,
         null,
@@ -64,7 +55,7 @@ const Login = (props: Props) => {
       //   loginViaJwt(query.jwt);
       // }
     }
-    props.setProfile({ ...props.profile, tenant: props.match.params.tenant });
+    // props.setProfile({ ...props.profile, tenant: props.match.params.tenant });
   }, []);
 
   const success = data => {
@@ -74,6 +65,7 @@ const Login = (props: Props) => {
       secret: data.secret,
       name: data.name,
     });
+    props.setProfile({appStatus: 'authenticated'});
     sendMessage('loggedin', true);
     props.cookies.set(`mirror_${data.space}`, data.authKey);
     props.history.push('/');

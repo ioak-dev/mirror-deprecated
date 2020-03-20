@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { Authorization } from '../Types/GeneralTypes';
 import { httpGet } from '../Lib/RestTemplate';
+import { setProfile } from '../../actions/ProfileActions';
 
 interface Props extends ReactCookieProps {
   authorization: Authorization;
@@ -15,6 +16,7 @@ interface Props extends ReactCookieProps {
   removeAuth: Function;
   cookies: any;
   history: any;
+  redirectIfNotAuthenticated: Boolean;
 }
 
 const AuthInit = (props: Props) => {
@@ -33,7 +35,10 @@ const AuthInit = (props: Props) => {
   // }, [props.authorization.isAuth]);
 
   useEffect(() => {
-    if (profile.tenant) {
+    console.log('*******');
+    console.log(profile.appStatus);
+    console.log(profile.tenant);
+    if (profile.appStatus === 'mounted' && profile.tenant) {
       const authKey = props.cookies.get(`mirror_${profile.tenant}`);
       if (authKey) {
         httpGet(
@@ -42,27 +47,24 @@ const AuthInit = (props: Props) => {
           process.env.REACT_APP_ONEAUTH_API_URL
         ).then(sessionResponse => {
           if (sessionResponse.status === 200) {
-            // success({
-            //   token: sessionResponse.data.token,
-            //   secret: '',
-            //   name: 'name',
-            //   email: '',
-            // });
-            props.addAuth({
+            dispatch(addAuth({
               isAuth: true,
               token: sessionResponse.data.token,
               secret: '',
               name: 'name',
-            });
-            props.history.push(`/${profile.tenant}/home`);
+            }));
+            dispatch(setProfile({...profile, appStatus: 'authenticated'}));
           }
         });
-      } else {
-        console.log(props.history);
-        window.location.href = `http://localhost:3010/#/${props.profile.tenant}/login?appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+      } 
+      // else if (props.redirectIfNotAuthenticated) {
+      //   window.location.href = `http://localhost:3010/#/${props.profile.tenant}/login?appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+      // } 
+      else {
+        dispatch(setProfile({...profile, appStatus: 'authenticated'}));
       }
     }
-  }, [profile.tenant]);
+  }, [profile.appStatus]);
 
   return <></>;
 };
