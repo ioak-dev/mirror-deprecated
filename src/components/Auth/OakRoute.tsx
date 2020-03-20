@@ -11,6 +11,10 @@ interface Props {
   getAuth: Function;
   path: string;
   render: any;
+  profile: any;
+  setProfile: Function;
+  getProfile: Function;
+  component: any;
 }
 
 const OakRoute = ({profile: profile, getProfile: getProfile, setProfile: setProfile, component: ChildComponent, ...rest}) => {
