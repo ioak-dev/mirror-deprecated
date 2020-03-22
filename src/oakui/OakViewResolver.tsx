@@ -8,7 +8,7 @@ interface Props {
   children: any;
 }
 
-const OakOakViewResolver = (props: Props) => {
+const OakViewResolver = (props: Props) => {
   const [mobileViewPort, setMobileViewPort] = useState(false);
 
   const [showSide, setShowSide] = useState(false);
@@ -76,7 +76,7 @@ const OakOakViewResolver = (props: Props) => {
               <div>
                 <OakButton
                   theme="default"
-                  variant="disabled"
+                  variant="block"
                   action={toggleSideView}
                 >
                   {!showSide && (
@@ -102,4 +102,4 @@ const OakOakViewResolver = (props: Props) => {
   );
 };
 
-export default OakOakViewResolver;
+export default OakViewResolver;

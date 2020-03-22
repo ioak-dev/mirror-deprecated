@@ -69,6 +69,7 @@ const ArticleController = (props: Props) => {
     if (props.authorization.isAuth) {
       props.fetchArticle(props.match.params.tenant, props.authorization);
     }
+    console.log(props.profile);
     props.setProfile({ ...props.profile, tenant: props.match.params.tenant });
   }, []);
 
@@ -273,16 +274,7 @@ const ArticleController = (props: Props) => {
 
       <OakViewResolver sideLabel="More options">
         <OakView main>
-          <OakButton
-            action={() => setEditDialogOpen(!editDialogOpen)}
-            theme="primary"
-            variant="animate out"
-            align="right"
-          >
-            <i className="material-icons">double_arrow</i>New Request
-          </OakButton>
           <div className="search-bar">
-            <div />
             <div>
               <OakText
                 label="Search"
@@ -298,6 +290,16 @@ const ArticleController = (props: Props) => {
                 variant="block"
                 icon="clear"
               />
+            </div>
+            <div>
+              <OakButton
+                action={() => setEditDialogOpen(!editDialogOpen)}
+                theme="primary"
+                variant="animate out"
+                align="right"
+              >
+                <i className="material-icons">double_arrow</i>Add New Article
+              </OakButton>
             </div>
           </div>
           <OakPagination

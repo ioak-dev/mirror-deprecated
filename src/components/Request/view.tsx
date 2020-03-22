@@ -87,7 +87,13 @@ const ServiceRequestView = (props: Props) => {
     if (
       props.user &&
       props.user.roles &&
-      props.stages.some(r => props.user.roles.indexOf(r.name) >= 0)
+      props.stages.some(r => props.user.roles.indexOf(r._id) >= 0)
+    ) {
+      nextStageToAssign = findNextStage();
+    } else if (
+      props.user &&
+      props.user.roles &&
+      props.stages.some(r => props.user.roles.indexOf(r._id) >= 0)
     ) {
       nextStageToAssign = findNextStage();
     }
@@ -105,9 +111,17 @@ const ServiceRequestView = (props: Props) => {
       if (props.stages.length > index + 1) {
         return props.stages[index + 1].name;
       }
-
       return '';
     }
+    if (!props.request.stage) {
+      const index = props.stages.findIndex(
+        x => x._id === props.request.previousStage
+      );
+      if (props.stages[index]) {
+        return props.stages[index].name;
+      }
+    }
+    return '';
   };
 
   const addLog = () => {
@@ -140,6 +154,21 @@ const ServiceRequestView = (props: Props) => {
     setData({ ...data, [event.target.name]: event.target.value });
   };
 
+  const reOpenRequest = () => {
+    props.saveRequest(
+      {
+        id: data.request._id,
+        title: data.request.title,
+        description: data.request.description,
+        priority: data.request.priority,
+        assignedTo: props.match.params.tenant,
+        previousStage: '',
+        status: 'assigned',
+      },
+      true
+    );
+  };
+
   const saveRequest = () => {
     props.saveRequest(
       {
@@ -148,6 +177,8 @@ const ServiceRequestView = (props: Props) => {
         description: data.request.description,
         priority: data.request.priority,
         assignedTo: props.match.params.tenant,
+        stage: props.request.stage,
+        previousStage: props.request.previousStage,
       },
       true
     );
@@ -155,6 +186,14 @@ const ServiceRequestView = (props: Props) => {
 
   const nextStage = stage => {
     const index = props.stages.findIndex(x => x.name === stage);
+    let previousStage;
+    let status;
+    if (index > 0) {
+      previousStage = props.stages[index - 1]._id;
+    } else {
+      previousStage = '';
+      status = 'assigned';
+    }
     if (props.stages.length > index) {
       props.saveRequest(
         {
@@ -164,7 +203,8 @@ const ServiceRequestView = (props: Props) => {
           priority: data.request.priority,
           updateTime: new Date().toLocaleString(),
           stage: props.stages[index]._id,
-          previousStage: props.stages[index - 1]._id,
+          previousStage,
+          status,
           assignedTo: props.match.params.tenant,
         },
         true
@@ -172,22 +212,54 @@ const ServiceRequestView = (props: Props) => {
     }
   };
 
+  const resolveRequest = () => {
+    props.saveRequest(
+      {
+        id: data.request._id,
+        title: data.request.title,
+        description: data.request.description,
+        priority: data.request.priority,
+        updateTime: new Date().toLocaleString(),
+        status: 'resolved',
+        assignedTo: props.match.params.tenant,
+      },
+      true
+    );
+  };
+
+  const assignToUser = () => {
+    props.saveRequest(
+      {
+        id: data.request._id,
+        title: data.request.title,
+        description: data.request.description,
+        priority: data.request.priority,
+        updateTime: new Date().toLocaleString(),
+        stage: '',
+        previousStage: props.request.stage,
+        assignedTo: props.match.params.tenant,
+      },
+      true
+    );
+  };
+
   const newLogSection = (
     <>
-      {!newLog && (
-        <>
-          <OakButton
-            theme="secondary"
-            variant="animate none"
-            align="right"
-            icon="forum"
-            small
-            action={() => setNewLog(!newLog)}
-          >
-            Add Comment
-          </OakButton>
-        </>
-      )}
+      {!newLog &&
+        !(props.request.status === 'resolved' && props.request.stage) && (
+          <>
+            <OakButton
+              theme="secondary"
+              variant="animate none"
+              align="right"
+              icon="forum"
+              small
+              action={() => setNewLog(!newLog)}
+            >
+              Add Comment
+            </OakButton>
+          </>
+        )}
       {newLog && (
         <>
           <OakText
@@ -283,28 +355,62 @@ const ServiceRequestView = (props: Props) => {
             ))}
           {props.requestLog.logs.length > 10 && newLogSection}
         </div>
-        <div className="dialog-footer">
-          {data.nextStage && (
+        {!(props.request.status === 'resolved') && (
+          <div className="dialog-footer">
+            {data.nextStage && (
+              <OakButton
+                theme="primary"
+                variant="outline"
+                align="left"
+                icon="person_add"
+                action={() => nextStage(data.nextStage)}
+              >
+                Assign to {data.nextStage}
+              </OakButton>
+            )}
+            {props.request.stage && props.user.role === '' && (
+              <OakButton
+                theme="primary"
+                variant="outline"
+                align="right"
+                icon="person_add"
+                action={() => assignToUser()}
+              >
+                Assign to User
+              </OakButton>
+            )}
             <OakButton
               theme="primary"
               variant="outline"
-              align="left"
-              icon="person_add"
-              action={() => nextStage(data.nextStage)}
+              align="right"
+              icon="save"
+              action={saveRequest}
             >
-              Assign to {data.nextStage}
+              Save Changes
             </OakButton>
-          )}
+            <OakButton
+              theme="primary"
+              variant="outline"
+              align="right"
+              icon="save"
+              action={resolveRequest}
+            >
+              Resolve Request
+            </OakButton>
+          </div>
+        )}
+        {props.user.roles}
+        {props.request.status === 'resolved' && !props.user.roles.length && (
           <OakButton
             theme="primary"
             variant="outline"
-            align="right"
-            icon="save"
-            action={saveRequest}
+            align="left"
+            icon="person_add"
+            action={() => reOpenRequest()}
           >
-            Save Changes
+            Reopen the request
           </OakButton>
-        </div>
+        )}
       </OakDialog>
     </div>
   );

@@ -61,7 +61,8 @@ const UserAdministrationView = (props: Props) => {
     });
     Object.keys(data.supportRoles).forEach(item => {
       if (data.supportRoles[item]) {
-        roles.push(item);
+        const index = props.stages.findIndex(x => x.name === item);
+        roles.push(props.stages[index]._id);
       }
     });
 

@@ -91,7 +91,9 @@ const Navigation = (props: Props) => {
   };
 
   const login = type => {
-    props.history.push(`/${props.profile.tenant}/login?type=${type}`);
+    // props.history.push(`/${props.profile.tenant}/login?type=${type}`);
+    // console.log(props.profile.tenant);
+    window.location.href = `http://localhost:3010/#/${props.profile.tenant}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
   };
 
   const toggleSettings = () => {
@@ -106,6 +108,7 @@ const Navigation = (props: Props) => {
         login={login}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
+        toggleDarkMode={toggleDarkMode}
       />
       <Mobile
         {...props}
@@ -113,6 +116,7 @@ const Navigation = (props: Props) => {
         login={login}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
+        toggleDarkMode={toggleDarkMode}
       />
     </div>
   );

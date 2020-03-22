@@ -32,9 +32,8 @@ const UserAdministration = (props: Props) => {
     pageNo: 1,
     rowsPerPage: 6,
   });
-  const [data, setData] = useState({
-    searchCriteria: '',
-  });
+
+  const [searchPref, setSearchPref] = useState({ text: '' });
   const [items, setItems] = useState<undefined | any[]>([{}]);
   const [view, setView] = useState<undefined | any[]>([{}]);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -75,6 +74,8 @@ const UserAdministration = (props: Props) => {
   useEffect(() => {
     const list: any[] = [];
     props.user.users.forEach(item => {
+      const roleList = findRole(item.roles);
+      item.roles = roleList;
       list.push({
         ...item,
         action: (
@@ -86,23 +87,38 @@ const UserAdministration = (props: Props) => {
               action={() => openUser(item)}
               icon="open_in_new"
             />
-            {item.status === 'resolved' && (
-              <OakButton
-                theme="default"
-                variant="block"
-                align="right"
-                action=""
-              >
-                <i className="material-icons">archive</i>
-              </OakButton>
-            )}
           </>
         ),
       });
     });
     setItems(list);
     setView(list);
-  }, [props.user]);
+  }, [props.user.users]);
+
+  useEffect(() => {
+    applySearch();
+  }, [searchPref, items]);
+
+  const applySearch = () => {
+    const result = searchPref.text
+      ? view?.filter(item => item.email.toLowerCase().includes(searchPref.text))
+      : items;
+    setView(result);
+  };
+
+  const findRole = roles => {
+    const stageList: any[] = [];
+    const roleList: any[] = [];
+    let index = 0;
+    props.stage?.data.forEach(stageData => {
+      stageList.push(stageData.name);
+    });
+    roles.forEach(item => {
+      index = props.stage?.data.findIndex(x => x._id === item);
+      roleList.push(index >= 0 ? stageList[index] : item);
+    });
+    return roleList;
+  };
 
   const initializeRequest = () => {
     props.fetchAllUsers(props.match.params.tenant, props.authorization);
@@ -119,29 +135,15 @@ const UserAdministration = (props: Props) => {
       return;
     }
 
-    if (user.roles.length === 0) {
-      sendMessage('notification', true, {
-        type: 'failure',
-        message: 'No Roles selected',
-        duration: 5000,
-      });
-      return;
-    }
-
     props.saveUser(props.match.params.tenant, props.authorization, user);
   };
 
-  const find = event => {
-    setView(
-      items?.filter(
-        item => item.email.toLowerCase().indexOf(event.target.value) !== -1
-      )
-    );
-    setData({ ...data, searchCriteria: event.target.value });
+  const handleSearchPref = event => {
+    setSearchPref({ ...searchPref, [event.target.name]: event.target.value });
   };
 
   return (
-    <div className="user-administration boxed">
+    <div className="user-administration">
       <UserAdministrationView
         {...props}
         isDialogOpen={dialogOpen}
@@ -150,20 +152,25 @@ const UserAdministration = (props: Props) => {
         user={selectedUser}
         stages={props.stage.data}
       />
-      <OakViewResolver sideLabel="More options">
+      <OakViewResolver>
         <OakView main>
           <div className="search-bar">
             <div />
             <div>
               <OakText
                 label="Search"
-                data={data}
-                handleChange={find}
-                id="searchCriteria"
+                data={searchPref}
+                handleChange={handleSearchPref}
+                id="text"
               />
             </div>
             <div className="clear">
-              <OakButton theme="default" variant="block" icon="clear" />
+              <OakButton
+                action={() => setSearchPref({ ...searchPref, text: '' })}
+                theme="default"
+                variant="block"
+                icon="clear"
+              />
             </div>
           </div>
           <OakTable

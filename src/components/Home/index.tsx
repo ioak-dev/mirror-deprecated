@@ -116,7 +116,7 @@ export default class Home extends React.Component<Props, State> {
       requestId: undefined,
     });
     httpPost(
-      `/deeplearning/${this.props.match.params.tenant}${constants.API_URL_PREDICT}`,
+      `/learning/${this.props.match.params.tenant}${constants.API_URL_PREDICT}`,
       searchText,
       {
         headers: {
@@ -129,9 +129,7 @@ export default class Home extends React.Component<Props, State> {
         predictionMap[element.rank] = element.label;
       });
       httpGet(
-        `${constants.API_URL_FAQ}/${this.props.match.params.tenant}/category/${
-          predictionMap[response.data.prediction.length - 1]
-        }`,
+        `${constants.API_URL_FAQ}/${this.props.match.params.tenant}/category/${predictionMap[0]}`,
         {
           headers: {
             Authorization: this.props.authorization.token,

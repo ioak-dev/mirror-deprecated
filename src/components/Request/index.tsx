@@ -46,7 +46,8 @@ const Request = (props: Props) => {
   const [newDialogOpen, setNewDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState({});
-  const [searchCriteria, setSearchCriteria] = useState('');
+  const [searchPref, setSearchPref] = useState({ text: '' });
+  const [items, setItems] = useState<undefined | any[]>([{}]);
   const [data, setData] = useState({
     title: '',
     description: '',
@@ -82,6 +83,7 @@ const Request = (props: Props) => {
   useEffect(() => {
     if (props.authorization.isAuth) {
       props.fetchRequest(props.match.params.tenant, props.authorization);
+      props.fetchStage(props.match.params.tenant, props.authorization);
     }
   }, [props.authorization.isAuth]);
 
@@ -89,27 +91,26 @@ const Request = (props: Props) => {
     const stageList = findStage();
     const list: any[] = [];
     props.request.items.forEach(item => {
-      const index = props.stage.data.findIndex(x => x._id === item.stage);
-      if (item.status === 'assigned') {
-        item.status = (
+      if (item.status === 'assigned' && item.stage) {
+        const index = props.stage.data.findIndex(x => x._id === item.stage);
+        item.statusView = (
           <div className="tag-2">
             <span>{`Assigned_to_${stageList[index]}`}</span>
           </div>
         );
-      } else if (item.status === 'progress') {
-        item.status = (
+      } else if (item.status === 'assigned' && !item.stage) {
+        item.statusView = (
           <div className="tag-4">
-            <span>{`In_progress_with ${stageList[index]}`}</span>
+            <span>Assigned_to_user</span>
           </div>
         );
       } else if (item.status === 'resolved') {
-        item.status = (
+        item.statusView = (
           <div className="tag-5">
             <span>Resolved</span>
           </div>
         );
       }
-
       list.push({
         ...item,
         action: (
@@ -121,29 +122,27 @@ const Request = (props: Props) => {
               action={() => openEditDialog(item)}
               icon="open_in_new"
             />
-            {item.status === 'resolved' && (
-              <OakButton
-                theme="default"
-                variant="block"
-                align="right"
-                action=""
-              >
-                <i className="material-icons">archive</i>
-              </OakButton>
-            )}
           </>
         ),
       });
     });
-    setView(list);
-  }, [props.request.items, props.stage?.data]);
+    setItems(list);
+  }, [props.request.items, props.stage.data]);
 
   useEffect(() => {
-    const result = searchCriteria
-      ? view?.filter(item => item.title.toLowerCase().includes(searchCriteria))
-      : props.request.items;
+    applySearch();
+  }, [searchPref, items]);
+
+  const applySearch = () => {
+    const result = searchPref.text
+      ? view?.filter(
+          item =>
+            item.title.toLowerCase().includes(searchPref.text) ||
+            item.description.toLowerCase().includes(searchPref.text)
+        )
+      : items;
     setView(result);
-  }, [props.request.items, searchCriteria]);
+  };
 
   const findStage = () => {
     const stageList: any[] = [];
@@ -209,8 +208,8 @@ const Request = (props: Props) => {
     setData({ ...data, [event.target.name]: event.target.value });
   };
 
-  const handleSearchCriteriaChange = event => {
-    setSearchCriteria(event.target.value);
+  const handleSearchPrefChange = event => {
+    setSearchPref({ ...searchPref, [event.target.name]: event.target.value });
   };
 
   return (
@@ -271,31 +270,32 @@ const Request = (props: Props) => {
       />
       <OakViewResolver sideLabel="More options">
         <OakView main>
-          <OakButton
-            action={() => toggleNewDialog()}
-            theme="primary"
-            variant="animate out"
-            align="right"
-          >
-            <i className="material-icons">double_arrow</i>New Request
-          </OakButton>
-          <div className="search-bar">
-            <div />
-            <div>
+          <div className="search-bar-container">
+            <div className="search-bar">
               <OakText
                 label="Search"
-                data={data}
-                handleChange={handleSearchCriteriaChange}
-                id="searchCriteria"
+                data={searchPref}
+                handleChange={handleSearchPrefChange}
+                id="text"
               />
-            </div>
-            <div className="clear">
+              {/* </div>
+            <div className="clear"> */}
               <OakButton
-                action={() => setSearchCriteria('')}
+                action={() => setSearchPref({ ...searchPref, text: '' })}
                 theme="default"
                 variant="block"
                 icon="clear"
               />
+            </div>
+            <div>
+              <OakButton
+                action={() => toggleNewDialog()}
+                theme="primary"
+                variant="animate out"
+                align="right"
+              >
+                <i className="material-icons">double_arrow</i>New Request
+              </OakButton>
             </div>
           </div>
           <OakTable
@@ -305,7 +305,7 @@ const Request = (props: Props) => {
               { key: '_id', label: 'Request Number' },
               { key: 'title', label: 'Title' },
               { key: 'description', label: 'Description' },
-              { key: 'status', label: 'Status' },
+              { key: 'statusView', label: 'Status' },
               { key: 'category', label: 'Category' },
               { key: 'priority', label: 'Priority' },
               { key: 'createdAt', label: 'Opened On', dtype: 'date' },
