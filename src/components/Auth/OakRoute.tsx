@@ -17,30 +17,36 @@ interface Props {
   component: any;
 }
 
-const OakRoute = ({profile: profile, getProfile: getProfile, setProfile: setProfile, component: ChildComponent, ...rest}) => {
+const OakRoute = ({
+  profile: profile,
+  getProfile: getProfile,
+  setProfile: setProfile,
+  component: ChildComponent,
+  ...rest
+}) => {
   useEffect(() => {
     console.log(profile.appStatus, profile.loginPage);
     if (profile.appStatus === 'notmounted' && !profile.loginPage) {
-      setProfile({tenant: rest.match.params.tenant, appStatus: 'mounted'});
+      setProfile({ tenant: rest.match.params.tenant, appStatus: 'mounted' });
     } else {
-      setProfile({tenant: rest.match.params.tenant});
+      setProfile({ tenant: rest.match.params.tenant });
     }
     middlewares(rest.middleware);
   }, []);
 
   useEffect(() => {
-      middlewares(rest.middleware);
-  }, [profile.appStatus])
+    middlewares(rest.middleware);
+  }, [profile.appStatus]);
 
-  const middlewares = (layers) => {
-    if(profile.appStatus === 'authenticated') {
+  const middlewares = layers => {
+    if (profile.appStatus === 'authenticated') {
       layers?.forEach(middlewareName => {
-          runMidleware(middlewareName);
-      })
+        runMidleware(middlewareName);
+      });
     }
-  }
+  };
 
-  const runMidleware = (middlewareName) => {
+  const runMidleware = middlewareName => {
     console.log(middlewareName);
     switch (middlewareName) {
       case 'isAuthenticated':
@@ -50,7 +56,7 @@ const OakRoute = ({profile: profile, getProfile: getProfile, setProfile: setProf
         return isAdmin();
         break;
     }
-  }
+  };
 
   const isAuthenticated = () => {
     if (rest.authorization.isAuth) {
@@ -59,28 +65,42 @@ const OakRoute = ({profile: profile, getProfile: getProfile, setProfile: setProf
       redirectToLogin();
       return false;
     }
-  }
+  };
 
   const isAdmin = () => {
     redirectToUnauthorized();
     return false;
-  }
+  };
 
   const redirectToLogin = () => {
     window.location.href = `http://localhost:3010/#/${profile.tenant}/login?appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
-  }
+  };
 
   const redirectToUnauthorized = () => {
     rest.history.push(`/${profile.tenant}/unauthorized`);
-  }
+  };
 
   return (
     <>
-      <AuthInit profile={profile} redirectIfNotAuthenticated={rest.middleware && rest.middleware.indexOf('isAuthenticated') !== -1} />
-      {(!rest.middleware || rest.middleware.indexOf('isAuthenticated') === -1 || (profile.appStatus === 'authenticated' && rest.authorization.isAuth)) && 
-        <ChildComponent {...rest} profile= {profile} getProfile= {getProfile} setProfile= {setProfile}  />}
+      <AuthInit
+        profile={profile}
+        redirectIfNotAuthenticated={
+          rest.middleware && rest.middleware.indexOf('isAuthenticated') !== -1
+        }
+      />
+      {(!rest.middleware ||
+        rest.middleware.indexOf('isAuthenticated') === -1 ||
+        (profile.appStatus === 'authenticated' &&
+          rest.authorization.isAuth)) && (
+        <ChildComponent
+          {...rest}
+          profile={profile}
+          getProfile={getProfile}
+          setProfile={setProfile}
+        />
+      )}
     </>
-  )
+  );
 };
 
 const mapStateToProps = state => ({
@@ -88,4 +108,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, { getAuth })(OakRoute);
-

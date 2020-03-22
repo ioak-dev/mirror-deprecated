@@ -47,21 +47,23 @@ const AuthInit = (props: Props) => {
           process.env.REACT_APP_ONEAUTH_API_URL
         ).then(sessionResponse => {
           if (sessionResponse.status === 200) {
-            dispatch(addAuth({
-              isAuth: true,
-              token: sessionResponse.data.token,
-              secret: '',
-              name: 'name',
-            }));
-            dispatch(setProfile({...profile, appStatus: 'authenticated'}));
+            dispatch(
+              addAuth({
+                isAuth: true,
+                token: sessionResponse.data.token,
+                secret: '',
+                name: 'name',
+              })
+            );
+            dispatch(setProfile({ ...profile, appStatus: 'authenticated' }));
           }
         });
-      } 
+      }
       // else if (props.redirectIfNotAuthenticated) {
       //   window.location.href = `http://localhost:3010/#/${props.profile.tenant}/login?appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
-      // } 
+      // }
       else {
-        dispatch(setProfile({...profile, appStatus: 'authenticated'}));
+        dispatch(setProfile({ ...profile, appStatus: 'authenticated' }));
       }
     }
   }, [profile.appStatus]);

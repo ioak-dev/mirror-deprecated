@@ -8,8 +8,6 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Home from '../Home';
 import Login from '../Auth/Login';
 import Landing from '../Landing';
-import PrivateRoute from '../Auth/PrivateRoute';
-import AuthInit from '../Auth/AuthInit';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getUser, addUser } from '../../actions/UserActions';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
