@@ -4,9 +4,6 @@ const initialState = {
   theme: 'theme_dark',
   textSize: 'textsize_medium',
   themeColor: 'themecolor1',
-  tenant: '',
-  appStatus: 'notmounted',
-  loginPage: false
 };
 
 export default function(state = initialState, action) {

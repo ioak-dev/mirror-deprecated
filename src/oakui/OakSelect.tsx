@@ -71,10 +71,14 @@ const OakSelect = (props: Props) => {
           <option value={props.firstAction}>{props.firstAction}</option>
         )}
         {props.elements?.map(item => (
-          <option value={item}>{item}</option>
+          <option value={item} key={item}>
+            {item}
+          </option>
         ))}
         {props.objects?.map(item => (
-          <option value={item.key}>{item.value}</option>
+          <option value={item.key} key={item.key}>
+            {item.value}
+          </option>
         ))}
       </select>
       {props.label && (

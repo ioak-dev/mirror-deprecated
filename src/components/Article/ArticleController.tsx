@@ -23,7 +23,6 @@ interface Props {
   setProfile: Function;
   profile: any;
   authorization: any;
-  logout: Function;
   article: any;
   fetchArticle: Function;
   saveArticle: Function;
@@ -71,7 +70,6 @@ const ArticleController = (props: Props) => {
     if (props.authorization.isAuth) {
       props.fetchArticle(props.match.params.tenant, props.authorization);
     }
-    console.log(props.profile);
     props.setProfile({ ...props.profile, tenant: props.match.params.tenant });
   }, []);
 
@@ -194,17 +192,17 @@ const ArticleController = (props: Props) => {
       paginationPref.pageNo * paginationPref.rowsPerPage
     );
   }
-  const listview = view.map(item => (
-    <div key={item._id}>
+  const listview = view.map((item, index) => {
+    return (
       <ArticleItem
         id={item._id}
         article={item}
         editArticle={editArticle}
         confirmDeleteFaq={() => confirmDeleteFaq(item._id)}
+        key={item._id || index}
       />
-      <br />
-    </div>
-  ));
+    );
+  });
   return (
     <div className="article">
       <OakDialog

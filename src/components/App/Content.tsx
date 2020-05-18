@@ -66,114 +66,127 @@ const Content = (props: Props) => {
   useEffect(() => {
     props.getProfile();
     props.getAuth();
-    props.getAuth();
   }, []);
-
-  useEffect(() => {
-    const eventBus = receiveMessage().subscribe(message => {
-      if (message.name === 'session expired') {
-        logout(null, 'failure', 'Session expired. Login again');
-      }
-    });
-    return () => eventBus.unsubscribe();
-  });
-
-  useEffect(() => {
-    if (
-      props.authorization &&
-      props.authorization.token &&
-      props.profile.tenant
-    ) {
-      httpGet(`${constants.API_URL_USER}/${props.profile.tenant}/`, {
-        headers: {
-          Authorization: props.authorization.token,
-        },
-      }).then(response => {
-        props.addUser(response.data.data[0]);
-      });
-    }
-  }, [props.authorization]);
-
-  const logout = (
-    event: any,
-    type = 'success',
-    message = 'You have been logged out'
-  ) => {
-    props.removeAuth();
-    props.cookies.remove('isAuth');
-    props.cookies.remove('token');
-    props.cookies.remove('secret');
-    props.cookies.remove('name');
-    sendMessage('notification', true, {
-      type,
-      message,
-      duration: 3000,
-    });
-  };
 
   return (
     <div
       className={`App ${props.profile.theme} ${props.profile.textSize} ${props.profile.themeColor}`}
     >
       <HashRouter>
-        {/* <AuthInit profile={props.profile} /> */}
         <Backdrop />
         <div className="body">
           <div className="body-content">
             <Notification />
             <MuiThemeProvider theme={themes.themecolor1}>
-              <Navigation {...props} logout={() => logout} />
+              <Navigation {...props} />
               <Route
                 path="/login"
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={Login}/>}
+                render={propsLocal => (
+                  <OakRoute {...propsLocal} {...props} component={Login} />
+                )}
               />
               <Route
                 path="/:tenant/unauthorized"
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={Unauthorized} middleware={['isAuthenticated']}/>}
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={Unauthorized}
+                    middleware={['isAuthenticated']}
+                  />
+                )}
               />
               <Route
                 path="/"
                 exact
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={Landing}/>}
+                render={propsLocal => (
+                  <OakRoute {...propsLocal} {...props} component={Landing} />
+                )}
               />
               <Route
                 path="/home"
                 exact
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={Landing}/>}
+                render={propsLocal => (
+                  <OakRoute {...propsLocal} {...props} component={Landing} />
+                )}
               />
               <Route
                 path="/tenant"
                 exact
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={Tenant}/>}
+                render={propsLocal => (
+                  <OakRoute {...propsLocal} {...props} component={Tenant} />
+                )}
               />
               <Route
                 path="/:tenant/home"
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={Home} />}
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={Home}
+                    middleware={['readAuthentication']}
+                  />
+                )}
               />
               <Route
                 path="/:tenant/article"
                 exact
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={ArticleController} middleware={['isAuthenticated']}/>}
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={ArticleController}
+                    middleware={['authenticate']}
+                  />
+                )}
               />
               <Route
                 path="/:tenant/settings"
                 exact
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={Settings} middleware={['isAuthenticated']}/>}
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={Settings}
+                    middleware={['authenticate']}
+                  />
+                )}
               />
               <Route
                 path="/:tenant/request"
                 exact
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={ServiceRequests}  middleware={['isAuthenticated']}/>}
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={ServiceRequests}
+                    middleware={['authenticate']}
+                  />
+                )}
               />
               <Route
                 path="/:tenant/useradministration"
                 exact
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={UserAdministration}  middleware={['isAuthenticated', 'isAdmin']}/>}
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={UserAdministration}
+                    middleware={['authenticate', 'isAdmin']}
+                  />
+                )}
               />
               <Route
                 path="/:tenant"
                 exact
-                render={(propsLocal) => <OakRoute {...propsLocal} {...props} logout={() => logout} component={Home}/>}
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={Home}
+                    middleware={['readAuthentication']}
+                  />
+                )}
               />
             </MuiThemeProvider>
           </div>

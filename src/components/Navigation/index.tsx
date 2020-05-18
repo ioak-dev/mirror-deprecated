@@ -9,7 +9,7 @@ import Desktop from './Desktop';
 import Mobile from './Mobile';
 
 import { Authorization, Profile } from '../Types/GeneralTypes';
-import { receiveMessage } from '../../events/MessageService';
+import { receiveMessage, sendMessage } from '../../events/MessageService';
 
 interface Props {
   sendEvent: Function;
@@ -22,7 +22,6 @@ interface Props {
   profile: Profile;
   login: Function;
   transparent: boolean;
-  logout: Function;
   toggleSettings: any;
   history: any;
   cookies: any;
@@ -39,6 +38,16 @@ const Navigation = (props: Props) => {
     transparentNavBar: false,
     firstLoad: true,
   });
+
+  const [space, setSpace] = useState('');
+
+  useEffect(() => {
+    receiveMessage().subscribe(event => {
+      if (event.name === 'spaceChange') {
+        setSpace(event.data);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     props.getProfile();
@@ -62,6 +71,20 @@ const Navigation = (props: Props) => {
     }
   }, [props.authorization.isAuth]);
 
+  const logout = (
+    event: any,
+    type = 'success',
+    message = 'You have been logged out'
+  ) => {
+    props.removeAuth();
+    props.cookies.remove(`mirror_${space}`);
+    sendMessage('notification', true, {
+      type,
+      message,
+      duration: 3000,
+    });
+  };
+
   const toggleDarkMode = () => {
     if (props.profile.theme === 'theme_dark') {
       props.setProfile({
@@ -76,24 +99,10 @@ const Navigation = (props: Props) => {
     }
   };
 
-  const changeTextSize = size => {
-    props.setProfile({
-      ...props.profile,
-      textSize: size,
-    });
-  };
-
-  const changeThemeColor = color => {
-    props.setProfile({
-      ...props.profile,
-      themeColor: color,
-    });
-  };
-
   const login = type => {
     // props.history.push(`/${props.profile.tenant}/login?type=${type}`);
     // console.log(props.profile.tenant);
-    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${props.profile.tenant}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${space}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
   };
 
   const toggleSettings = () => {
@@ -104,7 +113,7 @@ const Navigation = (props: Props) => {
     <div className="nav">
       <Desktop
         {...props}
-        logout={props.logout}
+        logout={logout}
         login={login}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
@@ -112,7 +121,7 @@ const Navigation = (props: Props) => {
       />
       <Mobile
         {...props}
-        logout={props.logout}
+        logout={logout}
         login={login}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}

@@ -105,7 +105,7 @@ const Mobile = (props: Props) => {
                     </div> */}
             <div className="buttons">
               {props.authorization.isAuth && (
-                <OakButton variant="appear" small action={props.logout()}>
+                <OakButton variant="appear" small action={props.logout}>
                   <i className="material-icons">power_settings_new</i>Logout
                 </OakButton>
               )}

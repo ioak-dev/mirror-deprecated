@@ -24,53 +24,41 @@ interface Props {
 
 const Login = (props: Props) => {
   useEffect(() => {
-    console.log('INSIDE LOGIN');
-    props.setProfile({ ...props.profile, loginPage: true });
-    console.log(props.profile.loginPage);
+    // console.log('INSIDE LOGIN');
+    // props.setProfile({ ...props.profile, loginPage: true });
+    // console.log(props.profile.loginPage);
+    console.log('*********', props.location.search);
     if (props.location.search) {
       const query = queryString.parse(props.location.search);
-      httpGet(
-        `/auth/${query.space}/session/${query.authKey}`,
-        null,
-        process.env.REACT_APP_ONEAUTH_API_URL
-      ).then(sessionResponse => {
-        if (sessionResponse.status === 200) {
-          console.log(sessionResponse.data);
-          success({
-            ...sessionResponse.data.data,
-            // secret: '',
-            name: 'name',
-            email: '',
-            authKey: query.authKey,
-            space: query.space,
-          });
-          props.history.push(`/${query.space}/home`);
-          sendMessage('notification', true, {
-            type: 'success',
-            message: 'logged in',
-            duration: 3000,
-          });
-        }
-      });
+      props.cookies.set(`mirror_${query.space}`, query.authKey);
+      // httpGet(
+      //   `/auth/${query.space}/session/${query.authKey}`,
+      //   null,
+      //   process.env.REACT_APP_ONEAUTH_API_URL
+      // ).then(sessionResponse => {
+      //   if (sessionResponse.status === 200) {
+      //     console.log(sessionResponse.data);
+      //     success({
+      //       ...sessionResponse.data.data,
+      //       // secret: '',
+      //       name: 'name',
+      //       email: '',
+      //       authKey: query.authKey,
+      //       space: query.space,
+      //     });
+      props.history.push(`/${query.space}/home`);
+      //     sendMessage('notification', true, {
+      //       type: 'success',
+      //       message: 'logged in',
+      //       duration: 3000,
+      //     });
+      //   }
+      // });
       // if (query && query.jwt) {
       //   loginViaJwt(query.jwt);
       // }
     }
-    // props.setProfile({ ...props.profile, tenant: props.match.params.tenant });
   }, []);
-
-  const success = data => {
-    props.addAuth({
-      isAuth: true,
-      token: data.token,
-      secret: data.secret,
-      name: data.name,
-    });
-    props.setProfile({ appStatus: 'authenticated' });
-    sendMessage('loggedin', true);
-    props.cookies.set(`mirror_${data.space}`, data.authKey);
-    props.history.push('/');
-  };
 
   return <></>;
 };

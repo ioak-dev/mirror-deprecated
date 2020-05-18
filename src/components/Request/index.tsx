@@ -23,7 +23,6 @@ interface Props {
   setProfile: Function;
   profile: any;
   authorization: Authorization;
-  logout: Function;
   user: any;
   request: any;
   fetchRequest: Function;

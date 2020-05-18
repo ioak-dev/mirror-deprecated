@@ -15,7 +15,6 @@ interface Props {
   setProfile: Function;
   profile: any;
   authorization: Authorization;
-  logout: Function;
   request: any;
   stages: any;
   saveRequest: Function;
