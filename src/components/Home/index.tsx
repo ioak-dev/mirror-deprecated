@@ -82,25 +82,26 @@ export default class Home extends React.Component<Props, State> {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.authorization) {
-      getBanner(this.props.match.params.tenant, {
-        headers: {
-          Authorization: nextProps.authorization.token,
-        },
-      })
-        .then(response => {
-          if (response.status === 200 && response.data) {
-            this.setState({
-              banner: `data:image/jpeg;base64,${response.data}`,
-            });
-          } else {
-            this.setState({ banner: cover });
-          }
-        })
-        .catch(() => {
-          this.setState({ banner: cover });
-        });
-    }
+    // if (nextProps.authorization) {
+    //   getBanner(this.props.match.params.tenant, {
+    //     headers: {
+    //       Authorization: nextProps.authorization.token,
+    //     },
+    //   })
+    //     .then(response => {
+    //       if (response.status === 200 && response.data) {
+    //         this.setState({
+    //           banner: `data:image/jpeg;base64,${response.data}`,
+    //         });
+    //       } else {
+    //         this.setState({ banner: cover });
+    //       }
+    //     })
+    //     .catch(() => {
+    //       this.setState({ banner: cover });
+    //     });
+    // }
+    console.log('**Banner load disabled**');
   }
 
   componentWillUnmount() {
