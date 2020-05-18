@@ -276,7 +276,7 @@ export default class Home extends React.Component<Props, State> {
             <OakButton
               action={this.toggleEditDialog}
               theme="default"
-              variant="animate in"
+              variant="appear"
               align="left"
             >
               <i className="material-icons">close</i>Cancel
@@ -284,7 +284,7 @@ export default class Home extends React.Component<Props, State> {
             <OakButton
               action={this.addRequest}
               theme="primary"
-              variant="animate out"
+              variant="disappear"
               align="right"
             >
               <i className="material-icons">double_arrow</i>Create Service
@@ -308,14 +308,14 @@ export default class Home extends React.Component<Props, State> {
             <OakButton
               theme="primary"
               action={this.helpful}
-              variant="animate in"
+              variant="appear"
               align="left"
             >
               Helpful
             </OakButton>
             <OakButton
               theme="primary"
-              variant="animate in"
+              variant="appear"
               align="right"
               action={this.notHelpful}
             >

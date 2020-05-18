@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/oak-text-slide.scss';
+import './styles/oak-text-plain.scss';
 
 interface Props {
   label?: string;
@@ -14,14 +14,15 @@ interface Props {
   handleFocus?: Function;
   placeholder?: string;
 }
-const OakText = (props: Props) => {
+const OakTextPlain = (props: Props) => {
   const handleFocus = () => {
     if (props.handleFocus) {
       props.handleFocus();
     }
   };
   return (
-    <div className="oak-text">
+    <div className="oak-text-plain">
+      {props.label && <label htmlFor={props.id}>{props.label}</label>}
       {!props.multiline && (
         <input
           disabled={props.disabled}
@@ -36,8 +37,10 @@ const OakText = (props: Props) => {
           value={props.data[props.id]}
           onChange={props.handleChange}
           onFocus={handleFocus}
+          placeholder={props.placeholder}
         />
       )}
+      {/* rows={props.rows ? props.rows : 4} */}
       {props.multiline && (
         <textarea
           disabled={props.disabled}
@@ -51,14 +54,11 @@ const OakText = (props: Props) => {
           onChange={props.handleChange}
         />
       )}
-      <label
-        htmlFor={props.id}
-        className={props.data[props.id] ? 'active' : ''}
-      >
-        {props.label}
-      </label>
+      {/* {props.multiline && <div contentEditable={props.disabled ? false : true} suppressContentEditableWarning={true}
+                className={"textarea " + (props.errorFields && props.errorFields[props.id] ? "error" : "") + (props.disabled ? " disabled" : "")}
+                onBlur={handleChange}>{props.data[props.id]}</div>} */}
     </div>
   );
 };
 
-export default OakText;
+export default OakTextPlain;

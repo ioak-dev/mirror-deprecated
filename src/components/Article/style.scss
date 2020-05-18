@@ -31,7 +31,7 @@
     cursor: pointer;
     display: inline;
     padding-left: 10px;
-    color: var(--color-palette-1);
+    color: var(--color-primary-1);
     color: var(--color-foreground-2);
 
     .material-icons {
@@ -78,7 +78,7 @@
         cursor: pointer;
         display: grid;
         grid-template-rows: auto auto 1fr;
-        color: var(--color-palette-1);
+        color: var(--color-primary-1);
         color: var(--color-foreground-2);
 
         .item-edit {
@@ -90,7 +90,7 @@
           justify-content: center;
 
           &:hover {
-            background-color: var(--color-palette-1);
+            background-color: var(--color-primary-1);
           }
         }
         .item-delete {

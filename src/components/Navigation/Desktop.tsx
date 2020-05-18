@@ -70,7 +70,7 @@ const Desktop = (props: Props) => {
           {props.authorization.isAuth && (
             <OakButton
               theme="primary"
-              variant="animate out"
+              variant="disappear"
               small
               action={props.logout()}
             >
@@ -80,7 +80,7 @@ const Desktop = (props: Props) => {
           {!props.authorization.isAuth && (
             <OakButton
               theme="primary"
-              variant="animate in"
+              variant="appear"
               align="left"
               small
               action={() => signin('signin')}
@@ -91,7 +91,7 @@ const Desktop = (props: Props) => {
           {!props.authorization.isAuth && (
             <OakButton
               theme="primary"
-              variant="animate in"
+              variant="appear"
               align="right"
               small
               action={() => signin('signup')}

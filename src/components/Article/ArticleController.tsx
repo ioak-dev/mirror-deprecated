@@ -249,7 +249,7 @@ const ArticleController = (props: Props) => {
           <OakButton
             action={() => setEditDialogOpen(!editDialogOpen)}
             theme="default"
-            variant="animate in"
+            variant="appear"
             align="left"
           >
             <i className="material-icons">close</i>Cancel
@@ -257,7 +257,7 @@ const ArticleController = (props: Props) => {
           <OakButton
             action={() => addArticle()}
             theme="primary"
-            variant="animate out"
+            variant="disappear"
             align="right"
           >
             <i className="material-icons">double_arrow</i>Create
@@ -295,7 +295,7 @@ const ArticleController = (props: Props) => {
               <OakButton
                 action={() => setEditDialogOpen(!editDialogOpen)}
                 theme="primary"
-                variant="animate out"
+                variant="disappear"
                 align="right"
               >
                 <i className="material-icons">double_arrow</i>Add New Article

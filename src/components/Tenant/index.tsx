@@ -265,18 +265,14 @@ const Tenant = (props: Props) => {
             {banner && banner.name}
           </label>
           <div className="action">
-            <OakButton theme="primary" variant="animate in" action={submit}>
+            <OakButton theme="primary" variant="appear" action={submit}>
               Create Tenant
             </OakButton>
           </div>
         </div>
       )}
       {data.created && (
-        <OakButton
-          theme="primary"
-          variant="animate out"
-          action={gotoTenantPage}
-        >
+        <OakButton theme="primary" variant="disappear" action={gotoTenantPage}>
           Take me to my tenant
         </OakButton>
       )}
