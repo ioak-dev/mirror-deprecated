@@ -25,7 +25,7 @@ interface Props {
 const Login = (props: Props) => {
   useEffect(() => {
     console.log('INSIDE LOGIN');
-    props.setProfile({...props.profile, loginPage: true});
+    props.setProfile({ ...props.profile, loginPage: true });
     console.log(props.profile.loginPage);
     if (props.location.search) {
       const query = queryString.parse(props.location.search);
@@ -35,8 +35,9 @@ const Login = (props: Props) => {
         process.env.REACT_APP_ONEAUTH_API_URL
       ).then(sessionResponse => {
         if (sessionResponse.status === 200) {
+          console.log(sessionResponse.data);
           success({
-            token: sessionResponse.data.token,
+            ...sessionResponse.data.data,
             // secret: '',
             name: 'name',
             email: '',
@@ -65,7 +66,7 @@ const Login = (props: Props) => {
       secret: data.secret,
       name: data.name,
     });
-    props.setProfile({appStatus: 'authenticated'});
+    props.setProfile({ appStatus: 'authenticated' });
     sendMessage('loggedin', true);
     props.cookies.set(`mirror_${data.space}`, data.authKey);
     props.history.push('/');

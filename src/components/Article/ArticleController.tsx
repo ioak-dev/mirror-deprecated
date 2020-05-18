@@ -49,6 +49,8 @@ const ArticleController = (props: Props) => {
     rowsPerPage: 6,
   });
 
+  useEffect(() => console.log(props.authorization));
+
   useEffect(() => {
     const eventBus = receiveMessage().subscribe(message => {
       if (message.name === domain && message.signal) {
