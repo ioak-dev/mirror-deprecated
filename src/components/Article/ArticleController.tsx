@@ -17,6 +17,8 @@ import {
   saveArticle,
   deleteArticle,
 } from '../../actions/ArticleActions';
+import OakEditor from '../../oakui/OakEditor';
+import OakModal from '../../oakui/OakModal';
 
 interface Props {
   match: any;
@@ -47,8 +49,6 @@ const ArticleController = (props: Props) => {
     pageNo: 1,
     rowsPerPage: 6,
   });
-
-  useEffect(() => console.log(props.authorization));
 
   useEffect(() => {
     const eventBus = receiveMessage().subscribe(message => {
@@ -204,12 +204,48 @@ const ArticleController = (props: Props) => {
     );
   });
   return (
-    <div className="article">
-      <OakDialog
+    <>
+      <div className="article">
+        <div className="search-bar">
+          <div>
+            <OakText
+              label="Search"
+              data={searchCriteria}
+              handleChange={handleSearchCriteriaChange}
+              id="searchCriteria"
+            />
+          </div>
+          <div className="clear">
+            <OakButton
+              action={() => setSearchCriteria('')}
+              theme="default"
+              variant="block"
+              icon="clear"
+            />
+          </div>
+          <div>
+            <OakButton
+              action={() => setEditDialogOpen(!editDialogOpen)}
+              theme="primary"
+              variant="disappear"
+              align="right"
+            >
+              <i className="material-icons">double_arrow</i>Add New Article
+            </OakButton>
+          </div>
+        </div>
+        <OakPagination
+          totalRows={props.article.items.length}
+          onChangePage={onChangePage}
+          label="Items per page"
+        />
+        {listview}
+      </div>
+      <OakModal
         visible={editDialogOpen}
         toggleVisibility={() => setEditDialogOpen(!editDialogOpen)}
       >
-        <div className="dialog-body">
+        <div className="modal-body">
           <div>
             <OakSelect
               theme="default"
@@ -238,14 +274,14 @@ const ArticleController = (props: Props) => {
             id="question"
             handleChange={e => handleChange(e)}
           />
-          <OakText
-            label="Answer"
+          <OakEditor
             data={data}
             id="answer"
+            label="Answer"
             handleChange={e => handleChange(e)}
           />
         </div>
-        <div className="dialog-footer">
+        <div className="modal-footer">
           <OakButton
             action={() => setEditDialogOpen(!editDialogOpen)}
             theme="default"
@@ -263,7 +299,7 @@ const ArticleController = (props: Props) => {
             <i className="material-icons">double_arrow</i>Create
           </OakButton>
         </div>
-      </OakDialog>
+      </OakModal>
 
       {deleteDialogOpen}
       <OakPrompt
@@ -271,46 +307,7 @@ const ArticleController = (props: Props) => {
         visible={deleteDialogOpen}
         toggleVisibility={() => setDeleteDialogOpen(!deleteDialogOpen)}
       />
-
-      <OakViewResolver sideLabel="More options">
-        <OakView main>
-          <div className="search-bar">
-            <div>
-              <OakText
-                label="Search"
-                data={searchCriteria}
-                handleChange={handleSearchCriteriaChange}
-                id="searchCriteria"
-              />
-            </div>
-            <div className="clear">
-              <OakButton
-                action={() => setSearchCriteria('')}
-                theme="default"
-                variant="block"
-                icon="clear"
-              />
-            </div>
-            <div>
-              <OakButton
-                action={() => setEditDialogOpen(!editDialogOpen)}
-                theme="primary"
-                variant="disappear"
-                align="right"
-              >
-                <i className="material-icons">double_arrow</i>Add New Article
-              </OakButton>
-            </div>
-          </div>
-          <OakPagination
-            totalRows={props.article.items.length}
-            onChangePage={onChangePage}
-            label="Items per page"
-          />
-          {listview}
-        </OakView>
-      </OakViewResolver>
-    </div>
+    </>
   );
 };
 

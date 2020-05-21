@@ -12,7 +12,6 @@ import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getUser, addUser } from '../../actions/UserActions';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
 
-import Backdrop from './Backdrop';
 import Notification from '../Notification';
 import Navigation from '../Navigation';
 import { httpGet } from '../Lib/RestTemplate';
@@ -73,7 +72,6 @@ const Content = (props: Props) => {
       className={`App ${props.profile.theme} ${props.profile.textSize} ${props.profile.themeColor}`}
     >
       <HashRouter>
-        <Backdrop />
         <div className="body">
           <div className="body-content">
             <Notification />

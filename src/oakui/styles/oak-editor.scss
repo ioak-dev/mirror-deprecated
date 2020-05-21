@@ -1,0 +1,144 @@
+.oak-editor {
+  label {
+    font-size: 13px;
+  }
+  &.bubble {
+    border-bottom: 1px solid var(--color-foreground-1);
+  }
+}
+
+.quill {
+  .ql-syntax {
+    border-radius: 4px;
+    padding: 4px;
+    background-color: var(--color-background-transparent-5);
+  }
+
+  blockquote {
+    background-color: var(--color-background-transparent-5);
+  }
+
+  .ql-formats {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-right: 0 !important;
+  }
+
+  .ql-formats > * {
+    margin-right: 4px;
+    margin-left: 0px;
+    margin-bottom: 12px;
+  }
+
+  .ql-toolbar.ql-snow {
+    border: none;
+    color: var(--color-foreground-1);
+    padding: 0px;
+    display: flex;
+    justify-content: center;
+  }
+  .ql-container.ql-snow {
+    border: none;
+    border-bottom: 1px solid var(--color-foreground-1);
+  }
+  .ql-editor {
+    padding: 10px 0;
+  }
+  .ql-snow .ql-stroke {
+    stroke: var(--color-foreground-3);
+  }
+  .ql-snow .ql-fill,
+  .ql-snow .ql-stroke.ql-fill {
+    fill: var(--color-foreground-3);
+  }
+  .ql-picker-label {
+    color: var(--color-foreground-3);
+    &:hover {
+      color: green;
+    }
+  }
+  .ql-strike.ql-active {
+    // border: 1px solid var(--color-foreground-3);
+    background-color: var(--color-foreground-5);
+    color: var(--color-foreground-1);
+  }
+
+  p,
+  ul,
+  li {
+    font-size: var(--metric-typography-5);
+  }
+
+  h5 {
+    font-size: var(--metric-typography-8) !important;
+  }
+
+  h4 {
+    font-size: var(--metric-typography-9) !important;
+  }
+
+  h3 {
+    font-size: var(--metric-typography-10) !important;
+  }
+
+  h2 {
+    font-size: var(--metric-typography-11) !important;
+  }
+
+  h1 {
+    font-size: var(--metric-typography-12) !important;
+  }
+
+  .ql-snow .ql-picker.ql-expanded .ql-picker-options {
+    background-color: var(--color-background-5);
+    color: var(--color-foreground-1);
+    .ql-picker-item {
+      &:hover {
+        color: var(--color-primary-1) !important;
+      }
+    }
+  }
+
+  .ql-formats {
+    button {
+      height: auto !important;
+      width: auto !important;
+      &:hover {
+        background-color: var(--color-background-3) !important;
+        border-radius: 2px;
+      }
+    }
+    .ql-picker-label,
+    .ql-picker {
+      // height: auto !important;
+      // width: auto !important;
+    }
+    svg {
+      height: 20px !important;
+    }
+    .ql-active {
+      // border: 1px solid var(--color-primary-1) !important;
+      border-radius: 2px;
+      background-color: var(--color-background-5) !important;
+      &:hover {
+        background-color: var(--color-background-5) !important;
+      }
+      color: var(--color-foreground-1) !important;
+      .ql-fill {
+        fill: var(--color-foreground-3) !important;
+      }
+      .ql-stroke {
+        stroke: var(--color-foreground-3) !important;
+      }
+    }
+    &:hover {
+      .ql-fill {
+        fill: var(--color-foreground-3) !important;
+      }
+      .ql-stroke {
+        stroke: var(--color-foreground-1) !important;
+      }
+    }
+  }
+}
