@@ -19,12 +19,14 @@ import { Authorization } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import Tenant from '../Tenant';
 import Settings from '../Settings';
-import ArticleController from '../Article/ArticleController';
+import ArticleController from '../Article_Backup/ArticleController';
 import ServiceRequests from '../Request';
 import UserAdministration from '../UserAdministration';
 import constants from '../Constants';
 import OakRoute from '../Auth/OakRoute';
 import Unauthorized from '../Auth/Unauthorized';
+import Dashboard from '../Article/Dashboard';
+import CreateArticle from '../Article/CreateArticle';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -133,11 +135,25 @@ const Content = (props: Props) => {
                   <OakRoute
                     {...propsLocal}
                     {...props}
-                    component={ArticleController}
+                    component={Dashboard}
                     middleware={['authenticate']}
                   />
                 )}
               />
+
+              <Route
+                path="/:tenant/article/create"
+                exact
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={CreateArticle}
+                    middleware={['authenticate']}
+                  />
+                )}
+              />
+
               <Route
                 path="/:tenant/settings"
                 exact
