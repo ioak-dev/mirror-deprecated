@@ -25,8 +25,8 @@ import UserAdministration from '../UserAdministration';
 import constants from '../Constants';
 import OakRoute from '../Auth/OakRoute';
 import Unauthorized from '../Auth/Unauthorized';
-import Dashboard from '../Article/Dashboard';
 import CreateArticle from '../Article/CreateArticle';
+import ListArticle from '../Article/ListArticle';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -135,7 +135,7 @@ const Content = (props: Props) => {
                   <OakRoute
                     {...propsLocal}
                     {...props}
-                    component={Dashboard}
+                    component={ListArticle}
                     middleware={['authenticate']}
                   />
                 )}

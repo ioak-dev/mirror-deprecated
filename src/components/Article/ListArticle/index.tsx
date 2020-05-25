@@ -3,6 +3,7 @@ import { Route, useHistory } from 'react-router-dom';
 import OakRoute from '../../Auth/OakRoute';
 import './style.scss';
 import CreateArticle from '../CreateArticle';
+import ArticleItem from './ArticleItem';
 
 interface Props {
   setProfile: Function;
@@ -14,9 +15,9 @@ interface Props {
   cookies: any;
 }
 
-const Dashboard = (props: Props) => {
-  const categoryid = '5eca57296a086f066690011s';
-  const history = useHistory();
+const ListArticle = (props: Props) => {
+  const categoryid = '5eca57296a086f066690011s'; //to be removed
+  const history = useHistory(); // to be removed
 
   useEffect(() => {
     props.setProfile({
@@ -26,13 +27,14 @@ const Dashboard = (props: Props) => {
     console.log(props.match.params.tenant);
   }, []);
 
+  // To be removed
   const nextPath = path => {
     history.push(path);
   };
 
   return (
-    <div className="dashboard">
-      <div>Helllooooooooooooooo</div>
+    <div className="listArticle">
+      {/* {To Be removed} */}
       <button
         onClick={() =>
           nextPath(
@@ -42,19 +44,9 @@ const Dashboard = (props: Props) => {
       >
         change path
       </button>
-      {/* <Route
-        path={`/:tenant/article/create?categoryid= ${categoryid}`}
-        render={propsLocal => (
-          <OakRoute
-            {...propsLocal}
-            {...props}
-            component={CreateArticle}
-            middleware={['authenticate']}
-          />
-        )}
-      /> */}
+      <ArticleItem />
     </div>
   );
 };
 
-export default Dashboard;
+export default ListArticle;

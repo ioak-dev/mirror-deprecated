@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
-import CategoryTree from '../CategoryTree';
+import CategoryTree from '../../Category/CategoryTree';
 import CreateItem from './CreateItem';
 
 interface Props {
@@ -32,7 +32,11 @@ const CreateArticle = (props: Props) => {
         <CategoryTree id={urlParam.categoryid} />
       </div>
       <div className="article-container">
-        <CreateItem {...props} />
+        <CreateItem
+          {...props}
+          urlParam={urlParam}
+          tenant={props.profile.tenant}
+        />
       </div>
     </div>
   );
