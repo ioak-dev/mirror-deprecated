@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 import './styles/oak-button.scss';
 import OakIcon from './OakIcon';
 
@@ -24,8 +25,10 @@ interface Props {
 }
 
 const OakButton = (props: Props) => {
+  const profile = useSelector(state => state.profile);
   const getStyle = () => {
     let style = props.theme ? props.theme : '';
+    style += profile?.theme?.includes('theme_light') ? ' light' : '';
     style += props.variant ? ` ${props.variant}` : '';
 
     if (!props.children) {

@@ -5,7 +5,16 @@ interface Props {
   id: any;
 }
 const CategoryTree = (props: Props) => {
-  return <div className="category-tree">{props.id}</div>;
+  return (
+    <div className="category-tree">
+      <div className="category-name typography-4">lorem ipsum</div>
+      <div className="category-relation">
+        <i className="material-icons">keyboard_arrow_right</i>
+      </div>
+      <div className="category-name typography-4">dolor sit</div>
+      <div className="action typography-4">change</div>
+    </div>
+  );
 };
 
 export default CategoryTree;

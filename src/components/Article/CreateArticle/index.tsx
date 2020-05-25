@@ -27,16 +27,15 @@ const CreateArticle = (props: Props) => {
   }, []);
 
   return (
-    <div className="createArticle">
-      <div className="typography-4">
-        <CategoryTree id={urlParam.categoryid} />
-      </div>
-      <div className="article-container">
-        <CreateItem
-          {...props}
-          urlParam={urlParam}
-          tenant={props.profile.tenant}
-        />
+    <div className="app-page">
+      <div className="app-content">
+        <div className="app-text">
+          <CreateItem
+            {...props}
+            urlParam={urlParam}
+            tenant={props.profile.tenant}
+          />
+        </div>
       </div>
     </div>
   );

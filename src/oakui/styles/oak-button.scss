@@ -40,7 +40,7 @@ button {
 
     background: none;
     outline: none;
-    color: var(--btn-text-color);
+    color: var(--btn-text-color) !important;
     // text-transform: uppercase;
     cursor: pointer;
     transition: 0.4s cubic-bezier(0.5, 1.6, 0.4, 0.7);
@@ -97,9 +97,9 @@ button {
       }
 
       &.light {
-        color: var(--btn-text-color-dark);
+        color: var(--btn-text-color-dark) !important;
         &:hover {
-          color: var(--btn-text-color);
+          color: var(--btn-text-color) !important;
         }
       }
     }
@@ -116,12 +116,13 @@ button {
 
       &.light {
         &:hover {
-          color: var(--btn-text-color-dark);
+          color: var(--btn-text-color-dark) !important;
         }
       }
     }
 
-    &.appear, &.disappear {
+    &.appear,
+    &.disappear {
       &::before {
         content: '';
         position: absolute;
@@ -150,9 +151,9 @@ button {
       }
 
       &.light {
-        color: var(--btn-text-color-dark);
+        color: var(--btn-text-color-dark) !important;
         &:hover {
-          color: var(--btn-text-color);
+          color: var(--btn-text-color) !important;
         }
       }
     }
@@ -164,7 +165,7 @@ button {
       }
 
       &.light {
-        color: var(--btn-text-color-dark);
+        color: var(--btn-text-color-dark) !important;
       }
     }
 

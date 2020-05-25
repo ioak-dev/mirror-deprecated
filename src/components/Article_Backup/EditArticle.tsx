@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import OakText from '../../oakui/OakText';
 import OakEditor from '../../oakui/OakEditor';
 
-interface Props {
-  // article: Array<>;
-}
-const EditArticle = (props: Props) => {
+const EditArticle = () => {
   const [data, setData] = useState({
     id: undefined,
     category: '',

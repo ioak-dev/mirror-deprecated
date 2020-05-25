@@ -8,6 +8,9 @@
 }
 
 .quill {
+  .ql-editor {
+    min-height: 200px;
+  }
   .ql-syntax {
     border-radius: 4px;
     padding: 4px;
@@ -29,6 +32,11 @@
     margin-right: 4px;
     margin-left: 0px;
     margin-bottom: 12px;
+    @media (max-width: 767px) {
+      margin-right: 0px;
+      margin-left: 0px;
+      margin-bottom: 0px;
+    }
   }
 
   .ql-toolbar.ql-snow {

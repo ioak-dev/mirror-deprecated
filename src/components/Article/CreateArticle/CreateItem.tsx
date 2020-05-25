@@ -6,7 +6,7 @@ import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces } from '../../Utils';
 import { sendMessage, receiveMessage } from '../../../events/MessageService';
 import { saveArticle } from '../ArticleService';
-import OakPrompt from '../../../oakui/OakPrompt';
+import CategoryTree from '../../Category/CategoryTree';
 
 const domain = 'article';
 
@@ -20,6 +20,7 @@ const CreateItem = (props: Props) => {
   const [data, setData] = useState({
     title: '',
     description: '',
+    tags: '',
   });
 
   useEffect(() => {
@@ -41,6 +42,7 @@ const CreateItem = (props: Props) => {
     setData({
       title: '',
       description: '',
+      tags: '',
     });
   }, []);
 
@@ -88,35 +90,39 @@ const CreateItem = (props: Props) => {
   };
 
   return (
-    <div className="createArticle-item">
-      <OakText
-        label="Title"
-        data={data}
-        id="title"
-        handleChange={e => handleChange(e)}
-      />
-      <OakEditor
-        data={data}
-        id="description"
-        handleChange={e => handleChange(e)}
-      />
-      <div className="article-action">
-        <OakButton
-          action={() => addArticle()}
-          theme="primary"
-          variant="disappear"
-          align="right"
-        >
+    <div className="create-article-item">
+      <div className="action-header position-right">
+        <OakButton action={() => addArticle()} theme="primary" variant="appear">
           <i className="material-icons">double_arrow</i>Save
         </OakButton>
         <OakButton
           action={() => cancelCreation()}
-          theme="primary"
-          variant="disappear"
-          align="right"
+          theme="default"
+          variant="appear"
         >
-          <i className="material-icons secondary">double_arrow</i>Cancel
+          <i className="material-icons">close</i>Cancel
         </OakButton>
+      </div>
+      <div className="user-form">
+        <CategoryTree id={props.urlParam.categoryid} />
+        <OakText
+          label="Title"
+          data={data}
+          id="title"
+          handleChange={e => handleChange(e)}
+        />
+        <OakEditor
+          label="Description"
+          data={data}
+          id="description"
+          handleChange={e => handleChange(e)}
+        />
+        <OakText
+          label="Tags (comma separated list)"
+          data={data}
+          id="tags"
+          handleChange={e => handleChange(e)}
+        />
       </div>
     </div>
   );

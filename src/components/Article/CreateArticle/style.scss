@@ -1,33 +1,5 @@
-.createArticle {
-    padding-top: 50px;
-    
-    .article-container {
-        display: grid;
-       // height: 100vh;
-        
-        
-        padding: 0.5in 0.5in;
-        
-        .createArticle-item {
-            display: grid;
-            grid-template-rows:auto ;
-            grid-column-start: auto;
-        }
-        .article-action{
-            padding-top: 10px;
-            display:flex;
-	        justify-content: center;
-	        
-        }
-        
-
-        @media (max-width: 767px) {
-            .article-container { grid-template-columns: auto; height:auto}
-        
-    }
-  
-    
-  }
-  
-  
+.create-article-item {
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 20px;
 }

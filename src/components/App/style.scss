@@ -8,19 +8,21 @@ a {
   color: var(--color-foreground-1);
 }
 
-::-webkit-scrollbar {
-  width: 10px; /* for vertical scrollbars */
-  height: 10px; /* for horizontal scrollbars */
-}
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 10px; /* for vertical scrollbars */
+    height: 10px; /* for horizontal scrollbars */
+  }
 
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
 }
 
 .App {
