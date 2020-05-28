@@ -118,13 +118,15 @@ const EditItem = (props: Props) => {
         >
           <i className="material-icons">double_arrow</i>Save
         </OakButton>
-        <OakButton
-          action={() => cancelCreation()}
-          theme="default"
-          variant="appear"
-        >
-          <i className="material-icons">close</i>Cancel
-        </OakButton>
+        {props.history.length > 2 && (
+          <OakButton
+            action={() => cancelCreation()}
+            theme="default"
+            variant="appear"
+          >
+            <i className="material-icons">close</i>Cancel
+          </OakButton>
+        )}
       </div>
       <div className="user-form">
         <CategoryTree id={props.urlParam.categoryid} />

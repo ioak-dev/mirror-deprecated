@@ -10,9 +10,10 @@ const domain = 'Article';
 interface Props {
   urlParam: any;
   history?: any;
-  tenant: any;
+  // tenant: any;
   authorization: any;
   location: any;
+  space: string;
 }
 
 const ArticleItem = (props: Props) => {
@@ -45,7 +46,7 @@ const ArticleItem = (props: Props) => {
 
   useEffect(() => {
     if (props.authorization.token && props.urlParam.articleid) {
-      fetchArticle(props.tenant, props.urlParam.articleid, {
+      fetchArticle(props.space, props.urlParam.articleid, {
         headers: {
           Authorization: props.authorization.token,
         },
@@ -64,7 +65,8 @@ const ArticleItem = (props: Props) => {
   }, [props.urlParam, props.authorization]);
 
   const Editing = () => {
-    console.log('Add');
+    console.log(props.history);
+    // props.history.push(`/${props.space}/article/edit?id=articleid`);
   };
 
   const cancelCreation = () => {
@@ -75,7 +77,7 @@ const ArticleItem = (props: Props) => {
     setConfirmDelete(true);
   };
   const deleteArticledata = () => {
-    deleteArticle(props.tenant, props.urlParam.articleid, {
+    deleteArticle(props.space, props.urlParam.articleid, {
       headers: {
         Authorization: props.authorization.token,
       },
@@ -97,14 +99,14 @@ const ArticleItem = (props: Props) => {
           <i className="material-icons">double_arrow</i>Edit
         </OakButton>
 
-        {props.history.location.pathname && (
+        {props.history.length > 2 && (
           <>
             <OakButton
               action={() => cancelCreation()}
               theme="default"
               variant="appear"
             >
-              <i className="material-icons">close</i>Cancel
+              <i className="material-icons">close</i>Close
             </OakButton>
           </>
         )}

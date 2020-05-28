@@ -9,6 +9,7 @@ interface Props {
   match: any;
   location: any;
   history: any;
+  space: string;
 }
 
 const queryString = require('query-string');
@@ -36,7 +37,7 @@ const ViewArticle = (props: Props) => {
             {...props}
             authorization={authorization}
             urlParam={urlParam}
-            tenant={props.profile.tenant}
+            space={props.space}
           />
         </div>
       </div>
