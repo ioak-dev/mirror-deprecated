@@ -3,6 +3,7 @@ import './style.scss';
 
 interface Props {
   id: any;
+  pageid?: string;
 }
 const CategoryTree = (props: Props) => {
   return (
@@ -12,7 +13,9 @@ const CategoryTree = (props: Props) => {
         <i className="material-icons">keyboard_arrow_right</i>
       </div>
       <div className="category-name typography-4">dolor sit</div>
-      <div className="action typography-4">change</div>
+      {props.pageid !== 'leafNode' && (
+        <div className="action typography-4">change</div>
+      )}
     </div>
   );
 };
