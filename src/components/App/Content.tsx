@@ -26,7 +26,8 @@ import constants from '../Constants';
 import OakRoute from '../Auth/OakRoute';
 import Unauthorized from '../Auth/Unauthorized';
 import CreateArticle from '../Article/CreateArticle';
-import ListArticle from '../Article/ListArticle';
+import ViewArticle from '../Article/ViewArticle';
+import EditArticle from '../Article/EditArticle';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -135,12 +136,24 @@ const Content = (props: Props) => {
                   <OakRoute
                     {...propsLocal}
                     {...props}
-                    component={ListArticle}
+                    component={ArticleController}
                     middleware={['authenticate']}
                   />
                 )}
               />
 
+              <Route
+                path="/:tenant/article/view"
+                exact
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={ViewArticle}
+                    middleware={['authenticate']}
+                  />
+                )}
+              />
               <Route
                 path="/:tenant/article/create"
                 exact
@@ -153,7 +166,18 @@ const Content = (props: Props) => {
                   />
                 )}
               />
-
+              <Route
+                path="/:tenant/article/edit"
+                exact
+                render={propsLocal => (
+                  <OakRoute
+                    {...propsLocal}
+                    {...props}
+                    component={EditArticle}
+                    middleware={['authenticate']}
+                  />
+                )}
+              />
               <Route
                 path="/:tenant/settings"
                 exact

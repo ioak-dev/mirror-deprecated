@@ -5,7 +5,7 @@ import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces } from '../../Utils';
 import { sendMessage, receiveMessage } from '../../../events/MessageService';
-import { saveArticle } from '../ArticleService';
+import { saveArticle, fetchArticle } from '../ArticleService';
 import CategoryTree from '../../Category/CategoryTree';
 
 const domain = 'article';
@@ -14,13 +14,16 @@ interface Props {
   urlParam: any;
   history: any;
   tenant: any;
+  authorization: any;
 }
-const CreateItem = (props: Props) => {
+const EditItem = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
   const [data, setData] = useState({
     title: '',
     description: '',
     tags: '',
+    categoryId: '',
+    _id: '',
   });
 
   useEffect(() => {
@@ -39,12 +42,26 @@ const CreateItem = (props: Props) => {
   });
 
   useEffect(() => {
-    setData({
-      title: '',
-      description: '',
-      tags: '',
-    });
-  }, []);
+    if (props.authorization.token && props.urlParam.articleid) {
+      fetchArticle(props.tenant, props.urlParam.articleid, {
+        headers: {
+          Authorization: props.authorization.token,
+        },
+      }).then(response => {
+        if (response.data) {
+          response.data.map(item => {
+            setData({
+              _id: item._id,
+              title: item.title,
+              description: item.description,
+              tags: item.tags,
+              categoryId: item.categoryId,
+            });
+          });
+        }
+      });
+    }
+  }, [props.urlParam, props.authorization]);
 
   const handleChange = event => {
     setData({
@@ -65,7 +82,7 @@ const CreateItem = (props: Props) => {
     return true;
   };
 
-  const addArticle = () => {
+  const updateArticle = () => {
     if (
       validateEmptyText(data.title, 'Title is not provided') &&
       validateEmptyText(
@@ -76,7 +93,8 @@ const CreateItem = (props: Props) => {
       saveArticle(
         props.tenant,
         {
-          categoryId: props.urlParam.categoryid,
+          _id: data._id,
+          categoryId: data.categoryId,
           title: data.title,
           description: data.description,
           tags: data.tags,
@@ -93,7 +111,11 @@ const CreateItem = (props: Props) => {
   return (
     <div className="create-article-item">
       <div className="action-header position-right">
-        <OakButton action={() => addArticle()} theme="primary" variant="appear">
+        <OakButton
+          action={() => updateArticle()}
+          theme="primary"
+          variant="appear"
+        >
           <i className="material-icons">double_arrow</i>Save
         </OakButton>
         <OakButton
@@ -128,4 +150,4 @@ const CreateItem = (props: Props) => {
     </div>
   );
 };
-export default CreateItem;
+export default EditItem;

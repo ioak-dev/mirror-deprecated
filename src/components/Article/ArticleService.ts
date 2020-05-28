@@ -5,7 +5,7 @@ import { sendMessage } from '../../events/MessageService';
 const domain = 'article';
 
 export const saveArticle = (tenant, payload, authorization) => {
-  httpPut(`${constants.API_URL_FAQ}/${tenant}/`, payload, {
+  httpPut(`${constants.API_URL_ARTICLE}/${tenant}/`, payload, {
     headers: {
       Authorization: authorization.token,
     },
@@ -18,14 +18,24 @@ export const saveArticle = (tenant, payload, authorization) => {
   });
 };
 
-export const fetchArticle = (tenant, authorization, category?, searchText?) => {
-  if (category) {
-    httpGet(`${constants.API_URL_FAQ}/${tenant}/${category}`, {
-      headers: {
-        Authorization: authorization.token,
-      },
-    }).then(response => {
-      return Promise.resolve(response.data);
-    });
-  }
-};
+export function fetchArticle(tenant, articleid, headers) {
+  return httpGet(
+    `${constants.API_URL_ARTICLE}/${tenant}/${articleid}`,
+    headers
+  ).then(function(response) {
+    return Promise.resolve(response.data);
+  });
+}
+
+export function deleteArticle(tenant, articleid, headers) {
+  return httpDelete(
+    `${constants.API_URL_ARTICLE}/${tenant}/${articleid}`,
+    headers
+  ).then(function(response) {
+    if (response.status === 200) {
+      sendMessage(domain, true, {
+        action: `deleted'`,
+      });
+    }
+  });
+}

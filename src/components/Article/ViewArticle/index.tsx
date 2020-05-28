@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import './style.scss';
-import CreateItem from './CreateItem';
+import ArticleItem from './ArticleItem';
 
 interface Props {
   setProfile: Function;
@@ -12,9 +13,11 @@ interface Props {
 
 const queryString = require('query-string');
 
-const CreateArticle = (props: Props) => {
+const ViewArticle = (props: Props) => {
+  const authorization = useSelector(state => state.authorization);
+
   const [urlParam, setUrlParam] = useState({
-    categoryid: '',
+    articleid: '',
   });
 
   useEffect(() => {
@@ -29,8 +32,9 @@ const CreateArticle = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
-          <CreateItem
+          <ArticleItem
             {...props}
+            authorization={authorization}
             urlParam={urlParam}
             tenant={props.profile.tenant}
           />
@@ -40,4 +44,4 @@ const CreateArticle = (props: Props) => {
   );
 };
 
-export default CreateArticle;
+export default ViewArticle;
