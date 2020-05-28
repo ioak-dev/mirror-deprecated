@@ -28,48 +28,6 @@ const Links = (props: Props) => {
           >
             Articles
           </NavLink>
-          <NavLink
-            to={`/${props.profile.tenant}/article/create`}
-            className="navitem"
-            activeClassName="active"
-          >
-            CreateArticle
-          </NavLink>
-          <NavLink
-            to={`/${props.profile.tenant}/article/view`}
-            className="navitem"
-            activeClassName="active"
-          >
-            ViewArticle
-          </NavLink>
-          <NavLink
-            to={`/${props.profile.tenant}/article/edit`}
-            className="navitem"
-            activeClassName="active"
-          >
-            EditArticle
-          </NavLink>
-          <NavLink
-            to={`/${props.profile.tenant}/request`}
-            className="navitem"
-            activeClassName="active"
-          >
-            Requests
-          </NavLink>
-          <NavLink
-            to={`/${props.profile.tenant}/useradministration`}
-            className="navitem"
-            activeClassName="active"
-          >
-            Manage User
-          </NavLink>
-          <NavLink
-            to={`/${props.profile.tenant}/settings`}
-            className="navitem"
-            activeClassName="active"
-          >
-            Settings
-          </NavLink>
         </>
       )}
     </div>

@@ -65,8 +65,7 @@ const ArticleItem = (props: Props) => {
   }, [props.urlParam, props.authorization]);
 
   const Editing = () => {
-    console.log(props.history);
-    // props.history.push(`/${props.space}/article/edit?id=articleid`);
+    props.history.push(`/${props.space}/article/edit?id=articleid`);
   };
 
   const cancelCreation = () => {

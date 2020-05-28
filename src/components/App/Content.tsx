@@ -19,7 +19,7 @@ import { Authorization } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import Tenant from '../Tenant';
 import Settings from '../Settings';
-import ArticleController from '../Article_Backup/ArticleController';
+import ArticleList from '../Article/ArticleList';
 import ServiceRequests from '../Request';
 import UserAdministration from '../UserAdministration';
 import constants from '../Constants';
@@ -136,7 +136,7 @@ const Content = (props: Props) => {
                   <OakRoute
                     {...propsLocal}
                     {...props}
-                    component={ArticleController}
+                    component={ArticleList}
                     middleware={['authenticate']}
                   />
                 )}
