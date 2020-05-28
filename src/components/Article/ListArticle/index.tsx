@@ -16,7 +16,7 @@ interface Props {
 }
 
 const ListArticle = (props: Props) => {
-  const categoryid = '5eca57296a086f066690011s'; //to be removed
+  const categoryid = '5eca57296a086f066690011s'; // to be removed
   const history = useHistory(); // to be removed
 
   useEffect(() => {

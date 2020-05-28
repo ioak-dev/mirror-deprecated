@@ -7,6 +7,7 @@ import { isEmptyOrSpaces } from '../../Utils';
 import { sendMessage, receiveMessage } from '../../../events/MessageService';
 import { saveArticle } from '../ArticleService';
 import CategoryTree from '../../Category/CategoryTree';
+import OakChipGroup from '../../../oakui/OakChipGroup';
 
 const domain = 'article';
 
@@ -17,11 +18,53 @@ interface Props {
 }
 const CreateItem = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
-  const [data, setData] = useState({
+  const [data, setData] = useState<any>({
     title: '',
     description: '',
-    tags: '',
+    tags: [],
+    addTags: [],
+    removeTags: [],
   });
+  const [view, setView] = useState<any>({
+    tags: [],
+  });
+
+  const globalTags = [
+    'int',
+    'lorem',
+    'ipsum',
+    'dolor',
+    'wrsedfdsf',
+    'fgfdgyy',
+    'ujku',
+    'fre546',
+    'yudsf',
+    'uiasedas',
+    'y78sd',
+  ];
+
+  const globalTagsObjects = [
+    {
+      key: 'internet',
+      value: 'Internet',
+    },
+    {
+      key: 'web',
+      value: 'Web',
+    },
+    {
+      key: 'lorem',
+      value: 'Lorem ipsum',
+    },
+    {
+      key: 'dolor',
+      value: 'Dolor sit',
+    },
+    {
+      key: 'loremdolor',
+      value: 'Lorem ipsum, dolor sit',
+    },
+  ];
 
   useEffect(() => {
     const eventBus = receiveMessage().subscribe(message => {
@@ -42,15 +85,58 @@ const CreateItem = (props: Props) => {
     setData({
       title: '',
       description: '',
-      tags: '',
+      tags: [],
+      addTags: [],
+      removeTags: [],
     });
   }, []);
+
+  useEffect(
+    () =>
+      setView({
+        ...view,
+        tags: [...data.tags, ...data.addTags].filter(
+          item => !data.removeTags.includes(item)
+        ),
+      }),
+    [data.addTags, data.tags, data.removeTags]
+  );
 
   const handleChange = event => {
     setData({
       ...data,
       [event.target.name]: event.target.value,
     });
+  };
+
+  const handleTagAddition = key => {
+    if (!data.tags.includes(key)) {
+      setData({
+        ...data,
+        addTags: [...data.addTags, key],
+        removeTags: data.removeTags.filter(item => item !== key),
+      });
+    } else {
+      setData({
+        ...data,
+        removeTags: data.removeTags.filter(item => item !== key),
+      });
+    }
+  };
+
+  const handleTagRemoval = key => {
+    if (data.tags.includes(key)) {
+      setData({
+        ...data,
+        removeTags: [...data.removeTags, key],
+        addTags: data.addTags.filter(item => item !== key),
+      });
+    } else {
+      setData({
+        ...data,
+        addTags: data.addTags.filter(item => item !== key),
+      });
+    }
   };
 
   const validateEmptyText = (text, message) => {
@@ -79,6 +165,8 @@ const CreateItem = (props: Props) => {
           categoryId: props.urlParam.categoryid,
           title: data.title,
           description: data.description,
+          addTags: data.addTags,
+          removeTags: data.removeTags,
         },
         authorization
       );
@@ -117,11 +205,14 @@ const CreateItem = (props: Props) => {
           id="description"
           handleChange={e => handleChange(e)}
         />
-        <OakText
-          label="Tags (comma separated list)"
-          data={data}
+        <OakChipGroup
+          handleAddition={handleTagAddition}
+          handleRemoval={handleTagRemoval}
+          // objects={globalTagsObjects}
+          elements={globalTags}
+          data={view}
           id="tags"
-          handleChange={e => handleChange(e)}
+          label="Tags"
         />
       </div>
     </div>
