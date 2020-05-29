@@ -18,7 +18,7 @@ const ViewArticle = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
 
   const [urlParam, setUrlParam] = useState({
-    articleid: '',
+    id: '',
   });
 
   useEffect(() => {
@@ -26,8 +26,11 @@ const ViewArticle = (props: Props) => {
       ...props.profile,
       tenant: props.match.params.tenant,
     });
-    setUrlParam(queryString.parse(props.location.search));
   }, []);
+
+  useEffect(() => {
+    setUrlParam(queryString.parse(props.location.search));
+  }, [props.location.search]);
 
   return (
     <div className="app-page">
@@ -36,7 +39,7 @@ const ViewArticle = (props: Props) => {
           <ArticleItem
             {...props}
             authorization={authorization}
-            urlParam={urlParam}
+            id={urlParam.id}
             space={props.space}
           />
         </div>

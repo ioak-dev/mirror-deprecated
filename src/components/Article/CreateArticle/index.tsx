@@ -8,6 +8,7 @@ interface Props {
   match: any;
   location: any;
   history: any;
+  space: string;
 }
 
 const queryString = require('query-string');
@@ -29,11 +30,7 @@ const CreateArticle = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
-          <CreateItem
-            {...props}
-            urlParam={urlParam}
-            tenant={props.profile.tenant}
-          />
+          <CreateItem {...props} urlParam={urlParam} space={props.space} />
         </div>
       </div>
     </div>

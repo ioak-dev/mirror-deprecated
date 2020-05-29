@@ -8,7 +8,7 @@ import { receiveMessage, sendMessage } from '../../../events/MessageService';
 const domain = 'Article';
 
 interface Props {
-  urlParam: any;
+  id: string;
   history?: any;
   // tenant: any;
   authorization: any;
@@ -26,46 +26,38 @@ const ArticleItem = (props: Props) => {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
-    const eventBus = receiveMessage().subscribe(message => {
-      if (message.name === domain && message.signal) {
-        sendMessage('notification', true, {
-          type: 'success',
-          message: `${domain} ${message.data.action}`,
-          duration: 5000,
-        });
+    (async function anonymous() {
+      if (props.authorization.token && props.id) {
+        const { outcome, response } = await fetchArticle(
+          props.space,
+          props.id,
+          props.authorization
+        );
 
-        setData({
-          title: '',
-          description: '',
-          tags: '',
-        });
-      }
-    });
-    return () => eventBus.unsubscribe();
-  });
-
-  useEffect(() => {
-    if (props.authorization.token && props.urlParam.articleid) {
-      fetchArticle(props.space, props.urlParam.articleid, {
-        headers: {
-          Authorization: props.authorization.token,
-        },
-      }).then(response => {
-        if (response.data) {
-          response.data.map(item => {
-            setData({
-              title: item.title,
-              description: item.description,
-              tags: item.tags,
-            });
+        if (outcome) {
+          setData(response.data.data);
+        } else {
+          sendMessage('notification', true, {
+            type: 'failure',
+            message:
+              response?.response?.status === 404
+                ? 'Article does not exist. You will be redirected to articles page'
+                : response?.response?.status,
           });
+          setTimeout(() => {
+            if (props.history.length > 2) {
+              props.history.goBack();
+            } else {
+              props.history.push(`/${props.space}/article`);
+            }
+          }, 1000);
         }
-      });
-    }
-  }, [props.urlParam, props.authorization]);
+      }
+    })();
+  }, [props.id, props.authorization]);
 
-  const Editing = () => {
-    props.history.push(`/${props.space}/article/edit?id=articleid`);
+  const editArticle = () => {
+    props.history.push(`/${props.space}/article/edit?id=${props.id}`);
   };
 
   const cancelCreation = () => {
@@ -75,14 +67,16 @@ const ArticleItem = (props: Props) => {
   const deleteArticlePrompt = () => {
     setConfirmDelete(true);
   };
-  const deleteArticledata = () => {
-    deleteArticle(props.space, props.urlParam.articleid, {
-      headers: {
-        Authorization: props.authorization.token,
-      },
-    }).then(response => {
+  const deleteArticledata = async () => {
+    const { outcome } = await deleteArticle(
+      props.space,
+      props.id,
+      props.authorization
+    );
+
+    if (outcome) {
       setConfirmDelete(false);
-    });
+    }
   };
 
   return (
@@ -90,7 +84,7 @@ const ArticleItem = (props: Props) => {
       <div className="action-header position-right">
         <OakButton
           action={() => {
-            Editing();
+            editArticle();
           }}
           theme="primary"
           variant="appear"
@@ -123,7 +117,7 @@ const ArticleItem = (props: Props) => {
           toggleVisibility={() => setConfirmDelete(!confirmDelete)}
         />
       </div>
-      <CategoryTree id={props.urlParam.articleid} pageid="leafNode" />
+      <CategoryTree id={props.id} pageid="leafNode" />
 
       <div
         className="typography-7"

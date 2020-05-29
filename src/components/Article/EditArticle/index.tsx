@@ -6,6 +6,7 @@ import EditItem from './EditItem';
 interface Props {
   setProfile: Function;
   profile: any;
+  space: string;
   match: any;
   location: any;
   history?: any;
@@ -16,7 +17,8 @@ const queryString = require('query-string');
 const EditArticle = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
   const [urlParam, setUrlParam] = useState({
-    articleid: '',
+    id: '',
+    categoryId: '',
   });
 
   useEffect(() => {
@@ -24,8 +26,11 @@ const EditArticle = (props: Props) => {
       ...props.profile,
       tenant: props.match.params.tenant,
     });
-    setUrlParam(queryString.parse(props.location.search));
   }, []);
+
+  useEffect(() => {
+    setUrlParam(queryString.parse(props.location.search));
+  }, [props.location.search]);
 
   return (
     <div className="app-page">
@@ -33,8 +38,9 @@ const EditArticle = (props: Props) => {
         <div className="app-text">
           <EditItem
             history={props.history}
-            urlParam={urlParam}
-            tenant={props.profile.tenant}
+            id={urlParam.id}
+            categoryId={urlParam.categoryId}
+            space={props.space}
             authorization={authorization}
           />
         </div>

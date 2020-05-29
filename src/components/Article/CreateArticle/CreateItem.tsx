@@ -14,7 +14,7 @@ const domain = 'article';
 interface Props {
   urlParam: any;
   history: any;
-  tenant: any;
+  space: any;
 }
 const CreateItem = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
@@ -65,21 +65,6 @@ const CreateItem = (props: Props) => {
       value: 'Lorem ipsum, dolor sit',
     },
   ];
-
-  useEffect(() => {
-    const eventBus = receiveMessage().subscribe(message => {
-      if (message.name === domain && message.signal) {
-        sendMessage('notification', true, {
-          type: 'success',
-          message: `${domain} ${message.data.action}`,
-          duration: 5000,
-        });
-
-        props.history.goBack();
-      }
-    });
-    return () => eventBus.unsubscribe();
-  });
 
   useEffect(() => {
     setData({
@@ -151,7 +136,7 @@ const CreateItem = (props: Props) => {
     return true;
   };
 
-  const addArticle = () => {
+  const addArticle = async () => {
     if (
       validateEmptyText(data.title, 'Title is not provided') &&
       validateEmptyText(
@@ -159,8 +144,8 @@ const CreateItem = (props: Props) => {
         'Provide details for the mentioned title'
       )
     ) {
-      saveArticle(
-        props.tenant,
+      const outcome = await saveArticle(
+        props.space,
         {
           categoryId: props.urlParam.categoryid,
           title: data.title,
@@ -170,6 +155,10 @@ const CreateItem = (props: Props) => {
         },
         authorization
       );
+
+      if (outcome) {
+        props.history.goBack();
+      }
     }
   };
 

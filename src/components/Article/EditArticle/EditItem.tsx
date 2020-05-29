@@ -11,9 +11,10 @@ import CategoryTree from '../../Category/CategoryTree';
 const domain = 'article';
 
 interface Props {
-  urlParam: any;
+  id: string;
+  categoryId: string;
   history: any;
-  tenant: any;
+  space: any;
   authorization: any;
 }
 const EditItem = (props: Props) => {
@@ -27,41 +28,20 @@ const EditItem = (props: Props) => {
   });
 
   useEffect(() => {
-    const eventBus = receiveMessage().subscribe(message => {
-      if (message.name === domain && message.signal) {
-        sendMessage('notification', true, {
-          type: 'success',
-          message: `${domain} ${message.data.action}`,
-          duration: 5000,
-        });
+    (async function anonymous() {
+      if (props.authorization.token && props.id) {
+        const { outcome, response } = await fetchArticle(
+          props.space,
+          props.id,
+          props.authorization
+        );
 
-        props.history.goBack();
-      }
-    });
-    return () => eventBus.unsubscribe();
-  });
-
-  useEffect(() => {
-    if (props.authorization.token && props.urlParam.articleid) {
-      fetchArticle(props.tenant, props.urlParam.articleid, {
-        headers: {
-          Authorization: props.authorization.token,
-        },
-      }).then(response => {
-        if (response.data) {
-          response.data.map(item => {
-            setData({
-              _id: item._id,
-              title: item.title,
-              description: item.description,
-              tags: item.tags,
-              categoryId: item.categoryId,
-            });
-          });
+        if (outcome) {
+          setData(response.data.data);
         }
-      });
-    }
-  }, [props.urlParam, props.authorization]);
+      }
+    })();
+  }, [props.id, props.authorization]);
 
   const handleChange = event => {
     setData({
@@ -82,7 +62,7 @@ const EditItem = (props: Props) => {
     return true;
   };
 
-  const updateArticle = () => {
+  const updateArticle = async () => {
     if (
       validateEmptyText(data.title, 'Title is not provided') &&
       validateEmptyText(
@@ -90,8 +70,8 @@ const EditItem = (props: Props) => {
         'Provide details for the mentioned title'
       )
     ) {
-      saveArticle(
-        props.tenant,
+      const { outcome } = await saveArticle(
+        props.space,
         {
           _id: data._id,
           categoryId: data.categoryId,
@@ -101,6 +81,10 @@ const EditItem = (props: Props) => {
         },
         authorization
       );
+
+      if (outcome) {
+        props.history.goBack();
+      }
     }
   };
 
@@ -129,7 +113,7 @@ const EditItem = (props: Props) => {
         )}
       </div>
       <div className="user-form">
-        <CategoryTree id={props.urlParam.categoryid} />
+        <CategoryTree id={props.categoryId} />
         <OakText
           label="Title"
           data={data}
@@ -140,7 +124,7 @@ const EditItem = (props: Props) => {
           label="Description"
           data={data}
           id="description"
-          handleChange={e => handleChange(e)}
+          handleChange={handleChange}
         />
         <OakText
           label="Tags (comma separated list)"

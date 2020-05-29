@@ -1,41 +1,57 @@
+import axios from 'axios';
 import { httpGet, httpPut, httpDelete } from '../Lib/RestTemplate';
-import constants from '../Constants';
-import { sendMessage } from '../../events/MessageService';
+
+import {
+  sendMessage,
+  newMessageId,
+  httpHandleRequest,
+  httpHandleResponse,
+  httpHandleError,
+  httpHandleResponseSilent,
+  httpHandleErrorSilent,
+} from '../../events/MessageService';
 
 const domain = 'article';
+const baseUrl = process.env.REACT_APP_API_URL;
 
-export const saveArticle = (tenant, payload, authorization) => {
-  httpPut(`${constants.API_URL_ARTICLE}/${tenant}/`, payload, {
-    headers: {
-      Authorization: authorization.token,
-    },
-  }).then(response => {
-    if (response.status === 200) {
-      sendMessage(domain, true, {
-        action: payload.id ? 'updated' : 'created',
-      });
-    }
-  });
+export const saveArticle = async (space, payload, authorization) => {
+  const action = 'Save article';
+  const messageId = newMessageId();
+  httpHandleRequest(messageId, action, payload.title);
+  try {
+    const response = await axios.put(`${baseUrl}/article/${space}/`, payload, {
+      headers: {
+        Authorization: authorization.token,
+      },
+    });
+    return httpHandleResponse(messageId, response, action, payload.title);
+  } catch (error) {
+    return httpHandleError(messageId, error, action, payload.title);
+  }
 };
 
-export function fetchArticle(tenant, articleid, headers) {
-  return httpGet(
-    `${constants.API_URL_ARTICLE}/${tenant}/${articleid}`,
-    headers
-  ).then(function(response) {
-    return Promise.resolve(response.data);
-  });
-}
+export const fetchArticle = async (space, id, authorization) => {
+  try {
+    const response = await axios.get(`${baseUrl}/article/${space}/${id}`, {
+      headers: {
+        Authorization: authorization.token,
+      },
+    });
+    return httpHandleResponseSilent(response);
+  } catch (error) {
+    return httpHandleErrorSilent(error);
+  }
+};
 
-export function deleteArticle(tenant, articleid, headers) {
-  return httpDelete(
-    `${constants.API_URL_ARTICLE}/${tenant}/${articleid}`,
-    headers
-  ).then(function(response) {
-    if (response.status === 200) {
-      sendMessage(domain, true, {
-        action: `deleted'`,
-      });
-    }
-  });
-}
+export const deleteArticle = async (space, id, authorization) => {
+  try {
+    const response = await axios.get(`${baseUrl}/article/${space}/${id}`, {
+      headers: {
+        Authorization: authorization.token,
+      },
+    });
+    return httpHandleResponseSilent(response);
+  } catch (error) {
+    return httpHandleErrorSilent(error);
+  }
+};

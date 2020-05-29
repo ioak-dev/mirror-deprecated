@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import './styles/oak-editor.scss';
 import 'react-quill/dist/quill.snow.css';
@@ -12,6 +12,7 @@ interface Props {
   label?: string;
 }
 const OakEditor = (props: Props) => {
+  const [blockApiChangeEvents, setBlockApiChangeEvents] = useState(true);
   const modules = {
     toolbar: [
       [
@@ -75,13 +76,17 @@ const OakEditor = (props: Props) => {
     'background',
     'align',
   ];
-  const handleChange = value => {
-    props.handleChange({
-      target: {
-        name: props.id,
-        value,
-      },
-    });
+  const handleChange = (value, delta, source) => {
+    if (source === 'api' && blockApiChangeEvents) {
+      setBlockApiChangeEvents(false);
+    } else {
+      props.handleChange({
+        target: {
+          name: props.id,
+          value,
+        },
+      });
+    }
   };
   return (
     <div className={props.bubble ? 'oak-editor bubble' : 'oak-editor'}>
