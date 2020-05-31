@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
 import OakText from '../../../oakui/OakText';
 import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
@@ -8,6 +10,7 @@ import { sendMessage, receiveMessage } from '../../../events/MessageService';
 import { saveArticle } from '../ArticleService';
 import CategoryTree from '../../Category/CategoryTree';
 import OakChipGroup from '../../../oakui/OakChipGroup';
+import { ArticlePayload } from '../../../types/graphql';
 
 const domain = 'article';
 
@@ -16,7 +19,18 @@ interface Props {
   history: any;
   space: any;
 }
+
+const ADD_ARTICLE = gql`
+  mutation AddArticle($payload: ArticlePayload!) {
+    addArticle(payload: $payload) {
+      id
+      title
+    }
+  }
+`;
+
 const CreateItem = (props: Props) => {
+  const [addArticle, { data: savedArticle }] = useMutation(ADD_ARTICLE);
   const authorization = useSelector(state => state.authorization);
   const [data, setData] = useState<any>({
     title: '',
@@ -136,7 +150,7 @@ const CreateItem = (props: Props) => {
     return true;
   };
 
-  const addArticle = async () => {
+  const submit = () => {
     if (
       validateEmptyText(data.title, 'Title is not provided') &&
       validateEmptyText(
@@ -144,21 +158,18 @@ const CreateItem = (props: Props) => {
         'Provide details for the mentioned title'
       )
     ) {
-      const outcome = await saveArticle(
-        props.space,
-        {
-          categoryId: props.urlParam.categoryid,
-          title: data.title,
-          description: data.description,
-          addTags: data.addTags,
-          removeTags: data.removeTags,
+      const payload: ArticlePayload = {
+        title: data.title,
+        categoryId: props.urlParam.categoryid,
+        description: data.description,
+        addTags: data.addTags,
+        removeTags: data.removeTags,
+      };
+      addArticle({
+        variables: {
+          payload,
         },
-        authorization
-      );
-
-      if (outcome) {
-        props.history.goBack();
-      }
+      }).then(response => props.history.goBack());
     }
   };
 
@@ -169,7 +180,7 @@ const CreateItem = (props: Props) => {
   return (
     <div className="create-article-item">
       <div className="action-header position-right">
-        <OakButton action={() => addArticle()} theme="primary" variant="appear">
+        <OakButton action={submit} theme="primary" variant="appear">
           <i className="material-icons">double_arrow</i>Save
         </OakButton>
         {props.history.length > 2 && (

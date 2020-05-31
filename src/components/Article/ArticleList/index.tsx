@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 import './style.scss';
 import OakButton from '../../../oakui/OakButton';
+import { Article } from '../../../types/graphql';
 
 interface Props {
   setProfile: Function;
@@ -13,7 +16,18 @@ interface Props {
 
 const queryString = require('query-string');
 
+const LIST_ARTICLES = gql`
+  {
+    articles {
+      id
+      title
+      description
+    }
+  }
+`;
+
 const CreateArticle = (props: Props) => {
+  const { loading, error, data } = useQuery(LIST_ARTICLES);
   const [urlParam, setUrlParam] = useState({
     categoryid: '',
   });
@@ -53,6 +67,16 @@ const CreateArticle = (props: Props) => {
             >
               Simulate click of an article from list
             </OakButton>
+          </div>
+          <div className="separate-as-new-component">
+            {data?.articles.map((item: Article) => (
+              <>
+                <div className="typography-8">{item.title}</div>
+                <div className="typography-5 space-bottom-2">
+                  {item.description}
+                </div>
+              </>
+            ))}
           </div>
         </div>
       </div>

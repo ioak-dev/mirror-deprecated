@@ -1,4 +1,5 @@
 import React from 'react';
+import cookie from 'react-cookie';
 import { Provider } from 'react-redux';
 import store from '../../store';
 import './style.scss';

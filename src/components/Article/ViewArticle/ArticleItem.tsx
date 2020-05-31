@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import gql from 'graphql-tag';
 import OakButton from '../../../oakui/OakButton';
 import CategoryTree from '../../Category/CategoryTree';
 import { fetchArticle, deleteArticle } from '../ArticleService';
 import OakPrompt from '../../../oakui/OakPrompt';
-import { receiveMessage, sendMessage } from '../../../events/MessageService';
+import { Article } from '../../../types/graphql';
 
 const domain = 'Article';
 
@@ -13,48 +14,12 @@ interface Props {
   // tenant: any;
   authorization: any;
   location: any;
+  article: Article;
   space: string;
 }
 
 const ArticleItem = (props: Props) => {
-  const [data, setData] = useState({
-    title: '',
-    description: '',
-    tags: '',
-  });
-
   const [confirmDelete, setConfirmDelete] = useState(false);
-
-  useEffect(() => {
-    (async function anonymous() {
-      if (props.authorization.token && props.id) {
-        const { outcome, response } = await fetchArticle(
-          props.space,
-          props.id,
-          props.authorization
-        );
-
-        if (outcome) {
-          setData(response.data.data);
-        } else {
-          sendMessage('notification', true, {
-            type: 'failure',
-            message:
-              response?.response?.status === 404
-                ? 'Article does not exist. You will be redirected to articles page'
-                : response?.response?.status,
-          });
-          setTimeout(() => {
-            if (props.history.length > 2) {
-              props.history.goBack();
-            } else {
-              props.history.push(`/${props.space}/article`);
-            }
-          }, 1000);
-        }
-      }
-    })();
-  }, [props.id, props.authorization]);
 
   const editArticle = () => {
     props.history.push(`/${props.space}/article/edit?id=${props.id}`);
@@ -119,21 +84,14 @@ const ArticleItem = (props: Props) => {
       </div>
       <CategoryTree id={props.id} pageid="leafNode" />
 
-      <div
-        className="typography-7"
-        dangerouslySetInnerHTML={{ __html: data.title }}
-      />
+      <div className="typography-7">{props.article.title}</div>
       <div
         className="typography-4"
-        dangerouslySetInnerHTML={{ __html: data.description }}
+        dangerouslySetInnerHTML={{ __html: props.article.description || '' }}
       />
-
-      {data.tags && (
-        <div
-          className="typography-4"
-          dangerouslySetInnerHTML={{ __html: data.tags }}
-        />
-      )}
+      {/* {props.article.tags && (
+        <div className="typography-4">{props.article.tags}</div>
+      )} */}
     </div>
   );
 };

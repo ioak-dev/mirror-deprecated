@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
+
 import { withRouter } from 'react-router';
 import { withCookies } from 'react-cookie';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
@@ -16,7 +17,6 @@ interface Props {
   getAuth: Function;
   addAuth: Function;
   removeAuth: Function;
-  authorization: Authorization;
   getProfile: Function;
   setProfile: Function;
   profile: Profile;
@@ -38,6 +38,8 @@ const Navigation = (props: Props) => {
     transparentNavBar: false,
     firstLoad: true,
   });
+
+  const authorization = useSelector(state => state.authorization);
 
   const [space, setSpace] = useState('');
 
@@ -66,10 +68,10 @@ const Navigation = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (data.firstLoad && props.authorization && props.authorization.isAuth) {
+    if (data.firstLoad && authorization && authorization.isAuth) {
       setData({ ...data, firstLoad: false });
     }
-  }, [props.authorization.isAuth]);
+  }, [authorization.isAuth]);
 
   const logout = (
     event: any,
@@ -115,6 +117,7 @@ const Navigation = (props: Props) => {
         {...props}
         logout={logout}
         login={login}
+        space={space}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
         toggleDarkMode={toggleDarkMode}
@@ -123,6 +126,7 @@ const Navigation = (props: Props) => {
         {...props}
         logout={logout}
         login={login}
+        space={space}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
         toggleDarkMode={toggleDarkMode}

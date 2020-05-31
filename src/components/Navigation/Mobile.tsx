@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import './style.scss';
 import mirrorWhite from '../../images/mirror_white.svg';
 import mirrorWhiteSmall from '../../images/mirror_white_small.svg';
@@ -15,10 +17,10 @@ interface Props {
   getAuth: Function;
   addAuth: Function;
   removeAuth: Function;
-  authorization: Authorization;
   getProfile: Function;
   toggleDarkMode: Function;
   profile: Profile;
+  space: string;
   login: Function;
   transparent: boolean;
   logout: Function;
@@ -26,6 +28,7 @@ interface Props {
 }
 
 const Mobile = (props: Props) => {
+  const authorization = useSelector(state => state.authorization);
   const [data, setData] = useState({
     showSearchBar: false,
     menu: false,
@@ -104,12 +107,12 @@ const Mobile = (props: Props) => {
                         {props.authorization.isAuth && <OakButton invert variant="appear" small action={props.toggleSettings}><i className="material-icons">brush</i>Action 1</OakButton>}
                     </div> */}
             <div className="buttons">
-              {props.authorization.isAuth && (
+              {authorization.isAuth && (
                 <OakButton variant="appear" small action={props.logout}>
                   <i className="material-icons">power_settings_new</i>Logout
                 </OakButton>
               )}
-              {!props.authorization.isAuth && (
+              {!authorization.isAuth && (
                 <OakButton
                   variant="appear"
                   small
@@ -118,7 +121,7 @@ const Mobile = (props: Props) => {
                   <i className="material-icons">person</i>Login
                 </OakButton>
               )}
-              {!props.authorization.isAuth && (
+              {!authorization.isAuth && (
                 <OakButton
                   variant="appear"
                   small
@@ -129,7 +132,7 @@ const Mobile = (props: Props) => {
               )}
             </div>
           </div>
-          <Links authorization={props.authorization} profile={props.profile} />
+          <Links authorization={authorization} space={props.space} />
           <div className="dark-mode">
             <i
               className="material-icons"

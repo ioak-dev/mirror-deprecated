@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import './style.scss';
 import mirrorWhite from '../../images/mirror_white.svg';
@@ -15,10 +16,10 @@ interface Props {
   getAuth: Function;
   addAuth: Function;
   removeAuth: Function;
-  authorization: Authorization;
   getProfile: Function;
   toggleDarkMode: Function;
   profile: Profile;
+  space: string;
   login: Function;
   transparent: boolean;
   logout: Function;
@@ -27,6 +28,7 @@ interface Props {
 
 const Desktop = (props: Props) => {
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const authorization = useSelector(state => state.authorization);
 
   useEffect(() => {
     props.getProfile();
@@ -57,7 +59,7 @@ const Desktop = (props: Props) => {
         {(props.transparent || props.profile.theme === 'theme_dark') && (
           <img className="logo" src={mirrorWhite} alt="Mirror logo" />
         )}
-        <Links authorization={props.authorization} profile={props.profile} />
+        <Links authorization={authorization} space={props.space} />
         {showSearchBar && <SearchBar alt />}
       </div>
       <div className="right">
@@ -67,7 +69,7 @@ const Desktop = (props: Props) => {
           </i>
         </div>
         <div className="action">
-          {props.authorization.isAuth && (
+          {authorization.isAuth && (
             <OakButton
               theme="primary"
               variant="disappear"
@@ -77,7 +79,7 @@ const Desktop = (props: Props) => {
               <i className="material-icons">power_settings_new</i>Logout
             </OakButton>
           )}
-          {!props.authorization.isAuth && (
+          {!authorization.isAuth && (
             <OakButton
               theme="primary"
               variant="appear"
@@ -88,7 +90,7 @@ const Desktop = (props: Props) => {
               <i className="material-icons">person</i>Login
             </OakButton>
           )}
-          {!props.authorization.isAuth && (
+          {!authorization.isAuth && (
             <OakButton
               theme="primary"
               variant="appear"
