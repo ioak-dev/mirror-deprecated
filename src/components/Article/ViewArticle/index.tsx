@@ -22,6 +22,10 @@ const GET_ARTICLE = gql`
       id
       title
       description
+      tags {
+        id
+        name
+      }
     }
   }
 `;

@@ -25,6 +25,9 @@ const ADD_ARTICLE = gql`
     addArticle(payload: $payload) {
       id
       title
+      tags {
+        name
+      }
     }
   }
 `;

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import gql from 'graphql-tag';
+import Maybe from 'graphql/tsutils/Maybe';
 import OakButton from '../../../oakui/OakButton';
 import CategoryTree from '../../Category/CategoryTree';
 import { fetchArticle, deleteArticle } from '../ArticleService';
 import OakPrompt from '../../../oakui/OakPrompt';
-import { Article } from '../../../types/graphql';
+import { Article, Tag } from '../../../types/graphql';
 import OakViewer from '../../../oakui/OakViewer';
+import TagItem from './TagItem';
+import TagContainer from './TagContainer';
 
 const domain = 'Article';
 
@@ -86,14 +89,8 @@ const ArticleItem = (props: Props) => {
       <CategoryTree id={props.id} pageid="leafNode" />
 
       <div className="typography-7">{props.article.title}</div>
-      {/* <div
-        className="typography-4"
-        dangerouslySetInnerHTML={{ __html: props.article.description || '' }}
-      /> */}
       <OakViewer>{props.article.description}</OakViewer>
-      {/* {props.article.tags && (
-        <div className="typography-4">{props.article.tags}</div>
-      )} */}
+      <TagContainer tags={props.article.tags || []} />
     </div>
   );
 };

@@ -28,8 +28,15 @@ export type Article = {
   id: Scalars['ID'];
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  categoryId?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   category?: Maybe<Category>;
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  article?: Maybe<Article>;
 };
 
 export type CategoryPayload = {
@@ -58,6 +65,7 @@ export type Query = {
   __typename?: 'Query';
   article?: Maybe<Article>;
   articles?: Maybe<Array<Maybe<Article>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
   category?: Maybe<Category>;
   categories?: Maybe<Array<Maybe<Category>>>;
   session?: Maybe<User>;
@@ -65,6 +73,10 @@ export type Query = {
 
 export type QueryArticleArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryTagsArgs = {
+  articleId: Scalars['ID'];
 };
 
 export type QueryCategoryArgs = {
@@ -110,7 +122,9 @@ export type AddArticleMutationVariables = {
 
 export type AddArticleMutation = { __typename?: 'Mutation' } & {
   addArticle?: Maybe<
-    { __typename?: 'Article' } & Pick<Article, 'id' | 'title'>
+    { __typename?: 'Article' } & Pick<Article, 'id' | 'title'> & {
+        tags?: Maybe<Array<Maybe<{ __typename?: 'Tag' } & Pick<Tag, 'name'>>>>;
+      }
   >;
 };
 
@@ -132,7 +146,7 @@ export type SessionQuery = { __typename?: 'Query' } & {
   session?: Maybe<
     { __typename?: 'User' } & Pick<
       User,
-      'firstName' | 'lastName' | 'email' | 'token'
+      'id' | 'firstName' | 'lastName' | 'email' | 'token'
     >
   >;
 };
@@ -142,6 +156,9 @@ export const AddArticleDocument = gql`
     addArticle(payload: $payload) {
       id
       title
+      tags {
+        name
+      }
     }
   }
 `;
@@ -270,6 +287,7 @@ export type ArticleQueryResult = ApolloReactCommon.QueryResult<
 export const SessionDocument = gql`
   query Session($key: ID!) {
     session(key: $key) {
+      id
       firstName
       lastName
       email
