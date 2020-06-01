@@ -72,9 +72,7 @@ const CreateArticle = (props: Props) => {
             {data?.articles.map((item: Article) => (
               <>
                 <div className="typography-8">{item.title}</div>
-                <div className="typography-5 space-bottom-2">
-                  {item.description}
-                </div>
+                <div className="typography-5 space-bottom-2">{item.id}</div>
               </>
             ))}
           </div>

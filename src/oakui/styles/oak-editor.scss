@@ -52,6 +52,7 @@
   }
   .ql-editor {
     padding: 10px 0;
+    font-size: 16px;
   }
   .ql-snow .ql-stroke {
     stroke: var(--color-foreground-3);
@@ -72,30 +73,23 @@
     color: var(--color-foreground-1);
   }
 
-  p,
-  ul,
-  li {
-    font-size: var(--metric-typography-5);
-  }
-
-  h5 {
-    font-size: var(--metric-typography-8) !important;
-  }
-
-  h4 {
-    font-size: var(--metric-typography-9) !important;
-  }
-
-  h3 {
-    font-size: var(--metric-typography-10) !important;
-  }
-
-  h2 {
-    font-size: var(--metric-typography-11) !important;
-  }
-
   h1 {
-    font-size: var(--metric-typography-12) !important;
+    font-size: 2em !important;
+  }
+  h2 {
+    font-size: 1.5em !important;
+  }
+  h3 {
+    font-size: 1.17em;
+  }
+  h4 {
+    font-size: 1.12em;
+  }
+  h5 {
+    font-size: 0.83em;
+  }
+  h6 {
+    font-size: 0.75em;
   }
 
   .ql-snow .ql-picker.ql-expanded .ql-picker-options {
