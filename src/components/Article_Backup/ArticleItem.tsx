@@ -10,7 +10,7 @@ interface Props {
 
 const ArticleItem = (props: Props) => {
   return (
-    <div className="article-record">
+    <div className="article-record" key={props.id}>
       <div className="item-container">
         <div className="item-actions">
           <div className="item-edit">

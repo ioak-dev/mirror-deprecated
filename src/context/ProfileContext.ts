@@ -8,4 +8,4 @@ const ProfileContext = React.createContext({});
 
 export default ProfileContext;
 
-export const ThemeContext = React.createContext(["light", () => {}]);
+// export const ThemeContext = React.createContext(["light", () => {}]);

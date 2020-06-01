@@ -1,69 +1,111 @@
 import React, { useEffect } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { getAuth } from '../../actions/AuthActions';
+import { useQuery, useLazyQuery, useApolloClient } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import { getAuth, addAuth } from '../../actions/AuthActions';
 import { Authorization } from '../Types/GeneralTypes';
-import AuthInit from './AuthInit';
-import Home from '../Home';
+import { httpGet } from '../Lib/RestTemplate';
+import { sendMessage } from '../../events/MessageService';
 
 interface Props {
   authorization: Authorization;
-  getAuth: Function;
-  path: string;
-  render: any;
-  profile: any;
-  setProfile: Function;
-  getProfile: Function;
+  path?: string;
+  render?: any;
   component: any;
+  match: any;
+  history: any;
+  middleware?: string[];
+  cookies: any;
 }
 
-const OakRoute = ({
-  profile: profile,
-  getProfile: getProfile,
-  setProfile: setProfile,
-  component: ChildComponent,
-  ...rest
-}) => {
-  useEffect(() => {
-    console.log(profile.appStatus, profile.loginPage);
-    if (profile.appStatus === 'notmounted' && !profile.loginPage) {
-      setProfile({ tenant: rest.match.params.tenant, appStatus: 'mounted' });
-    } else {
-      setProfile({ tenant: rest.match.params.tenant });
+const GET_SESSION = gql`
+  query Session($key: ID!) {
+    session(key: $key) {
+      id
+      firstName
+      lastName
+      email
+      token
     }
-    middlewares(rest.middleware);
-  }, []);
+  }
+`;
 
-  useEffect(() => {
-    middlewares(rest.middleware);
-  }, [profile.appStatus]);
+const OakRoute = (props: Props) => {
+  const gqlClient = useApolloClient();
+  const authorization = useSelector(state => state.authorization);
+  const profile = useSelector(state => state.profile);
+  const dispatch = useDispatch();
 
-  const middlewares = layers => {
-    if (profile.appStatus === 'authenticated') {
-      layers?.forEach(middlewareName => {
-        runMidleware(middlewareName);
-      });
-    }
+  const middlewares = () => {
+    props.middleware?.forEach(middlewareName => {
+      if (!runMidleware(middlewareName)) {
+        return false;
+      }
+    });
+    return true;
   };
 
   const runMidleware = middlewareName => {
-    console.log(middlewareName);
+    sendMessage('spaceChange', true, '');
     switch (middlewareName) {
-      case 'isAuthenticated':
-        return isAuthenticated();
-        break;
+      case 'readAuthentication':
+        return readAuthenticationSpace();
+      case 'authenticate':
+        return authenticateSpace();
       case 'isAdmin':
         return isAdmin();
-        break;
+      default:
+        return true;
     }
   };
 
-  const isAuthenticated = () => {
-    if (rest.authorization.isAuth) {
+  const authenticateSpace = () => {
+    return authenticate('space');
+  };
+  const readAuthenticationSpace = () => {
+    return authenticate('space', false);
+  };
+
+  const authenticate = async (type, redirect = true) => {
+    sendMessage('spaceChange', true, props.match.params.tenant);
+    if (authorization.isAuth) {
       return true;
+    }
+    const cookieKey = `mirror_${props.match.params.tenant}`;
+    const authKey = props.cookies.get(cookieKey);
+    const baseAuthUrl = `/auth/${props.match.params.tenant}`;
+    if (authKey) {
+      const { data } = await gqlClient.query({
+        query: GET_SESSION,
+        variables: { key: authKey },
+      });
+
+      if (data?.session) {
+        dispatch(
+          addAuth({
+            isAuth: true,
+            token: data.session.token,
+            secret: '',
+            firstName: data.session.firstName,
+            lastName: data.session.lastName,
+            email: data.session.email,
+          })
+        );
+      } else {
+        props.cookies.remove(cookieKey);
+        if (redirect) {
+          sendMessage('notification', true, {
+            type: 'failure',
+            message: 'Invalid session token',
+            duration: 3000,
+          });
+          redirectToLogin(props.match.params.tenant);
+        }
+      }
+    } else if (redirect) {
+      redirectToLogin(props.match.params.tenant);
     } else {
-      redirectToLogin();
-      return false;
+      return true;
     }
   };
 
@@ -72,39 +114,27 @@ const OakRoute = ({
     return false;
   };
 
-  const redirectToLogin = () => {
-    window.location.href = `http://localhost:3010/#/${profile.tenant}/login?appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+  const redirectToLogin = spaceId => {
+    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceId}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
   };
 
   const redirectToUnauthorized = () => {
-    rest.history.push(`/${profile.tenant}/unauthorized`);
+    props.history.push(`/${profile.tenant}/unauthorized`);
   };
 
   return (
     <>
-      <AuthInit
-        profile={profile}
-        redirectIfNotAuthenticated={
-          rest.middleware && rest.middleware.indexOf('isAuthenticated') !== -1
-        }
-      />
-      {(!rest.middleware ||
-        rest.middleware.indexOf('isAuthenticated') === -1 ||
-        (profile.appStatus === 'authenticated' &&
-          rest.authorization.isAuth)) && (
-        <ChildComponent
-          {...rest}
+      {middlewares() && (
+        <props.component
+          {...props}
           profile={profile}
-          getProfile={getProfile}
-          setProfile={setProfile}
+          space={props.match.params.tenant}
+          // getProfile={getProfile}
+          // setProfile={props.setProfile}
         />
       )}
     </>
   );
 };
 
-const mapStateToProps = state => ({
-  authorization: state.authorization,
-});
-
-export default connect(mapStateToProps, { getAuth })(OakRoute);
+export default OakRoute;

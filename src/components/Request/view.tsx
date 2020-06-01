@@ -15,7 +15,6 @@ interface Props {
   setProfile: Function;
   profile: any;
   authorization: Authorization;
-  logout: Function;
   request: any;
   stages: any;
   saveRequest: Function;
@@ -250,7 +249,7 @@ const ServiceRequestView = (props: Props) => {
           <>
             <OakButton
               theme="secondary"
-              variant="animate none"
+              variant="regular"
               align="right"
               icon="forum"
               small
@@ -271,7 +270,7 @@ const ServiceRequestView = (props: Props) => {
           />
           <OakButton
             theme="secondary"
-            variant="animate out"
+            variant="disappear"
             small
             align="right"
             icon="done"
@@ -281,7 +280,7 @@ const ServiceRequestView = (props: Props) => {
           </OakButton>
           <OakButton
             theme="default"
-            variant="animate in"
+            variant="appear"
             small
             align="right"
             icon="close"

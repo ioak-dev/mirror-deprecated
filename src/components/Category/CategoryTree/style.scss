@@ -1,0 +1,29 @@
+.category-tree {
+  user-select: none;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+  .category-name {
+    cursor: pointer;
+    color: var(--color-foreground-3);
+    &:hover {
+      color: var(--color-primary-1);
+    }
+  }
+  .category-relation {
+    display: flex;
+    align-items: center;
+    .material-icons {
+      font-size: 1em;
+    }
+  }
+  .action {
+    cursor: pointer;
+    color: var(--color-primary-1);
+    &:hover {
+      text-decoration: underline;
+    }
+    margin-left: 6px;
+  }
+}

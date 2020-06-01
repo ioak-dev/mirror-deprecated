@@ -23,7 +23,6 @@ interface Props {
   setProfile: Function;
   profile: any;
   authorization: Authorization;
-  logout: Function;
   user: any;
   request: any;
   fetchRequest: Function;
@@ -236,7 +235,7 @@ const Request = (props: Props) => {
           <OakButton
             action={() => toggleNewDialog()}
             theme="default"
-            variant="animate in"
+            variant="appear"
             align="left"
           >
             <i className="material-icons">close</i>Cancel
@@ -253,7 +252,7 @@ const Request = (props: Props) => {
               )
             }
             theme="primary"
-            variant="animate out"
+            variant="disappear"
             align="right"
           >
             <i className="material-icons">double_arrow</i>Save
@@ -291,7 +290,7 @@ const Request = (props: Props) => {
               <OakButton
                 action={() => toggleNewDialog()}
                 theme="primary"
-                variant="animate out"
+                variant="disappear"
                 align="right"
               >
                 <i className="material-icons">double_arrow</i>New Request

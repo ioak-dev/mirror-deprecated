@@ -6,14 +6,15 @@ import { sendMessage } from '../events/MessageService';
 const domain = 'article';
 
 export const fetchArticle = (tenant, authorization) => dispatch => {
-  httpGet(`${constants.API_URL_FAQ}/${tenant}/`, {
+  httpGet(`/article/${tenant}/`, {
     headers: {
       Authorization: authorization.token,
     },
   }).then(response => {
+    console.log(response);
     dispatch({
       type: FETCH_ARTICLE,
-      payload: { items: response.data.faq, categories: response.data.category },
+      payload: { items: response.data.data },
     });
   });
 };

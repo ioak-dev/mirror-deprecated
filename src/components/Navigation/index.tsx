@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
+
 import { withRouter } from 'react-router';
 import { withCookies } from 'react-cookie';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
@@ -9,20 +10,18 @@ import Desktop from './Desktop';
 import Mobile from './Mobile';
 
 import { Authorization, Profile } from '../Types/GeneralTypes';
-import { receiveMessage } from '../../events/MessageService';
+import { receiveMessage, sendMessage } from '../../events/MessageService';
 
 interface Props {
   sendEvent: Function;
   getAuth: Function;
   addAuth: Function;
   removeAuth: Function;
-  authorization: Authorization;
   getProfile: Function;
   setProfile: Function;
   profile: Profile;
   login: Function;
   transparent: boolean;
-  logout: Function;
   toggleSettings: any;
   history: any;
   cookies: any;
@@ -39,6 +38,18 @@ const Navigation = (props: Props) => {
     transparentNavBar: false,
     firstLoad: true,
   });
+
+  const authorization = useSelector(state => state.authorization);
+
+  const [space, setSpace] = useState('');
+
+  useEffect(() => {
+    receiveMessage().subscribe(event => {
+      if (event.name === 'spaceChange') {
+        setSpace(event.data);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     props.getProfile();
@@ -57,10 +68,24 @@ const Navigation = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (data.firstLoad && props.authorization && props.authorization.isAuth) {
+    if (data.firstLoad && authorization && authorization.isAuth) {
       setData({ ...data, firstLoad: false });
     }
-  }, [props.authorization.isAuth]);
+  }, [authorization.isAuth]);
+
+  const logout = (
+    event: any,
+    type = 'success',
+    message = 'You have been logged out'
+  ) => {
+    props.removeAuth();
+    props.cookies.remove(`mirror_${space}`);
+    sendMessage('notification', true, {
+      type,
+      message,
+      duration: 3000,
+    });
+  };
 
   const toggleDarkMode = () => {
     if (props.profile.theme === 'theme_dark') {
@@ -76,24 +101,10 @@ const Navigation = (props: Props) => {
     }
   };
 
-  const changeTextSize = size => {
-    props.setProfile({
-      ...props.profile,
-      textSize: size,
-    });
-  };
-
-  const changeThemeColor = color => {
-    props.setProfile({
-      ...props.profile,
-      themeColor: color,
-    });
-  };
-
   const login = type => {
     // props.history.push(`/${props.profile.tenant}/login?type=${type}`);
     // console.log(props.profile.tenant);
-    window.location.href = `http://localhost:3010/#/${props.profile.tenant}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${space}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
   };
 
   const toggleSettings = () => {
@@ -104,16 +115,18 @@ const Navigation = (props: Props) => {
     <div className="nav">
       <Desktop
         {...props}
-        logout={props.logout}
+        logout={logout}
         login={login}
+        space={space}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
         toggleDarkMode={toggleDarkMode}
       />
       <Mobile
         {...props}
-        logout={props.logout}
+        logout={logout}
         login={login}
+        space={space}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
         toggleDarkMode={toggleDarkMode}

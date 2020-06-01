@@ -17,7 +17,6 @@ interface Props {
   setProfile: Function;
   profile: any;
   authorization: Authorization;
-  logout: Function;
   user: any;
   fetchAllUsers: Function;
   saveUser: Function;
