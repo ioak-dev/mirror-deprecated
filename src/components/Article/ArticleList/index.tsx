@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './style.scss';
 import OakButton from '../../../oakui/OakButton';
 import ArticleSection from './ArticleSection';
+import CategorySection from './CategorySection';
 
 interface Props {
   setProfile: Function;
@@ -21,14 +22,23 @@ const CreateArticle = (props: Props) => {
 
   useEffect(() => {
     setUrlParam(queryString.parse(props.location.search));
-  }, []);
+  }, [props.location.search]);
 
   const createArticleLink = event => {
-    props.history.push(`/${props.space}/article/create`);
+    props.history.push(
+      `/${props.space}/article/create?categoryid=${urlParam.categoryid}`
+    );
   };
 
   const viewArticleLink = event => {
     props.history.push(`/${props.space}/article/view`);
+  };
+
+  const handleCategoryChange = id => {
+    props.history.push({
+      pathname: props.location.pathname,
+      search: `?categoryid=${id}`,
+    });
   };
 
   return (
@@ -51,7 +61,15 @@ const CreateArticle = (props: Props) => {
               Simulate click of an article from list
             </OakButton>
           </div>
-          <ArticleSection categoryId={urlParam.categoryid} />
+          <CategorySection
+            categoryId={urlParam.categoryid}
+            handleChange={handleCategoryChange}
+          />
+          <ArticleSection
+            categoryId={urlParam.categoryid}
+            history={props.history}
+            space={props.space}
+          />
         </div>
       </div>
     </div>

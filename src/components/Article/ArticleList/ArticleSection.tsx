@@ -9,10 +9,12 @@ import OakSpinner from '../../../oakui/OakSpinner';
 
 interface Props {
   categoryId: string;
+  history: any;
+  space: string;
 }
 
 const LIST_ARTICLES = gql`
-  query Articles($categoryId: ID!, $pageNo: Int, $pageSize: Int) {
+  query Articles($categoryId: ID, $pageNo: Int, $pageSize: Int) {
     articles(categoryId: $categoryId, pageNo: $pageNo, pageSize: $pageSize) {
       results {
         id
@@ -53,13 +55,22 @@ const ArticleSection = (props: Props) => {
     }
   };
 
+  const viewArticle = id => {
+    props.history.push(`/${props.space}/article/view?id=${id}`);
+  };
+
   return (
     <OakInfiniteScroll handleChange={fetchMoreArticles} selector=".app-page">
       <div className="article-list-container">
         <div>
           {data?.articles?.results?.map((item: Article) => (
             <div key={item.id}>
-              <div className="typography-8">{item.title}</div>
+              <div
+                className="typography-8"
+                onClick={() => viewArticle(item.id)}
+              >
+                {item.title}
+              </div>
               <OakViewer>{item.description}</OakViewer>
               <div className="typography-5 space-bottom-2">{item.id}</div>
             </div>

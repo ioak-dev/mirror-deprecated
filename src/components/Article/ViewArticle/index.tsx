@@ -13,7 +13,7 @@ interface Props {
 const queryString = require('query-string');
 
 const GET_ARTICLE = gql`
-  query Article($id: ID!) {
+  query ArticleTwo($id: ID!) {
     article(id: $id) {
       id
       title

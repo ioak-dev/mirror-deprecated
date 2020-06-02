@@ -18,7 +18,7 @@ interface Props {
 }
 
 const UPDATE_ARTICLE = gql`
-  mutation AddArticle($payload: ArticlePayload!) {
+  mutation UpdateArticle($payload: ArticlePayload!) {
     addArticle(payload: $payload) {
       id
     }
