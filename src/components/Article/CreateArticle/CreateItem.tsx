@@ -172,7 +172,10 @@ const CreateItem = (props: Props) => {
         variables: {
           payload,
         },
-      }).then(response => props.history.goBack());
+      }).then(response => {
+        console.log(props.history.length);
+        props.history.goBack();
+      });
     }
   };
 

@@ -3,3 +3,8 @@
   grid-auto-flow: row;
   row-gap: 20px;
 }
+
+.article-list-container {
+  display: flex;
+  flex-direction: column;
+}

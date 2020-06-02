@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
-import * as ApolloReactCommon from '@apollo/react-common';
 import * as React from 'react';
+import * as ApolloReactCommon from '@apollo/react-common';
 import * as ApolloReactComponents from '@apollo/react-components';
 import * as ApolloReactHoc from '@apollo/react-hoc';
 export type Maybe<T> = T | null;
@@ -21,6 +21,13 @@ export type ArticlePayload = {
   categoryId?: Maybe<Scalars['String']>;
   addTags?: Maybe<Array<Maybe<Scalars['String']>>>;
   removeTags?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type ArticlePaginated = {
+  __typename?: 'ArticlePaginated';
+  pageNo?: Maybe<Scalars['Int']>;
+  hasMore?: Maybe<Scalars['Boolean']>;
+  results: Array<Maybe<Article>>;
 };
 
 export type Article = {
@@ -49,7 +56,6 @@ export type Category = {
   __typename?: 'Category';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
-  articles?: Maybe<Array<Maybe<Article>>>;
 };
 
 export type User = {
@@ -64,7 +70,7 @@ export type User = {
 export type Query = {
   __typename?: 'Query';
   article?: Maybe<Article>;
-  articles?: Maybe<Array<Maybe<Article>>>;
+  articles?: Maybe<ArticlePaginated>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   category?: Maybe<Category>;
   categories?: Maybe<Array<Maybe<Category>>>;
@@ -73,6 +79,12 @@ export type Query = {
 
 export type QueryArticleArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryArticlesArgs = {
+  categoryId: Scalars['ID'];
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
 };
 
 export type QueryTagsArgs = {
@@ -101,18 +113,27 @@ export type MutationAddCategoryArgs = {
   payload?: Maybe<CategoryPayload>;
 };
 
-export type Unnamed_1_QueryVariables = {};
+export type ArticlesQueryVariables = {
+  categoryId: Scalars['ID'];
+  pageNo?: Maybe<Scalars['Int']>;
+  pageSize?: Maybe<Scalars['Int']>;
+};
 
-export type Unnamed_1_Query = { __typename?: 'Query' } & {
+export type ArticlesQuery = { __typename?: 'Query' } & {
   articles?: Maybe<
-    Array<
-      Maybe<
-        { __typename?: 'Article' } & Pick<
-          Article,
-          'id' | 'title' | 'description'
-        >
-      >
-    >
+    { __typename?: 'ArticlePaginated' } & Pick<
+      ArticlePaginated,
+      'pageNo' | 'hasMore'
+    > & {
+        results: Array<
+          Maybe<
+            { __typename?: 'Article' } & Pick<
+              Article,
+              'id' | 'title' | 'description'
+            >
+          >
+        >;
+      }
   >;
 };
 
@@ -134,7 +155,14 @@ export type ArticleQueryVariables = {
 
 export type ArticleQuery = { __typename?: 'Query' } & {
   article?: Maybe<
-    { __typename?: 'Article' } & Pick<Article, 'id' | 'title' | 'description'>
+    { __typename?: 'Article' } & Pick<
+      Article,
+      'id' | 'title' | 'description'
+    > & {
+        tags?: Maybe<
+          Array<Maybe<{ __typename?: 'Tag' } & Pick<Tag, 'id' | 'name'>>>
+        >;
+      }
   >;
 };
 
@@ -151,6 +179,71 @@ export type SessionQuery = { __typename?: 'Query' } & {
   >;
 };
 
+export const ArticlesDocument = gql`
+  query Articles($categoryId: ID!, $pageNo: Int, $pageSize: Int) {
+    articles(categoryId: $categoryId, pageNo: $pageNo, pageSize: $pageSize) {
+      results {
+        id
+        title
+        description
+      }
+      pageNo
+      hasMore
+    }
+  }
+`;
+export type ArticlesComponentProps = Omit<
+  ApolloReactComponents.QueryComponentOptions<
+    ArticlesQuery,
+    ArticlesQueryVariables
+  >,
+  'query'
+> &
+  ({ variables: ArticlesQueryVariables; skip?: boolean } | { skip: boolean });
+
+export const ArticlesComponent = (props: ArticlesComponentProps) => (
+  <ApolloReactComponents.Query<ArticlesQuery, ArticlesQueryVariables>
+    query={ArticlesDocument}
+    {...props}
+  />
+);
+
+export type ArticlesProps<
+  TChildProps = {},
+  TDataName extends string = 'data'
+> = {
+  [key in TDataName]: ApolloReactHoc.DataValue<
+    ArticlesQuery,
+    ArticlesQueryVariables
+  >;
+} &
+  TChildProps;
+export function withArticles<
+  TProps,
+  TChildProps = {},
+  TDataName extends string = 'data'
+>(
+  operationOptions?: ApolloReactHoc.OperationOption<
+    TProps,
+    ArticlesQuery,
+    ArticlesQueryVariables,
+    ArticlesProps<TChildProps, TDataName>
+  >
+) {
+  return ApolloReactHoc.withQuery<
+    TProps,
+    ArticlesQuery,
+    ArticlesQueryVariables,
+    ArticlesProps<TChildProps, TDataName>
+  >(ArticlesDocument, {
+    alias: 'articles',
+    ...operationOptions,
+  });
+}
+export type ArticlesQueryResult = ApolloReactCommon.QueryResult<
+  ArticlesQuery,
+  ArticlesQueryVariables
+>;
 export const AddArticleDocument = gql`
   mutation AddArticle($payload: ArticlePayload!) {
     addArticle(payload: $payload) {
@@ -229,6 +322,10 @@ export const ArticleDocument = gql`
       id
       title
       description
+      tags {
+        id
+        name
+      }
     }
   }
 `;
