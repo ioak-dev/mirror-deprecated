@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
-import { useSelector } from 'react-redux';
 import './style.scss';
 import ArticleItem from './ArticleItem';
 
 interface Props {
-  setProfile: Function;
-  profile: any;
-  match: any;
   location: any;
   history: any;
   space: string;
@@ -37,14 +33,6 @@ const ViewArticle = (props: Props) => {
   const { loading, error, data } = useQuery(GET_ARTICLE, {
     variables: { id: urlParam.id },
   });
-  const authorization = useSelector(state => state.authorization);
-
-  useEffect(() => {
-    props.setProfile({
-      ...props.profile,
-      tenant: props.match.params.tenant,
-    });
-  }, []);
 
   useEffect(() => {
     setUrlParam(queryString.parse(props.location.search));
@@ -56,8 +44,7 @@ const ViewArticle = (props: Props) => {
         <div className="app-text">
           {!loading && !error && (
             <ArticleItem
-              {...props}
-              authorization={authorization}
+              history={props.history}
               id={urlParam.id}
               space={props.space}
               article={data.article}

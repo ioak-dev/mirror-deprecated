@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import OakText from '../../../oakui/OakText';
 import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces } from '../../Utils';
-import { sendMessage, receiveMessage } from '../../../events/MessageService';
-import { saveArticle } from '../ArticleService';
+import { sendMessage } from '../../../events/MessageService';
 import CategoryTree from '../../Category/CategoryTree';
 import OakChipGroup from '../../../oakui/OakChipGroup';
 import { ArticlePayload } from '../../../types/graphql';
-
-const domain = 'article';
 
 interface Props {
   urlParam: any;
@@ -34,7 +30,6 @@ const ADD_ARTICLE = gql`
 
 const CreateItem = (props: Props) => {
   const [addArticle, { data: savedArticle }] = useMutation(ADD_ARTICLE);
-  const authorization = useSelector(state => state.authorization);
   const [data, setData] = useState<any>({
     title: '',
     description: '',
