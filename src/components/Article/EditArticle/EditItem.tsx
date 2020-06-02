@@ -174,7 +174,7 @@ const EditItem = (props: Props) => {
         )}
       </div>
       <div className="user-form">
-        <CategoryTree id={props.article.category} />
+        {/* <CategoryTree id={props.article.category} /> */}
         <OakText
           label="Title"
           data={state}

@@ -77,7 +77,7 @@ const ArticleItem = (props: Props) => {
           toggleVisibility={() => setConfirmDelete(!confirmDelete)}
         />
       </div>
-      <CategoryTree id={props.id} pageid="leafNode" />
+      {/* <CategoryTree id={props.id} pageid="leafNode" /> */}
 
       <div className="typography-7">{props.article.title}</div>
       <OakViewer>{props.article.description}</OakViewer>

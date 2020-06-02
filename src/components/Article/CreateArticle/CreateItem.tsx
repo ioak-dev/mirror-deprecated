@@ -169,7 +169,7 @@ const CreateItem = (props: Props) => {
         )}
       </div>
       <div className="user-form">
-        <CategoryTree id={props.categoryid} />
+        {/* <CategoryTree id={props.categoryid} /> */}
         <OakText
           label="Title"
           data={state}

@@ -7,6 +7,7 @@ import OakInfiniteScroll from '../../../oakui/OakInfiniteScroll';
 import OakViewer from '../../../oakui/OakViewer';
 import OakSpinner from '../../../oakui/OakSpinner';
 import CategoryView from './CategoryView';
+import CategoryTree from '../../Category/CategoryTree';
 
 interface Props {
   categoryId: string;
@@ -29,8 +30,6 @@ const CategorySection = (props: Props) => {
   const [view, setView] = useState<Array<Category> | undefined>();
 
   useEffect(() => {
-    console.log(data?.categories);
-    console.log(props.categoryId);
     if (data?.categories && props.categoryId) {
       setView(
         data.categories.filter(
@@ -46,13 +45,22 @@ const CategorySection = (props: Props) => {
 
   return (
     <div className="category-section">
-      {view?.map((item: Category) => (
-        <CategoryView
-          category={item}
-          key={item.id}
-          handleClick={() => props.handleChange(item.id)}
-        />
-      ))}
+      <CategoryTree
+        category={data?.categories?.find(
+          (item: Category) => item.id === props.categoryId
+        )}
+        categories={data?.categories}
+        handleChange={props.handleChange}
+      />
+      <div className="category-list">
+        {view?.map((item: Category) => (
+          <CategoryView
+            category={item}
+            key={item.id}
+            handleClick={() => props.handleChange(item.id)}
+          />
+        ))}
+      </div>
       <div>{loading ? <OakSpinner /> : ''}</div>
     </div>
   );

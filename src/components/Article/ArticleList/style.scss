@@ -10,11 +10,16 @@
 }
 
 .category-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
   margin: 20px 0;
-  row-gap: 20px;
-  column-gap: 20px;
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 10px;
+  .category-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 20px;
+    column-gap: 20px;
+  }
 }
 
 .category-view {
