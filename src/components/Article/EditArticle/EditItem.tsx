@@ -21,17 +21,13 @@ const UPDATE_ARTICLE = gql`
   mutation AddArticle($payload: ArticlePayload!) {
     addArticle(payload: $payload) {
       id
-      title
-      tags {
-        name
-      }
     }
   }
 `;
 
 const EditItem = (props: Props) => {
   const [updateArticle, { data: updatedArticle }] = useMutation(UPDATE_ARTICLE);
-  const [data, setData] = useState<any>({
+  const [state, setState] = useState<any>({
     id: '',
     title: '',
     description: '',
@@ -57,35 +53,12 @@ const EditItem = (props: Props) => {
     'y78sd',
   ];
 
-  const globalTagsObjects = [
-    {
-      key: 'internet',
-      value: 'Internet',
-    },
-    {
-      key: 'web',
-      value: 'Web',
-    },
-    {
-      key: 'lorem',
-      value: 'Lorem ipsum',
-    },
-    {
-      key: 'dolor',
-      value: 'Dolor sit',
-    },
-    {
-      key: 'loremdolor',
-      value: 'Lorem ipsum, dolor sit',
-    },
-  ];
-
   useEffect(() => {
     const tags: string[] = [];
     props.article.tags?.map(item => {
       tags.push(item?.name || '');
     });
-    setData({
+    setState({
       id: props.article.id,
       title: props.article.title,
       description: props.article.description,
@@ -99,16 +72,16 @@ const EditItem = (props: Props) => {
     () =>
       setView({
         ...view,
-        tags: [...data.tags, ...data.addTags].filter(
-          item => !data.removeTags.includes(item)
+        tags: [...state.tags, ...state.addTags].filter(
+          item => !state.removeTags.includes(item)
         ),
       }),
-    [data.addTags, data.tags, data.removeTags]
+    [state.addTags, state.tags, state.removeTags]
   );
 
   const handleChange = event => {
-    setData({
-      ...data,
+    setState({
+      ...state,
       [event.target.name]: event.target.value,
     });
   };
@@ -126,55 +99,57 @@ const EditItem = (props: Props) => {
   };
 
   const handleTagAddition = key => {
-    if (!data.tags.includes(key)) {
-      setData({
-        ...data,
-        addTags: [...data.addTags, key],
-        removeTags: data.removeTags.filter(item => item !== key),
+    if (!state.tags.includes(key)) {
+      setState({
+        ...state,
+        addTags: [...state.addTags, key],
+        removeTags: state.removeTags.filter(item => item !== key),
       });
     } else {
-      setData({
-        ...data,
-        removeTags: data.removeTags.filter(item => item !== key),
+      setState({
+        ...state,
+        removeTags: state.removeTags.filter(item => item !== key),
       });
     }
   };
 
   const handleTagRemoval = key => {
-    if (data.tags.includes(key)) {
-      setData({
-        ...data,
-        removeTags: [...data.removeTags, key],
-        addTags: data.addTags.filter(item => item !== key),
+    if (state.tags.includes(key)) {
+      setState({
+        ...state,
+        removeTags: [...state.removeTags, key],
+        addTags: state.addTags.filter(item => item !== key),
       });
     } else {
-      setData({
-        ...data,
-        addTags: data.addTags.filter(item => item !== key),
+      setState({
+        ...state,
+        addTags: state.addTags.filter(item => item !== key),
       });
     }
   };
 
   const update = async () => {
     if (
-      validateEmptyText(data.title, 'Title is not provided') &&
+      validateEmptyText(state.title, 'Title is not provided') &&
       validateEmptyText(
-        data.description,
+        state.description,
         'Provide details for the mentioned title'
       )
     ) {
       const payload: ArticlePayload = {
         id: props.article.id,
-        title: data.title,
-        description: data.description,
-        addTags: data.addTags,
-        removeTags: data.removeTags,
+        title: state.title,
+        description: state.description,
+        addTags: state.addTags,
+        removeTags: state.removeTags,
       };
       updateArticle({
         variables: {
           payload,
         },
-      }).then(response => props.history.goBack());
+      }).then(response => {
+        if (props.history.length > 2) props.history.goBack();
+      });
     }
   };
 
@@ -202,21 +177,19 @@ const EditItem = (props: Props) => {
         <CategoryTree id={props.article.category} />
         <OakText
           label="Title"
-          data={data}
+          data={state}
           id="title"
           handleChange={e => handleChange(e)}
         />
         <OakEditor
           label="Description"
-          data={data}
+          data={state}
           id="description"
           handleChange={handleChange}
         />
-        testing mate
         <OakChipGroup
           handleAddition={handleTagAddition}
           handleRemoval={handleTagRemoval}
-          // objects={globalTagsObjects}
           elements={globalTags}
           data={view}
           id="tags"

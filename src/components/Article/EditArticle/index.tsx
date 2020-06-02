@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import './style.scss';
 import { useQuery } from '@apollo/react-hooks';
 import EditItem from './EditItem';
+import OakSpinner from '../../../oakui/OakSpinner';
 
 interface Props {
   space: string;
@@ -52,6 +53,7 @@ const EditArticle = (props: Props) => {
               article={data.article}
             />
           )}
+          {loading && <OakSpinner />}
         </div>
       </div>
     </div>

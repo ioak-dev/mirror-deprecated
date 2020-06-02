@@ -25,7 +25,7 @@ const CreateArticle = (props: Props) => {
         <div className="app-text">
           <CreateItem
             history={props.history}
-            urlParam={urlParam}
+            categoryid={urlParam.categoryid}
             space={props.space}
           />
         </div>

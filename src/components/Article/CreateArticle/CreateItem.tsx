@@ -11,7 +11,7 @@ import OakChipGroup from '../../../oakui/OakChipGroup';
 import { ArticlePayload } from '../../../types/graphql';
 
 interface Props {
-  urlParam: any;
+  categoryid: any;
   history: any;
   space: any;
 }
@@ -20,17 +20,13 @@ const ADD_ARTICLE = gql`
   mutation AddArticle($payload: ArticlePayload!) {
     addArticle(payload: $payload) {
       id
-      title
-      tags {
-        name
-      }
     }
   }
 `;
 
 const CreateItem = (props: Props) => {
   const [addArticle, { data: savedArticle }] = useMutation(ADD_ARTICLE);
-  const [data, setData] = useState<any>({
+  const [state, setState] = useState<any>({
     title: '',
     description: '',
     tags: [],
@@ -55,31 +51,8 @@ const CreateItem = (props: Props) => {
     'y78sd',
   ];
 
-  const globalTagsObjects = [
-    {
-      key: 'internet',
-      value: 'Internet',
-    },
-    {
-      key: 'web',
-      value: 'Web',
-    },
-    {
-      key: 'lorem',
-      value: 'Lorem ipsum',
-    },
-    {
-      key: 'dolor',
-      value: 'Dolor sit',
-    },
-    {
-      key: 'loremdolor',
-      value: 'Lorem ipsum, dolor sit',
-    },
-  ];
-
   useEffect(() => {
-    setData({
+    setState({
       title: '',
       description: '',
       tags: [],
@@ -92,46 +65,46 @@ const CreateItem = (props: Props) => {
     () =>
       setView({
         ...view,
-        tags: [...data.tags, ...data.addTags].filter(
-          item => !data.removeTags.includes(item)
+        tags: [...state.tags, ...state.addTags].filter(
+          item => !state.removeTags.includes(item)
         ),
       }),
-    [data.addTags, data.tags, data.removeTags]
+    [state.addTags, state.tags, state.removeTags]
   );
 
   const handleChange = event => {
-    setData({
-      ...data,
+    setState({
+      ...state,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleTagAddition = key => {
-    if (!data.tags.includes(key)) {
-      setData({
-        ...data,
-        addTags: [...data.addTags, key],
-        removeTags: data.removeTags.filter(item => item !== key),
+    if (!state.tags.includes(key)) {
+      setState({
+        ...state,
+        addTags: [...state.addTags, key],
+        removeTags: state.removeTags.filter(item => item !== key),
       });
     } else {
-      setData({
-        ...data,
-        removeTags: data.removeTags.filter(item => item !== key),
+      setState({
+        ...state,
+        removeTags: state.removeTags.filter(item => item !== key),
       });
     }
   };
 
   const handleTagRemoval = key => {
-    if (data.tags.includes(key)) {
-      setData({
-        ...data,
-        removeTags: [...data.removeTags, key],
-        addTags: data.addTags.filter(item => item !== key),
+    if (state.tags.includes(key)) {
+      setState({
+        ...state,
+        removeTags: [...state.removeTags, key],
+        addTags: state.addTags.filter(item => item !== key),
       });
     } else {
-      setData({
-        ...data,
-        addTags: data.addTags.filter(item => item !== key),
+      setState({
+        ...state,
+        addTags: state.addTags.filter(item => item !== key),
       });
     }
   };
@@ -150,26 +123,27 @@ const CreateItem = (props: Props) => {
 
   const submit = () => {
     if (
-      validateEmptyText(data.title, 'Title is not provided') &&
+      validateEmptyText(state.title, 'Title is not provided') &&
       validateEmptyText(
-        data.description,
+        state.description,
         'Provide details for the mentioned title'
       )
     ) {
       const payload: ArticlePayload = {
-        title: data.title,
-        categoryId: props.urlParam.categoryid,
-        description: data.description,
-        addTags: data.addTags,
-        removeTags: data.removeTags,
+        title: state.title,
+        categoryId: props.categoryid,
+        description: state.description,
+        addTags: state.addTags,
+        removeTags: state.removeTags,
       };
       addArticle({
         variables: {
           payload,
         },
       }).then(response => {
-        console.log(props.history.length);
-        props.history.goBack();
+        props.history.length > 2
+          ? props.history.goBack()
+          : props.history.push(`/${props.space}/article`);
       });
     }
   };
@@ -195,23 +169,22 @@ const CreateItem = (props: Props) => {
         )}
       </div>
       <div className="user-form">
-        <CategoryTree id={props.urlParam.categoryid} />
+        <CategoryTree id={props.categoryid} />
         <OakText
           label="Title"
-          data={data}
+          data={state}
           id="title"
           handleChange={e => handleChange(e)}
         />
         <OakEditor
           label="Description"
-          data={data}
+          data={state}
           id="description"
           handleChange={e => handleChange(e)}
         />
         <OakChipGroup
           handleAddition={handleTagAddition}
           handleRemoval={handleTagRemoval}
-          // objects={globalTagsObjects}
           elements={globalTags}
           data={view}
           id="tags"
