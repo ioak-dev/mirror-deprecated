@@ -1,23 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import gql from 'graphql-tag';
-import Maybe from 'graphql/tsutils/Maybe';
+import React, { useState } from 'react';
 import OakButton from '../../../oakui/OakButton';
 import CategoryTree from '../../Category/CategoryTree';
-import { fetchArticle, deleteArticle } from '../ArticleService';
+import { deleteArticle } from '../ArticleService';
 import OakPrompt from '../../../oakui/OakPrompt';
 import { Article, Tag } from '../../../types/graphql';
 import OakViewer from '../../../oakui/OakViewer';
-import TagItem from './TagItem';
 import TagContainer from './TagContainer';
-
-const domain = 'Article';
 
 interface Props {
   id: string;
-  history?: any;
-  // tenant: any;
-  authorization: any;
-  location: any;
+  history: any;
   article: Article;
   space: string;
 }
@@ -37,15 +29,14 @@ const ArticleItem = (props: Props) => {
     setConfirmDelete(true);
   };
   const deleteArticledata = async () => {
-    const { outcome } = await deleteArticle(
-      props.space,
-      props.id,
-      props.authorization
-    );
-
-    if (outcome) {
-      setConfirmDelete(false);
-    }
+    // const { outcome } = await deleteArticle(
+    //   props.space,
+    //   props.id,
+    //   props.authorization
+    // );
+    // if (outcome) {
+    //   setConfirmDelete(false);
+    // }
   };
 
   return (

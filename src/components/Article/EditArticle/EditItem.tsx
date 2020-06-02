@@ -1,47 +1,110 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import gql from 'graphql-tag';
+import { useMutation } from '@apollo/react-hooks';
 import OakText from '../../../oakui/OakText';
 import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces } from '../../Utils';
-import { sendMessage, receiveMessage } from '../../../events/MessageService';
-import { saveArticle, fetchArticle } from '../ArticleService';
+import { sendMessage } from '../../../events/MessageService';
 import CategoryTree from '../../Category/CategoryTree';
-
-const domain = 'article';
+import { Article, ArticlePayload } from '../../../types/graphql';
+import OakChipGroup from '../../../oakui/OakChipGroup';
 
 interface Props {
   id: string;
-  categoryId: string;
   history: any;
   space: any;
-  authorization: any;
+  article: Article;
 }
+
+const UPDATE_ARTICLE = gql`
+  mutation AddArticle($payload: ArticlePayload!) {
+    addArticle(payload: $payload) {
+      id
+      title
+      tags {
+        name
+      }
+    }
+  }
+`;
+
 const EditItem = (props: Props) => {
-  const authorization = useSelector(state => state.authorization);
-  const [data, setData] = useState({
+  const [updateArticle, { data: updatedArticle }] = useMutation(UPDATE_ARTICLE);
+  const [data, setData] = useState<any>({
+    id: '',
     title: '',
     description: '',
-    tags: '',
-    categoryId: '',
-    _id: '',
+    tags: [],
+    addTags: [],
+    removeTags: [],
+  });
+  const [view, setView] = useState<any>({
+    tags: [],
   });
 
-  useEffect(() => {
-    (async function anonymous() {
-      if (props.authorization.token && props.id) {
-        const { outcome, response } = await fetchArticle(
-          props.space,
-          props.id,
-          props.authorization
-        );
+  const globalTags = [
+    'int',
+    'lorem',
+    'ipsum',
+    'dolor',
+    'wrsedfdsf',
+    'fgfdgyy',
+    'ujku',
+    'fre546',
+    'yudsf',
+    'uiasedas',
+    'y78sd',
+  ];
 
-        if (outcome) {
-          setData(response.data.data);
-        }
-      }
-    })();
-  }, [props.id, props.authorization]);
+  const globalTagsObjects = [
+    {
+      key: 'internet',
+      value: 'Internet',
+    },
+    {
+      key: 'web',
+      value: 'Web',
+    },
+    {
+      key: 'lorem',
+      value: 'Lorem ipsum',
+    },
+    {
+      key: 'dolor',
+      value: 'Dolor sit',
+    },
+    {
+      key: 'loremdolor',
+      value: 'Lorem ipsum, dolor sit',
+    },
+  ];
+
+  useEffect(() => {
+    const tags: string[] = [];
+    props.article.tags?.map(item => {
+      tags.push(item?.name || '');
+    });
+    setData({
+      id: props.article.id,
+      title: props.article.title,
+      description: props.article.description,
+      tags,
+      addTags: [],
+      removeTags: [],
+    });
+  }, []);
+
+  useEffect(
+    () =>
+      setView({
+        ...view,
+        tags: [...data.tags, ...data.addTags].filter(
+          item => !data.removeTags.includes(item)
+        ),
+      }),
+    [data.addTags, data.tags, data.removeTags]
+  );
 
   const handleChange = event => {
     setData({
@@ -62,7 +125,37 @@ const EditItem = (props: Props) => {
     return true;
   };
 
-  const updateArticle = async () => {
+  const handleTagAddition = key => {
+    if (!data.tags.includes(key)) {
+      setData({
+        ...data,
+        addTags: [...data.addTags, key],
+        removeTags: data.removeTags.filter(item => item !== key),
+      });
+    } else {
+      setData({
+        ...data,
+        removeTags: data.removeTags.filter(item => item !== key),
+      });
+    }
+  };
+
+  const handleTagRemoval = key => {
+    if (data.tags.includes(key)) {
+      setData({
+        ...data,
+        removeTags: [...data.removeTags, key],
+        addTags: data.addTags.filter(item => item !== key),
+      });
+    } else {
+      setData({
+        ...data,
+        addTags: data.addTags.filter(item => item !== key),
+      });
+    }
+  };
+
+  const update = async () => {
     if (
       validateEmptyText(data.title, 'Title is not provided') &&
       validateEmptyText(
@@ -70,21 +163,18 @@ const EditItem = (props: Props) => {
         'Provide details for the mentioned title'
       )
     ) {
-      const { outcome } = await saveArticle(
-        props.space,
-        {
-          _id: data._id,
-          categoryId: data.categoryId,
-          title: data.title,
-          description: data.description,
-          tags: data.tags,
+      const payload: ArticlePayload = {
+        id: props.article.id,
+        title: data.title,
+        description: data.description,
+        addTags: data.addTags,
+        removeTags: data.removeTags,
+      };
+      updateArticle({
+        variables: {
+          payload,
         },
-        authorization
-      );
-
-      if (outcome) {
-        props.history.goBack();
-      }
+      }).then(response => props.history.goBack());
     }
   };
 
@@ -95,11 +185,7 @@ const EditItem = (props: Props) => {
   return (
     <div className="create-article-item">
       <div className="action-header position-right">
-        <OakButton
-          action={() => updateArticle()}
-          theme="primary"
-          variant="appear"
-        >
+        <OakButton action={update} theme="primary" variant="appear">
           <i className="material-icons">double_arrow</i>Save
         </OakButton>
         {props.history.length > 2 && (
@@ -113,7 +199,7 @@ const EditItem = (props: Props) => {
         )}
       </div>
       <div className="user-form">
-        <CategoryTree id={props.categoryId} />
+        <CategoryTree id={props.article.category} />
         <OakText
           label="Title"
           data={data}
@@ -126,11 +212,15 @@ const EditItem = (props: Props) => {
           id="description"
           handleChange={handleChange}
         />
-        <OakText
-          label="Tags (comma separated list)"
-          data={data}
+        testing mate
+        <OakChipGroup
+          handleAddition={handleTagAddition}
+          handleRemoval={handleTagRemoval}
+          // objects={globalTagsObjects}
+          elements={globalTags}
+          data={view}
           id="tags"
-          handleChange={e => handleChange(e)}
+          label="Tags"
         />
       </div>
     </div>
