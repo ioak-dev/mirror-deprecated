@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
 import OakButton from '../../../oakui/OakButton';
-import ArticleSection from './ArticleSection';
-import CategorySection from './CategorySection';
 
 interface Props {
   setProfile: Function;
@@ -15,7 +13,7 @@ interface Props {
 
 const queryString = require('query-string');
 
-const CreateArticle = (props: Props) => {
+const ArticleList = (props: Props) => {
   const [urlParam, setUrlParam] = useState({
     categoryid: '',
   });
@@ -24,56 +22,45 @@ const CreateArticle = (props: Props) => {
     setUrlParam(queryString.parse(props.location.search));
   }, [props.location.search]);
 
-  const createArticleLink = event => {
-    props.history.push(
-      `/${props.space}/article/create?categoryid=${urlParam.categoryid}`
-    );
+  const browseArticle = event => {
+    props.history.push(`/${props.space}/article/browse`);
   };
 
-  const viewArticleLink = event => {
-    props.history.push(`/${props.space}/article/view`);
-  };
-
-  const handleCategoryChange = id => {
-    props.history.push({
-      pathname: props.location.pathname,
-      search: `?categoryid=${id}`,
-    });
+  const searchArticle = event => {
+    props.history.push(`/${props.space}/article/search`);
   };
 
   return (
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
+          <div className="page-title">
+            Article knowledge base
+            <div className="page-subtitle">Home of knowledge</div>
+            <div className="page-highlight" />
+          </div>
+          <div className="typography-4 space-bottom-4">
+            Welcome to the world of knowledge. Here you will find articles that
+            will answer the question on your mind about this application. You
+            can access the articles by different means. Start to explore by
+            picking one of the below choices to navigate and reach your desired
+            article.
+          </div>
           <div className="action-header">
-            <OakButton
-              theme="primary"
-              variant="regular"
-              action={createArticleLink}
-            >
-              Create
+            <OakButton theme="primary" variant="appear" action={searchArticle}>
+              Search article
             </OakButton>
-            <OakButton
-              theme="primary"
-              variant="regular"
-              action={viewArticleLink}
-            >
-              Simulate click of an article from list
+            <OakButton theme="primary" variant="appear" action={browseArticle}>
+              Browse by category
+            </OakButton>
+            <OakButton theme="primary" variant="appear" action={browseArticle}>
+              View by tags
             </OakButton>
           </div>
-          <CategorySection
-            categoryId={urlParam.categoryid}
-            handleChange={handleCategoryChange}
-          />
-          <ArticleSection
-            categoryId={urlParam.categoryid}
-            history={props.history}
-            space={props.space}
-          />
         </div>
       </div>
     </div>
   );
 };
 
-export default CreateArticle;
+export default ArticleList;

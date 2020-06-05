@@ -1,5 +1,7 @@
-.listArticle {
-  padding-top: 50px;
+.view-article-item {
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 20px;
 }
 
 .tag-container {
@@ -7,7 +9,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .tag-item {
   cursor: pointer;
@@ -42,6 +44,33 @@
 
     .material-icons {
       color: var(--color-foreground-4);
+    }
+  }
+}
+
+.article-item-actions {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: flex-start;
+  column-gap: 20px;
+}
+
+.article-feedback {
+  cursor: pointer;
+  user-select: none;
+  .material-icons {
+    &.helpful {
+      &:hover,
+      &.active {
+        color: var(--color-success);
+      }
+    }
+
+    &.not-helpful {
+      &:hover,
+      &.active {
+        color: var(--color-failure);
+      }
     }
   }
 }

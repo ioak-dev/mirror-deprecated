@@ -10,8 +10,8 @@ interface Props {
 const TagContainer = (props: Props) => {
   return (
     <div className="tag-container">
-      {props.tags.map((item: Maybe<Tag>) => (
-        <>{item && <TagItem name={item.name || ''} key={item.id || ''} />}</>
+      {props.tags.map((item: Maybe<Tag>, index) => (
+        <div key={item?.id}>{item && <TagItem name={item.name || ''} />}</div>
       ))}
     </div>
   );

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import OakText from '../../../oakui/OakText';
 import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces } from '../../Utils';
 import { sendMessage } from '../../../events/MessageService';
 import CategoryTree from '../../Category/CategoryTree';
-import { Article, ArticlePayload } from '../../../types/graphql';
+import { Article, ArticlePayload, Category } from '../../../types/graphql';
 import OakChipGroup from '../../../oakui/OakChipGroup';
+import { UPDATE_ARTICLE, LIST_CATEGORIES } from '../../Types/schema';
 
 interface Props {
   id: string;
@@ -17,15 +18,8 @@ interface Props {
   article: Article;
 }
 
-const UPDATE_ARTICLE = gql`
-  mutation UpdateArticle($payload: ArticlePayload!) {
-    addArticle(payload: $payload) {
-      id
-    }
-  }
-`;
-
 const EditItem = (props: Props) => {
+  const { loading, error, data } = useQuery(LIST_CATEGORIES);
   const [updateArticle, { data: updatedArticle }] = useMutation(UPDATE_ARTICLE);
   const [state, setState] = useState<any>({
     id: '',
@@ -34,6 +28,7 @@ const EditItem = (props: Props) => {
     tags: [],
     addTags: [],
     removeTags: [],
+    categoryId: '',
   });
   const [view, setView] = useState<any>({
     tags: [],
@@ -62,6 +57,7 @@ const EditItem = (props: Props) => {
       id: props.article.id,
       title: props.article.title,
       description: props.article.description,
+      categoryId: props.article.category?.id,
       tags,
       addTags: [],
       removeTags: [],
@@ -142,6 +138,7 @@ const EditItem = (props: Props) => {
         description: state.description,
         addTags: state.addTags,
         removeTags: state.removeTags,
+        categoryId: state.categoryId,
       };
       updateArticle({
         variables: {
@@ -152,51 +149,72 @@ const EditItem = (props: Props) => {
       });
     }
   };
+  const handleCategoryChange = id => {
+    // setUrlParam({ categoryid: id });
+    setState({ ...state, categoryId: id });
+  };
 
   const cancelCreation = () => {
     props.history.goBack();
   };
 
   return (
-    <div className="create-article-item">
-      <div className="action-header position-right">
-        <OakButton action={update} theme="primary" variant="appear">
-          <i className="material-icons">double_arrow</i>Save
-        </OakButton>
-        {props.history.length > 2 && (
-          <OakButton
-            action={() => cancelCreation()}
-            theme="default"
-            variant="appear"
-          >
-            <i className="material-icons">close</i>Cancel
+    <>
+      <div className="page-header">
+        <div className="page-title">
+          Edit article
+          {/* <div className="page-subtitle">sub text</div> */}
+          <div className="page-highlight" />
+        </div>
+        <div className="action-header position-right">
+          <OakButton action={update} theme="primary" variant="appear">
+            <i className="material-icons">double_arrow</i>Save
           </OakButton>
-        )}
+          {props.history.length > 2 && (
+            <OakButton
+              action={() => cancelCreation()}
+              theme="default"
+              variant="appear"
+            >
+              <i className="material-icons">close</i>Cancel
+            </OakButton>
+          )}
+        </div>
       </div>
-      <div className="user-form">
-        {/* <CategoryTree id={props.article.category} /> */}
-        <OakText
-          label="Title"
-          data={state}
-          id="title"
-          handleChange={e => handleChange(e)}
+      <div className="create-article-item">
+        <CategoryTree
+          category={data?.categories?.find(
+            (item: Category) => item.id === state.categoryId
+          )}
+          categories={data?.categories}
+          handleChange={handleCategoryChange}
+          choosable
         />
-        <OakEditor
-          label="Description"
-          data={state}
-          id="description"
-          handleChange={handleChange}
-        />
-        <OakChipGroup
-          handleAddition={handleTagAddition}
-          handleRemoval={handleTagRemoval}
-          elements={globalTags}
-          data={view}
-          id="tags"
-          label="Tags"
-        />
+        <div className="user-form">
+          {/* <CategoryTree id={props.article.category} /> */}
+          <OakText
+            label="Title"
+            data={state}
+            id="title"
+            handleChange={e => handleChange(e)}
+          />
+          <OakEditor
+            label="Description"
+            data={state}
+            id="description"
+            handleChange={handleChange}
+          />
+          <OakChipGroup
+            handleAddition={handleTagAddition}
+            handleRemoval={handleTagRemoval}
+            elements={globalTags}
+            data={view}
+            id="tags"
+            label="Tags"
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 export default EditItem;

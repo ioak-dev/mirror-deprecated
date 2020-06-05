@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import OakText from '../../../oakui/OakText';
 import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
@@ -8,7 +8,8 @@ import { isEmptyOrSpaces } from '../../Utils';
 import { sendMessage } from '../../../events/MessageService';
 import CategoryTree from '../../Category/CategoryTree';
 import OakChipGroup from '../../../oakui/OakChipGroup';
-import { ArticlePayload } from '../../../types/graphql';
+import { ArticlePayload, Category } from '../../../types/graphql';
+import { LIST_ARTICLES, LIST_CATEGORIES } from '../../Types/schema';
 
 interface Props {
   categoryid: any;
@@ -25,11 +26,13 @@ const ADD_ARTICLE = gql`
 `;
 
 const CreateItem = (props: Props) => {
+  const { loading, error, data } = useQuery(LIST_CATEGORIES);
   const [addArticle, { data: savedArticle }] = useMutation(ADD_ARTICLE);
   const [state, setState] = useState<any>({
     title: '',
     description: '',
     tags: [],
+    categoryId: '',
     addTags: [],
     removeTags: [],
   });
@@ -58,8 +61,13 @@ const CreateItem = (props: Props) => {
       tags: [],
       addTags: [],
       removeTags: [],
+      categoryId: props.categoryid,
     });
   }, []);
+
+  useEffect(() => {
+    setState({ ...state, categoryId: props.categoryid });
+  }, [props.categoryid]);
 
   useEffect(
     () =>
@@ -77,6 +85,10 @@ const CreateItem = (props: Props) => {
       ...state,
       [event.target.name]: event.target.value,
     });
+  };
+  const handleCategoryChange = id => {
+    // setUrlParam({ categoryid: id });
+    setState({ ...state, categoryId: id });
   };
 
   const handleTagAddition = key => {
@@ -131,7 +143,7 @@ const CreateItem = (props: Props) => {
     ) {
       const payload: ArticlePayload = {
         title: state.title,
-        categoryId: props.categoryid,
+        categoryId: state.categoryId,
         description: state.description,
         addTags: state.addTags,
         removeTags: state.removeTags,
@@ -140,6 +152,13 @@ const CreateItem = (props: Props) => {
         variables: {
           payload,
         },
+        // update: (cache, { data: { addArticle } }) => {
+        //   const data: any = cache.readQuery({ query: LIST_CATEGORIES });
+        //   console.log('********');
+        //   console.log(data);
+        //   // data.items = [...data.items, addArticle];
+        //   // cache.writeQuery({ query: GET_ITEMS }, data);
+        // },
       }).then(response => {
         props.history.length > 2
           ? props.history.goBack()
@@ -153,45 +172,67 @@ const CreateItem = (props: Props) => {
   };
 
   return (
-    <div className="create-article-item">
-      <div className="action-header position-right">
-        <OakButton action={submit} theme="primary" variant="appear">
-          <i className="material-icons">double_arrow</i>Save
-        </OakButton>
-        {props.history.length > 2 && (
-          <OakButton
-            action={() => cancelCreation()}
-            theme="default"
-            variant="appear"
-          >
-            <i className="material-icons">close</i>Cancel
+    <>
+      <div className="page-header">
+        <div className="page-title">
+          Create article
+          {/* <div className="page-subtitle">sub text</div> */}
+          <div className="page-highlight" />
+        </div>
+        <div className="action-header position-right">
+          <OakButton action={submit} theme="primary" variant="appear">
+            <i className="material-icons">double_arrow</i>Save
           </OakButton>
+          {props.history.length > 2 && (
+            <OakButton
+              action={() => cancelCreation()}
+              theme="default"
+              variant="appear"
+            >
+              <i className="material-icons">close</i>Cancel
+            </OakButton>
+          )}
+        </div>
+      </div>
+      <div className="create-article-item">
+        <CategoryTree
+          category={data?.categories?.find(
+            (item: Category) => item.id === state.categoryId
+          )}
+          categories={data?.categories}
+          handleChange={handleCategoryChange}
+          choosable
+        />
+        {state.categoryId && (
+          <div className="user-form">
+            {/* <CategoryTree id={props.categoryid} /> */}
+            <OakText
+              label="Title"
+              data={state}
+              id="title"
+              handleChange={e => handleChange(e)}
+            />
+            <OakEditor
+              label="Description"
+              data={state}
+              id="description"
+              handleChange={e => handleChange(e)}
+            />
+            <OakChipGroup
+              handleAddition={handleTagAddition}
+              handleRemoval={handleTagRemoval}
+              elements={globalTags}
+              data={view}
+              id="tags"
+              label="Tags"
+            />
+          </div>
+        )}
+        {!state.categoryId && (
+          <div className="typography-4">Choose a category to continue</div>
         )}
       </div>
-      <div className="user-form">
-        {/* <CategoryTree id={props.categoryid} /> */}
-        <OakText
-          label="Title"
-          data={state}
-          id="title"
-          handleChange={e => handleChange(e)}
-        />
-        <OakEditor
-          label="Description"
-          data={state}
-          id="description"
-          handleChange={e => handleChange(e)}
-        />
-        <OakChipGroup
-          handleAddition={handleTagAddition}
-          handleRemoval={handleTagRemoval}
-          elements={globalTags}
-          data={view}
-          id="tags"
-          label="Tags"
-        />
-      </div>
-    </div>
+    </>
   );
 };
 export default CreateItem;

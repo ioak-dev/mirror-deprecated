@@ -35,6 +35,8 @@ import Unauthorized from '../Auth/Unauthorized';
 import CreateArticle from '../Article/CreateArticle';
 import ViewArticle from '../Article/ViewArticle';
 import EditArticle from '../Article/EditArticle';
+import BrowseArticle from '../Article/ArticleList/BrowseArticle';
+import SearchArticle from '../Article/ArticleList/SearchArticle';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -164,6 +166,30 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={ArticleList}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:tenant/article/browse"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={BrowseArticle}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:tenant/article/search"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={SearchArticle}
                       middleware={['authenticate']}
                     />
                   )}

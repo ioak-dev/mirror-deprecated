@@ -4,6 +4,7 @@ import './style.scss';
 import { useQuery } from '@apollo/react-hooks';
 import EditItem from './EditItem';
 import OakSpinner from '../../../oakui/OakSpinner';
+import { GET_ARTICLE } from '../../Types/schema';
 
 interface Props {
   space: string;
@@ -12,20 +13,6 @@ interface Props {
 }
 
 const queryString = require('query-string');
-
-const GET_ARTICLE = gql`
-  query Article($id: ID!) {
-    article(id: $id) {
-      id
-      title
-      description
-      tags {
-        id
-        name
-      }
-    }
-  }
-`;
 
 const EditArticle = (props: Props) => {
   const [urlParam, setUrlParam] = useState({

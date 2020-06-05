@@ -3,6 +3,9 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import './style.scss';
 import ArticleItem from './ArticleItem';
+import { GET_ARTICLE } from '../../Types/schema';
+import OakButton from '../../../oakui/OakButton';
+import FeedbackView from './FeedbackView';
 
 interface Props {
   location: any;
@@ -12,26 +15,13 @@ interface Props {
 
 const queryString = require('query-string');
 
-const GET_ARTICLE = gql`
-  query ArticleTwo($id: ID!) {
-    article(id: $id) {
-      id
-      title
-      description
-      tags {
-        id
-        name
-      }
-    }
-  }
-`;
-
 const ViewArticle = (props: Props) => {
   const [urlParam, setUrlParam] = useState({
     id: '',
   });
   const { loading, error, data } = useQuery(GET_ARTICLE, {
     variables: { id: urlParam.id },
+    fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
@@ -43,12 +33,15 @@ const ViewArticle = (props: Props) => {
       <div className="app-content">
         <div className="app-text">
           {!loading && !error && (
-            <ArticleItem
-              history={props.history}
-              id={urlParam.id}
-              space={props.space}
-              article={data.article}
-            />
+            <>
+              <ArticleItem
+                history={props.history}
+                id={urlParam.id}
+                space={props.space}
+                article={data.article}
+              />
+              <FeedbackView article={data.article} />
+            </>
           )}
           {error && <div className="typography-6">Article does not exist</div>}
         </div>
