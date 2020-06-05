@@ -37,6 +37,7 @@ const OakEditor = (props: Props) => {
         { header: [1, 2, 3, 4, 5, 6, false] },
         { font: [] },
         // 'clean',
+        'image',
       ],
     ],
   };

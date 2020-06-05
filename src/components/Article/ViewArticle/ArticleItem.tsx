@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import gql from 'graphql-tag';
-import OakButton from '../../../oakui/OakButton';
-import CategoryTree from '../../Category/CategoryTree';
-import { fetchArticle, deleteArticle } from '../ArticleService';
+import React, { useState } from 'react';
 import OakPrompt from '../../../oakui/OakPrompt';
 import { Article } from '../../../types/graphql';
-
-const domain = 'Article';
+import OakViewer from '../../../oakui/OakViewer';
+import TagContainer from './TagContainer';
 
 interface Props {
   id: string;
-  history?: any;
-  // tenant: any;
-  authorization: any;
-  location: any;
+  history: any;
   article: Article;
   space: string;
 }
@@ -25,7 +18,7 @@ const ArticleItem = (props: Props) => {
     props.history.push(`/${props.space}/article/edit?id=${props.id}`);
   };
 
-  const cancelCreation = () => {
+  const goBack = () => {
     props.history.goBack();
   };
 
@@ -33,66 +26,64 @@ const ArticleItem = (props: Props) => {
     setConfirmDelete(true);
   };
   const deleteArticledata = async () => {
-    const { outcome } = await deleteArticle(
-      props.space,
-      props.id,
-      props.authorization
-    );
-
-    if (outcome) {
-      setConfirmDelete(false);
-    }
+    // const { outcome } = await deleteArticle(
+    //   props.space,
+    //   props.id,
+    //   props.authorization
+    // );
+    // if (outcome) {
+    //   setConfirmDelete(false);
+    // }
   };
 
   return (
-    <div className="create-article-item">
-      <div className="action-header position-right">
-        <OakButton
-          action={() => {
-            editArticle();
-          }}
-          theme="primary"
-          variant="appear"
-        >
-          <i className="material-icons">double_arrow</i>Edit
-        </OakButton>
-
-        {props.history.length > 2 && (
-          <>
-            <OakButton
-              action={() => cancelCreation()}
-              theme="default"
-              variant="appear"
-            >
-              <i className="material-icons">close</i>Close
-            </OakButton>
-          </>
-        )}
-        <OakButton
-          action={() => deleteArticlePrompt()}
-          theme="secondary"
-          variant="block"
-        >
-          <i className="material-icons">delete</i>Delete
-        </OakButton>
-        {confirmDelete}
-        <OakPrompt
-          action={() => deleteArticledata()}
-          visible={confirmDelete}
-          toggleVisibility={() => setConfirmDelete(!confirmDelete)}
-        />
+    <>
+      <div className="view-article-item">
+        <div className="page-title">
+          {props.article.title}
+          <div className="page-subtitle">
+            <div className="article-item-actions typography-5">
+              {props.history.length > 2 && (
+                <div
+                  className="align-horizontal hyperlink-container"
+                  onClick={goBack}
+                >
+                  <i className="material-icons typography-6">reply</i>
+                  <div className="hyperlink">Go back</div>
+                </div>
+              )}
+              <div className="align-horizontal hyperlink-container">
+                <i className="material-icons typography-6">edit</i>
+                <div className="hyperlink" onClick={editArticle}>
+                  Edit
+                </div>
+              </div>
+              <div className="align-horizontal hyperlink-container">
+                <i className="material-icons typography-6">delete_outline</i>
+                <div className="hyperlink" onClick={deleteArticlePrompt}>
+                  Delete
+                </div>
+              </div>
+            </div>
+            {/* <CategoryTree
+          category={data?.categories?.find(
+            (item: Category) => item.id === urlParam.categoryid
+          )}
+          categories={data?.categories}
+          handleChange={handleChange}
+        /> */}
+          </div>
+          <div className="page-highlight" />
+        </div>
+        <TagContainer tags={props.article.tags || []} />
+        <OakViewer>{props.article.description}</OakViewer>
       </div>
-      <CategoryTree id={props.id} pageid="leafNode" />
-
-      <div className="typography-7">{props.article.title}</div>
-      <div
-        className="typography-4"
-        dangerouslySetInnerHTML={{ __html: props.article.description || '' }}
+      <OakPrompt
+        action={() => deleteArticledata()}
+        visible={confirmDelete}
+        toggleVisibility={() => setConfirmDelete(!confirmDelete)}
       />
-      {/* {props.article.tags && (
-        <div className="typography-4">{props.article.tags}</div>
-      )} */}
-    </div>
+    </>
   );
 };
 

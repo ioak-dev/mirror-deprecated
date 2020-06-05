@@ -1,14 +1,13 @@
-import { FETCH_ARTICLE } from '../actions/types';
+import { FETCH_CATEGORY } from '../actions/types';
 
 const initialState = {
-  items: [],
-  categories: [],
+  data: [],
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case FETCH_ARTICLE:
-      console.log('FETCH_ARTICLE reducer');
+    case FETCH_CATEGORY:
+      console.log('FETCH_CATEGORY reducer');
       return {
         ...state,
         ...action.payload,

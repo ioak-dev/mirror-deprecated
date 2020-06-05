@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
 import './style.scss';
 import OakButton from '../../../oakui/OakButton';
-import { Article } from '../../../types/graphql';
 
 interface Props {
   setProfile: Function;
@@ -16,67 +13,49 @@ interface Props {
 
 const queryString = require('query-string');
 
-const LIST_ARTICLES = gql`
-  {
-    articles {
-      id
-      title
-      description
-    }
-  }
-`;
-
-const CreateArticle = (props: Props) => {
-  const { loading, error, data } = useQuery(LIST_ARTICLES);
+const ArticleList = (props: Props) => {
   const [urlParam, setUrlParam] = useState({
     categoryid: '',
   });
 
   useEffect(() => {
-    props.setProfile({
-      ...props.profile,
-      tenant: props.match.params.tenant,
-    });
     setUrlParam(queryString.parse(props.location.search));
-  }, []);
+  }, [props.location.search]);
 
-  const createArticleLink = event => {
-    props.history.push(`/${props.space}/article/create`);
+  const browseArticle = event => {
+    props.history.push(`/${props.space}/article/browse`);
   };
 
-  const viewArticleLink = event => {
-    props.history.push(`/${props.space}/article/view`);
+  const searchArticle = event => {
+    props.history.push(`/${props.space}/article/search`);
   };
 
   return (
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
-          <div className="action-header">
-            <OakButton
-              theme="primary"
-              variant="regular"
-              action={createArticleLink}
-            >
-              Create
-            </OakButton>
-            <OakButton
-              theme="primary"
-              variant="regular"
-              action={viewArticleLink}
-            >
-              Simulate click of an article from list
-            </OakButton>
+          <div className="page-title">
+            Article knowledge base
+            <div className="page-subtitle">Home of knowledge</div>
+            <div className="page-highlight" />
           </div>
-          <div className="separate-as-new-component">
-            {data?.articles.map((item: Article) => (
-              <>
-                <div className="typography-8">{item.title}</div>
-                <div className="typography-5 space-bottom-2">
-                  {item.description}
-                </div>
-              </>
-            ))}
+          <div className="typography-4 space-bottom-4">
+            Welcome to the world of knowledge. Here you will find articles that
+            will answer the question on your mind about this application. You
+            can access the articles by different means. Start to explore by
+            picking one of the below choices to navigate and reach your desired
+            article.
+          </div>
+          <div className="action-header">
+            <OakButton theme="primary" variant="appear" action={searchArticle}>
+              Search article
+            </OakButton>
+            <OakButton theme="primary" variant="appear" action={browseArticle}>
+              Browse by category
+            </OakButton>
+            <OakButton theme="primary" variant="appear" action={browseArticle}>
+              View by tags
+            </OakButton>
           </div>
         </div>
       </div>
@@ -84,4 +63,4 @@ const CreateArticle = (props: Props) => {
   );
 };
 
-export default CreateArticle;
+export default ArticleList;

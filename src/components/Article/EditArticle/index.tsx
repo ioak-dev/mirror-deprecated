@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import gql from 'graphql-tag';
 import './style.scss';
+import { useQuery } from '@apollo/react-hooks';
 import EditItem from './EditItem';
+import OakSpinner from '../../../oakui/OakSpinner';
+import { GET_ARTICLE } from '../../Types/schema';
 
 interface Props {
-  setProfile: Function;
-  profile: any;
   space: string;
-  match: any;
   location: any;
   history?: any;
 }
@@ -15,18 +15,14 @@ interface Props {
 const queryString = require('query-string');
 
 const EditArticle = (props: Props) => {
-  const authorization = useSelector(state => state.authorization);
   const [urlParam, setUrlParam] = useState({
     id: '',
     categoryId: '',
   });
 
-  useEffect(() => {
-    props.setProfile({
-      ...props.profile,
-      tenant: props.match.params.tenant,
-    });
-  }, []);
+  const { loading, error, data } = useQuery(GET_ARTICLE, {
+    variables: { id: urlParam.id },
+  });
 
   useEffect(() => {
     setUrlParam(queryString.parse(props.location.search));
@@ -36,13 +32,15 @@ const EditArticle = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
-          <EditItem
-            history={props.history}
-            id={urlParam.id}
-            categoryId={urlParam.categoryId}
-            space={props.space}
-            authorization={authorization}
-          />
+          {!loading && !error && (
+            <EditItem
+              history={props.history}
+              id={urlParam.id}
+              space={props.space}
+              article={data.article}
+            />
+          )}
+          {loading && <OakSpinner />}
         </div>
       </div>
     </div>

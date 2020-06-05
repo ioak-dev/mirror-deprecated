@@ -12,6 +12,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateScalar: any;
 };
 
 export type ArticlePayload = {
@@ -23,13 +24,42 @@ export type ArticlePayload = {
   removeTags?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
+export type ArticlePaginated = {
+  __typename?: 'ArticlePaginated';
+  pageNo?: Maybe<Scalars['Int']>;
+  hasMore?: Maybe<Scalars['Boolean']>;
+  total?: Maybe<Scalars['Int']>;
+  results: Array<Maybe<Article>>;
+};
+
 export type Article = {
   __typename?: 'Article';
   id: Scalars['ID'];
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  categoryId?: Maybe<Scalars['String']>;
+  views: Scalars['Int'];
+  helpful: Scalars['Int'];
+  notHelpful: Scalars['Int'];
+  createdAt?: Maybe<Scalars['DateScalar']>;
+  updatedAt?: Maybe<Scalars['DateScalar']>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  feedback?: Maybe<Array<Maybe<Feedback>>>;
   category?: Maybe<Category>;
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  article?: Maybe<Article>;
+};
+
+export type Feedback = {
+  __typename?: 'Feedback';
+  id: Scalars['ID'];
+  type?: Maybe<Scalars['String']>;
+  article?: Maybe<Article>;
+  user?: Maybe<User>;
 };
 
 export type CategoryPayload = {
@@ -42,7 +72,7 @@ export type Category = {
   __typename?: 'Category';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
-  articles?: Maybe<Array<Maybe<Article>>>;
+  parentCategoryId?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -57,7 +87,10 @@ export type User = {
 export type Query = {
   __typename?: 'Query';
   article?: Maybe<Article>;
-  articles?: Maybe<Array<Maybe<Article>>>;
+  articles?: Maybe<ArticlePaginated>;
+  searchArticles?: Maybe<ArticlePaginated>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  feedback?: Maybe<Array<Maybe<Feedback>>>;
   category?: Maybe<Category>;
   categories?: Maybe<Array<Maybe<Category>>>;
   session?: Maybe<User>;
@@ -65,6 +98,26 @@ export type Query = {
 
 export type QueryArticleArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryArticlesArgs = {
+  categoryId?: Maybe<Scalars['ID']>;
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
+};
+
+export type QuerySearchArticlesArgs = {
+  text?: Maybe<Scalars['String']>;
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
+};
+
+export type QueryTagsArgs = {
+  articleId: Scalars['ID'];
+};
+
+export type QueryFeedbackArgs = {
+  articleId: Scalars['ID'];
 };
 
 export type QueryCategoryArgs = {
@@ -78,6 +131,8 @@ export type QuerySessionArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
+  addFeedback?: Maybe<Feedback>;
+  removeFeedback?: Maybe<Feedback>;
   addCategory?: Maybe<Category>;
 };
 
@@ -85,23 +140,18 @@ export type MutationAddArticleArgs = {
   payload?: Maybe<ArticlePayload>;
 };
 
-export type MutationAddCategoryArgs = {
-  payload?: Maybe<CategoryPayload>;
+export type MutationAddFeedbackArgs = {
+  articleId: Scalars['String'];
+  type: Scalars['String'];
 };
 
-export type Unnamed_1_QueryVariables = {};
+export type MutationRemoveFeedbackArgs = {
+  articleId: Scalars['String'];
+  type: Scalars['String'];
+};
 
-export type Unnamed_1_Query = { __typename?: 'Query' } & {
-  articles?: Maybe<
-    Array<
-      Maybe<
-        { __typename?: 'Article' } & Pick<
-          Article,
-          'id' | 'title' | 'description'
-        >
-      >
-    >
-  >;
+export type MutationAddCategoryArgs = {
+  payload?: Maybe<CategoryPayload>;
 };
 
 export type AddArticleMutationVariables = {
@@ -109,19 +159,7 @@ export type AddArticleMutationVariables = {
 };
 
 export type AddArticleMutation = { __typename?: 'Mutation' } & {
-  addArticle?: Maybe<
-    { __typename?: 'Article' } & Pick<Article, 'id' | 'title'>
-  >;
-};
-
-export type ArticleQueryVariables = {
-  id: Scalars['ID'];
-};
-
-export type ArticleQuery = { __typename?: 'Query' } & {
-  article?: Maybe<
-    { __typename?: 'Article' } & Pick<Article, 'id' | 'title' | 'description'>
-  >;
+  addArticle?: Maybe<{ __typename?: 'Article' } & Pick<Article, 'id'>>;
 };
 
 export type SessionQueryVariables = {
@@ -132,7 +170,7 @@ export type SessionQuery = { __typename?: 'Query' } & {
   session?: Maybe<
     { __typename?: 'User' } & Pick<
       User,
-      'firstName' | 'lastName' | 'email' | 'token'
+      'id' | 'firstName' | 'lastName' | 'email' | 'token'
     >
   >;
 };
@@ -141,7 +179,6 @@ export const AddArticleDocument = gql`
   mutation AddArticle($payload: ArticlePayload!) {
     addArticle(payload: $payload) {
       id
-      title
     }
   }
 `;
@@ -206,70 +243,10 @@ export type AddArticleMutationOptions = ApolloReactCommon.BaseMutationOptions<
   AddArticleMutation,
   AddArticleMutationVariables
 >;
-export const ArticleDocument = gql`
-  query Article($id: ID!) {
-    article(id: $id) {
-      id
-      title
-      description
-    }
-  }
-`;
-export type ArticleComponentProps = Omit<
-  ApolloReactComponents.QueryComponentOptions<
-    ArticleQuery,
-    ArticleQueryVariables
-  >,
-  'query'
-> &
-  ({ variables: ArticleQueryVariables; skip?: boolean } | { skip: boolean });
-
-export const ArticleComponent = (props: ArticleComponentProps) => (
-  <ApolloReactComponents.Query<ArticleQuery, ArticleQueryVariables>
-    query={ArticleDocument}
-    {...props}
-  />
-);
-
-export type ArticleProps<
-  TChildProps = {},
-  TDataName extends string = 'data'
-> = {
-  [key in TDataName]: ApolloReactHoc.DataValue<
-    ArticleQuery,
-    ArticleQueryVariables
-  >;
-} &
-  TChildProps;
-export function withArticle<
-  TProps,
-  TChildProps = {},
-  TDataName extends string = 'data'
->(
-  operationOptions?: ApolloReactHoc.OperationOption<
-    TProps,
-    ArticleQuery,
-    ArticleQueryVariables,
-    ArticleProps<TChildProps, TDataName>
-  >
-) {
-  return ApolloReactHoc.withQuery<
-    TProps,
-    ArticleQuery,
-    ArticleQueryVariables,
-    ArticleProps<TChildProps, TDataName>
-  >(ArticleDocument, {
-    alias: 'article',
-    ...operationOptions,
-  });
-}
-export type ArticleQueryResult = ApolloReactCommon.QueryResult<
-  ArticleQuery,
-  ArticleQueryVariables
->;
 export const SessionDocument = gql`
   query Session($key: ID!) {
     session(key: $key) {
+      id
       firstName
       lastName
       email
