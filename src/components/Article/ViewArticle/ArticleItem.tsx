@@ -75,7 +75,11 @@ const ArticleItem = (props: Props) => {
           </div>
           <div className="page-highlight" />
         </div>
-        <TagContainer tags={props.article.tags || []} />
+        <TagContainer
+          tags={props.article.tags || []}
+          history={props.history}
+          space={props.space}
+        />
         <OakViewer>{props.article.description}</OakViewer>
       </div>
       <OakPrompt

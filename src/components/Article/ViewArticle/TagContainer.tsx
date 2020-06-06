@@ -5,13 +5,23 @@ import TagItem from './TagItem';
 
 interface Props {
   tags: Array<Maybe<Tag>>;
+  history: any;
+  space: string;
 }
 
 const TagContainer = (props: Props) => {
   return (
     <div className="tag-container">
       {props.tags.map((item: Maybe<Tag>, index) => (
-        <div key={item?.id}>{item && <TagItem name={item.name || ''} />}</div>
+        <div key={item?.id}>
+          {item && (
+            <TagItem
+              name={item.name || ''}
+              history={props.history}
+              space={props.space}
+            />
+          )}
+        </div>
       ))}
     </div>
   );

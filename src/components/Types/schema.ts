@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const LIST_ARTICLES = gql`
-  query Articles($categoryId: ID, $pageNo: Int, $pageSize: Int) {
+  query Articles($categoryId: ID!, $pageNo: Int, $pageSize: Int) {
     articles(categoryId: $categoryId, pageNo: $pageNo, pageSize: $pageSize) {
       results {
         id
@@ -68,6 +68,33 @@ export const GET_ARTICLE = gql`
       feedback {
         type
       }
+    }
+  }
+`;
+
+export const ARTICLES_BY_TAG = gql`
+  query ArticlesByTag($tag: String!, $pageNo: Int, $pageSize: Int) {
+    articlesByTag(tag: $tag, pageNo: $pageNo, pageSize: $pageSize) {
+      results {
+        id
+        name
+        article {
+          id
+          title
+          description
+          views
+          helpful
+          notHelpful
+          createdAt
+          updatedAt
+          tags {
+            id
+            name
+          }
+        }
+      }
+      pageNo
+      hasMore
     }
   }
 `;
@@ -163,6 +190,15 @@ export const REMOVE_FEEDBACK = gql`
           type
         }
       }
+    }
+  }
+`;
+
+export const TAG_CLOUD = gql`
+  query TagCloud {
+    tagCloud {
+      name
+      count
     }
   }
 `;
