@@ -48,7 +48,7 @@ export const SEARCH_ARTICLES = gql`
 `;
 
 export const GET_ARTICLE = gql`
-  query ArticleTwo($id: ID!) {
+  query Article($id: ID!) {
     article(id: $id) {
       id
       title
@@ -114,6 +114,14 @@ export const UPDATE_ARTICLE = gql`
         id
         name
       }
+    }
+  }
+`;
+
+export const DELETE_ARTICLE = gql`
+  mutation DeleteArticle($id: ID!) {
+    deleteArticle(id: $id) {
+      id
     }
   }
 `;

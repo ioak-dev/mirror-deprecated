@@ -11,7 +11,9 @@ interface Props {
 }
 
 const TagSection = (props: Props) => {
-  const { loading, error, data, fetchMore, refetch } = useQuery(TAG_CLOUD);
+  const { loading, error, data, fetchMore, refetch } = useQuery(TAG_CLOUD, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   const searchArticle = event => {
     props.history.push(`/${props.space}/article/search`);
@@ -34,6 +36,7 @@ const TagSection = (props: Props) => {
         <div className="tag-section">
           {data?.tagCloud?.map(item => (
             <TagLink
+              key={item.name}
               tag={item}
               handleClick={() => props.handleChange(item.name)}
             />

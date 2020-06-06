@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useMutation } from '@apollo/react-hooks';
 import OakPrompt from '../../../oakui/OakPrompt';
 import { Article } from '../../../types/graphql';
 import OakViewer from '../../../oakui/OakViewer';
 import TagContainer from './TagContainer';
+import { DELETE_ARTICLE } from '../../Types/schema';
 
 interface Props {
   id: string;
@@ -12,6 +14,10 @@ interface Props {
 }
 
 const ArticleItem = (props: Props) => {
+  const [deleteArticle, { data: deleteResponse }] = useMutation(
+    DELETE_ARTICLE,
+    { variables: { id: props.article.id } }
+  );
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const editArticle = () => {
@@ -22,18 +28,22 @@ const ArticleItem = (props: Props) => {
     props.history.goBack();
   };
 
+  const searchArticle = () => {
+    props.history.push(`/${props.space}/article/search`);
+  };
+
   const deleteArticlePrompt = () => {
     setConfirmDelete(true);
   };
+
   const deleteArticledata = async () => {
-    // const { outcome } = await deleteArticle(
-    //   props.space,
-    //   props.id,
-    //   props.authorization
-    // );
-    // if (outcome) {
-    //   setConfirmDelete(false);
-    // }
+    deleteArticle().then(() => {
+      if (props.history.length > 2) {
+        goBack();
+      } else {
+        searchArticle();
+      }
+    });
   };
 
   return (

@@ -16,7 +16,10 @@ interface Props {
 const ArticleSection = (props: Props) => {
   const { loading, error, data, fetchMore, refetch } = useQuery(
     ARTICLES_BY_TAG,
-    { variables: { tag: props.tag, pageSize: 10, pageNo: 0 } }
+    {
+      variables: { tag: props.tag, pageSize: 10, pageNo: 0 },
+      fetchPolicy: 'cache-and-network',
+    }
   );
 
   const fetchMoreArticles = () => {
@@ -80,17 +83,16 @@ const ArticleSection = (props: Props) => {
           >
             <div className="search-results-section">
               <div className="search-results-container">
-                {data?.articlesByTag?.results?.map((item: Tag) => (
-                  <>
+                {data?.articlesByTag?.results?.map((item: Tag, index) => (
+                  <div key={item?.article?.id || index}>
                     {item?.article && (
                       <ArticleLink
-                        key={item.id}
                         article={item.article}
                         space={props.space}
                         history={props.history}
                       />
                     )}
-                  </>
+                  </div>
                 ))}
                 {/* {data?.articlesByTag?.results?.length === 0 &&
               props.text &&

@@ -1,7 +1,5 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
-import { TAG_CLOUD } from '../../../Types/schema';
 import { TagCloud } from '../../../../types/graphql';
 
 interface Props {
@@ -10,8 +8,6 @@ interface Props {
 }
 
 const TagLink = (props: Props) => {
-  const { loading, error, data, fetchMore, refetch } = useQuery(TAG_CLOUD);
-
   return (
     <div className="tag-link">
       <div className="hyperlink-drama" onClick={props.handleClick}>
