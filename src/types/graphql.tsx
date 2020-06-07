@@ -15,6 +15,7 @@ export type Scalars = {
   DateScalar: any;
 };
 
+
 export type ArticlePayload = {
   id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -97,6 +98,10 @@ export type AssetPayload = {
   productionMode?: Maybe<Scalars['Boolean']>;
 };
 
+export type AssetAdditionPayload = {
+  email?: Maybe<Scalars['String']>;
+};
+
 export type Asset = {
   __typename?: 'Asset';
   id: Scalars['ID'];
@@ -132,9 +137,11 @@ export type Query = {
   session?: Maybe<User>;
 };
 
+
 export type QueryArticleArgs = {
   id: Scalars['ID'];
 };
+
 
 export type QueryArticlesArgs = {
   categoryId: Scalars['ID'];
@@ -142,11 +149,13 @@ export type QueryArticlesArgs = {
   pageNo?: Maybe<Scalars['Int']>;
 };
 
+
 export type QuerySearchArticlesArgs = {
   text?: Maybe<Scalars['String']>;
   pageSize?: Maybe<Scalars['Int']>;
   pageNo?: Maybe<Scalars['Int']>;
 };
+
 
 export type QueryArticlesByTagArgs = {
   tag: Scalars['String'];
@@ -154,21 +163,26 @@ export type QueryArticlesByTagArgs = {
   pageNo?: Maybe<Scalars['Int']>;
 };
 
+
 export type QueryFeedbackArgs = {
   articleId: Scalars['ID'];
 };
+
 
 export type QueryCategoryArgs = {
   id: Scalars['ID'];
 };
 
+
 export type QueryAssetArgs = {
   assetId: Scalars['String'];
 };
 
+
 export type QueryAssetByIdArgs = {
   id: Scalars['ID'];
 };
+
 
 export type QuerySessionArgs = {
   key: Scalars['ID'];
@@ -182,183 +196,131 @@ export type Mutation = {
   removeFeedback?: Maybe<Feedback>;
   addCategory?: Maybe<Category>;
   updateAsset?: Maybe<Asset>;
+  createAsset?: Maybe<Asset>;
 };
+
 
 export type MutationAddArticleArgs = {
   payload?: Maybe<ArticlePayload>;
 };
 
+
 export type MutationDeleteArticleArgs = {
   id: Scalars['ID'];
 };
+
 
 export type MutationAddFeedbackArgs = {
   articleId: Scalars['String'];
   type: Scalars['String'];
 };
 
+
 export type MutationRemoveFeedbackArgs = {
   articleId: Scalars['String'];
   type: Scalars['String'];
 };
 
+
 export type MutationAddCategoryArgs = {
   payload?: Maybe<CategoryPayload>;
 };
 
+
 export type MutationUpdateAssetArgs = {
   payload?: Maybe<AssetPayload>;
+};
+
+
+export type MutationCreateAssetArgs = {
+  payload?: Maybe<AssetPayload>;
+  addition?: Maybe<AssetAdditionPayload>;
 };
 
 export type AddArticleMutationVariables = {
   payload: ArticlePayload;
 };
 
-export type AddArticleMutation = { __typename?: 'Mutation' } & {
-  addArticle?: Maybe<{ __typename?: 'Article' } & Pick<Article, 'id'>>;
-};
+
+export type AddArticleMutation = (
+  { __typename?: 'Mutation' }
+  & { addArticle?: Maybe<(
+    { __typename?: 'Article' }
+    & Pick<Article, 'id'>
+  )> }
+);
 
 export type SessionQueryVariables = {
   key: Scalars['ID'];
 };
 
-export type SessionQuery = { __typename?: 'Query' } & {
-  session?: Maybe<
-    { __typename?: 'User' } & Pick<
-      User,
-      'id' | 'firstName' | 'lastName' | 'email' | 'token'
-    >
-  >;
-};
+
+export type SessionQuery = (
+  { __typename?: 'Query' }
+  & { session?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'token'>
+  )> }
+);
+
 
 export const AddArticleDocument = gql`
-  mutation AddArticle($payload: ArticlePayload!) {
-    addArticle(payload: $payload) {
-      id
-    }
+    mutation AddArticle($payload: ArticlePayload!) {
+  addArticle(payload: $payload) {
+    id
   }
-`;
-export type AddArticleMutationFn = ApolloReactCommon.MutationFunction<
-  AddArticleMutation,
-  AddArticleMutationVariables
->;
-export type AddArticleComponentProps = Omit<
-  ApolloReactComponents.MutationComponentOptions<
-    AddArticleMutation,
-    AddArticleMutationVariables
-  >,
-  'mutation'
->;
-
-export const AddArticleComponent = (props: AddArticleComponentProps) => (
-  <ApolloReactComponents.Mutation<
-    AddArticleMutation,
-    AddArticleMutationVariables
-  >
-    mutation={AddArticleDocument}
-    {...props}
-  />
-);
-
-export type AddArticleProps<
-  TChildProps = {},
-  TDataName extends string = 'mutate'
-> = {
-  [key in TDataName]: ApolloReactCommon.MutationFunction<
-    AddArticleMutation,
-    AddArticleMutationVariables
-  >;
-} &
-  TChildProps;
-export function withAddArticle<
-  TProps,
-  TChildProps = {},
-  TDataName extends string = 'mutate'
->(
-  operationOptions?: ApolloReactHoc.OperationOption<
-    TProps,
-    AddArticleMutation,
-    AddArticleMutationVariables,
-    AddArticleProps<TChildProps, TDataName>
-  >
-) {
-  return ApolloReactHoc.withMutation<
-    TProps,
-    AddArticleMutation,
-    AddArticleMutationVariables,
-    AddArticleProps<TChildProps, TDataName>
-  >(AddArticleDocument, {
-    alias: 'addArticle',
-    ...operationOptions,
-  });
 }
-export type AddArticleMutationResult = ApolloReactCommon.MutationResult<
-  AddArticleMutation
->;
-export type AddArticleMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    `;
+export type AddArticleMutationFn = ApolloReactCommon.MutationFunction<AddArticleMutation, AddArticleMutationVariables>;
+export type AddArticleComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddArticleMutation, AddArticleMutationVariables>, 'mutation'>;
+
+    export const AddArticleComponent = (props: AddArticleComponentProps) => (
+      <ApolloReactComponents.Mutation<AddArticleMutation, AddArticleMutationVariables> mutation={AddArticleDocument} {...props} />
+    );
+    
+export type AddArticleProps<TChildProps = {}, TDataName extends string = 'mutate'> = {
+      [key in TDataName]: ApolloReactCommon.MutationFunction<AddArticleMutation, AddArticleMutationVariables>
+    } & TChildProps;
+export function withAddArticle<TProps, TChildProps = {}, TDataName extends string = 'mutate'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
   AddArticleMutation,
-  AddArticleMutationVariables
->;
+  AddArticleMutationVariables,
+  AddArticleProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withMutation<TProps, AddArticleMutation, AddArticleMutationVariables, AddArticleProps<TChildProps, TDataName>>(AddArticleDocument, {
+      alias: 'addArticle',
+      ...operationOptions
+    });
+};
+export type AddArticleMutationResult = ApolloReactCommon.MutationResult<AddArticleMutation>;
+export type AddArticleMutationOptions = ApolloReactCommon.BaseMutationOptions<AddArticleMutation, AddArticleMutationVariables>;
 export const SessionDocument = gql`
-  query Session($key: ID!) {
-    session(key: $key) {
-      id
-      firstName
-      lastName
-      email
-      token
-    }
+    query Session($key: ID!) {
+  session(key: $key) {
+    id
+    firstName
+    lastName
+    email
+    token
   }
-`;
-export type SessionComponentProps = Omit<
-  ApolloReactComponents.QueryComponentOptions<
-    SessionQuery,
-    SessionQueryVariables
-  >,
-  'query'
-> &
-  ({ variables: SessionQueryVariables; skip?: boolean } | { skip: boolean });
-
-export const SessionComponent = (props: SessionComponentProps) => (
-  <ApolloReactComponents.Query<SessionQuery, SessionQueryVariables>
-    query={SessionDocument}
-    {...props}
-  />
-);
-
-export type SessionProps<
-  TChildProps = {},
-  TDataName extends string = 'data'
-> = {
-  [key in TDataName]: ApolloReactHoc.DataValue<
-    SessionQuery,
-    SessionQueryVariables
-  >;
-} &
-  TChildProps;
-export function withSession<
-  TProps,
-  TChildProps = {},
-  TDataName extends string = 'data'
->(
-  operationOptions?: ApolloReactHoc.OperationOption<
-    TProps,
-    SessionQuery,
-    SessionQueryVariables,
-    SessionProps<TChildProps, TDataName>
-  >
-) {
-  return ApolloReactHoc.withQuery<
-    TProps,
-    SessionQuery,
-    SessionQueryVariables,
-    SessionProps<TChildProps, TDataName>
-  >(SessionDocument, {
-    alias: 'session',
-    ...operationOptions,
-  });
 }
-export type SessionQueryResult = ApolloReactCommon.QueryResult<
+    `;
+export type SessionComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SessionQuery, SessionQueryVariables>, 'query'> & ({ variables: SessionQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const SessionComponent = (props: SessionComponentProps) => (
+      <ApolloReactComponents.Query<SessionQuery, SessionQueryVariables> query={SessionDocument} {...props} />
+    );
+    
+export type SessionProps<TChildProps = {}, TDataName extends string = 'data'> = {
+      [key in TDataName]: ApolloReactHoc.DataValue<SessionQuery, SessionQueryVariables>
+    } & TChildProps;
+export function withSession<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
   SessionQuery,
-  SessionQueryVariables
->;
+  SessionQueryVariables,
+  SessionProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withQuery<TProps, SessionQuery, SessionQueryVariables, SessionProps<TChildProps, TDataName>>(SessionDocument, {
+      alias: 'session',
+      ...operationOptions
+    });
+};
+export type SessionQueryResult = ApolloReactCommon.QueryResult<SessionQuery, SessionQueryVariables>;

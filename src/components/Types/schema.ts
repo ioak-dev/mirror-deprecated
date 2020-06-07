@@ -237,6 +237,22 @@ export const GET_ASSET = gql`
   }
 `;
 
+export const CREATE_ASSET = gql`
+  mutation CreateAsset(
+    $payload: AssetPayload!
+    $addition: AssetAdditionPayload!
+  ) {
+    CreateAsset(payload: $payload, addition: $addition) {
+      id
+      name
+      description
+      jwtPassword
+      productionMode
+      assetId
+    }
+  }
+`;
+
 export const UPDATE_ASSET = gql`
   mutation UpdateAsset($payload: AssetPayload!) {
     updateAsset(payload: $payload) {
