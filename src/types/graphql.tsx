@@ -104,6 +104,7 @@ export type Asset = {
   description?: Maybe<Scalars['String']>;
   jwtPassword?: Maybe<Scalars['String']>;
   productionMode?: Maybe<Scalars['Boolean']>;
+  assetId?: Maybe<Scalars['String']>;
 };
 
 export type User = {

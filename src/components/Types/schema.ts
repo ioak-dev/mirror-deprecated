@@ -219,6 +219,7 @@ export const LIST_ASSETS = gql`
       description
       jwtPassword
       productionMode
+      assetId
     }
   }
 `;
@@ -231,6 +232,7 @@ export const GET_ASSET = gql`
       description
       jwtPassword
       productionMode
+      assetId
     }
   }
 `;
@@ -243,6 +245,7 @@ export const UPDATE_ASSET = gql`
       description
       jwtPassword
       productionMode
+      assetId
     }
   }
 `;
