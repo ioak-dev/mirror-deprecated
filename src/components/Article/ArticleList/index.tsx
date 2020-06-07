@@ -30,6 +30,10 @@ const ArticleList = (props: Props) => {
     props.history.push(`/${props.space}/article/search`);
   };
 
+  const viewByTags = event => {
+    props.history.push(`/${props.space}/article/tag`);
+  };
+
   return (
     <div className="app-page">
       <div className="app-content">
@@ -53,7 +57,7 @@ const ArticleList = (props: Props) => {
             <OakButton theme="primary" variant="appear" action={browseArticle}>
               Browse by category
             </OakButton>
-            <OakButton theme="primary" variant="appear" action={browseArticle}>
+            <OakButton theme="primary" variant="appear" action={viewByTags}>
               View by tags
             </OakButton>
           </div>

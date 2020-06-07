@@ -6,6 +6,7 @@ import ArticleItem from './ArticleItem';
 import { GET_ARTICLE } from '../../Types/schema';
 import OakButton from '../../../oakui/OakButton';
 import FeedbackView from './FeedbackView';
+import OakSpinner from '../../../oakui/OakSpinner';
 
 interface Props {
   location: any;
@@ -32,6 +33,7 @@ const ViewArticle = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
+          {loading && <OakSpinner />}
           {!loading && !error && (
             <>
               <ArticleItem

@@ -37,6 +37,7 @@ import ViewArticle from '../Article/ViewArticle';
 import EditArticle from '../Article/EditArticle';
 import BrowseArticle from '../Article/ArticleList/BrowseArticle';
 import SearchArticle from '../Article/ArticleList/SearchArticle';
+import ArticlesByTag from '../Article/ArticleList/ArticlesByTag';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -190,6 +191,18 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={SearchArticle}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:tenant/article/tag"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={ArticlesByTag}
                       middleware={['authenticate']}
                     />
                   )}

@@ -37,7 +37,9 @@ const SearchSection = (props: Props) => {
 
   const onSubmit = event => {
     event.preventDefault();
-    props.handleSearchTextChange(state.text);
+    if (state.text) {
+      props.handleSearchTextChange(state.text);
+    }
   };
 
   const fetchMoreArticles = () => {

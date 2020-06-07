@@ -3,7 +3,7 @@
   z-index: 999;
   position: relative;
   // top: 50%;
-  left: 25%;
+  // left: 25%;
   // transform: translate(-50%, -50%);
   // transform: translateX(-50%);
 
@@ -13,6 +13,10 @@
 }
 
 .oak-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // margin: 10px 0;
   // width: 100%;
   .spinner-wrapper {
     display: flex;
@@ -49,16 +53,16 @@
 
 @keyframes loading {
   0% {
-    transform: translateX(-350px);
+    transform: translateX(-40vw);
     opacity: 0;
   }
   35%,
   65% {
-    transform: translateX(0px);
+    transform: translateX(0vw);
     opacity: 1;
   }
   100% {
-    transform: translateX(+350px);
+    transform: translateX(+40vw);
     opacity: 0;
   }
 }

@@ -47,6 +47,20 @@ export type Article = {
   category?: Maybe<Category>;
 };
 
+export type TagPaginated = {
+  __typename?: 'TagPaginated';
+  pageNo?: Maybe<Scalars['Int']>;
+  hasMore?: Maybe<Scalars['Boolean']>;
+  total?: Maybe<Scalars['Int']>;
+  results: Array<Maybe<Tag>>;
+};
+
+export type TagCloud = {
+  __typename?: 'TagCloud';
+  name?: Maybe<Scalars['String']>;
+  count?: Maybe<Scalars['Int']>;
+};
+
 export type Tag = {
   __typename?: 'Tag';
   id: Scalars['ID'];
@@ -89,7 +103,8 @@ export type Query = {
   article?: Maybe<Article>;
   articles?: Maybe<ArticlePaginated>;
   searchArticles?: Maybe<ArticlePaginated>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
+  tagCloud?: Maybe<Array<Maybe<TagCloud>>>;
+  articlesByTag?: Maybe<TagPaginated>;
   feedback?: Maybe<Array<Maybe<Feedback>>>;
   category?: Maybe<Category>;
   categories?: Maybe<Array<Maybe<Category>>>;
@@ -101,7 +116,7 @@ export type QueryArticleArgs = {
 };
 
 export type QueryArticlesArgs = {
-  categoryId?: Maybe<Scalars['ID']>;
+  categoryId: Scalars['ID'];
   pageSize?: Maybe<Scalars['Int']>;
   pageNo?: Maybe<Scalars['Int']>;
 };
@@ -112,8 +127,10 @@ export type QuerySearchArticlesArgs = {
   pageNo?: Maybe<Scalars['Int']>;
 };
 
-export type QueryTagsArgs = {
-  articleId: Scalars['ID'];
+export type QueryArticlesByTagArgs = {
+  tag: Scalars['String'];
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
 };
 
 export type QueryFeedbackArgs = {

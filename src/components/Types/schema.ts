@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const LIST_ARTICLES = gql`
-  query Articles($categoryId: ID, $pageNo: Int, $pageSize: Int) {
+  query Articles($categoryId: ID!, $pageNo: Int, $pageSize: Int) {
     articles(categoryId: $categoryId, pageNo: $pageNo, pageSize: $pageSize) {
       results {
         id
@@ -48,7 +48,7 @@ export const SEARCH_ARTICLES = gql`
 `;
 
 export const GET_ARTICLE = gql`
-  query ArticleTwo($id: ID!) {
+  query Article($id: ID!) {
     article(id: $id) {
       id
       title
@@ -72,6 +72,33 @@ export const GET_ARTICLE = gql`
   }
 `;
 
+export const ARTICLES_BY_TAG = gql`
+  query ArticlesByTag($tag: String!, $pageNo: Int, $pageSize: Int) {
+    articlesByTag(tag: $tag, pageNo: $pageNo, pageSize: $pageSize) {
+      results {
+        id
+        name
+        article {
+          id
+          title
+          description
+          views
+          helpful
+          notHelpful
+          createdAt
+          updatedAt
+          tags {
+            id
+            name
+          }
+        }
+      }
+      pageNo
+      hasMore
+    }
+  }
+`;
+
 export const UPDATE_ARTICLE = gql`
   mutation UpdateArticle($payload: ArticlePayload!) {
     addArticle(payload: $payload) {
@@ -87,6 +114,14 @@ export const UPDATE_ARTICLE = gql`
         id
         name
       }
+    }
+  }
+`;
+
+export const DELETE_ARTICLE = gql`
+  mutation DeleteArticle($id: ID!) {
+    deleteArticle(id: $id) {
+      id
     }
   }
 `;
@@ -163,6 +198,15 @@ export const REMOVE_FEEDBACK = gql`
           type
         }
       }
+    }
+  }
+`;
+
+export const TAG_CLOUD = gql`
+  query TagCloud {
+    tagCloud {
+      name
+      count
     }
   }
 `;
