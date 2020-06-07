@@ -210,3 +210,39 @@ export const TAG_CLOUD = gql`
     }
   }
 `;
+
+export const LIST_ASSETS = gql`
+  query Assets {
+    assets {
+      id
+      name
+      description
+      jwtPassword
+      productionMode
+    }
+  }
+`;
+
+export const GET_ASSET = gql`
+  query Asset($id: ID!) {
+    asset(id: $id) {
+      id
+      name
+      description
+      jwtPassword
+      productionMode
+    }
+  }
+`;
+
+export const UPDATE_ASSET = gql`
+  mutation UpdateAsset($payload: AssetPayload!) {
+    updateAsset(payload: $payload) {
+      id
+      name
+      description
+      jwtPassword
+      productionMode
+    }
+  }
+`;

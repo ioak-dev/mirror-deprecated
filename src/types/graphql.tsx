@@ -89,6 +89,23 @@ export type Category = {
   parentCategoryId?: Maybe<Scalars['String']>;
 };
 
+export type AssetPayload = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  jwtPassword?: Maybe<Scalars['String']>;
+  productionMode?: Maybe<Scalars['Boolean']>;
+};
+
+export type Asset = {
+  __typename?: 'Asset';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  jwtPassword?: Maybe<Scalars['String']>;
+  productionMode?: Maybe<Scalars['Boolean']>;
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
@@ -108,6 +125,8 @@ export type Query = {
   feedback?: Maybe<Array<Maybe<Feedback>>>;
   category?: Maybe<Category>;
   categories?: Maybe<Array<Maybe<Category>>>;
+  asset?: Maybe<Asset>;
+  assets?: Maybe<Array<Maybe<Asset>>>;
   session?: Maybe<User>;
 };
 
@@ -141,6 +160,10 @@ export type QueryCategoryArgs = {
   id: Scalars['ID'];
 };
 
+export type QueryAssetArgs = {
+  id: Scalars['ID'];
+};
+
 export type QuerySessionArgs = {
   key: Scalars['ID'];
 };
@@ -148,13 +171,19 @@ export type QuerySessionArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
+  deleteArticle?: Maybe<Article>;
   addFeedback?: Maybe<Feedback>;
   removeFeedback?: Maybe<Feedback>;
   addCategory?: Maybe<Category>;
+  updateAsset?: Maybe<Asset>;
 };
 
 export type MutationAddArticleArgs = {
   payload?: Maybe<ArticlePayload>;
+};
+
+export type MutationDeleteArticleArgs = {
+  id: Scalars['ID'];
 };
 
 export type MutationAddFeedbackArgs = {
@@ -169,6 +198,10 @@ export type MutationRemoveFeedbackArgs = {
 
 export type MutationAddCategoryArgs = {
   payload?: Maybe<CategoryPayload>;
+};
+
+export type MutationUpdateAssetArgs = {
+  payload?: Maybe<AssetPayload>;
 };
 
 export type AddArticleMutationVariables = {
