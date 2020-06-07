@@ -225,8 +225,8 @@ export const LIST_ASSETS = gql`
 `;
 
 export const GET_ASSET = gql`
-  query Asset($id: ID!) {
-    asset(id: $id) {
+  query Asset($assetId: String!) {
+    asset(assetId: $assetId) {
       id
       name
       description

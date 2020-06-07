@@ -127,6 +127,7 @@ export type Query = {
   category?: Maybe<Category>;
   categories?: Maybe<Array<Maybe<Category>>>;
   asset?: Maybe<Asset>;
+  assetById?: Maybe<Asset>;
   assets?: Maybe<Array<Maybe<Asset>>>;
   session?: Maybe<User>;
 };
@@ -162,6 +163,10 @@ export type QueryCategoryArgs = {
 };
 
 export type QueryAssetArgs = {
+  assetId: Scalars['String'];
+};
+
+export type QueryAssetByIdArgs = {
   id: Scalars['ID'];
 };
 
