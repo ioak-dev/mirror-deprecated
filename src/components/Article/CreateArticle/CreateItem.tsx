@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import OakText from '../../../oakui/OakText';
 import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
-import { isEmptyOrSpaces } from '../../Utils';
+import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import { sendMessage } from '../../../events/MessageService';
 import CategoryTree from '../../Category/CategoryTree';
 import OakChipGroup from '../../../oakui/OakChipGroup';
@@ -35,6 +35,10 @@ const CreateItem = (props: Props) => {
     categoryId: '',
     addTags: [],
     removeTags: [],
+  });
+  const [formErrors, setFormErrors] = useState<any>({
+    title: null,
+    description: null,
   });
   const [view, setView] = useState<any>({
     tags: [],
@@ -121,26 +125,16 @@ const CreateItem = (props: Props) => {
     }
   };
 
-  const validateEmptyText = (text, message) => {
-    if (isEmptyOrSpaces(text)) {
-      sendMessage('notification', true, {
-        type: 'failure',
-        message,
-        duration: 5000,
-      });
-      return false;
-    }
-    return true;
-  };
-
   const submit = () => {
-    if (
-      validateEmptyText(state.title, 'Title is not provided') &&
-      validateEmptyText(
-        state.description,
-        'Provide details for the mentioned title'
-      )
-    ) {
+    const errorFields: any = { title: null, description: '' };
+    if (isEmptyOrSpaces(state.title)) {
+      errorFields.title = 'Title cannot be empty';
+    }
+    if (isEmptyOrSpaces(state.description)) {
+      errorFields.description = 'Description cannot be empty';
+    }
+    setFormErrors(errorFields);
+    if (isEmptyAttributes(errorFields)) {
       const payload: ArticlePayload = {
         title: state.title,
         categoryId: state.categoryId,
@@ -209,12 +203,14 @@ const CreateItem = (props: Props) => {
             <OakText
               label="Title"
               data={state}
+              errorData={formErrors}
               id="title"
               handleChange={e => handleChange(e)}
             />
             <OakEditor
               label="Description"
               data={state}
+              errorData={formErrors}
               id="description"
               handleChange={e => handleChange(e)}
             />
