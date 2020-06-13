@@ -38,6 +38,9 @@ import EditArticle from '../Article/EditArticle';
 import BrowseArticle from '../Article/ArticleList/BrowseArticle';
 import SearchArticle from '../Article/ArticleList/SearchArticle';
 import ArticlesByTag from '../Article/ArticleList/ArticlesByTag';
+import CreateAsset from '../Asset/CreateAsset/index';
+import ViewAsset from '../Asset/ViewAsset/index';
+import EditAsset from '../Asset/EditAsset';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -149,6 +152,17 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
+                  path="/asset/create"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={CreateAsset}
+                    />
+                  )}
+                />
+                <Route
                   path="/:tenant/home"
                   render={propsLocal => (
                     <OakRoute
@@ -241,6 +255,30 @@ const Content = (props: Props) => {
                       {...props}
                       component={EditArticle}
                       middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/asset/view"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={ViewAsset}
+                      // middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/asset/edit"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={EditAsset}
+                      // middleware={['authenticate']}
                     />
                   )}
                 />

@@ -1,0 +1,12 @@
+.asset-status-container {
+  display: flex;
+  justify-content: flex-start;
+  .asset-status {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background-color: var(--color-failure);
+    &.live {
+      background-color: var(--color-success);
+    }
+  }
+}

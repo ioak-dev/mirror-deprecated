@@ -28,6 +28,14 @@ const Links = (props: Props) => {
           >
             Articles
           </NavLink>
+
+          <NavLink
+            to={`/${props.space}/asset/view`}
+            className="navitem"
+            activeClassName="active"
+          >
+            View Asset
+          </NavLink>
         </>
       )}
     </div>
