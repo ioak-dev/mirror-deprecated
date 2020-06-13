@@ -42,7 +42,7 @@ import CreateAsset from '../Asset/CreateAsset/index';
 import ViewAsset from '../Asset/ViewAsset/index';
 import EditAsset from '../Asset/EditAsset';
 import OneAuth from '../Login/OneAuth/index';
-import Email from '../Login/Email/index';
+// import Email from '../Login/Email/index';
 import Login from '../Login/index';
 
 const themes = {
@@ -198,7 +198,7 @@ const Content = (props: Props) => {
                     />
                   )}
                 />
-                <Route
+                {/* <Route
                   path="/:asset/login/email"
                   render={propsLocal => (
                     <OakRoute
@@ -208,7 +208,7 @@ const Content = (props: Props) => {
                       // middleware={['readAuthentication']}
                     />
                   )}
-                />
+                /> */}
                 <Route
                   path="/:asset/article"
                   exact

@@ -5,17 +5,12 @@ interface Props {
   history: any;
   match: any;
   params: string;
+  asset: string;
 }
 
 const Login = (props: Props) => {
-  const [state, setState] = useState({ asset: '' });
-
-  useEffect(() => {
-    setState(props.match.params.asset);
-  }, [props.match.params.asset]);
-
   const oaLogin = () => {
-    props.history.push(`/${state.asset}/login/oa`);
+    props.history.push(`/${props.asset}/login/oa`);
   };
   const emailLogin = () => {
     console.log('in progress');

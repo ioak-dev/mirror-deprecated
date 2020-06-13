@@ -13,14 +13,11 @@ const OaLogin = (props: Props) => {
   useEffect(() => {
     if (props.location.search) {
       const query = queryString.parse(props.location.search);
-      console.log(query);
-      const asset = query.space;
       props.cookies.set(
-        `mirror_${asset}`,
+        `mirror_${query.asset}`,
         `oa ${query.space} ${query.authKey}`
       );
-      console.log(`oa ${query.space} ${query.authKey}`);
-      props.history.push(`/${asset}/home`);
+      props.history.push(`/${query.asset}/home`);
     }
   }, []);
 

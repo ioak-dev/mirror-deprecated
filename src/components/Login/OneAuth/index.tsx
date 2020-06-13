@@ -6,6 +6,7 @@ import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 interface Props {
   history: any;
   location: any;
+  asset: string;
 }
 
 const queryString = require('query-string');
@@ -19,7 +20,7 @@ const OneAuth = (props: Props) => {
   useEffect(() => {
     const spaceData = queryString.parse(props.location.search);
     if (spaceData.space) {
-      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceData.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceData.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}`;
     }
   }, []);
 
@@ -30,7 +31,7 @@ const OneAuth = (props: Props) => {
     }
     setFormErrors(errorFields);
     if (isEmptyAttributes(errorFields)) {
-      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${state.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${state.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}`;
     }
   };
 
