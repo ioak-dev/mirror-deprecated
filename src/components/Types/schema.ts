@@ -132,6 +132,7 @@ export const LIST_CATEGORIES = gql`
       id
       name
       parentCategoryId
+      articles
     }
   }
 `;
@@ -142,6 +143,7 @@ export const UPDATE_CATEGORY = gql`
       id
       name
       parentCategoryId
+      articles
     }
   }
 `;
