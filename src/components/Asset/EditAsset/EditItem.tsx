@@ -12,8 +12,8 @@ import { UPDATE_ASSET } from '../../Types/schema';
 interface Props {
   id: string;
   history: any;
-  space: string;
-  asset: Asset;
+  asset: string;
+  assetData: Asset;
 }
 
 const EditItem = (props: Props) => {
@@ -36,10 +36,10 @@ const EditItem = (props: Props) => {
     if (props.asset) {
       setState({
         id: props.id,
-        name: props.asset.name,
-        description: props.asset.description,
-        productionMode: props.asset.productionMode,
-        jwtPassword: props.asset.jwtPassword,
+        name: props.assetData.name,
+        description: props.assetData.description,
+        productionMode: props.assetData.productionMode,
+        jwtPassword: props.assetData.jwtPassword,
       });
     }
   }, []);
@@ -78,7 +78,7 @@ const EditItem = (props: Props) => {
     setFormErrors(errorFields);
     if (isEmptyAttributes(errorFields)) {
       const payload: AssetPayload = {
-        id: props.asset.id,
+        id: props.assetData.id,
         name: state.name,
         description: state.description,
         jwtPassword: state.jwtPassword,
@@ -100,7 +100,7 @@ const EditItem = (props: Props) => {
 
   const changeMode = () => {
     const payload: AssetPayload = {
-      id: props.asset.id,
+      id: props.assetData.id,
       productionMode: !state.productionMode,
     };
     updateAsset({
@@ -152,7 +152,7 @@ const EditItem = (props: Props) => {
             <div className="page-highlight" />
           </div>
         )}
-        {props.asset && (
+        {props.assetData && (
           <div className="action-header position-right">
             <OakButton action={update} theme="primary" variant="appear">
               <i className="material-icons">double_arrow</i>Save
@@ -199,7 +199,9 @@ const EditItem = (props: Props) => {
           </div>
         </div>
       )}
-      {!props.asset && <div className="typography-6">Asset does not exist</div>}
+      {!props.assetData && (
+        <div className="typography-6">Asset does not exist</div>
+      )}
     </>
   );
 };

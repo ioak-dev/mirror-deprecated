@@ -10,7 +10,7 @@ interface Props {
   match: any;
   location: any;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const queryString = require('query-string');
@@ -26,12 +26,12 @@ const BrowseArticle = (props: Props) => {
 
   const createArticleLink = event => {
     props.history.push(
-      `/${props.space}/article/create?categoryid=${urlParam.categoryid}`
+      `/${props.asset}/article/create?categoryid=${urlParam.categoryid}`
     );
   };
 
   const searchArticle = event => {
-    props.history.push(`/${props.space}/article/search`);
+    props.history.push(`/${props.asset}/article/search`);
   };
 
   const handleCategoryChange = id => {
@@ -66,12 +66,12 @@ const BrowseArticle = (props: Props) => {
             categoryId={urlParam.categoryid}
             handleChange={handleCategoryChange}
             history={props.history}
-            space={props.space}
+            asset={props.asset}
           />
           <ArticleSection
             categoryId={urlParam.categoryid}
             history={props.history}
-            space={props.space}
+            asset={props.asset}
           />
         </div>
       </div>

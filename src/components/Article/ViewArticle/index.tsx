@@ -11,7 +11,7 @@ import OakSpinner from '../../../oakui/OakSpinner';
 interface Props {
   location: any;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const queryString = require('query-string');
@@ -39,7 +39,7 @@ const ViewArticle = (props: Props) => {
               <ArticleItem
                 history={props.history}
                 id={urlParam.id}
-                space={props.space}
+                asset={props.asset}
                 article={data.article}
               />
               <FeedbackView article={data.article} />

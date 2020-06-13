@@ -10,7 +10,7 @@ import { LIST_CATEGORIES } from '../../Types/schema';
 interface Props {
   location: any;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const queryString = require('query-string');
@@ -31,7 +31,7 @@ const CreateArticle = (props: Props) => {
           <CreateItem
             history={props.history}
             categoryid={urlParam.categoryid}
-            space={props.space}
+            asset={props.asset}
           />
         </div>
       </div>

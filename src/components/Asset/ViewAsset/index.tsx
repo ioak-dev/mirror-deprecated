@@ -8,7 +8,7 @@ import ManageItem from './ViewItem';
 interface Props {
   location: any;
   history: any;
-  space: string;
+  asset: string;
   match: any;
 }
 

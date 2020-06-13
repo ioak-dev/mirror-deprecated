@@ -16,8 +16,10 @@ const Login = (props: Props) => {
   useEffect(() => {
     if (props.location.search) {
       const query = queryString.parse(props.location.search);
-      props.cookies.set(`mirror_${query.space}`, query.authKey);
-      props.history.push(`/${query.space}/home`);
+      console.log(query);
+      const asset = query.space;
+      props.cookies.set(`mirror_${asset}`, query.authKey);
+      props.history.push(`/${asset}/home`);
     }
   }, []);
 

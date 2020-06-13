@@ -41,12 +41,12 @@ const Navigation = (props: Props) => {
 
   const authorization = useSelector(state => state.authorization);
 
-  const [space, setSpace] = useState('');
+  const [asset, setAsset] = useState('');
 
   useEffect(() => {
     receiveMessage().subscribe(event => {
       if (event.name === 'spaceChange') {
-        setSpace(event.data);
+        setAsset(event.data);
       }
     });
   }, []);
@@ -79,7 +79,7 @@ const Navigation = (props: Props) => {
     message = 'You have been logged out'
   ) => {
     props.removeAuth();
-    props.cookies.remove(`mirror_${space}`);
+    props.cookies.remove(`mirror_${asset}`);
     sendMessage('notification', true, {
       type,
       message,
@@ -104,7 +104,7 @@ const Navigation = (props: Props) => {
   const login = type => {
     // props.history.push(`/${props.profile.tenant}/login?type=${type}`);
     // console.log(props.profile.tenant);
-    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${space}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${asset}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
   };
 
   const toggleSettings = () => {
@@ -117,7 +117,7 @@ const Navigation = (props: Props) => {
         {...props}
         logout={logout}
         login={login}
-        space={space}
+        asset={asset}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
         toggleDarkMode={toggleDarkMode}
@@ -126,7 +126,7 @@ const Navigation = (props: Props) => {
         {...props}
         logout={logout}
         login={login}
-        space={space}
+        asset={asset}
         toggleSettings={toggleSettings}
         transparent={data.transparentNavBar}
         toggleDarkMode={toggleDarkMode}

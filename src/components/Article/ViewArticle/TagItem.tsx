@@ -3,12 +3,12 @@ import React from 'react';
 interface Props {
   name: string;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const TagItem = (props: Props) => {
   const viewTag = event => {
-    props.history.push(`/${props.space}/article/tag?name=${props.name}`);
+    props.history.push(`/${props.asset}/article/tag?name=${props.name}`);
   };
   return (
     <div className="tag-item" onClick={viewTag}>

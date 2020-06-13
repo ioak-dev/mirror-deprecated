@@ -6,7 +6,7 @@ import TagItem from './TagItem';
 interface Props {
   tags: Array<Maybe<Tag>>;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const TagContainer = (props: Props) => {
@@ -18,7 +18,7 @@ const TagContainer = (props: Props) => {
             <TagItem
               name={item.name || ''}
               history={props.history}
-              space={props.space}
+              asset={props.asset}
             />
           )}
         </div>

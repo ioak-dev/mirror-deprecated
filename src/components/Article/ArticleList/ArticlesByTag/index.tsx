@@ -9,7 +9,7 @@ interface Props {
   match: any;
   location: any;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const queryString = require('query-string');
@@ -24,7 +24,7 @@ const ArticlesByTag = (props: Props) => {
   }, [props.location.search]);
 
   const handleChange = name => {
-    props.history.push(`/${props.space}/article/tag?name=${name}`);
+    props.history.push(`/${props.asset}/article/tag?name=${name}`);
   };
 
   return (
@@ -37,14 +37,14 @@ const ArticlesByTag = (props: Props) => {
       {!urlParam.name && (
         <TagSection
           handleChange={handleChange}
-          space={props.space}
+          asset={props.asset}
           history={props.history}
         />
       )}
       {urlParam.name && (
         <ArticleSection
           tag={urlParam.name}
-          space={props.space}
+          asset={props.asset}
           history={props.history}
         />
       )}

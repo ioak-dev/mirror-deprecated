@@ -120,7 +120,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/unauthorized"
+                  path="/:asset/unauthorized"
                   render={propsLocal => (
                     <OakRoute
                       {...propsLocal}
@@ -163,7 +163,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/home"
+                  path="/:asset/home"
                   render={propsLocal => (
                     <OakRoute
                       {...propsLocal}
@@ -174,7 +174,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article"
+                  path="/:asset/article"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -186,7 +186,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/browse"
+                  path="/:asset/article/browse"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -198,7 +198,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/search"
+                  path="/:asset/article/search"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -210,7 +210,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/tag"
+                  path="/:asset/article/tag"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -223,7 +223,7 @@ const Content = (props: Props) => {
                 />
 
                 <Route
-                  path="/:tenant/article/view"
+                  path="/:asset/article/view"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -235,7 +235,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/create"
+                  path="/:asset/article/create"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -247,7 +247,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/edit"
+                  path="/:asset/article/edit"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -283,7 +283,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/settings"
+                  path="/:asset/settings"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -295,7 +295,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/request"
+                  path="/:asset/request"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -307,7 +307,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/useradministration"
+                  path="/:asset/useradministration"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -319,7 +319,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant"
+                  path="/:asset"
                   exact
                   render={propsLocal => (
                     <OakRoute

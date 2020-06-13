@@ -13,7 +13,7 @@ import { LIST_ARTICLES } from '../../../Types/schema';
 interface Props {
   categoryId: string;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const ArticleSection = (props: Props) => {
@@ -51,7 +51,7 @@ const ArticleSection = (props: Props) => {
 
   const createArticleLink = event => {
     props.history.push(
-      `/${props.space}/article/create?categoryid=${props.categoryId}`
+      `/${props.asset}/article/create?categoryid=${props.categoryId}`
     );
   };
 
@@ -93,7 +93,7 @@ const ArticleSection = (props: Props) => {
                   <ArticleLink
                     key={item.id}
                     article={item}
-                    space={props.space}
+                    asset={props.asset}
                     history={props.history}
                   />
                 ))}

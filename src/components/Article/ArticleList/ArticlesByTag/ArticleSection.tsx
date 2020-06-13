@@ -9,7 +9,7 @@ import OakSpinner from '../../../../oakui/OakSpinner';
 
 interface Props {
   tag: string;
-  space: string;
+  asset: string;
   history: any;
 }
 
@@ -49,7 +49,7 @@ const ArticleSection = (props: Props) => {
   };
 
   const viewByTags = event => {
-    props.history.push(`/${props.space}/article/tag`);
+    props.history.push(`/${props.asset}/article/tag`);
   };
 
   return (
@@ -88,7 +88,7 @@ const ArticleSection = (props: Props) => {
                     {item?.article && (
                       <ArticleLink
                         article={item.article}
-                        space={props.space}
+                        asset={props.asset}
                         history={props.history}
                       />
                     )}
@@ -97,7 +97,7 @@ const ArticleSection = (props: Props) => {
                 {/* {data?.articlesByTag?.results?.length === 0 &&
               props.text &&
               !loading && (
-                <AlternateSection history={props.history} space={props.space} />
+                <AlternateSection history={props.history} asset={props.asset} />
               )} */}
               </div>
               <div>{loading ? <OakSpinner /> : ''}</div>

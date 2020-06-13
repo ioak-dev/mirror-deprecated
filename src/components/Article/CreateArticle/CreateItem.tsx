@@ -14,7 +14,7 @@ import { LIST_ARTICLES, LIST_CATEGORIES } from '../../Types/schema';
 interface Props {
   categoryid: any;
   history: any;
-  space: any;
+  asset: any;
 }
 
 const ADD_ARTICLE = gql`
@@ -156,7 +156,7 @@ const CreateItem = (props: Props) => {
       }).then(response => {
         props.history.length > 2
           ? props.history.goBack()
-          : props.history.push(`/${props.space}/article`);
+          : props.history.push(`/${props.asset}/article`);
       });
     }
   };

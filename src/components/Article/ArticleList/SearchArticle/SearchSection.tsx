@@ -13,7 +13,7 @@ import OakText from '../../../../oakui/OakText';
 import AlternateSection from './AlternateSection';
 
 interface Props {
-  space: string;
+  asset: string;
   history: any;
   text: string;
   handleSearchTextChange: Function;
@@ -96,14 +96,14 @@ const SearchSection = (props: Props) => {
               <ArticleLink
                 key={item.id}
                 article={item}
-                space={props.space}
+                asset={props.asset}
                 history={props.history}
               />
             ))}
             {data?.searchArticles?.results?.length === 0 &&
               props.text &&
               !loading && (
-                <AlternateSection history={props.history} space={props.space} />
+                <AlternateSection history={props.history} asset={props.asset} />
               )}
           </div>
           <div>{loading ? <OakSpinner /> : ''}</div>

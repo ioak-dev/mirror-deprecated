@@ -14,7 +14,7 @@ import { LIST_CATEGORIES } from '../../../Types/schema';
 interface Props {
   categoryId: string;
   handleChange: Function;
-  space: string;
+  asset: string;
   history: any;
 }
 

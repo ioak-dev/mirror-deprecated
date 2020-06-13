@@ -14,7 +14,7 @@ import { UPDATE_ARTICLE, LIST_CATEGORIES } from '../../Types/schema';
 interface Props {
   id: string;
   history: any;
-  space: any;
+  asset: any;
   article: Article;
 }
 

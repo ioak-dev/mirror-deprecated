@@ -60,20 +60,20 @@ const OakRoute = (props: Props) => {
   };
 
   const authenticateSpace = () => {
-    return authenticate('space');
+    return authenticate('asset');
   };
   const readAuthenticationSpace = () => {
-    return authenticate('space', false);
+    return authenticate('asset', false);
   };
 
   const authenticate = async (type, redirect = true) => {
-    sendMessage('spaceChange', true, props.match.params.tenant);
+    sendMessage('spaceChange', true, props.match.params.asset);
     if (authorization.isAuth) {
       return true;
     }
-    const cookieKey = `mirror_${props.match.params.tenant}`;
+    const cookieKey = `mirror_${props.match.params.asset}`;
     const authKey = props.cookies.get(cookieKey);
-    const baseAuthUrl = `/auth/${props.match.params.tenant}`;
+    const baseAuthUrl = `/auth/${props.match.params.asset}`;
     if (authKey) {
       const { data } = await gqlClient.query({
         query: GET_SESSION,
@@ -99,11 +99,11 @@ const OakRoute = (props: Props) => {
             message: 'Invalid session token',
             duration: 3000,
           });
-          redirectToLogin(props.match.params.tenant);
+          redirectToLogin(props.match.params.asset);
         }
       }
     } else if (redirect) {
-      redirectToLogin(props.match.params.tenant);
+      redirectToLogin(props.match.params.asset);
     } else {
       return true;
     }
@@ -119,7 +119,7 @@ const OakRoute = (props: Props) => {
   };
 
   const redirectToUnauthorized = () => {
-    props.history.push(`/${profile.tenant}/unauthorized`);
+    props.history.push(`/${profile.asset}/unauthorized`);
   };
 
   return (
@@ -128,7 +128,7 @@ const OakRoute = (props: Props) => {
         <props.component
           {...props}
           profile={profile}
-          space={props.match.params.tenant}
+          asset={props.match.params.asset}
           // getProfile={getProfile}
           // setProfile={props.setProfile}
         />

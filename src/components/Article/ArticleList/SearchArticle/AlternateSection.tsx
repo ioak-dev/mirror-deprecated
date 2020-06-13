@@ -2,21 +2,21 @@ import React from 'react';
 import './style.scss';
 
 interface Props {
-  space: string;
+  asset: string;
   history: any;
 }
 
 const AlternateSection = (props: Props) => {
   const browseArticle = event => {
-    props.history.push(`/${props.space}/article/browse`);
+    props.history.push(`/${props.asset}/article/browse`);
   };
 
   const browsePost = event => {
-    props.history.push(`/${props.space}/post`);
+    props.history.push(`/${props.asset}/post`);
   };
 
   const createPost = event => {
-    props.history.push(`/${props.space}/post/create`);
+    props.history.push(`/${props.asset}/post/create`);
   };
 
   return (

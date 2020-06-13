@@ -6,7 +6,7 @@ import EditItem from './EditItem';
 interface Props {
   match: any;
   history: any;
-  space: string;
+  asset: string;
   location: string;
 }
 
@@ -23,10 +23,10 @@ const EditAsset = (props: Props) => {
         <div className="app-text">
           {!loading && !error && (
             <EditItem
-              space={props.space}
+              asset={props.asset}
               history={props.history}
               id={props.match.params.asset}
-              asset={data.asset}
+              assetData={data.asset}
             />
           )}
           {error && <div className="typography-6">Asset does not exist</div>}

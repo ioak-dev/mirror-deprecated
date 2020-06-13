@@ -8,7 +8,7 @@ interface Props {
   match: any;
   location: any;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const queryString = require('query-string');
@@ -23,15 +23,15 @@ const ArticleList = (props: Props) => {
   }, [props.location.search]);
 
   const browseArticle = event => {
-    props.history.push(`/${props.space}/article/browse`);
+    props.history.push(`/${props.asset}/article/browse`);
   };
 
   const searchArticle = event => {
-    props.history.push(`/${props.space}/article/search`);
+    props.history.push(`/${props.asset}/article/search`);
   };
 
   const viewByTags = event => {
-    props.history.push(`/${props.space}/article/tag`);
+    props.history.push(`/${props.asset}/article/tag`);
   };
 
   return (

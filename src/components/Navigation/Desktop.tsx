@@ -19,7 +19,7 @@ interface Props {
   getProfile: Function;
   toggleDarkMode: Function;
   profile: Profile;
-  space: string;
+  asset: string;
   login: Function;
   transparent: boolean;
   logout: Function;
@@ -59,7 +59,7 @@ const Desktop = (props: Props) => {
         {(props.transparent || props.profile.theme === 'theme_dark') && (
           <img className="logo" src={mirrorWhite} alt="Mirror logo" />
         )}
-        <Links authorization={authorization} space={props.space} />
+        <Links authorization={authorization} asset={props.asset} />
         {showSearchBar && <SearchBar alt />}
       </div>
       <div className="right">

@@ -7,7 +7,7 @@ import TagLink from './TagLink';
 interface Props {
   handleChange: Function;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const TagSection = (props: Props) => {
@@ -16,7 +16,7 @@ const TagSection = (props: Props) => {
   });
 
   const searchArticle = event => {
-    props.history.push(`/${props.space}/article/search`);
+    props.history.push(`/${props.asset}/article/search`);
   };
 
   return (
