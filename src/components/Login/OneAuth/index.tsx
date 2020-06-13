@@ -27,7 +27,7 @@ const OneAuth = (props: Props) => {
   const oaLogin = () => {
     const errorFields: any = { space: '' };
     if (isEmptyOrSpaces(state.space)) {
-      errorFields.name = 'Space cannot be empty';
+      errorFields.space = 'Space cannot be empty';
     }
     setFormErrors(errorFields);
     if (isEmptyAttributes(errorFields)) {

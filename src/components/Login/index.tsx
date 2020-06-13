@@ -13,8 +13,7 @@ const Login = (props: Props) => {
     props.history.push(`/${props.asset}/login/oa`);
   };
   const emailLogin = () => {
-    console.log('in progress');
-    // props.history.push(`/${state.asset}/login/email`);
+    props.history.push(`/${props.asset}/login/email`);
   };
 
   const mirrorLogin = () => {
