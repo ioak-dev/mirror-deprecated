@@ -13,7 +13,7 @@ import { withCookies } from 'react-cookie';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Home from '../Home';
-import Login from '../Auth/Login';
+import OaLogin from '../Auth/OaLogin';
 import Landing from '../Landing';
 import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getUser, addUser } from '../../actions/UserActions';
@@ -116,7 +116,7 @@ const Content = (props: Props) => {
                 <Route
                   path="/login"
                   render={propsLocal => (
-                    <OakRoute {...propsLocal} {...props} component={Login} />
+                    <OakRoute {...propsLocal} {...props} component={OaLogin} />
                   )}
                 />
                 <Route

@@ -1,5 +1,17 @@
 import gql from 'graphql-tag';
 
+export const GET_SESSION = gql`
+  query Session($key: ID!) {
+    session(key: $key) {
+      id
+      firstName
+      lastName
+      email
+      token
+    }
+  }
+`;
+
 export const LIST_ARTICLES = gql`
   query Articles($categoryId: ID!, $pageNo: Int, $pageSize: Int) {
     articles(categoryId: $categoryId, pageNo: $pageNo, pageSize: $pageSize) {

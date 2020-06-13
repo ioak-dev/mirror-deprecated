@@ -6,6 +6,7 @@ import { getAuth, addAuth } from '../../actions/AuthActions';
 import { Authorization } from '../Types/GeneralTypes';
 import { httpGet } from '../Lib/RestTemplate';
 import { sendMessage } from '../../events/MessageService';
+import { GET_SESSION } from '../Types/schema';
 
 interface Props {
   authorization: Authorization;
@@ -17,18 +18,6 @@ interface Props {
   middleware?: string[];
   cookies: any;
 }
-
-const GET_SESSION = gql`
-  query Session($key: ID!) {
-    session(key: $key) {
-      id
-      firstName
-      lastName
-      email
-      token
-    }
-  }
-`;
 
 const OakRoute = (props: Props) => {
   const gqlClient = useApolloClient();

@@ -4,21 +4,22 @@ import './Login.scss';
 const queryString = require('query-string');
 
 interface Props {
-  setProfile: Function;
   cookies: any;
   history: any;
-  profile: any;
-  match: any;
   location: any;
 }
 
-const Login = (props: Props) => {
+const OaLogin = (props: Props) => {
   useEffect(() => {
     if (props.location.search) {
       const query = queryString.parse(props.location.search);
       console.log(query);
       const asset = query.space;
-      props.cookies.set(`mirror_${asset}`, query.authKey);
+      props.cookies.set(
+        `mirror_${asset}`,
+        `oa ${query.space} ${query.authKey}`
+      );
+      console.log(`oa ${query.space} ${query.authKey}`);
       props.history.push(`/${asset}/home`);
     }
   }, []);
@@ -26,4 +27,4 @@ const Login = (props: Props) => {
   return <></>;
 };
 
-export default Login;
+export default OaLogin;
