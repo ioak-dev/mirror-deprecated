@@ -45,7 +45,6 @@ const CreateItem = (props: Props) => {
   };
 
   const submit = event => {
-    event.preventDefault();
     const errorFields: any = {
       name: '',
       description: '',
@@ -123,31 +122,28 @@ const CreateItem = (props: Props) => {
   };
 
   return (
-    <form method="GET" onSubmit={handleSubmit} noValidate className="asset">
-      {stage === 'assetdetails' && (
-        <div className="page-header">
-          <div className="page-title">
-            Create Asset
-            <div className="page-highlight" />
-          </div>
-          {stage === 'assetdetails' && (
-            <div className="action-header position-right">
-              <OakButton action={submit} theme="primary" variant="appear">
-                <i className="material-icons">double_arrow</i>Save
-              </OakButton>
-              {props.history.length > 2 && (
-                <OakButton
-                  action={() => cancelCreation()}
-                  theme="default"
-                  variant="appear"
-                >
-                  <i className="material-icons">close</i>Cancel
-                </OakButton>
-              )}
-            </div>
+    <>
+      <div className="page-header">
+        <div className="page-title">
+          Create Asset
+          <div className="page-highlight" />
+        </div>
+
+        <div className="action-header position-right">
+          <OakButton action={submit} theme="primary" variant="appear">
+            <i className="material-icons">double_arrow</i>Save
+          </OakButton>
+          {props.history.length > 2 && (
+            <OakButton
+              action={() => cancelCreation()}
+              theme="default"
+              variant="appear"
+            >
+              <i className="material-icons">close</i>Cancel
+            </OakButton>
           )}
         </div>
-      )}
+      </div>
       <div className="create-article-item">
         <div className="user-form">
           <OakText
@@ -195,7 +191,7 @@ const CreateItem = (props: Props) => {
           </div>
         </div>
       </div>
-    </form>
+    </>
   );
 };
 

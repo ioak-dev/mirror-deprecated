@@ -41,6 +41,9 @@ import ArticlesByTag from '../Article/ArticleList/ArticlesByTag';
 import CreateAsset from '../Asset/CreateAsset/index';
 import ViewAsset from '../Asset/ViewAsset/index';
 import EditAsset from '../Asset/EditAsset';
+import OneAuth from '../Login/OneAuth/index';
+import Email from '../Login/Email/index';
+import Login from '../Login/index';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -170,6 +173,39 @@ const Content = (props: Props) => {
                       {...props}
                       component={Home}
                       middleware={['readAuthentication']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/login/home"
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={Login}
+                      // middleware={['readAuthentication']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/login/oa"
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={OneAuth}
+                      // middleware={['readAuthentication']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/login/email"
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={Email}
+                      // middleware={['readAuthentication']}
                     />
                   )}
                 />

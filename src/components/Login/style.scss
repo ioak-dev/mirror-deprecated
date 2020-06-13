@@ -1,0 +1,28 @@
+.mirror-signin {
+  display: flex;
+  justify-content: center;
+  .mirror-signin-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    column-gap: 10px;
+    background-color: #30323d !important;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px,
+      rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
+    &:hover {
+      background-color: #444750 !important;
+    }
+  }
+}
+
+&.icon {
+  height: 38px;
+  width: 38px;
+  border-width: 2px;
+  padding: 4px 4px;
+  border-radius: 50%;
+  .material-icons {
+    margin: 0;
+    font-size: 1.5em;
+  }
+}
