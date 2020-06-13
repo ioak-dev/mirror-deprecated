@@ -103,8 +103,9 @@ const OakRoute = (props: Props) => {
     return false;
   };
 
-  const redirectToLogin = spaceId => {
-    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceId}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+  const redirectToLogin = asset => {
+    // window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceId}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+    props.history.push(`/${asset}/login/home`);
   };
 
   const redirectToUnauthorized = () => {
