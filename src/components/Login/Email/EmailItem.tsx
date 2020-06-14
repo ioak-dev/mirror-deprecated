@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
+import { useApolloClient } from '@apollo/react-hooks';
 import OakText from '../../../oakui/OakText';
 import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
+import { NEW_EMAIL_SESSION } from '../../Types/schema';
 
 interface Props {
   history: any;
+  tokenLogin: Function;
+  newAccount: Function;
 }
+
 const EmailItem = (props: Props) => {
-  const [state, setState] = useState({
-    email: '',
-    firstName: '',
-    lastName: '',
-  });
+  const gqlClient = useApolloClient();
+  const [state, setState] = useState({ email: '' });
   const [formErrors, setFormErrors] = useState<any>({
     email: '',
-    firstName: '',
-    lastName: '',
   });
+
+  const [message, setMessage] = useState(false);
 
   const handleChange = event => {
     setState({
@@ -25,19 +27,9 @@ const EmailItem = (props: Props) => {
     });
   };
 
-  const cancelLogin = () => {
-    props.history.goBack();
-  };
+  const login = async () => {
+    const errorFields: any = { email: '' };
 
-  const submit = () => {
-    const errorFields: any = { email: '', firstName: '', lastName: '' };
-
-    if (isEmptyOrSpaces(state.firstName)) {
-      errorFields.firstName = 'First name cannot be empty';
-    }
-    if (isEmptyOrSpaces(state.lastName)) {
-      errorFields.lastName = 'Last name cannot be empty';
-    }
     if (isEmptyOrSpaces(state.email)) {
       errorFields.email = 'Email cannot be empty';
     }
@@ -50,21 +42,47 @@ const EmailItem = (props: Props) => {
     }
     setFormErrors(errorFields);
     if (isEmptyAttributes(errorFields)) {
-      console.log('Yet to be implemented');
+      const { data } = await gqlClient.query({
+        query: NEW_EMAIL_SESSION,
+        variables: { email: state.email },
+      });
+      if (data?.newEmailSession) {
+        console.log(data?.newEmailSession.sessionId);
+        setMessage(!message);
+      } else {
+        props.newAccount();
+      }
     }
+  };
+
+  const cancelLogin = () => {
+    props.history.goBack();
   };
 
   return (
     <>
-      <div className="page-header">
-        <div className="page-title">
-          Provide details
-          <div className="page-highlight" />
+      {message && (
+        <div className="typhography-4">
+          Your authentication token is generated. Follow the instruction
+          provided in the email or click on
+          <div className="hyperlink" onClick={() => props.tokenLogin()}>
+            Login with token
+          </div>
         </div>
-
+      )}
+      {!message && (
+        <div className="page-subtitle">
+          <div className="browse-article-subtitle">
+            <div className="hyperlink" onClick={() => props.tokenLogin()}>
+              already have an auth key?
+            </div>
+          </div>
+        </div>
+      )}
+      {!message && (
         <div className="action-header position-right">
-          <OakButton action={submit} theme="primary" variant="appear">
-            <i className="material-icons">double_arrow</i>Save
+          <OakButton action={login} theme="primary" variant="appear">
+            <i className="material-icons">double_arrow</i>Submit
           </OakButton>
           {props.history.length > 2 && (
             <OakButton
@@ -76,32 +94,16 @@ const EmailItem = (props: Props) => {
             </OakButton>
           )}
         </div>
-      </div>
-      <div className="create-article-item">
-        <div className="user-form">
-          <OakText
-            label="First Name"
-            data={state}
-            errorData={formErrors}
-            id="firstName"
-            handleChange={e => handleChange(e)}
-          />
-          <OakText
-            label="Last name"
-            data={state}
-            errorData={formErrors}
-            id="lastName"
-            handleChange={e => handleChange(e)}
-          />
-          <OakText
-            label="Email"
-            data={state}
-            errorData={formErrors}
-            id="email"
-            handleChange={e => handleChange(e)}
-          />
-        </div>
-      </div>
+      )}
+      {!message && (
+        <OakText
+          label="Email"
+          data={state}
+          errorData={formErrors}
+          id="email"
+          handleChange={e => handleChange(e)}
+        />
+      )}
     </>
   );
 };

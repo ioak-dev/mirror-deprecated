@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
 import { GET_ASSET } from '../../Types/schema';
 import OakSpinner from '../../../oakui/OakSpinner';
-import ManageItem from './ViewItem';
+import ViewItem from './ViewItem';
 
 interface Props {
   location: any;
@@ -24,7 +24,7 @@ const ViewAsset = (props: Props) => {
         <div className="app-text">
           {loading && <OakSpinner />}
           {!loading && !error && (
-            <ManageItem history={props.history} asset={data.asset} />
+            <ViewItem history={props.history} asset={data.asset} />
           )}
           {error && <div className="typography-6">Asset does not exist</div>}
         </div>

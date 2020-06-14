@@ -1,75 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import OakText from '../../../oakui/OakText';
-import OakButton from '../../../oakui/OakButton';
-import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import EmailItem from './EmailItem';
+import AccountItem from './AccountItem';
+import TokenItem from './TokenItem';
 
 interface Props {
   history: any;
   location: any;
-  match: any;
-  param: string;
   asset: string;
 }
 
 const queryString = require('query-string');
 
 const Email = (props: Props) => {
-  const [state, setState] = useState({ email: '', token: '' });
-  const [formErrors, setFormErrors] = useState<any>({
-    email: '',
-    token: '',
-  });
-
-  const [tokenLogin, setTokenLogin] = useState(false);
-
-  const [newEmail, setNewEmail] = useState(false);
+  const [state, setState] = useState({ type: 'email' });
+  const [queryParam, setQueryParam] = useState<any>({});
 
   useEffect(() => {
-    const token = queryString.parse(props.location.search);
-    if (token.auth_token) {
-      console.log(token.auth_token);
-    }
+    const query = queryString.parse(props.location.search);
+    query.type ? setState({ type: query.type }) : setState({ type: 'email' });
+    setQueryParam(query);
   }, [props.location.search]);
 
-  const handleChange = event => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.value,
-    });
+  const emailLogin = () => {
+    props.history.push(`/${props.asset}/login/email?type=email`);
   };
 
-  const cancelLogin = () => {
-    props.history.goBack();
+  const tokenLogin = () => {
+    props.history.push(`/${props.asset}/login/email?type=token`);
   };
 
-  const login = () => {
-    const errorFields: any = { email: '', token: '' };
-
-    if (tokenLogin && isEmptyOrSpaces(state.token)) {
-      errorFields.token = 'Token cannot be empty';
-    }
-    if (!tokenLogin && isEmptyOrSpaces(state.email)) {
-      errorFields.email = 'Email cannot be empty';
-    }
-    if (
-      !tokenLogin &&
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-        state.email.trim().toLowerCase()
-      )
-    ) {
-      errorFields.email = 'Invalid email';
-    }
-    setFormErrors(errorFields);
-    if (isEmptyAttributes(errorFields)) {
-      if (tokenLogin) {
-        props.history.push(
-          `/${props.asset}/login/email?auth_token=${state.token}`
-        );
-      } else if (state.email === 'josh.shrinivas@gmail.com') {
-        setNewEmail(!newEmail);
-      }
-    }
+  const newAccount = () => {
+    props.history.push(`/${props.asset}/login/email?type=new`);
   };
 
   return (
@@ -77,71 +38,25 @@ const Email = (props: Props) => {
       <div className="app-content">
         <div className="app-text">
           <div className="view-asset-item">
-            {!newEmail && (
-              <div className="page-title">
-                Login Details
-                {!tokenLogin && !newEmail && (
-                  <div className="page-subtitle">
-                    <div className="browse-article-subtitle">
-                      <div
-                        className="hyperlink"
-                        onClick={() => setTokenLogin(!tokenLogin)}
-                      >
-                        already have an auth key?
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {tokenLogin && (
-                  <div className="page-subtitle">
-                    <div className="browse-article-subtitle">
-                      <div
-                        className="hyperlink"
-                        onClick={() => setTokenLogin(!tokenLogin)}
-                      >
-                        Use email instead?
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-            {!newEmail && (
-              <div className="action-header position-right">
-                <OakButton action={login} theme="primary" variant="appear">
-                  <i className="material-icons">double_arrow</i>Submit
-                </OakButton>
-                {props.history.length > 2 && (
-                  <OakButton
-                    action={() => cancelLogin()}
-                    theme="default"
-                    variant="appear"
-                  >
-                    <i className="material-icons">close</i>Cancel
-                  </OakButton>
-                )}
-              </div>
-            )}
-            {!tokenLogin && !newEmail && (
-              <OakText
-                label="Email"
-                data={state}
-                errorData={formErrors}
-                id="email"
-                handleChange={e => handleChange(e)}
+            <div className="page-title">Login Details</div>
+            {state.type === 'email' && (
+              <EmailItem
+                history={props.history}
+                tokenLogin={tokenLogin}
+                newAccount={newAccount}
               />
             )}
-
-            {tokenLogin && !newEmail && (
-              <OakText
-                label="Token"
-                data={state}
-                errorData={formErrors}
-                id="token"
-                handleChange={e => handleChange(e)}
+            {state.type === 'token' && (
+              <TokenItem
+                history={props.history}
+                emailLogin={emailLogin}
+                asset={props.asset}
+                queryParam={queryParam}
               />
             )}
-            {!tokenLogin && newEmail && <EmailItem history={props.history} />}
+            {state.type === 'new' && (
+              <AccountItem history={props.history} emailLogin={emailLogin} />
+            )}
           </div>
         </div>
       </div>
