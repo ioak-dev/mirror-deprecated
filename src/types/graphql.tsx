@@ -112,13 +112,35 @@ export type Asset = {
   assetId?: Maybe<Scalars['String']>;
 };
 
+export type Session = {
+  __typename?: 'Session';
+  id: Scalars['ID'];
+  sessionId: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type UserSession = {
+  __typename?: 'UserSession';
+  id: Scalars['ID'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
+};
+
+export type UserPayload = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   id: Scalars['ID'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  resolver?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -134,7 +156,8 @@ export type Query = {
   asset?: Maybe<Asset>;
   assetById?: Maybe<Asset>;
   assets?: Maybe<Array<Maybe<Asset>>>;
-  session?: Maybe<User>;
+  newEmailSession?: Maybe<Session>;
+  session?: Maybe<UserSession>;
 };
 
 export type QueryArticleArgs = {
@@ -175,6 +198,10 @@ export type QueryAssetByIdArgs = {
   id: Scalars['ID'];
 };
 
+export type QueryNewEmailSessionArgs = {
+  email: Scalars['String'];
+};
+
 export type QuerySessionArgs = {
   key: Scalars['ID'];
 };
@@ -188,6 +215,7 @@ export type Mutation = {
   addCategory?: Maybe<Category>;
   updateAsset?: Maybe<Asset>;
   createAsset?: Maybe<Asset>;
+  createEmailAccount: User;
 };
 
 export type MutationAddArticleArgs = {
@@ -221,6 +249,10 @@ export type MutationCreateAssetArgs = {
   addition?: Maybe<AssetAdditionPayload>;
 };
 
+export type MutationCreateEmailAccountArgs = {
+  payload?: Maybe<UserPayload>;
+};
+
 export type AddArticleMutationVariables = {
   payload: ArticlePayload;
 };
@@ -236,19 +268,6 @@ export type CreateAssetMutationVariables = {
 
 export type CreateAssetMutation = { __typename?: 'Mutation' } & {
   createAsset?: Maybe<{ __typename?: 'Asset' } & Pick<Asset, 'id'>>;
-};
-
-export type SessionQueryVariables = {
-  key: Scalars['ID'];
-};
-
-export type SessionQuery = { __typename?: 'Query' } & {
-  session?: Maybe<
-    { __typename?: 'User' } & Pick<
-      User,
-      'id' | 'firstName' | 'lastName' | 'email' | 'token'
-    >
-  >;
 };
 
 export const AddArticleDocument = gql`
@@ -389,67 +408,4 @@ export type CreateAssetMutationResult = ApolloReactCommon.MutationResult<
 export type CreateAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateAssetMutation,
   CreateAssetMutationVariables
->;
-export const SessionDocument = gql`
-  query Session($key: ID!) {
-    session(key: $key) {
-      id
-      firstName
-      lastName
-      email
-      token
-    }
-  }
-`;
-export type SessionComponentProps = Omit<
-  ApolloReactComponents.QueryComponentOptions<
-    SessionQuery,
-    SessionQueryVariables
-  >,
-  'query'
-> &
-  ({ variables: SessionQueryVariables; skip?: boolean } | { skip: boolean });
-
-export const SessionComponent = (props: SessionComponentProps) => (
-  <ApolloReactComponents.Query<SessionQuery, SessionQueryVariables>
-    query={SessionDocument}
-    {...props}
-  />
-);
-
-export type SessionProps<
-  TChildProps = {},
-  TDataName extends string = 'data'
-> = {
-  [key in TDataName]: ApolloReactHoc.DataValue<
-    SessionQuery,
-    SessionQueryVariables
-  >;
-} &
-  TChildProps;
-export function withSession<
-  TProps,
-  TChildProps = {},
-  TDataName extends string = 'data'
->(
-  operationOptions?: ApolloReactHoc.OperationOption<
-    TProps,
-    SessionQuery,
-    SessionQueryVariables,
-    SessionProps<TChildProps, TDataName>
-  >
-) {
-  return ApolloReactHoc.withQuery<
-    TProps,
-    SessionQuery,
-    SessionQueryVariables,
-    SessionProps<TChildProps, TDataName>
-  >(SessionDocument, {
-    alias: 'session',
-    ...operationOptions,
-  });
-}
-export type SessionQueryResult = ApolloReactCommon.QueryResult<
-  SessionQuery,
-  SessionQueryVariables
 >;

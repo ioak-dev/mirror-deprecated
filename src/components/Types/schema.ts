@@ -12,6 +12,23 @@ export const GET_SESSION = gql`
   }
 `;
 
+export const NEW_EMAIL_SESSION = gql`
+  query NewEmailSession($email: String!) {
+    newEmailSession(email: $email) {
+      sessionId
+    }
+  }
+`;
+
+export const CREATE_EMAIL_ACCOUNT = gql`
+  mutation CreateEmailAccount($payload: UserPayload) {
+    createEmailAccount(payload: $payload) {
+      id
+      email
+    }
+  }
+`;
+
 export const LIST_ARTICLES = gql`
   query Articles($categoryId: ID!, $pageNo: Int, $pageSize: Int) {
     articles(categoryId: $categoryId, pageNo: $pageNo, pageSize: $pageSize) {
