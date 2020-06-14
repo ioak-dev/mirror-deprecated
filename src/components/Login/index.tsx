@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import OakButton from '../../oakui/OakButton';
+import './style.scss';
+import LoginMethod from './LoginMethod';
 
 interface Props {
   history: any;
@@ -24,39 +26,26 @@ const Login = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
+          <div className="page-title">
+            <div className="align-horizontal">
+              {/* <i className="material-icons">fingerprint</i> */}
+              Sign in
+            </div>
+            <div className="page-subtitle">
+              Choose the preferred authentication method to continue
+            </div>
+            <div className="page-highlight" />
+          </div>
           <div className="view-asset-item">
-            <div className="page-title">
-              Login to Mirror
-              <div className="space-top-3 mirror-signin">
-                <div className="mirror-signin-container align-vertical">
-                  <div className="icon space-bottom-1">
-                    <OakButton
-                      action={oaLogin}
-                      theme="primary"
-                      variant="appear"
-                    >
-                      <i className="material-icons">login</i>OneAuth Login
-                    </OakButton>
-                  </div>
-                  <div className="icon space-bottom-1">
-                    <OakButton
-                      action={emailLogin}
-                      theme="primary"
-                      variant="appear"
-                    >
-                      <i className="material-icons">login</i>Email Login
-                    </OakButton>
-                  </div>
-                  <div className="icon space-bottom-1">
-                    <OakButton
-                      action={mirrorLogin}
-                      theme="primary"
-                      variant="appear"
-                    >
-                      <i className="material-icons">login</i>Native Mirror Login
-                    </OakButton>
-                  </div>
-                </div>
+            <div className="space-top-3 mirror-signin">
+              <div className="login-home">
+                <LoginMethod action={oaLogin} icon="blur_on" label="Oneauth" />
+                <LoginMethod action={emailLogin} icon="email" label="Email" />
+                <LoginMethod
+                  action={mirrorLogin}
+                  icon="people"
+                  label="Native"
+                />
               </div>
             </div>
           </div>

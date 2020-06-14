@@ -66,11 +66,8 @@ const Email = (props: Props) => {
         props.history.push(
           `/${props.asset}/login/email?auth_token=${state.token}`
         );
-      } else {
-        console.log('Yet to be implemented');
-        if (state.email === 'josh.shrinivas@gmail.com') {
-          setNewEmail(!newEmail);
-        }
+      } else if (state.email === 'josh.shrinivas@gmail.com') {
+        setNewEmail(!newEmail);
       }
     }
   };

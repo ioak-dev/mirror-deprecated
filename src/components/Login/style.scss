@@ -1,28 +1,32 @@
-.mirror-signin {
-  display: flex;
-  justify-content: center;
-  .mirror-signin-container {
+.login-home {
+  align-items: center;
+  @media (min-width: 768px) {
     display: grid;
-    grid-template-columns: auto auto;
-    align-items: center;
-    column-gap: 10px;
-    background-color: #30323d !important;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px,
-      rgba(0, 0, 0, 0.24) 0px 0px 1px 0px;
-    &:hover {
-      background-color: #444750 !important;
-    }
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 20px;
+  }
+  @media (max-width: 767px) {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    row-gap: 20px;
   }
 }
 
-&.icon {
-  height: 38px;
-  width: 38px;
-  border-width: 2px;
-  padding: 4px 4px;
-  border-radius: 50%;
+.login-method {
+  cursor: pointer;
+  user-select: none;
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 10px;
+  justify-items: center;
+  background-color: var(--color-background-5);
+  padding: 20px;
+  box-shadow: var(--bs-lg);
+  border-radius: 6px;
+  &:hover {
+    background-color: var(--color-primary-1);
+  }
   .material-icons {
-    margin: 0;
-    font-size: 1.5em;
+    font-size: 40px;
   }
 }
