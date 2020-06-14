@@ -7,6 +7,7 @@ interface Props {
   history: any;
   location: any;
   asset: string;
+  cookies: any;
 }
 
 const queryString = require('query-string');
@@ -52,6 +53,7 @@ const Email = (props: Props) => {
                 emailLogin={emailLogin}
                 asset={props.asset}
                 queryParam={queryParam}
+                cookies={props.cookies}
               />
             )}
             {state.type === 'new' && (

@@ -388,6 +388,12 @@ code {
     }
   }
 
+  .hyperlink-inline {
+    .hyperlink {
+      display: inline;
+    }
+  }
+
   .hyperlink {
     cursor: pointer;
     user-select: none;

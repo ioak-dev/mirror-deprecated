@@ -18,7 +18,10 @@ const EmailItem = (props: Props) => {
     email: '',
   });
 
-  const [message, setMessage] = useState(false);
+  const [isTokenSent, setIsTokenSent] = useState(false);
+
+  // Temporary until email functionality is implemented
+  const [token, setToken] = useState('');
 
   const handleChange = event => {
     setState({
@@ -47,8 +50,8 @@ const EmailItem = (props: Props) => {
         variables: { email: state.email },
       });
       if (data?.newEmailSession) {
-        console.log(data?.newEmailSession.sessionId);
-        setMessage(!message);
+        setToken(data?.newEmailSession.sessionId);
+        setIsTokenSent(true);
       } else {
         props.newAccount();
       }
@@ -61,16 +64,17 @@ const EmailItem = (props: Props) => {
 
   return (
     <>
-      {message && (
-        <div className="typhography-4">
-          Your authentication token is generated. Follow the instruction
-          provided in the email or click on
+      {isTokenSent && (
+        <div className="typhography-4 hyperlink-inline">
+          Authentication token is generated and sent to your email. You can
+          click on the login link from your email instruction or copy paste{' '}
+          {token} the token id&nbsp;
           <div className="hyperlink" onClick={() => props.tokenLogin()}>
-            Login with token
+            here
           </div>
         </div>
       )}
-      {!message && (
+      {!isTokenSent && (
         <div className="page-subtitle">
           <div className="browse-article-subtitle">
             <div className="hyperlink" onClick={() => props.tokenLogin()}>
@@ -79,30 +83,30 @@ const EmailItem = (props: Props) => {
           </div>
         </div>
       )}
-      {!message && (
-        <div className="action-header position-right">
-          <OakButton action={login} theme="primary" variant="appear">
-            <i className="material-icons">double_arrow</i>Submit
-          </OakButton>
-          {props.history.length > 2 && (
-            <OakButton
-              action={() => cancelLogin()}
-              theme="default"
-              variant="appear"
-            >
-              <i className="material-icons">close</i>Cancel
+      {!isTokenSent && (
+        <>
+          <div className="action-header position-right">
+            <OakButton action={login} theme="primary" variant="appear">
+              <i className="material-icons">double_arrow</i>Submit
             </OakButton>
-          )}
-        </div>
-      )}
-      {!message && (
-        <OakText
-          label="Email"
-          data={state}
-          errorData={formErrors}
-          id="email"
-          handleChange={e => handleChange(e)}
-        />
+            {props.history.length > 2 && (
+              <OakButton
+                action={() => cancelLogin()}
+                theme="default"
+                variant="appear"
+              >
+                <i className="material-icons">close</i>Cancel
+              </OakButton>
+            )}
+          </div>
+          <OakText
+            label="Email"
+            data={state}
+            errorData={formErrors}
+            id="email"
+            handleChange={e => handleChange(e)}
+          />
+        </>
       )}
     </>
   );

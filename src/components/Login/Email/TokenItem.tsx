@@ -8,6 +8,7 @@ interface Props {
   emailLogin: Function;
   asset: string;
   queryParam: any;
+  cookies: any;
 }
 const TokenItem = (props: Props) => {
   const [state, setState] = useState({ token: '' });
@@ -18,6 +19,12 @@ const TokenItem = (props: Props) => {
   useEffect(() => {
     if (props.queryParam.auth_token) {
       console.log(props.queryParam.auth_token);
+
+      props.cookies.set(
+        `mirror_${props.asset}`,
+        `email ${props.queryParam.auth_token}`
+      );
+      props.history.push(`/${props.asset}/home`);
     }
   }, [props.queryParam]);
 
