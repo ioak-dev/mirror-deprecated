@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
-import { useQuery, useLazyQuery, useApolloClient } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-import { connect, useSelector, useDispatch } from 'react-redux';
-import { getAuth, addAuth } from '../../actions/AuthActions';
+import React from 'react';
+import { useApolloClient } from '@apollo/react-hooks';
+import { useSelector, useDispatch } from 'react-redux';
+import { addAuth } from '../../actions/AuthActions';
 import { Authorization } from '../Types/GeneralTypes';
-import { httpGet } from '../Lib/RestTemplate';
 import { sendMessage } from '../../events/MessageService';
+import { GET_SESSION } from '../Types/schema';
 
 interface Props {
   authorization: Authorization;
@@ -17,18 +16,6 @@ interface Props {
   middleware?: string[];
   cookies: any;
 }
-
-const GET_SESSION = gql`
-  query Session($key: ID!) {
-    session(key: $key) {
-      id
-      firstName
-      lastName
-      email
-      token
-    }
-  }
-`;
 
 const OakRoute = (props: Props) => {
   const gqlClient = useApolloClient();
@@ -60,20 +47,20 @@ const OakRoute = (props: Props) => {
   };
 
   const authenticateSpace = () => {
-    return authenticate('space');
+    return authenticate('asset');
   };
   const readAuthenticationSpace = () => {
-    return authenticate('space', false);
+    return authenticate('asset', false);
   };
 
   const authenticate = async (type, redirect = true) => {
-    sendMessage('spaceChange', true, props.match.params.tenant);
+    sendMessage('spaceChange', true, props.match.params.asset);
     if (authorization.isAuth) {
       return true;
     }
-    const cookieKey = `mirror_${props.match.params.tenant}`;
+    const cookieKey = `mirror_${props.match.params.asset}`;
     const authKey = props.cookies.get(cookieKey);
-    const baseAuthUrl = `/auth/${props.match.params.tenant}`;
+    const baseAuthUrl = `/auth/${props.match.params.asset}`;
     if (authKey) {
       const { data } = await gqlClient.query({
         query: GET_SESSION,
@@ -99,11 +86,11 @@ const OakRoute = (props: Props) => {
             message: 'Invalid session token',
             duration: 3000,
           });
-          redirectToLogin(props.match.params.tenant);
+          redirectToLogin(props.match.params.asset);
         }
       }
     } else if (redirect) {
-      redirectToLogin(props.match.params.tenant);
+      redirectToLogin(props.match.params.asset);
     } else {
       return true;
     }
@@ -114,12 +101,13 @@ const OakRoute = (props: Props) => {
     return false;
   };
 
-  const redirectToLogin = spaceId => {
-    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceId}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+  const redirectToLogin = asset => {
+    // window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceId}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+    props.history.push(`/${asset}/login/home`);
   };
 
   const redirectToUnauthorized = () => {
-    props.history.push(`/${profile.tenant}/unauthorized`);
+    props.history.push(`/${profile.asset}/unauthorized`);
   };
 
   return (
@@ -128,7 +116,7 @@ const OakRoute = (props: Props) => {
         <props.component
           {...props}
           profile={profile}
-          space={props.match.params.tenant}
+          asset={props.match.params.asset}
           // getProfile={getProfile}
           // setProfile={props.setProfile}
         />

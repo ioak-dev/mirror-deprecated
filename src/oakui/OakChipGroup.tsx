@@ -82,7 +82,7 @@ const OakChipGroup = (props: Props) => {
       >
         <div className="chip-group">
           {props.data[props.id].map(item => (
-            <div className="chip">
+            <div className="chip" key={item}>
               {item}
               <i
                 className="material-icons"

@@ -388,6 +388,12 @@ code {
     }
   }
 
+  .hyperlink-inline {
+    .hyperlink {
+      display: inline;
+    }
+  }
+
   .hyperlink {
     cursor: pointer;
     user-select: none;
@@ -425,6 +431,10 @@ code {
 
     &.position-right {
       justify-content: flex-end;
+    }
+
+    &.position-center {
+      justify-content: center;
     }
 
     &.position-left {

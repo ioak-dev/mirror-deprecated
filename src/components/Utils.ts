@@ -2,6 +2,19 @@ export function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null;
 }
 
+export function isEmptyAttributes(object: Record<string, any>) {
+  if (!object) {
+    return true;
+  }
+
+  return !Object.keys(object).find(key => {
+    if (object[key]) {
+      return true;
+    }
+    return false;
+  });
+}
+
 export function match(text, words) {
   let found = false;
   if (words) {

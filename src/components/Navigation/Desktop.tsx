@@ -19,7 +19,7 @@ interface Props {
   getProfile: Function;
   toggleDarkMode: Function;
   profile: Profile;
-  space: string;
+  asset: string;
   login: Function;
   transparent: boolean;
   logout: Function;
@@ -59,7 +59,7 @@ const Desktop = (props: Props) => {
         {(props.transparent || props.profile.theme === 'theme_dark') && (
           <img className="logo" src={mirrorWhite} alt="Mirror logo" />
         )}
-        <Links authorization={authorization} space={props.space} />
+        <Links authorization={authorization} asset={props.asset} />
         {showSearchBar && <SearchBar alt />}
       </div>
       <div className="right">
@@ -69,7 +69,7 @@ const Desktop = (props: Props) => {
           </i>
         </div>
         <div className="action">
-          {authorization.isAuth && (
+          {authorization.isAuth && props.asset && (
             <OakButton
               theme="primary"
               variant="disappear"
@@ -79,7 +79,7 @@ const Desktop = (props: Props) => {
               <i className="material-icons">power_settings_new</i>Logout
             </OakButton>
           )}
-          {!authorization.isAuth && (
+          {!authorization.isAuth && props.asset && (
             <OakButton
               theme="primary"
               variant="appear"
@@ -90,7 +90,7 @@ const Desktop = (props: Props) => {
               <i className="material-icons">person</i>Login
             </OakButton>
           )}
-          {!authorization.isAuth && (
+          {!authorization.isAuth && props.asset && (
             <OakButton
               theme="primary"
               variant="appear"

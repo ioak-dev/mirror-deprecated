@@ -1,5 +1,42 @@
 import gql from 'graphql-tag';
 
+export const GET_SESSION = gql`
+  query Session($key: ID!) {
+    session(key: $key) {
+      id
+      firstName
+      lastName
+      email
+      token
+    }
+  }
+`;
+
+export const NEW_EMAIL_SESSION = gql`
+  query NewEmailSession($email: String!) {
+    newEmailSession(email: $email) {
+      sessionId
+    }
+  }
+`;
+
+export const NEW_EXTERN_SESSION = gql`
+  query NewExternSession($token: String!) {
+    newExternSession(token: $token) {
+      sessionId
+    }
+  }
+`;
+
+export const CREATE_EMAIL_ACCOUNT = gql`
+  mutation CreateEmailAccount($payload: UserPayload) {
+    createEmailAccount(payload: $payload) {
+      id
+      email
+    }
+  }
+`;
+
 export const LIST_ARTICLES = gql`
   query Articles($categoryId: ID!, $pageNo: Int, $pageSize: Int) {
     articles(categoryId: $categoryId, pageNo: $pageNo, pageSize: $pageSize) {
@@ -126,22 +163,24 @@ export const DELETE_ARTICLE = gql`
   }
 `;
 
-export const LIST_CATEGORIES = gql`
-  query Categories {
-    categories {
+export const LIST_ARTICLE_CATEGORIES = gql`
+  query ArticleCategories {
+    articleCategories {
       id
       name
       parentCategoryId
+      articles
     }
   }
 `;
 
 export const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory($payload: CategoryPayload!) {
-    addCategory(payload: $payload) {
+  mutation UpdateCategory($payload: ArticleCategoryPayload!) {
+    addArticleCategory(payload: $payload) {
       id
       name
       parentCategoryId
+      articles
     }
   }
 `;
@@ -207,6 +246,61 @@ export const TAG_CLOUD = gql`
     tagCloud {
       name
       count
+    }
+  }
+`;
+
+export const LIST_ASSETS = gql`
+  query Assets {
+    assets {
+      id
+      name
+      description
+      jwtPassword
+      productionMode
+      assetId
+    }
+  }
+`;
+
+export const GET_ASSET = gql`
+  query Asset($assetId: String!) {
+    asset(assetId: $assetId) {
+      id
+      name
+      description
+      jwtPassword
+      productionMode
+      assetId
+    }
+  }
+`;
+
+export const CREATE_ASSET = gql`
+  mutation CreateAsset(
+    $payload: AssetPayload!
+    $addition: AssetAdditionPayload!
+  ) {
+    CreateAsset(payload: $payload, addition: $addition) {
+      id
+      name
+      description
+      jwtPassword
+      productionMode
+      assetId
+    }
+  }
+`;
+
+export const UPDATE_ASSET = gql`
+  mutation UpdateAsset($payload: AssetPayload!) {
+    updateAsset(payload: $payload) {
+      id
+      name
+      description
+      jwtPassword
+      productionMode
+      assetId
     }
   }
 `;

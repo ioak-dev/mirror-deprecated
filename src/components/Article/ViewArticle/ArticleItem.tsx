@@ -10,18 +10,17 @@ interface Props {
   id: string;
   history: any;
   article: Article;
-  space: string;
+  asset: string;
 }
 
 const ArticleItem = (props: Props) => {
-  const [deleteArticle, { data: deleteResponse }] = useMutation(
-    DELETE_ARTICLE,
-    { variables: { id: props.article.id } }
-  );
+  const [deleteArticle] = useMutation(DELETE_ARTICLE, {
+    variables: { id: props.article.id },
+  });
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const editArticle = () => {
-    props.history.push(`/${props.space}/article/edit?id=${props.id}`);
+    props.history.push(`/${props.asset}/article/edit?id=${props.id}`);
   };
 
   const goBack = () => {
@@ -29,7 +28,7 @@ const ArticleItem = (props: Props) => {
   };
 
   const searchArticle = () => {
-    props.history.push(`/${props.space}/article/search`);
+    props.history.push(`/${props.asset}/article/search`);
   };
 
   const deleteArticlePrompt = () => {
@@ -88,7 +87,7 @@ const ArticleItem = (props: Props) => {
         <TagContainer
           tags={props.article.tags || []}
           history={props.history}
-          space={props.space}
+          asset={props.asset}
         />
         <OakViewer>{props.article.description}</OakViewer>
       </div>

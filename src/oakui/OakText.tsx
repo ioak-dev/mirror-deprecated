@@ -5,6 +5,7 @@ interface Props {
   label?: string;
   id: string;
   data: any;
+  errorData?: any;
   type?: string;
   handleChange: any;
   errorFields?: any;
@@ -57,6 +58,12 @@ const OakText = (props: Props) => {
       >
         {props.label}
       </label>
+      {props.errorData && props.errorData[props.id] && (
+        <div className="text-field-error">
+          <i className="material-icons">warning</i>
+          {props.errorData[props.id]}
+        </div>
+      )}
     </div>
   );
 };

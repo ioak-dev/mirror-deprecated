@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import format from 'date-fns/format';
+import React from 'react';
 import './style.scss';
 import { Article } from '../../types/graphql';
 import { formatDateText } from '../Lib/DateUtils';
@@ -7,12 +6,12 @@ import { formatDateText } from '../Lib/DateUtils';
 interface Props {
   article: Article;
   history: any;
-  space: string;
+  asset: string;
 }
 
 const ArticleLink = (props: Props) => {
   const viewArticle = () => {
-    props.history.push(`/${props.space}/article/view?id=${props.article.id}`);
+    props.history.push(`/${props.asset}/article/view?id=${props.article.id}`);
   };
 
   return (

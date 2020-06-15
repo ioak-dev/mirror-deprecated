@@ -44,7 +44,7 @@ export type Article = {
   updatedAt?: Maybe<Scalars['DateScalar']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   feedback?: Maybe<Array<Maybe<Feedback>>>;
-  category?: Maybe<Category>;
+  category?: Maybe<ArticleCategory>;
 };
 
 export type TagPaginated = {
@@ -76,17 +76,62 @@ export type Feedback = {
   user?: Maybe<User>;
 };
 
-export type CategoryPayload = {
+export type ArticleCategoryPayload = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   parentCategoryId?: Maybe<Scalars['String']>;
 };
 
-export type Category = {
-  __typename?: 'Category';
+export type ArticleCategory = {
+  __typename?: 'ArticleCategory';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   parentCategoryId?: Maybe<Scalars['String']>;
+  articles?: Maybe<Scalars['Int']>;
+};
+
+export type AssetPayload = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  jwtPassword?: Maybe<Scalars['String']>;
+  productionMode?: Maybe<Scalars['Boolean']>;
+};
+
+export type AssetAdditionPayload = {
+  email?: Maybe<Scalars['String']>;
+};
+
+export type Asset = {
+  __typename?: 'Asset';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  jwtPassword?: Maybe<Scalars['String']>;
+  productionMode?: Maybe<Scalars['Boolean']>;
+  assetId?: Maybe<Scalars['String']>;
+};
+
+export type Session = {
+  __typename?: 'Session';
+  id: Scalars['ID'];
+  sessionId: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type UserSession = {
+  __typename?: 'UserSession';
+  id: Scalars['ID'];
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
+};
+
+export type UserPayload = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type User = {
@@ -95,7 +140,7 @@ export type User = {
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  resolver?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -106,9 +151,14 @@ export type Query = {
   tagCloud?: Maybe<Array<Maybe<TagCloud>>>;
   articlesByTag?: Maybe<TagPaginated>;
   feedback?: Maybe<Array<Maybe<Feedback>>>;
-  category?: Maybe<Category>;
-  categories?: Maybe<Array<Maybe<Category>>>;
-  session?: Maybe<User>;
+  articleCategory?: Maybe<ArticleCategory>;
+  articleCategories?: Maybe<Array<Maybe<ArticleCategory>>>;
+  asset?: Maybe<Asset>;
+  assetById?: Maybe<Asset>;
+  assets?: Maybe<Array<Maybe<Asset>>>;
+  newEmailSession?: Maybe<Session>;
+  newExternSession?: Maybe<Session>;
+  session?: Maybe<UserSession>;
 };
 
 export type QueryArticleArgs = {
@@ -137,8 +187,24 @@ export type QueryFeedbackArgs = {
   articleId: Scalars['ID'];
 };
 
-export type QueryCategoryArgs = {
+export type QueryArticleCategoryArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryAssetArgs = {
+  assetId: Scalars['String'];
+};
+
+export type QueryAssetByIdArgs = {
+  id: Scalars['ID'];
+};
+
+export type QueryNewEmailSessionArgs = {
+  email: Scalars['String'];
+};
+
+export type QueryNewExternSessionArgs = {
+  token: Scalars['String'];
 };
 
 export type QuerySessionArgs = {
@@ -148,13 +214,21 @@ export type QuerySessionArgs = {
 export type Mutation = {
   __typename?: 'Mutation';
   addArticle?: Maybe<Article>;
+  deleteArticle?: Maybe<Article>;
   addFeedback?: Maybe<Feedback>;
   removeFeedback?: Maybe<Feedback>;
-  addCategory?: Maybe<Category>;
+  addArticleCategory?: Maybe<ArticleCategory>;
+  updateAsset?: Maybe<Asset>;
+  createAsset?: Maybe<Asset>;
+  createEmailAccount: User;
 };
 
 export type MutationAddArticleArgs = {
   payload?: Maybe<ArticlePayload>;
+};
+
+export type MutationDeleteArticleArgs = {
+  id: Scalars['ID'];
 };
 
 export type MutationAddFeedbackArgs = {
@@ -167,8 +241,21 @@ export type MutationRemoveFeedbackArgs = {
   type: Scalars['String'];
 };
 
-export type MutationAddCategoryArgs = {
-  payload?: Maybe<CategoryPayload>;
+export type MutationAddArticleCategoryArgs = {
+  payload?: Maybe<ArticleCategoryPayload>;
+};
+
+export type MutationUpdateAssetArgs = {
+  payload?: Maybe<AssetPayload>;
+};
+
+export type MutationCreateAssetArgs = {
+  payload?: Maybe<AssetPayload>;
+  addition?: Maybe<AssetAdditionPayload>;
+};
+
+export type MutationCreateEmailAccountArgs = {
+  payload?: Maybe<UserPayload>;
 };
 
 export type AddArticleMutationVariables = {
@@ -179,17 +266,13 @@ export type AddArticleMutation = { __typename?: 'Mutation' } & {
   addArticle?: Maybe<{ __typename?: 'Article' } & Pick<Article, 'id'>>;
 };
 
-export type SessionQueryVariables = {
-  key: Scalars['ID'];
+export type CreateAssetMutationVariables = {
+  payload: AssetPayload;
+  addition: AssetAdditionPayload;
 };
 
-export type SessionQuery = { __typename?: 'Query' } & {
-  session?: Maybe<
-    { __typename?: 'User' } & Pick<
-      User,
-      'id' | 'firstName' | 'lastName' | 'email' | 'token'
-    >
-  >;
+export type CreateAssetMutation = { __typename?: 'Mutation' } & {
+  createAsset?: Maybe<{ __typename?: 'Asset' } & Pick<Asset, 'id'>>;
 };
 
 export const AddArticleDocument = gql`
@@ -260,66 +343,74 @@ export type AddArticleMutationOptions = ApolloReactCommon.BaseMutationOptions<
   AddArticleMutation,
   AddArticleMutationVariables
 >;
-export const SessionDocument = gql`
-  query Session($key: ID!) {
-    session(key: $key) {
+export const CreateAssetDocument = gql`
+  mutation createAsset(
+    $payload: AssetPayload!
+    $addition: AssetAdditionPayload!
+  ) {
+    createAsset(payload: $payload, addition: $addition) {
       id
-      firstName
-      lastName
-      email
-      token
     }
   }
 `;
-export type SessionComponentProps = Omit<
-  ApolloReactComponents.QueryComponentOptions<
-    SessionQuery,
-    SessionQueryVariables
+export type CreateAssetMutationFn = ApolloReactCommon.MutationFunction<
+  CreateAssetMutation,
+  CreateAssetMutationVariables
+>;
+export type CreateAssetComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    CreateAssetMutation,
+    CreateAssetMutationVariables
   >,
-  'query'
-> &
-  ({ variables: SessionQueryVariables; skip?: boolean } | { skip: boolean });
+  'mutation'
+>;
 
-export const SessionComponent = (props: SessionComponentProps) => (
-  <ApolloReactComponents.Query<SessionQuery, SessionQueryVariables>
-    query={SessionDocument}
+export const CreateAssetComponent = (props: CreateAssetComponentProps) => (
+  <ApolloReactComponents.Mutation<
+    CreateAssetMutation,
+    CreateAssetMutationVariables
+  >
+    mutation={CreateAssetDocument}
     {...props}
   />
 );
 
-export type SessionProps<
+export type CreateAssetProps<
   TChildProps = {},
-  TDataName extends string = 'data'
+  TDataName extends string = 'mutate'
 > = {
-  [key in TDataName]: ApolloReactHoc.DataValue<
-    SessionQuery,
-    SessionQueryVariables
+  [key in TDataName]: ApolloReactCommon.MutationFunction<
+    CreateAssetMutation,
+    CreateAssetMutationVariables
   >;
 } &
   TChildProps;
-export function withSession<
+export function withCreateAsset<
   TProps,
   TChildProps = {},
-  TDataName extends string = 'data'
+  TDataName extends string = 'mutate'
 >(
   operationOptions?: ApolloReactHoc.OperationOption<
     TProps,
-    SessionQuery,
-    SessionQueryVariables,
-    SessionProps<TChildProps, TDataName>
+    CreateAssetMutation,
+    CreateAssetMutationVariables,
+    CreateAssetProps<TChildProps, TDataName>
   >
 ) {
-  return ApolloReactHoc.withQuery<
+  return ApolloReactHoc.withMutation<
     TProps,
-    SessionQuery,
-    SessionQueryVariables,
-    SessionProps<TChildProps, TDataName>
-  >(SessionDocument, {
-    alias: 'session',
+    CreateAssetMutation,
+    CreateAssetMutationVariables,
+    CreateAssetProps<TChildProps, TDataName>
+  >(CreateAssetDocument, {
+    alias: 'createAsset',
     ...operationOptions,
   });
 }
-export type SessionQueryResult = ApolloReactCommon.QueryResult<
-  SessionQuery,
-  SessionQueryVariables
+export type CreateAssetMutationResult = ApolloReactCommon.MutationResult<
+  CreateAssetMutation
+>;
+export type CreateAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CreateAssetMutation,
+  CreateAssetMutationVariables
 >;

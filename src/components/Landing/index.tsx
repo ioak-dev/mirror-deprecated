@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './style.scss';
 import { NavLink } from 'react-router-dom';
 import OakButton from '../../oakui/OakButton';
@@ -43,9 +43,13 @@ const Landing = () => {
         </p>
       </div>
       <div className="action">
-        <NavLink to="/tenant" className="navitem" activeClassName="active">
+        <NavLink
+          to="/asset/create"
+          className="navitem"
+          activeClassName="active"
+        >
           <OakButton theme="primary" variant="disappear">
-            Create Tenant
+            Create Asset
           </OakButton>
         </NavLink>
       </div>

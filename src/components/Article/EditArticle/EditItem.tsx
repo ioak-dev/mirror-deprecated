@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import OakText from '../../../oakui/OakText';
 import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces } from '../../Utils';
 import { sendMessage } from '../../../events/MessageService';
-import CategoryTree from '../../Category/CategoryTree';
-import { Article, ArticlePayload, Category } from '../../../types/graphql';
+import CategoryTree from '../Category/CategoryTree';
+import {
+  Article,
+  ArticlePayload,
+  ArticleCategory,
+} from '../../../types/graphql';
 import OakChipGroup from '../../../oakui/OakChipGroup';
-import { UPDATE_ARTICLE, LIST_CATEGORIES } from '../../Types/schema';
+import { UPDATE_ARTICLE, LIST_ARTICLE_CATEGORIES } from '../../Types/schema';
 
 interface Props {
   id: string;
   history: any;
-  space: any;
+  asset: any;
   article: Article;
 }
 
 const EditItem = (props: Props) => {
-  const { loading, error, data } = useQuery(LIST_CATEGORIES);
-  const [updateArticle, { data: updatedArticle }] = useMutation(UPDATE_ARTICLE);
+  const { data } = useQuery(LIST_ARTICLE_CATEGORIES);
+  const [updateArticle] = useMutation(UPDATE_ARTICLE);
   const [state, setState] = useState<any>({
     id: '',
     title: '',
@@ -183,10 +186,10 @@ const EditItem = (props: Props) => {
       </div>
       <div className="create-article-item">
         <CategoryTree
-          category={data?.categories?.find(
-            (item: Category) => item.id === state.categoryId
+          category={data?.articleCategories?.find(
+            (item: ArticleCategory) => item.id === state.categoryId
           )}
-          categories={data?.categories}
+          categories={data?.articleCategories}
           handleChange={handleCategoryChange}
           choosable
         />

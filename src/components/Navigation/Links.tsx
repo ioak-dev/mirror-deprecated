@@ -6,7 +6,7 @@ import { Authorization, Profile } from '../Types/GeneralTypes';
 
 interface Props {
   authorization: Authorization;
-  space: string;
+  asset: string;
 }
 
 const Links = (props: Props) => {
@@ -15,18 +15,26 @@ const Links = (props: Props) => {
       {props.authorization.isAuth && (
         <>
           <NavLink
-            to={`/${props.space}/home`}
+            to={`/${props.asset}/home`}
             className="navitem"
             activeClassName="active"
           >
             Home
           </NavLink>
           <NavLink
-            to={`/${props.space}/article`}
+            to={`/${props.asset}/article`}
             className="navitem"
             activeClassName="active"
           >
             Articles
+          </NavLink>
+
+          <NavLink
+            to={`/${props.asset}/asset/view`}
+            className="navitem"
+            activeClassName="active"
+          >
+            View Asset
           </NavLink>
         </>
       )}

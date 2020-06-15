@@ -7,6 +7,7 @@ import 'react-quill/dist/quill.bubble.css';
 interface Props {
   id: string;
   data: any;
+  errorData?: any;
   handleChange: any;
   bubble?: boolean;
   label?: string;
@@ -99,6 +100,12 @@ const OakEditor = (props: Props) => {
         modules={modules}
         formats={formats}
       />
+      {props.errorData && props.errorData[props.id] && (
+        <div className="text-field-error">
+          <i className="material-icons">warning</i>
+          {props.errorData[props.id]}
+        </div>
+      )}
     </div>
   );
 };

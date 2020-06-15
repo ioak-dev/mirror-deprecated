@@ -14,12 +14,12 @@ import {
 const domain = 'article';
 const baseUrl = process.env.REACT_APP_API_URL;
 
-export const saveArticle = async (space, payload, authorization) => {
+export const saveArticle = async (asset, payload, authorization) => {
   const action = 'Save article';
   const messageId = newMessageId();
   httpHandleRequest(messageId, action, payload.title);
   try {
-    const response = await axios.put(`${baseUrl}/article/${space}/`, payload, {
+    const response = await axios.put(`${baseUrl}/article/${asset}/`, payload, {
       headers: {
         Authorization: authorization.token,
       },
@@ -30,9 +30,9 @@ export const saveArticle = async (space, payload, authorization) => {
   }
 };
 
-export const fetchArticle = async (space, id, authorization) => {
+export const fetchArticle = async (asset, id, authorization) => {
   try {
-    const response = await axios.get(`${baseUrl}/article/${space}/${id}`, {
+    const response = await axios.get(`${baseUrl}/article/${asset}/${id}`, {
       headers: {
         Authorization: authorization.token,
       },
@@ -43,9 +43,9 @@ export const fetchArticle = async (space, id, authorization) => {
   }
 };
 
-export const deleteArticle = async (space, id, authorization) => {
+export const deleteArticle = async (asset, id, authorization) => {
   try {
-    const response = await axios.get(`${baseUrl}/article/${space}/${id}`, {
+    const response = await axios.get(`${baseUrl}/article/${asset}/${id}`, {
       headers: {
         Authorization: authorization.token,
       },

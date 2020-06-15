@@ -1,4 +1,4 @@
-import { httpGet, httpPost, httpPut } from '../Lib/RestTemplate';
+import { httpGet, httpPost } from '../Lib/RestTemplate';
 import constants from '../Constants';
 
 export function createTenant(data) {

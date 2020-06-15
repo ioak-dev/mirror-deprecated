@@ -13,31 +13,32 @@ import { withCookies } from 'react-cookie';
 
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Home from '../Home';
-import Login from '../Auth/Login';
+import OaLogin from '../Auth/OaLogin';
 import Landing from '../Landing';
-import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getUser, addUser } from '../../actions/UserActions';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
 
 import Notification from '../Notification';
 import Navigation from '../Navigation';
-import { httpGet } from '../Lib/RestTemplate';
 import { Authorization } from '../Types/GeneralTypes';
-import { receiveMessage, sendMessage } from '../../events/MessageService';
 import Tenant from '../Tenant';
-import Settings from '../Settings';
-import ArticleList from '../Article/ArticleList';
-import ServiceRequests from '../Request';
+import ArticleHome from '../Article/ArticleHome';
 import UserAdministration from '../UserAdministration';
-import constants from '../Constants';
 import OakRoute from '../Auth/OakRoute';
 import Unauthorized from '../Auth/Unauthorized';
 import CreateArticle from '../Article/CreateArticle';
 import ViewArticle from '../Article/ViewArticle';
 import EditArticle from '../Article/EditArticle';
-import BrowseArticle from '../Article/ArticleList/BrowseArticle';
-import SearchArticle from '../Article/ArticleList/SearchArticle';
-import ArticlesByTag from '../Article/ArticleList/ArticlesByTag';
+import BrowseArticle from '../Article/ArticleHome/BrowseArticle';
+import SearchArticle from '../Article/ArticleHome/SearchArticle';
+import ArticlesByTag from '../Article/ArticleHome/ArticlesByTag';
+import CreateAsset from '../Asset/CreateAsset/index';
+import ViewAsset from '../Asset/ViewAsset/index';
+import EditAsset from '../Asset/EditAsset';
+import OneAuth from '../Login/OneAuth/index';
+import Email from '../Login/Email/index';
+import Login from '../Login/index';
+import ExternLogin from '../Auth/ExternLogin';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -113,11 +114,11 @@ const Content = (props: Props) => {
                 <Route
                   path="/login"
                   render={propsLocal => (
-                    <OakRoute {...propsLocal} {...props} component={Login} />
+                    <OakRoute {...propsLocal} {...props} component={OaLogin} />
                   )}
                 />
                 <Route
-                  path="/:tenant/unauthorized"
+                  path="/:asset/unauthorized"
                   render={propsLocal => (
                     <OakRoute
                       {...propsLocal}
@@ -149,7 +150,18 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/home"
+                  path="/asset/create"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={CreateAsset}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/home"
                   render={propsLocal => (
                     <OakRoute
                       {...propsLocal}
@@ -160,19 +172,62 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article"
+                  path="/:asset/login/home"
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={Login}
+                      // middleware={['readAuthentication']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/login/extern"
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={ExternLogin}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/login/oa"
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={OneAuth}
+                      // middleware={['readAuthentication']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/login/email"
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={Email}
+                      // middleware={['readAuthentication']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/article"
                   exact
                   render={propsLocal => (
                     <OakRoute
                       {...propsLocal}
                       {...props}
-                      component={ArticleList}
+                      component={ArticleHome}
                       middleware={['authenticate']}
                     />
                   )}
                 />
                 <Route
-                  path="/:tenant/article/browse"
+                  path="/:asset/article/browse"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -184,7 +239,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/search"
+                  path="/:asset/article/search"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -196,7 +251,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/tag"
+                  path="/:asset/article/tag"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -209,7 +264,7 @@ const Content = (props: Props) => {
                 />
 
                 <Route
-                  path="/:tenant/article/view"
+                  path="/:asset/article/view"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -221,7 +276,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/create"
+                  path="/:asset/article/create"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -233,7 +288,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/article/edit"
+                  path="/:asset/article/edit"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -245,31 +300,31 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant/settings"
+                  path="/:asset/asset/view"
                   exact
                   render={propsLocal => (
                     <OakRoute
                       {...propsLocal}
                       {...props}
-                      component={Settings}
-                      middleware={['authenticate']}
+                      component={ViewAsset}
+                      // middleware={['authenticate']}
                     />
                   )}
                 />
                 <Route
-                  path="/:tenant/request"
+                  path="/:asset/asset/edit"
                   exact
                   render={propsLocal => (
                     <OakRoute
                       {...propsLocal}
                       {...props}
-                      component={ServiceRequests}
-                      middleware={['authenticate']}
+                      component={EditAsset}
+                      // middleware={['authenticate']}
                     />
                   )}
                 />
                 <Route
-                  path="/:tenant/useradministration"
+                  path="/:asset/useradministration"
                   exact
                   render={propsLocal => (
                     <OakRoute
@@ -281,7 +336,7 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:tenant"
+                  path="/:asset"
                   exact
                   render={propsLocal => (
                     <OakRoute

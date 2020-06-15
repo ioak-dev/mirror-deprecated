@@ -20,7 +20,7 @@ interface Props {
   getProfile: Function;
   toggleDarkMode: Function;
   profile: Profile;
-  space: string;
+  asset: string;
   login: Function;
   transparent: boolean;
   logout: Function;
@@ -132,7 +132,7 @@ const Mobile = (props: Props) => {
               )}
             </div>
           </div>
-          <Links authorization={authorization} space={props.space} />
+          <Links authorization={authorization} asset={props.asset} />
           <div className="dark-mode">
             <i
               className="material-icons"

@@ -7,7 +7,7 @@ import OakSpinner from '../../../oakui/OakSpinner';
 import { GET_ARTICLE } from '../../Types/schema';
 
 interface Props {
-  space: string;
+  asset: string;
   location: any;
   history?: any;
 }
@@ -36,7 +36,7 @@ const EditArticle = (props: Props) => {
             <EditItem
               history={props.history}
               id={urlParam.id}
-              space={props.space}
+              asset={props.asset}
               article={data.article}
             />
           )}
