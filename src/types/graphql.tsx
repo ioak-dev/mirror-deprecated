@@ -157,6 +157,7 @@ export type Query = {
   assetById?: Maybe<Asset>;
   assets?: Maybe<Array<Maybe<Asset>>>;
   newEmailSession?: Maybe<Session>;
+  newExternSession?: Maybe<Session>;
   session?: Maybe<UserSession>;
 };
 
@@ -200,6 +201,10 @@ export type QueryAssetByIdArgs = {
 
 export type QueryNewEmailSessionArgs = {
   email: Scalars['String'];
+};
+
+export type QueryNewExternSessionArgs = {
+  token: Scalars['String'];
 };
 
 export type QuerySessionArgs = {

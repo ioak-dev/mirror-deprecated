@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, connect } from 'react-redux';
+import { useSelector, connect, useDispatch } from 'react-redux';
 
 import { withRouter } from 'react-router';
 import { withCookies } from 'react-cookie';
@@ -11,6 +11,7 @@ import Mobile from './Mobile';
 
 import { Authorization, Profile } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
+import { removeAuth } from '../../actions/AuthActions';
 
 interface Props {
   sendEvent: Function;
@@ -40,6 +41,8 @@ const Navigation = (props: Props) => {
   });
 
   const authorization = useSelector(state => state.authorization);
+
+  const dispatch = useDispatch();
 
   const [asset, setAsset] = useState('');
 
@@ -78,7 +81,7 @@ const Navigation = (props: Props) => {
     type = 'success',
     message = 'You have been logged out'
   ) => {
-    props.removeAuth();
+    dispatch(removeAuth());
     props.cookies.remove(`mirror_${asset}`);
     sendMessage('notification', true, {
       type,
@@ -102,9 +105,8 @@ const Navigation = (props: Props) => {
   };
 
   const login = type => {
-    // props.history.push(`/${props.profile.tenant}/login?type=${type}`);
-    // console.log(props.profile.tenant);
-    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${asset}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
+    props.history.push(`/${asset}/login/home`);
+    // window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${asset}/login?type=${type}&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}`;
   };
 
   const toggleSettings = () => {

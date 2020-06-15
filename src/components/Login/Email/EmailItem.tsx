@@ -4,6 +4,7 @@ import OakText from '../../../oakui/OakText';
 import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import { NEW_EMAIL_SESSION } from '../../Types/schema';
+import './style.scss';
 
 interface Props {
   history: any;
@@ -30,7 +31,8 @@ const EmailItem = (props: Props) => {
     });
   };
 
-  const login = async () => {
+  const login = async event => {
+    event.preventDefault();
     const errorFields: any = { email: '' };
 
     if (isEmptyOrSpaces(state.email)) {
@@ -65,47 +67,66 @@ const EmailItem = (props: Props) => {
   return (
     <>
       {isTokenSent && (
-        <div className="typhography-4 hyperlink-inline">
-          Authentication token is generated and sent to your email. You can
-          click on the login link from your email instruction or copy paste{' '}
-          {token} the token id&nbsp;
-          <div className="hyperlink" onClick={() => props.tokenLogin()}>
-            here
-          </div>
-        </div>
-      )}
-      {!isTokenSent && (
-        <div className="page-subtitle">
-          <div className="browse-article-subtitle">
-            <div className="hyperlink" onClick={() => props.tokenLogin()}>
-              already have an auth key?
+        <>
+          <div className="page-header">
+            <div className="page-title">
+              Email authentication
+              <div className="page-subtitle">
+                You will receive an authentication token to your email
+              </div>
+              <div className="page-highlight" />
             </div>
           </div>
-        </div>
+          <div className="typhography-4 hyperlink-inline">
+            Authentication token is generated and sent to your email. You can
+            click on the login link from your email instruction or copy paste{' '}
+            {token} the token id&nbsp;
+            <div className="hyperlink" onClick={() => props.tokenLogin()}>
+              here
+            </div>
+          </div>
+        </>
       )}
       {!isTokenSent && (
         <>
-          <div className="action-header position-right">
-            <OakButton action={login} theme="primary" variant="appear">
-              <i className="material-icons">double_arrow</i>Submit
-            </OakButton>
-            {props.history.length > 2 && (
-              <OakButton
-                action={() => cancelLogin()}
-                theme="default"
-                variant="appear"
-              >
-                <i className="material-icons">close</i>Cancel
+          <div className="page-header">
+            <div className="page-title">
+              Email authentication
+              <div className="page-subtitle">
+                You will receive an authentication token to your email
+              </div>
+              <div className="page-highlight" />
+            </div>
+            <div className="action-header position-right">
+              <OakButton action={login} theme="primary" variant="appear">
+                <i className="material-icons">double_arrow</i>Submit
               </OakButton>
-            )}
+              {props.history.length > 2 && (
+                <OakButton
+                  action={() => cancelLogin()}
+                  theme="default"
+                  variant="appear"
+                >
+                  <i className="material-icons">close</i>Cancel
+                </OakButton>
+              )}
+            </div>
           </div>
-          <OakText
-            label="Email"
-            data={state}
-            errorData={formErrors}
-            id="email"
-            handleChange={e => handleChange(e)}
-          />
+          <form method="GET" onSubmit={login} noValidate>
+            <OakText
+              label="Email"
+              data={state}
+              errorData={formErrors}
+              id="email"
+              handleChange={e => handleChange(e)}
+            />
+          </form>
+          <div className="email-login-footer">
+            <div>or</div>
+            <div className="hyperlink" onClick={() => props.tokenLogin()}>
+              Enter authentication token, if you already have one
+            </div>
+          </div>
         </>
       )}
     </>

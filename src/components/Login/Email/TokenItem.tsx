@@ -35,7 +35,8 @@ const TokenItem = (props: Props) => {
     });
   };
 
-  const login = () => {
+  const login = event => {
+    event.preventDefault();
     const errorFields: any = { token: '' };
 
     if (isEmptyOrSpaces(state.token)) {
@@ -55,34 +56,44 @@ const TokenItem = (props: Props) => {
 
   return (
     <>
-      <div className="page-subtitle">
-        <div className="browse-article-subtitle">
-          <div className="hyperlink" onClick={() => props.emailLogin()}>
-            Use email instead?
+      <div className="page-header">
+        <div className="page-title">
+          Email authentication
+          <div className="page-subtitle">
+            You would have received an authentication token in your email
           </div>
+          <div className="page-highlight" />
+        </div>
+        <div className="action-header position-right">
+          <OakButton action={login} theme="primary" variant="appear">
+            <i className="material-icons">double_arrow</i>Submit
+          </OakButton>
+          {props.history.length > 2 && (
+            <OakButton
+              action={() => cancelLogin()}
+              theme="default"
+              variant="appear"
+            >
+              <i className="material-icons">close</i>Cancel
+            </OakButton>
+          )}
         </div>
       </div>
-      <div className="action-header position-right">
-        <OakButton action={login} theme="primary" variant="appear">
-          <i className="material-icons">double_arrow</i>Submit
-        </OakButton>
-        {props.history.length > 2 && (
-          <OakButton
-            action={() => cancelLogin()}
-            theme="default"
-            variant="appear"
-          >
-            <i className="material-icons">close</i>Cancel
-          </OakButton>
-        )}
+      <form method="GET" onSubmit={login} noValidate>
+        <OakText
+          label="Token"
+          data={state}
+          errorData={formErrors}
+          id="token"
+          handleChange={e => handleChange(e)}
+        />
+      </form>
+      <div className="email-login-footer">
+        <div>or</div>
+        <div className="hyperlink" onClick={() => props.emailLogin()}>
+          Get a token to your email, if you did not receive one
+        </div>
       </div>
-      <OakText
-        label="Token"
-        data={state}
-        errorData={formErrors}
-        id="token"
-        handleChange={e => handleChange(e)}
-      />
     </>
   );
 };

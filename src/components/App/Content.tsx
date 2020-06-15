@@ -44,6 +44,7 @@ import EditAsset from '../Asset/EditAsset';
 import OneAuth from '../Login/OneAuth/index';
 import Email from '../Login/Email/index';
 import Login from '../Login/index';
+import ExternLogin from '../Auth/ExternLogin';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -184,6 +185,16 @@ const Content = (props: Props) => {
                       {...props}
                       component={Login}
                       // middleware={['readAuthentication']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/login/extern"
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={ExternLogin}
                     />
                   )}
                 />

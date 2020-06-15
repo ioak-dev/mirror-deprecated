@@ -39,7 +39,6 @@ const Email = (props: Props) => {
       <div className="app-content">
         <div className="app-text">
           <div className="view-asset-item">
-            <div className="page-title">Login Details</div>
             {state.type === 'email' && (
               <EmailItem
                 history={props.history}

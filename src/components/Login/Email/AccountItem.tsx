@@ -39,7 +39,9 @@ const AccountItem = (props: Props) => {
     props.history.goBack();
   };
 
-  const submit = () => {
+  const submit = event => {
+    console.log('*********');
+    event.preventDefault();
     const errorFields: any = { email: '', firstName: '', lastName: '' };
 
     if (isEmptyOrSpaces(state.firstName)) {
@@ -87,30 +89,31 @@ const AccountItem = (props: Props) => {
         </div>
       )}
       {!message && (
-        <div className="page-header">
-          <div className="page-title">
-            Provide details
-            <div className="page-highlight" />
-          </div>
+        <form method="GET" onSubmit={submit} noValidate>
+          <div className="page-header">
+            <div className="page-title">
+              Email authentication
+              <div className="page-subtitle">
+                You don&apos;t have an user account yet. Signup now
+              </div>
+              <div className="page-highlight" />
+            </div>
 
-          <div className="action-header position-right">
-            <OakButton action={submit} theme="primary" variant="appear">
-              <i className="material-icons">double_arrow</i>Save
-            </OakButton>
-            {props.history.length > 2 && (
-              <OakButton
-                action={() => cancelLogin()}
-                theme="default"
-                variant="appear"
-              >
-                <i className="material-icons">close</i>Cancel
+            <div className="action-header position-right">
+              <OakButton action={submit} theme="primary" variant="appear">
+                <i className="material-icons">double_arrow</i>Save
               </OakButton>
-            )}
+              {props.history.length > 2 && (
+                <OakButton
+                  action={() => cancelLogin()}
+                  theme="default"
+                  variant="appear"
+                >
+                  <i className="material-icons">close</i>Cancel
+                </OakButton>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-      {!message && (
-        <div className="create-article-item">
           <div className="user-form">
             <OakText
               label="First Name"
@@ -134,7 +137,7 @@ const AccountItem = (props: Props) => {
               handleChange={e => handleChange(e)}
             />
           </div>
-        </div>
+        </form>
       )}
     </>
   );

@@ -20,6 +20,14 @@ export const NEW_EMAIL_SESSION = gql`
   }
 `;
 
+export const NEW_EXTERN_SESSION = gql`
+  query NewExternSession($token: String!) {
+    newExternSession(token: $token) {
+      sessionId
+    }
+  }
+`;
+
 export const CREATE_EMAIL_ACCOUNT = gql`
   mutation CreateEmailAccount($payload: UserPayload) {
     createEmailAccount(payload: $payload) {

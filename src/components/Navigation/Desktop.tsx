@@ -69,7 +69,7 @@ const Desktop = (props: Props) => {
           </i>
         </div>
         <div className="action">
-          {authorization.isAuth && (
+          {authorization.isAuth && props.asset && (
             <OakButton
               theme="primary"
               variant="disappear"
@@ -79,7 +79,7 @@ const Desktop = (props: Props) => {
               <i className="material-icons">power_settings_new</i>Logout
             </OakButton>
           )}
-          {!authorization.isAuth && (
+          {!authorization.isAuth && props.asset && (
             <OakButton
               theme="primary"
               variant="appear"
@@ -90,7 +90,7 @@ const Desktop = (props: Props) => {
               <i className="material-icons">person</i>Login
             </OakButton>
           )}
-          {!authorization.isAuth && (
+          {!authorization.isAuth && props.asset && (
             <OakButton
               theme="primary"
               variant="appear"

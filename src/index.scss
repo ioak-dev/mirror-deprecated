@@ -433,6 +433,10 @@ code {
       justify-content: flex-end;
     }
 
+    &.position-center {
+      justify-content: center;
+    }
+
     &.position-left {
       justify-content: flex-start;
     }
