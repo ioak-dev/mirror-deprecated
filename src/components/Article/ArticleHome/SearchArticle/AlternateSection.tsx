@@ -15,10 +15,6 @@ const AlternateSection = (props: Props) => {
     props.history.push(`/${props.asset}/post`);
   };
 
-  const createPost = event => {
-    props.history.push(`/${props.asset}/post/create`);
-  };
-
   return (
     <div className="search-alternate-section">
       <div className="typography-4 no-article-match-message">

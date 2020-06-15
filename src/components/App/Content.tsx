@@ -15,29 +15,23 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Home from '../Home';
 import OaLogin from '../Auth/OaLogin';
 import Landing from '../Landing';
-import { getAuth, addAuth, removeAuth } from '../../actions/AuthActions';
 import { getUser, addUser } from '../../actions/UserActions';
 import { getProfile, setProfile } from '../../actions/ProfileActions';
 
 import Notification from '../Notification';
 import Navigation from '../Navigation';
-import { httpGet } from '../Lib/RestTemplate';
 import { Authorization } from '../Types/GeneralTypes';
-import { receiveMessage, sendMessage } from '../../events/MessageService';
 import Tenant from '../Tenant';
-import Settings from '../Settings';
-import ArticleList from '../Article/ArticleList';
-import ServiceRequests from '../Request';
+import ArticleHome from '../Article/ArticleHome';
 import UserAdministration from '../UserAdministration';
-import constants from '../Constants';
 import OakRoute from '../Auth/OakRoute';
 import Unauthorized from '../Auth/Unauthorized';
 import CreateArticle from '../Article/CreateArticle';
 import ViewArticle from '../Article/ViewArticle';
 import EditArticle from '../Article/EditArticle';
-import BrowseArticle from '../Article/ArticleList/BrowseArticle';
-import SearchArticle from '../Article/ArticleList/SearchArticle';
-import ArticlesByTag from '../Article/ArticleList/ArticlesByTag';
+import BrowseArticle from '../Article/ArticleHome/BrowseArticle';
+import SearchArticle from '../Article/ArticleHome/SearchArticle';
+import ArticlesByTag from '../Article/ArticleHome/ArticlesByTag';
 import CreateAsset from '../Asset/CreateAsset/index';
 import ViewAsset from '../Asset/ViewAsset/index';
 import EditAsset from '../Asset/EditAsset';
@@ -227,7 +221,7 @@ const Content = (props: Props) => {
                     <OakRoute
                       {...propsLocal}
                       {...props}
-                      component={ArticleList}
+                      component={ArticleHome}
                       middleware={['authenticate']}
                     />
                   )}
@@ -326,30 +320,6 @@ const Content = (props: Props) => {
                       {...props}
                       component={EditAsset}
                       // middleware={['authenticate']}
-                    />
-                  )}
-                />
-                <Route
-                  path="/:asset/settings"
-                  exact
-                  render={propsLocal => (
-                    <OakRoute
-                      {...propsLocal}
-                      {...props}
-                      component={Settings}
-                      middleware={['authenticate']}
-                    />
-                  )}
-                />
-                <Route
-                  path="/:asset/request"
-                  exact
-                  render={propsLocal => (
-                    <OakRoute
-                      {...propsLocal}
-                      {...props}
-                      component={ServiceRequests}
-                      middleware={['authenticate']}
                     />
                   )}
                 />

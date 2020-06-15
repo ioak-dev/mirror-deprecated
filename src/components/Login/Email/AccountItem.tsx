@@ -12,9 +12,7 @@ interface Props {
   emailLogin: Function;
 }
 const AccountItem = (props: Props) => {
-  const [createEmailAccount, { data: createAccount }] = useMutation(
-    CREATE_EMAIL_ACCOUNT
-  );
+  const [createEmailAccount] = useMutation(CREATE_EMAIL_ACCOUNT);
   const [state, setState] = useState({
     email: '',
     firstName: '',
@@ -71,7 +69,7 @@ const AccountItem = (props: Props) => {
         variables: {
           payload,
         },
-      }).then(response => {
+      }).then(() => {
         setMessage(!message);
       });
     }

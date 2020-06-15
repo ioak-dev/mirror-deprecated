@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './style.scss';
-import { Category } from '../../../types/graphql';
+import { ArticleCategory } from '../../../../types/graphql';
 import CategoryList from './CategoryList';
 
 interface Props {
-  category: Category;
-  categories: Array<Category>;
+  category: ArticleCategory;
+  categories: Array<ArticleCategory>;
   handleChange: any;
   choosable?: boolean;
 }
 const CategoryTree = (props: Props) => {
-  const [tree, setTree] = useState<Array<Category | any>>();
+  const [tree, setTree] = useState<Array<ArticleCategory | any>>();
 
   const [showChoose, setShowChoose] = useState(false);
 
@@ -22,7 +22,7 @@ const CategoryTree = (props: Props) => {
     }
   }, [props.category, props.categories]);
 
-  const traceParents = (category: Category) => {
+  const traceParents = (category: ArticleCategory) => {
     const parentCategory = props.categories.find(
       item => item.id === category.parentCategoryId
     );

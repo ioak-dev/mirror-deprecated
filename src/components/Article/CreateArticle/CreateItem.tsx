@@ -6,10 +6,10 @@ import OakEditor from '../../../oakui/OakEditor';
 import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import { sendMessage } from '../../../events/MessageService';
-import CategoryTree from '../../Category/CategoryTree';
+import CategoryTree from '../Category/CategoryTree';
 import OakChipGroup from '../../../oakui/OakChipGroup';
-import { ArticlePayload, Category } from '../../../types/graphql';
-import { LIST_ARTICLES, LIST_CATEGORIES } from '../../Types/schema';
+import { ArticlePayload, ArticleCategory } from '../../../types/graphql';
+import { LIST_ARTICLES, LIST_ARTICLE_CATEGORIES } from '../../Types/schema';
 
 interface Props {
   categoryid: any;
@@ -26,7 +26,7 @@ const ADD_ARTICLE = gql`
 `;
 
 const CreateItem = (props: Props) => {
-  const { loading, error, data } = useQuery(LIST_CATEGORIES);
+  const { loading, error, data } = useQuery(LIST_ARTICLE_CATEGORIES);
   const [addArticle, { data: savedArticle }] = useMutation(ADD_ARTICLE);
   const [state, setState] = useState<any>({
     title: '',
@@ -147,7 +147,7 @@ const CreateItem = (props: Props) => {
           payload,
         },
         // update: (cache, { data: { addArticle } }) => {
-        //   const data: any = cache.readQuery({ query: LIST_CATEGORIES });
+        //   const data: any = cache.readQuery({ query: LIST_ARTICLE_CATEGORIES });
         //   console.log('********');
         //   console.log(data);
         //   // data.items = [...data.items, addArticle];
@@ -190,10 +190,10 @@ const CreateItem = (props: Props) => {
       </div>
       <div className="create-article-item">
         <CategoryTree
-          category={data?.categories?.find(
-            (item: Category) => item.id === state.categoryId
+          category={data?.articleCategories?.find(
+            (item: ArticleCategory) => item.id === state.categoryId
           )}
-          categories={data?.categories}
+          categories={data?.articleCategories}
           handleChange={handleCategoryChange}
           choosable
         />

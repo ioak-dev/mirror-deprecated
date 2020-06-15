@@ -2,30 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import './style.scss';
-import { LIST_CATEGORIES } from '../../Types/schema';
-import { Category } from '../../../types/graphql';
+import { LIST_ARTICLE_CATEGORIES } from '../../../Types/schema';
+import { ArticleCategory } from '../../../../types/graphql';
 import CategoryView from './CategoryView';
 
 interface Props {
-  category: Category;
+  category: ArticleCategory;
   handleChange: Function;
 }
 
 const CategoryList = (props: Props) => {
-  const { loading, error, data } = useQuery(LIST_CATEGORIES);
+  const { loading, error, data } = useQuery(LIST_ARTICLE_CATEGORIES);
 
-  const [view, setView] = useState<Array<Category> | undefined>();
+  const [view, setView] = useState<Array<ArticleCategory> | undefined>();
 
   useEffect(() => {
-    if (data?.categories && props.category?.id) {
+    if (data?.articleCategories && props.category?.id) {
       setView(
-        data.categories.filter(
-          (item: Category) => item.parentCategoryId === props.category?.id
+        data.articleCategories.filter(
+          (item: ArticleCategory) =>
+            item.parentCategoryId === props.category?.id
         )
       );
-    } else if (data?.categories) {
+    } else if (data?.articleCategories) {
       setView(
-        data.categories.filter((item: Category) => !item.parentCategoryId)
+        data.articleCategories.filter(
+          (item: ArticleCategory) => !item.parentCategoryId
+        )
       );
     }
   }, [props.category, data]);
@@ -45,7 +48,7 @@ const CategoryList = (props: Props) => {
             props.handleChange(props.category?.parentCategoryId)
           }
         />
-        {view?.map((item: Category) => (
+        {view?.map((item: ArticleCategory) => (
           <CategoryView
             category={item}
             key={item.id}

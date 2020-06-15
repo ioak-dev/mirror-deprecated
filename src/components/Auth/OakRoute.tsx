@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
-import { useQuery, useLazyQuery, useApolloClient } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-import { connect, useSelector, useDispatch } from 'react-redux';
-import { getAuth, addAuth } from '../../actions/AuthActions';
+import React from 'react';
+import { useApolloClient } from '@apollo/react-hooks';
+import { useSelector, useDispatch } from 'react-redux';
+import { addAuth } from '../../actions/AuthActions';
 import { Authorization } from '../Types/GeneralTypes';
-import { httpGet } from '../Lib/RestTemplate';
 import { sendMessage } from '../../events/MessageService';
 import { GET_SESSION } from '../Types/schema';
 

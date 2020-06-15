@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
-import { Category } from '../../../../types/graphql';
+import { ArticleCategory } from '../../../../types/graphql';
 
 interface Props {
-  category: Category;
-  categories: Array<Category>;
+  category: ArticleCategory;
+  categories: Array<ArticleCategory>;
   handleClick: any;
 }
 
@@ -21,7 +21,7 @@ const CategoryView = (props: Props) => {
     );
   };
 
-  const addChildrenArticles = (count, category: Category) => {
+  const addChildrenArticles = (count, category: ArticleCategory) => {
     let newCount = count;
     newCount += category.articles;
     const children = props.categories.filter(

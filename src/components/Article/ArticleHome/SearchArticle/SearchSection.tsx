@@ -1,13 +1,10 @@
-import React, { useEffect, useState, FunctionComponent } from 'react';
-import { useQuery, useLazyQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import React, { useEffect, useState } from 'react';
+import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
 import { Article } from '../../../../types/graphql';
 import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
-import OakViewer from '../../../../oakui/OakViewer';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import ArticleLink from '../../ArticleLink';
-import OakButton from '../../../../oakui/OakButton';
 import { SEARCH_ARTICLES } from '../../../Types/schema';
 import OakText from '../../../../oakui/OakText';
 import AlternateSection from './AlternateSection';
@@ -31,7 +28,7 @@ const SearchSection = (props: Props) => {
   );
 
   useEffect(() => {
-    setState({ text: props.text });
+    setState({ text: props.text || '' });
     refetch();
   }, [props.text]);
 

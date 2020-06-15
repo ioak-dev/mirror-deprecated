@@ -11,7 +11,7 @@ interface Props {
 }
 
 const TagSection = (props: Props) => {
-  const { loading, error, data, fetchMore, refetch } = useQuery(TAG_CLOUD, {
+  const { data } = useQuery(TAG_CLOUD, {
     fetchPolicy: 'cache-and-network',
   });
 

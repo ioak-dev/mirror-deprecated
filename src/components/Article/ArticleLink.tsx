@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import format from 'date-fns/format';
+import React from 'react';
 import './style.scss';
 import { Article } from '../../types/graphql';
 import { formatDateText } from '../Lib/DateUtils';

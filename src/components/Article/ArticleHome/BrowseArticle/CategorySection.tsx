@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import './style.scss';
-import { Article, Category } from '../../../../types/graphql';
+import { Article, ArticleCategory } from '../../../../types/graphql';
 import CategoryView from './CategoryView';
-import CategoryTree from '../../../Category/CategoryTree';
+import CategoryTree from '../../Category/CategoryTree';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import CreateCategory from './CreateCategory';
 import CreateCategoryLink from './CreateCategoryLink';
 import OakButton from '../../../../oakui/OakButton';
-import { LIST_CATEGORIES } from '../../../Types/schema';
+import { LIST_ARTICLE_CATEGORIES } from '../../../Types/schema';
 
 interface Props {
   categoryId: string;
@@ -19,22 +19,24 @@ interface Props {
 }
 
 const CategorySection = (props: Props) => {
-  const { loading, error, data } = useQuery(LIST_CATEGORIES);
+  const { loading, error, data } = useQuery(LIST_ARTICLE_CATEGORIES);
 
-  const [view, setView] = useState<Array<Category> | undefined>();
+  const [view, setView] = useState<Array<ArticleCategory> | undefined>();
 
   const [showNewCategoryPrompt, setShowNewCategoryPrompt] = useState(false);
 
   useEffect(() => {
-    if (data?.categories && props.categoryId) {
+    if (data?.articleCategories && props.categoryId) {
       setView(
-        data.categories.filter(
-          (item: Category) => item.parentCategoryId === props.categoryId
+        data.articleCategories.filter(
+          (item: ArticleCategory) => item.parentCategoryId === props.categoryId
         )
       );
-    } else if (data?.categories) {
+    } else if (data?.articleCategories) {
       setView(
-        data.categories.filter((item: Category) => !item.parentCategoryId)
+        data.articleCategories.filter(
+          (item: ArticleCategory) => !item.parentCategoryId
+        )
       );
     }
   }, [props.categoryId, data]);
@@ -47,10 +49,10 @@ const CategorySection = (props: Props) => {
           <div className="section-subtitle">
             <div className="category-subtitle">
               <CategoryTree
-                category={data?.categories?.find(
-                  (item: Category) => item.id === props.categoryId
+                category={data?.articleCategories?.find(
+                  (item: ArticleCategory) => item.id === props.categoryId
                 )}
-                categories={data?.categories}
+                categories={data?.articleCategories}
                 handleChange={props.handleChange}
               />
             </div>
@@ -62,10 +64,10 @@ const CategorySection = (props: Props) => {
         <div className="typography-4">Choose a category to explore</div>
       )}
       <div className="category-list">
-        {view?.map((item: Category) => (
+        {view?.map((item: ArticleCategory) => (
           <CategoryView
             category={item}
-            categories={data?.categories}
+            categories={data?.articleCategories}
             key={item.id}
             handleClick={() => props.handleChange(item.id)}
           />

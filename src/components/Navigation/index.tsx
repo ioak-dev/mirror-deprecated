@@ -9,7 +9,7 @@ import './style.scss';
 import Desktop from './Desktop';
 import Mobile from './Mobile';
 
-import { Authorization, Profile } from '../Types/GeneralTypes';
+import { Profile } from '../Types/GeneralTypes';
 import { receiveMessage, sendMessage } from '../../events/MessageService';
 import { removeAuth } from '../../actions/AuthActions';
 

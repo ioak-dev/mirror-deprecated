@@ -163,9 +163,9 @@ export const DELETE_ARTICLE = gql`
   }
 `;
 
-export const LIST_CATEGORIES = gql`
-  query Categories {
-    categories {
+export const LIST_ARTICLE_CATEGORIES = gql`
+  query ArticleCategories {
+    articleCategories {
       id
       name
       parentCategoryId
@@ -175,8 +175,8 @@ export const LIST_CATEGORIES = gql`
 `;
 
 export const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory($payload: CategoryPayload!) {
-    addCategory(payload: $payload) {
+  mutation UpdateCategory($payload: ArticleCategoryPayload!) {
+    addArticleCategory(payload: $payload) {
       id
       name
       parentCategoryId

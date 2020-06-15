@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import './style.scss';
 import OakText from '../../../../oakui/OakText';
 import OakButton from '../../../../oakui/OakButton';
-import { UPDATE_CATEGORY, LIST_CATEGORIES } from '../../../Types/schema';
-import { CategoryPayload } from '../../../../types/graphql';
+import {
+  UPDATE_CATEGORY,
+  LIST_ARTICLE_CATEGORIES,
+} from '../../../Types/schema';
+import { ArticleCategoryPayload } from '../../../../types/graphql';
 
 interface Props {
   parentCategoryId: string;
@@ -12,8 +15,7 @@ interface Props {
 }
 
 const CreateCategory = (props: Props) => {
-  const { updateQuery } = useQuery(LIST_CATEGORIES);
-  const [addCategory, { data: savedCategory }] = useMutation(UPDATE_CATEGORY);
+  const [addArticleCategory] = useMutation(UPDATE_CATEGORY);
   const [state, setState] = useState({ name: '' });
 
   const handleChange = event => {
@@ -21,19 +23,21 @@ const CreateCategory = (props: Props) => {
   };
   const onSubmit = event => {
     event.preventDefault();
-    const payload: CategoryPayload = {
+    const payload: ArticleCategoryPayload = {
       name: state.name,
       parentCategoryId: props.parentCategoryId,
     };
-    addCategory({
+    addArticleCategory({
       variables: {
         payload,
       },
-      update: (cache, { data: { addCategory } }) => {
-        const data: any = cache.readQuery({ query: LIST_CATEGORIES });
+      update: (cache, { data: { addArticleCategory } }) => {
+        const data: any = cache.readQuery({ query: LIST_ARTICLE_CATEGORIES });
         cache.writeQuery({
-          query: LIST_CATEGORIES,
-          data: { categories: [...data.categories, addCategory] },
+          query: LIST_ARTICLE_CATEGORIES,
+          data: {
+            articleCategories: [...data.articleCategories, addArticleCategory],
+          },
         });
       },
     });

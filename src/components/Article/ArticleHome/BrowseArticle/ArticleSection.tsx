@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
 import './style.scss';
 import { Article } from '../../../../types/graphql';
 import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
-import OakViewer from '../../../../oakui/OakViewer';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import ArticleLink from '../../ArticleLink';
 import OakButton from '../../../../oakui/OakButton';
@@ -17,7 +15,7 @@ interface Props {
 }
 
 const ArticleSection = (props: Props) => {
-  const { loading, error, data, fetchMore, refetch } = useQuery(LIST_ARTICLES, {
+  const { loading, data, fetchMore } = useQuery(LIST_ARTICLES, {
     variables: { categoryId: props.categoryId, pageSize: 10, pageNo: 0 },
     fetchPolicy: 'cache-and-network',
   });

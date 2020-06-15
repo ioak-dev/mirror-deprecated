@@ -17,7 +17,7 @@ interface Props {
 }
 
 const EditItem = (props: Props) => {
-  const [updateAsset, { data: updatedAsset }] = useMutation(UPDATE_ASSET);
+  const [updateAsset] = useMutation(UPDATE_ASSET);
   const [state, setState] = useState<any>({
     id: '',
     name: '',

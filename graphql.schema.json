@@ -350,7 +350,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "Category",
+              "name": "ArticleCategory",
               "ofType": null
             },
             "isDeprecated": false,
@@ -590,7 +590,7 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CategoryPayload",
+        "name": "ArticleCategoryPayload",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -631,7 +631,7 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Category",
+        "name": "ArticleCategory",
         "description": null,
         "fields": [
           {
@@ -1340,7 +1340,7 @@
             "deprecationReason": null
           },
           {
-            "name": "category",
+            "name": "articleCategory",
             "description": null,
             "args": [
               {
@@ -1360,14 +1360,14 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "Category",
+              "name": "ArticleCategory",
               "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "categories",
+            "name": "articleCategories",
             "description": null,
             "args": [],
             "type": {
@@ -1375,7 +1375,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Category",
+                "name": "ArticleCategory",
                 "ofType": null
               }
             },
@@ -1677,7 +1677,7 @@
             "deprecationReason": null
           },
           {
-            "name": "addCategory",
+            "name": "addArticleCategory",
             "description": null,
             "args": [
               {
@@ -1685,7 +1685,7 @@
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "CategoryPayload",
+                  "name": "ArticleCategoryPayload",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -1693,7 +1693,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "Category",
+              "name": "ArticleCategory",
               "ofType": null
             },
             "isDeprecated": false,

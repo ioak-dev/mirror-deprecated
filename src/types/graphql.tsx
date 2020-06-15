@@ -44,7 +44,7 @@ export type Article = {
   updatedAt?: Maybe<Scalars['DateScalar']>;
   tags?: Maybe<Array<Maybe<Tag>>>;
   feedback?: Maybe<Array<Maybe<Feedback>>>;
-  category?: Maybe<Category>;
+  category?: Maybe<ArticleCategory>;
 };
 
 export type TagPaginated = {
@@ -76,14 +76,14 @@ export type Feedback = {
   user?: Maybe<User>;
 };
 
-export type CategoryPayload = {
+export type ArticleCategoryPayload = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   parentCategoryId?: Maybe<Scalars['String']>;
 };
 
-export type Category = {
-  __typename?: 'Category';
+export type ArticleCategory = {
+  __typename?: 'ArticleCategory';
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   parentCategoryId?: Maybe<Scalars['String']>;
@@ -151,8 +151,8 @@ export type Query = {
   tagCloud?: Maybe<Array<Maybe<TagCloud>>>;
   articlesByTag?: Maybe<TagPaginated>;
   feedback?: Maybe<Array<Maybe<Feedback>>>;
-  category?: Maybe<Category>;
-  categories?: Maybe<Array<Maybe<Category>>>;
+  articleCategory?: Maybe<ArticleCategory>;
+  articleCategories?: Maybe<Array<Maybe<ArticleCategory>>>;
   asset?: Maybe<Asset>;
   assetById?: Maybe<Asset>;
   assets?: Maybe<Array<Maybe<Asset>>>;
@@ -187,7 +187,7 @@ export type QueryFeedbackArgs = {
   articleId: Scalars['ID'];
 };
 
-export type QueryCategoryArgs = {
+export type QueryArticleCategoryArgs = {
   id: Scalars['ID'];
 };
 
@@ -217,7 +217,7 @@ export type Mutation = {
   deleteArticle?: Maybe<Article>;
   addFeedback?: Maybe<Feedback>;
   removeFeedback?: Maybe<Feedback>;
-  addCategory?: Maybe<Category>;
+  addArticleCategory?: Maybe<ArticleCategory>;
   updateAsset?: Maybe<Asset>;
   createAsset?: Maybe<Asset>;
   createEmailAccount: User;
@@ -241,8 +241,8 @@ export type MutationRemoveFeedbackArgs = {
   type: Scalars['String'];
 };
 
-export type MutationAddCategoryArgs = {
-  payload?: Maybe<CategoryPayload>;
+export type MutationAddArticleCategoryArgs = {
+  payload?: Maybe<ArticleCategoryPayload>;
 };
 
 export type MutationUpdateAssetArgs = {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './style.scss';
 import OakButton from '../../../oakui/OakButton';
 
@@ -11,17 +11,7 @@ interface Props {
   asset: string;
 }
 
-const queryString = require('query-string');
-
-const ArticleList = (props: Props) => {
-  const [urlParam, setUrlParam] = useState({
-    categoryid: '',
-  });
-
-  useEffect(() => {
-    setUrlParam(queryString.parse(props.location.search));
-  }, [props.location.search]);
-
+const ArticleHome = (props: Props) => {
   const browseArticle = event => {
     props.history.push(`/${props.asset}/article/browse`);
   };
@@ -67,4 +57,4 @@ const ArticleList = (props: Props) => {
   );
 };
 
-export default ArticleList;
+export default ArticleHome;

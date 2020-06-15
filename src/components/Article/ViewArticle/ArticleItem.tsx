@@ -14,10 +14,9 @@ interface Props {
 }
 
 const ArticleItem = (props: Props) => {
-  const [deleteArticle, { data: deleteResponse }] = useMutation(
-    DELETE_ARTICLE,
-    { variables: { id: props.article.id } }
-  );
+  const [deleteArticle] = useMutation(DELETE_ARTICLE, {
+    variables: { id: props.article.id },
+  });
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const editArticle = () => {

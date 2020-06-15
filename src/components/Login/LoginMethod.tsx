@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import OakButton from '../../oakui/OakButton';
+import React from 'react';
 import './style.scss';
 
 interface Props {

@@ -1,9 +1,9 @@
 import React from 'react';
 import './style.scss';
-import { Category } from '../../../types/graphql';
+import { ArticleCategory } from '../../../../types/graphql';
 
 interface Props {
-  category: Category;
+  category: ArticleCategory;
   handleChange?: any;
   parentNode?: boolean;
 }
