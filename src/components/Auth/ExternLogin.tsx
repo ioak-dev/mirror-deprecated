@@ -26,7 +26,7 @@ const ExternLogin = (props: Props) => {
   const createSession = async (token: string) => {
     const { data } = await gqlClient.query({
       query: NEW_EXTERN_SESSION,
-      variables: { token, asset: null },
+      variables: { token, asset: props.asset },
     });
     if (data?.newExternSession?.sessionId) {
       props.cookies.set(
