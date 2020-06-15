@@ -19,7 +19,6 @@ const ExternLogin = (props: Props) => {
   useEffect(() => {
     if (props.location.search) {
       const query = queryString.parse(props.location.search);
-      console.log(query.token);
       createSession(query.token);
     }
   }, []);
@@ -27,7 +26,7 @@ const ExternLogin = (props: Props) => {
   const createSession = async (token: string) => {
     const { data } = await gqlClient.query({
       query: NEW_EXTERN_SESSION,
-      variables: { token },
+      variables: { token, asset: null },
     });
     if (data?.newExternSession?.sessionId) {
       props.cookies.set(

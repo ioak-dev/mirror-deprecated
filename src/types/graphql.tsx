@@ -15,6 +15,7 @@ export type Scalars = {
   DateScalar: any;
 };
 
+
 export type ArticlePayload = {
   id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
@@ -161,9 +162,11 @@ export type Query = {
   session?: Maybe<UserSession>;
 };
 
+
 export type QueryArticleArgs = {
   id: Scalars['ID'];
 };
+
 
 export type QueryArticlesArgs = {
   categoryId: Scalars['ID'];
@@ -171,11 +174,13 @@ export type QueryArticlesArgs = {
   pageNo?: Maybe<Scalars['Int']>;
 };
 
+
 export type QuerySearchArticlesArgs = {
   text?: Maybe<Scalars['String']>;
   pageSize?: Maybe<Scalars['Int']>;
   pageNo?: Maybe<Scalars['Int']>;
 };
+
 
 export type QueryArticlesByTagArgs = {
   tag: Scalars['String'];
@@ -183,29 +188,37 @@ export type QueryArticlesByTagArgs = {
   pageNo?: Maybe<Scalars['Int']>;
 };
 
+
 export type QueryFeedbackArgs = {
   articleId: Scalars['ID'];
 };
+
 
 export type QueryArticleCategoryArgs = {
   id: Scalars['ID'];
 };
 
+
 export type QueryAssetArgs = {
   assetId: Scalars['String'];
 };
+
 
 export type QueryAssetByIdArgs = {
   id: Scalars['ID'];
 };
 
+
 export type QueryNewEmailSessionArgs = {
   email: Scalars['String'];
 };
 
+
 export type QueryNewExternSessionArgs = {
   token: Scalars['String'];
+  asset?: Maybe<Scalars['String']>;
 };
+
 
 export type QuerySessionArgs = {
   key: Scalars['ID'];
@@ -224,36 +237,44 @@ export type Mutation = {
   createEmailAccount: User;
 };
 
+
 export type MutationAddArticleArgs = {
   payload?: Maybe<ArticlePayload>;
 };
 
+
 export type MutationDeleteArticleArgs = {
   id: Scalars['ID'];
 };
+
 
 export type MutationAddFeedbackArgs = {
   articleId: Scalars['String'];
   type: Scalars['String'];
 };
 
+
 export type MutationRemoveFeedbackArgs = {
   articleId: Scalars['String'];
   type: Scalars['String'];
 };
 
+
 export type MutationAddArticleCategoryArgs = {
   payload?: Maybe<ArticleCategoryPayload>;
 };
+
 
 export type MutationUpdateAssetArgs = {
   payload?: Maybe<AssetPayload>;
 };
 
+
 export type MutationCreateAssetArgs = {
   payload?: Maybe<AssetPayload>;
   addition?: Maybe<AssetAdditionPayload>;
 };
+
 
 export type MutationCreateEmailAccountArgs = {
   payload?: Maybe<UserPayload>;
@@ -263,155 +284,85 @@ export type AddArticleMutationVariables = {
   payload: ArticlePayload;
 };
 
-export type AddArticleMutation = { __typename?: 'Mutation' } & {
-  addArticle?: Maybe<{ __typename?: 'Article' } & Pick<Article, 'id'>>;
-};
+
+export type AddArticleMutation = (
+  { __typename?: 'Mutation' }
+  & { addArticle?: Maybe<(
+    { __typename?: 'Article' }
+    & Pick<Article, 'id'>
+  )> }
+);
 
 export type CreateAssetMutationVariables = {
   payload: AssetPayload;
   addition: AssetAdditionPayload;
 };
 
-export type CreateAssetMutation = { __typename?: 'Mutation' } & {
-  createAsset?: Maybe<{ __typename?: 'Asset' } & Pick<Asset, 'id'>>;
-};
+
+export type CreateAssetMutation = (
+  { __typename?: 'Mutation' }
+  & { createAsset?: Maybe<(
+    { __typename?: 'Asset' }
+    & Pick<Asset, 'id'>
+  )> }
+);
+
 
 export const AddArticleDocument = gql`
-  mutation AddArticle($payload: ArticlePayload!) {
-    addArticle(payload: $payload) {
-      id
-    }
+    mutation AddArticle($payload: ArticlePayload!) {
+  addArticle(payload: $payload) {
+    id
   }
-`;
-export type AddArticleMutationFn = ApolloReactCommon.MutationFunction<
-  AddArticleMutation,
-  AddArticleMutationVariables
->;
-export type AddArticleComponentProps = Omit<
-  ApolloReactComponents.MutationComponentOptions<
-    AddArticleMutation,
-    AddArticleMutationVariables
-  >,
-  'mutation'
->;
-
-export const AddArticleComponent = (props: AddArticleComponentProps) => (
-  <ApolloReactComponents.Mutation<
-    AddArticleMutation,
-    AddArticleMutationVariables
-  >
-    mutation={AddArticleDocument}
-    {...props}
-  />
-);
-
-export type AddArticleProps<
-  TChildProps = {},
-  TDataName extends string = 'mutate'
-> = {
-  [key in TDataName]: ApolloReactCommon.MutationFunction<
-    AddArticleMutation,
-    AddArticleMutationVariables
-  >;
-} &
-  TChildProps;
-export function withAddArticle<
-  TProps,
-  TChildProps = {},
-  TDataName extends string = 'mutate'
->(
-  operationOptions?: ApolloReactHoc.OperationOption<
-    TProps,
-    AddArticleMutation,
-    AddArticleMutationVariables,
-    AddArticleProps<TChildProps, TDataName>
-  >
-) {
-  return ApolloReactHoc.withMutation<
-    TProps,
-    AddArticleMutation,
-    AddArticleMutationVariables,
-    AddArticleProps<TChildProps, TDataName>
-  >(AddArticleDocument, {
-    alias: 'addArticle',
-    ...operationOptions,
-  });
 }
-export type AddArticleMutationResult = ApolloReactCommon.MutationResult<
-  AddArticleMutation
->;
-export type AddArticleMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    `;
+export type AddArticleMutationFn = ApolloReactCommon.MutationFunction<AddArticleMutation, AddArticleMutationVariables>;
+export type AddArticleComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddArticleMutation, AddArticleMutationVariables>, 'mutation'>;
+
+    export const AddArticleComponent = (props: AddArticleComponentProps) => (
+      <ApolloReactComponents.Mutation<AddArticleMutation, AddArticleMutationVariables> mutation={AddArticleDocument} {...props} />
+    );
+    
+export type AddArticleProps<TChildProps = {}, TDataName extends string = 'mutate'> = {
+      [key in TDataName]: ApolloReactCommon.MutationFunction<AddArticleMutation, AddArticleMutationVariables>
+    } & TChildProps;
+export function withAddArticle<TProps, TChildProps = {}, TDataName extends string = 'mutate'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
   AddArticleMutation,
-  AddArticleMutationVariables
->;
+  AddArticleMutationVariables,
+  AddArticleProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withMutation<TProps, AddArticleMutation, AddArticleMutationVariables, AddArticleProps<TChildProps, TDataName>>(AddArticleDocument, {
+      alias: 'addArticle',
+      ...operationOptions
+    });
+};
+export type AddArticleMutationResult = ApolloReactCommon.MutationResult<AddArticleMutation>;
+export type AddArticleMutationOptions = ApolloReactCommon.BaseMutationOptions<AddArticleMutation, AddArticleMutationVariables>;
 export const CreateAssetDocument = gql`
-  mutation createAsset(
-    $payload: AssetPayload!
-    $addition: AssetAdditionPayload!
-  ) {
-    createAsset(payload: $payload, addition: $addition) {
-      id
-    }
+    mutation createAsset($payload: AssetPayload!, $addition: AssetAdditionPayload!) {
+  createAsset(payload: $payload, addition: $addition) {
+    id
   }
-`;
-export type CreateAssetMutationFn = ApolloReactCommon.MutationFunction<
-  CreateAssetMutation,
-  CreateAssetMutationVariables
->;
-export type CreateAssetComponentProps = Omit<
-  ApolloReactComponents.MutationComponentOptions<
-    CreateAssetMutation,
-    CreateAssetMutationVariables
-  >,
-  'mutation'
->;
-
-export const CreateAssetComponent = (props: CreateAssetComponentProps) => (
-  <ApolloReactComponents.Mutation<
-    CreateAssetMutation,
-    CreateAssetMutationVariables
-  >
-    mutation={CreateAssetDocument}
-    {...props}
-  />
-);
-
-export type CreateAssetProps<
-  TChildProps = {},
-  TDataName extends string = 'mutate'
-> = {
-  [key in TDataName]: ApolloReactCommon.MutationFunction<
-    CreateAssetMutation,
-    CreateAssetMutationVariables
-  >;
-} &
-  TChildProps;
-export function withCreateAsset<
-  TProps,
-  TChildProps = {},
-  TDataName extends string = 'mutate'
->(
-  operationOptions?: ApolloReactHoc.OperationOption<
-    TProps,
-    CreateAssetMutation,
-    CreateAssetMutationVariables,
-    CreateAssetProps<TChildProps, TDataName>
-  >
-) {
-  return ApolloReactHoc.withMutation<
-    TProps,
-    CreateAssetMutation,
-    CreateAssetMutationVariables,
-    CreateAssetProps<TChildProps, TDataName>
-  >(CreateAssetDocument, {
-    alias: 'createAsset',
-    ...operationOptions,
-  });
 }
-export type CreateAssetMutationResult = ApolloReactCommon.MutationResult<
-  CreateAssetMutation
->;
-export type CreateAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    `;
+export type CreateAssetMutationFn = ApolloReactCommon.MutationFunction<CreateAssetMutation, CreateAssetMutationVariables>;
+export type CreateAssetComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateAssetMutation, CreateAssetMutationVariables>, 'mutation'>;
+
+    export const CreateAssetComponent = (props: CreateAssetComponentProps) => (
+      <ApolloReactComponents.Mutation<CreateAssetMutation, CreateAssetMutationVariables> mutation={CreateAssetDocument} {...props} />
+    );
+    
+export type CreateAssetProps<TChildProps = {}, TDataName extends string = 'mutate'> = {
+      [key in TDataName]: ApolloReactCommon.MutationFunction<CreateAssetMutation, CreateAssetMutationVariables>
+    } & TChildProps;
+export function withCreateAsset<TProps, TChildProps = {}, TDataName extends string = 'mutate'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
   CreateAssetMutation,
-  CreateAssetMutationVariables
->;
+  CreateAssetMutationVariables,
+  CreateAssetProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withMutation<TProps, CreateAssetMutation, CreateAssetMutationVariables, CreateAssetProps<TChildProps, TDataName>>(CreateAssetDocument, {
+      alias: 'createAsset',
+      ...operationOptions
+    });
+};
+export type CreateAssetMutationResult = ApolloReactCommon.MutationResult<CreateAssetMutation>;
+export type CreateAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateAssetMutation, CreateAssetMutationVariables>;

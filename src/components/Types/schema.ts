@@ -21,8 +21,8 @@ export const NEW_EMAIL_SESSION = gql`
 `;
 
 export const NEW_EXTERN_SESSION = gql`
-  query NewExternSession($token: String!) {
-    newExternSession(token: $token) {
+  query NewExternSession($token: String!, $asset: String) {
+    newExternSession(token: $token, asset: $asset) {
       sessionId
     }
   }
