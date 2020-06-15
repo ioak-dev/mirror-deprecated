@@ -209,6 +209,7 @@ export type QueryNewExternSessionArgs = {
 
 export type QuerySessionArgs = {
   key: Scalars['ID'];
+  asset?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {

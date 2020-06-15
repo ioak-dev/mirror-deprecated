@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_SESSION = gql`
-  query Session($key: ID!) {
-    session(key: $key) {
+  query Session($key: ID!, $asset: String) {
+    session(key: $key, asset: $asset) {
       id
       firstName
       lastName

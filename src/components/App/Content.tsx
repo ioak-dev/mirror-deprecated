@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, connect } from 'react-redux';
 
 import { InMemoryCache } from 'apollo-boost';
@@ -39,6 +39,7 @@ import OneAuth from '../Login/OneAuth/index';
 import Email from '../Login/Email/index';
 import Login from '../Login/index';
 import ExternLogin from '../Auth/ExternLogin';
+import { receiveMessage } from '../../events/MessageService';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -77,6 +78,15 @@ interface Props {
 
 const Content = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
+  const [asset, setAsset] = useState('');
+
+  useEffect(() => {
+    receiveMessage().subscribe(event => {
+      if (event.name === 'spaceChange') {
+        setAsset(event.data);
+      }
+    });
+  }, []);
 
   const httpLink = createHttpLink({
     uri: process.env.REACT_APP_GRAPHQL_URL,
@@ -86,7 +96,7 @@ const Content = (props: Props) => {
     return {
       headers: {
         ...headers,
-        authorization: authorization?.token || '',
+        authorization: `${asset} ${authorization?.token}` || '',
       },
     };
   });

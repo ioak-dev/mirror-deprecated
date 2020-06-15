@@ -64,7 +64,7 @@ const OakRoute = (props: Props) => {
     if (authKey) {
       const { data } = await gqlClient.query({
         query: GET_SESSION,
-        variables: { key: authKey },
+        variables: { key: authKey, asset: props.match.params.asset },
       });
 
       if (data?.session) {
