@@ -4,7 +4,7 @@ import OakPrompt from '../../../oakui/OakPrompt';
 import { Article } from '../../../types/graphql';
 import OakViewer from '../../../oakui/OakViewer';
 import TagContainer from './TagContainer';
-import { DELETE_ARTICLE } from '../../Types/schema';
+import { DELETE_ARTICLE } from '../../Types/ArticleSchema';
 
 interface Props {
   id: string;

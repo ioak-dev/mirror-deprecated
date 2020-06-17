@@ -4,7 +4,7 @@ import './style.scss';
 import { useQuery } from '@apollo/react-hooks';
 import EditItem from './EditItem';
 import OakSpinner from '../../../oakui/OakSpinner';
-import { GET_ARTICLE } from '../../Types/schema';
+import { GET_ARTICLE } from '../../Types/ArticleSchema';
 
 interface Props {
   asset: string;

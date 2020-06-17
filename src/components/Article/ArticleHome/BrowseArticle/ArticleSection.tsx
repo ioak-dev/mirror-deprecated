@@ -6,7 +6,7 @@ import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import ArticleLink from '../../ArticleLink';
 import OakButton from '../../../../oakui/OakButton';
-import { LIST_ARTICLES } from '../../../Types/schema';
+import { LIST_ARTICLES } from '../../../Types/ArticleSchema';
 
 interface Props {
   categoryId: string;

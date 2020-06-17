@@ -9,7 +9,7 @@ import OakSpinner from '../../../../oakui/OakSpinner';
 import CreateCategory from './CreateCategory';
 import CreateCategoryLink from './CreateCategoryLink';
 import OakButton from '../../../../oakui/OakButton';
-import { LIST_ARTICLE_CATEGORIES } from '../../../Types/schema';
+import { LIST_ARTICLE_CATEGORIES } from '../../../Types/ArticleSchema';
 
 interface Props {
   categoryId: string;

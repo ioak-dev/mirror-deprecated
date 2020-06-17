@@ -5,7 +5,7 @@ import { Article } from '../../../../types/graphql';
 import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import ArticleLink from '../../ArticleLink';
-import { SEARCH_ARTICLES } from '../../../Types/schema';
+import { SEARCH_ARTICLES } from '../../../Types/ArticleSchema';
 import OakText from '../../../../oakui/OakText';
 import AlternateSection from './AlternateSection';
 

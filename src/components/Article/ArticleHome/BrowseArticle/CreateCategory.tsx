@@ -4,9 +4,9 @@ import './style.scss';
 import OakText from '../../../../oakui/OakText';
 import OakButton from '../../../../oakui/OakButton';
 import {
-  UPDATE_CATEGORY,
+  UPDATE_ARTICLE_CATEGORY,
   LIST_ARTICLE_CATEGORIES,
-} from '../../../Types/schema';
+} from '../../../Types/ArticleSchema';
 import { ArticleCategoryPayload } from '../../../../types/graphql';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const CreateCategory = (props: Props) => {
-  const [addArticleCategory] = useMutation(UPDATE_CATEGORY);
+  const [addArticleCategory] = useMutation(UPDATE_ARTICLE_CATEGORY);
   const [state, setState] = useState({ name: '' });
 
   const handleChange = event => {

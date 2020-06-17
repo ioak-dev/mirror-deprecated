@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { Article, Feedback } from '../../../types/graphql';
-import { ADD_FEEDBACK, REMOVE_FEEDBACK, GET_ARTICLE } from '../../Types/schema';
+import { Article } from '../../../types/graphql';
+import {
+  ADD_ARTICLE_FEEDBACK,
+  REMOVE_ARTICLE_FEEDBACK,
+  GET_ARTICLE,
+} from '../../Types/ArticleSchema';
 import { sendMessage } from '../../../events/MessageService';
 
 interface Props {
@@ -9,15 +13,17 @@ interface Props {
 }
 
 const FeedbackView = (props: Props) => {
-  const [addFeedback, { data: addedFeedback }] = useMutation(ADD_FEEDBACK);
-  const [removeFeedback, { data: removedFeedback }] = useMutation(
-    REMOVE_FEEDBACK
+  const [addArticleFeedback, { data: addedFeedback }] = useMutation(
+    ADD_ARTICLE_FEEDBACK
+  );
+  const [removeArticleFeedback, { data: removedFeedback }] = useMutation(
+    REMOVE_ARTICLE_FEEDBACK
   );
   const [providedFeedbacks, setProvidedFeedbacks] = useState<any[]>([]);
 
   const feedback = type => {
     if (providedFeedbacks.includes(type)) {
-      removeFeedback({
+      removeArticleFeedback({
         variables: {
           articleId: props.article.id,
           type,
@@ -29,7 +35,7 @@ const FeedbackView = (props: Props) => {
         });
       });
     } else {
-      addFeedback({
+      addArticleFeedback({
         variables: {
           articleId: props.article.id,
           type,

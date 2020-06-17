@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
-import { TAG_CLOUD } from '../../../Types/schema';
+import { ARTICLE_TAG_CLOUD } from '../../../Types/ArticleSchema';
 import TagLink from './TagLink';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const TagSection = (props: Props) => {
-  const { data } = useQuery(TAG_CLOUD, {
+  const { data } = useQuery(ARTICLE_TAG_CLOUD, {
     fetchPolicy: 'cache-and-network',
   });
 
@@ -34,7 +34,7 @@ const TagSection = (props: Props) => {
           <div className="page-highlight" />
         </div>
         <div className="tag-section">
-          {data?.tagCloud?.map(item => (
+          {data?.articleTagCloud?.map(item => (
             <TagLink
               key={item.name}
               tag={item}

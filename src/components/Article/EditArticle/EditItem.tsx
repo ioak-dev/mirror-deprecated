@@ -12,7 +12,10 @@ import {
   ArticleCategory,
 } from '../../../types/graphql';
 import OakChipGroup from '../../../oakui/OakChipGroup';
-import { UPDATE_ARTICLE, LIST_ARTICLE_CATEGORIES } from '../../Types/schema';
+import {
+  UPDATE_ARTICLE,
+  LIST_ARTICLE_CATEGORIES,
+} from '../../Types/ArticleSchema';
 
 interface Props {
   id: string;

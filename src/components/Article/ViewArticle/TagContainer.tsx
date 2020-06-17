@@ -1,10 +1,10 @@
 import React from 'react';
 import Maybe from 'graphql/tsutils/Maybe';
-import { Tag } from '../../../types/graphql';
+import { ArticleTag } from '../../../types/graphql';
 import TagItem from './TagItem';
 
 interface Props {
-  tags: Array<Maybe<Tag>>;
+  tags: Array<Maybe<ArticleTag>>;
   history: any;
   asset: string;
 }
@@ -12,7 +12,7 @@ interface Props {
 const TagContainer = (props: Props) => {
   return (
     <div className="tag-container">
-      {props.tags.map((item: Maybe<Tag>) => (
+      {props.tags.map((item: Maybe<ArticleTag>) => (
         <div key={item?.id}>
           {item && (
             <TagItem

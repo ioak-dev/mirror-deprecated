@@ -9,7 +9,10 @@ import { sendMessage } from '../../../events/MessageService';
 import CategoryTree from '../Category/CategoryTree';
 import OakChipGroup from '../../../oakui/OakChipGroup';
 import { ArticlePayload, ArticleCategory } from '../../../types/graphql';
-import { LIST_ARTICLES, LIST_ARTICLE_CATEGORIES } from '../../Types/schema';
+import {
+  LIST_ARTICLES,
+  LIST_ARTICLE_CATEGORIES,
+} from '../../Types/ArticleSchema';
 
 interface Props {
   categoryid: any;

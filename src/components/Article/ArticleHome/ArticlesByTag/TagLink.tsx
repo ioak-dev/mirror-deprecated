@@ -1,9 +1,9 @@
 import React from 'react';
 import './style.scss';
-import { TagCloud } from '../../../../types/graphql';
+import { ArticleTagCloud } from '../../../../types/graphql';
 
 interface Props {
-  tag: TagCloud;
+  tag: ArticleTagCloud;
   handleClick: any;
 }
 

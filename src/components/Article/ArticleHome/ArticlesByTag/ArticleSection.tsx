@@ -1,10 +1,10 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
-import { ARTICLES_BY_TAG } from '../../../Types/schema';
+import { ARTICLES_BY_TAG } from '../../../Types/ArticleSchema';
 import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
 import ArticleLink from '../../ArticleLink';
-import { Article, Tag } from '../../../../types/graphql';
+import { Article, ArticleTag } from '../../../../types/graphql';
 import OakSpinner from '../../../../oakui/OakSpinner';
 
 interface Props {
@@ -83,17 +83,19 @@ const ArticleSection = (props: Props) => {
           >
             <div className="search-results-section">
               <div className="search-results-container">
-                {data?.articlesByTag?.results?.map((item: Tag, index) => (
-                  <div key={item?.article?.id || index}>
-                    {item?.article && (
-                      <ArticleLink
-                        article={item.article}
-                        asset={props.asset}
-                        history={props.history}
-                      />
-                    )}
-                  </div>
-                ))}
+                {data?.articlesByTag?.results?.map(
+                  (item: ArticleTag, index) => (
+                    <div key={item?.article?.id || index}>
+                      {item?.article && (
+                        <ArticleLink
+                          article={item.article}
+                          asset={props.asset}
+                          history={props.history}
+                        />
+                      )}
+                    </div>
+                  )
+                )}
                 {/* {data?.articlesByTag?.results?.length === 0 &&
               props.text &&
               !loading && (

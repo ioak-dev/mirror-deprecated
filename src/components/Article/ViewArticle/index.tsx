@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import './style.scss';
 import ArticleItem from './ArticleItem';
-import { GET_ARTICLE } from '../../Types/schema';
+import { GET_ARTICLE } from '../../Types/ArticleSchema';
 import OakButton from '../../../oakui/OakButton';
 import FeedbackView from './FeedbackView';
 import OakSpinner from '../../../oakui/OakSpinner';
