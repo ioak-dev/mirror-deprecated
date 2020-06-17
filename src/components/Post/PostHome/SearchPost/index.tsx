@@ -39,7 +39,7 @@ const SearchPost = (props: Props) => {
             <div className="page-subtitle">
               <div className="browse-post-subtitle">
                 <div className="hyperlink" onClick={browsePost}>
-                  Or Browse by category instead
+                  Or Browse by timeline instead
                 </div>
               </div>
             </div>

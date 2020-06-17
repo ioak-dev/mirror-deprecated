@@ -23,7 +23,7 @@ const AlternateSection = (props: Props) => {
       </div>
       <div className="no-post-match-action">
         <div className="hyperlink" onClick={browsePost}>
-          Browse posts by category
+          Browse posts by timeline
         </div>
         <div className="hyperlink" onClick={browsePost}>
           Submit your question

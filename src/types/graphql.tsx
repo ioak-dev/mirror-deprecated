@@ -147,7 +147,6 @@ export type PostPayload = {
   id?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  categoryId?: Maybe<Scalars['String']>;
   addTags?: Maybe<Array<Maybe<Scalars['String']>>>;
   removeTags?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
@@ -172,7 +171,6 @@ export type Post = {
   updatedAt?: Maybe<Scalars['DateScalar']>;
   tags?: Maybe<Array<Maybe<PostTag>>>;
   feedback?: Maybe<Array<Maybe<PostFeedback>>>;
-  category?: Maybe<PostCategory>;
 };
 
 export type PostTagPaginated = {
@@ -203,20 +201,6 @@ export type PostFeedback = {
   post?: Maybe<Post>;
 };
 
-export type PostCategoryPayload = {
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  parentCategoryId?: Maybe<Scalars['String']>;
-};
-
-export type PostCategory = {
-  __typename?: 'PostCategory';
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  parentCategoryId?: Maybe<Scalars['String']>;
-  posts?: Maybe<Scalars['Int']>;
-};
-
 export type Query = {
   __typename?: 'Query';
   asset?: Maybe<Asset>;
@@ -239,8 +223,6 @@ export type Query = {
   postTagCloud?: Maybe<Array<Maybe<PostTagCloud>>>;
   postsByTag?: Maybe<PostTagPaginated>;
   postFeedback?: Maybe<Array<Maybe<PostFeedback>>>;
-  postCategory?: Maybe<PostCategory>;
-  postCategories?: Maybe<Array<Maybe<PostCategory>>>;
 };
 
 export type QueryAssetArgs = {
@@ -300,7 +282,6 @@ export type QueryPostArgs = {
 };
 
 export type QueryPostsArgs = {
-  categoryId: Scalars['ID'];
   pageSize?: Maybe<Scalars['Int']>;
   pageNo?: Maybe<Scalars['Int']>;
 };
@@ -321,10 +302,6 @@ export type QueryPostFeedbackArgs = {
   postId: Scalars['ID'];
 };
 
-export type QueryPostCategoryArgs = {
-  id: Scalars['ID'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   updateAsset?: Maybe<Asset>;
@@ -339,7 +316,6 @@ export type Mutation = {
   deletePost?: Maybe<Post>;
   addPostFeedback?: Maybe<PostFeedback>;
   removePostFeedback?: Maybe<PostFeedback>;
-  addPostCategory?: Maybe<PostCategory>;
 };
 
 export type MutationUpdateAssetArgs = {
@@ -393,10 +369,6 @@ export type MutationAddPostFeedbackArgs = {
 export type MutationRemovePostFeedbackArgs = {
   postId: Scalars['String'];
   type: Scalars['String'];
-};
-
-export type MutationAddPostCategoryArgs = {
-  payload?: Maybe<PostCategoryPayload>;
 };
 
 export type AddArticleMutationVariables = {

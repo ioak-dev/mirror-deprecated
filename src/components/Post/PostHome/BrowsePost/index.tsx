@@ -5,23 +5,11 @@ import PostSection from './PostSection';
 interface Props {
   setProfile: Function;
   profile: any;
-  match: any;
-  location: any;
   history: any;
   asset: string;
 }
 
-const queryString = require('query-string');
-
 const BrowsePost = (props: Props) => {
-  const [urlParam, setUrlParam] = useState({
-    categoryid: '',
-  });
-
-  useEffect(() => {
-    setUrlParam(queryString.parse(props.location.search));
-  }, [props.location.search]);
-
   const searchPost = event => {
     props.history.push(`/${props.asset}/post/search`);
   };
@@ -46,11 +34,7 @@ const BrowsePost = (props: Props) => {
             post
           </div>
           <div className="section-close" />
-          <PostSection
-            categoryId={urlParam.categoryid}
-            history={props.history}
-            asset={props.asset}
-          />
+          <PostSection history={props.history} asset={props.asset} />
         </div>
       </div>
     </div>

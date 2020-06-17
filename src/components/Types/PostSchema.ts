@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const LIST_POSTS = gql`
-  query Posts($categoryId: ID!, $pageNo: Int, $pageSize: Int) {
-    posts(categoryId: $categoryId, pageNo: $pageNo, pageSize: $pageSize) {
+  query Posts($pageNo: Int, $pageSize: Int) {
+    posts(pageNo: $pageNo, pageSize: $pageSize) {
       results {
         id
         title
@@ -61,9 +61,6 @@ export const GET_POST = gql`
       tags {
         id
         name
-      }
-      category {
-        id
       }
       feedback {
         type
@@ -126,28 +123,6 @@ export const DELETE_POST = gql`
   }
 `;
 
-export const LIST_POST_CATEGORIES = gql`
-  query PostCategories {
-    postCategories {
-      id
-      name
-      parentCategoryId
-      posts
-    }
-  }
-`;
-
-export const UPDATE_POST_CATEGORY = gql`
-  mutation UpdatePostCategory($payload: PostCategoryPayload!) {
-    addPostCategory(payload: $payload) {
-      id
-      name
-      parentCategoryId
-      posts
-    }
-  }
-`;
-
 export const ADD_POST_FEEDBACK = gql`
   mutation AddPostFeedback($postId: String!, $type: String!) {
     addPostFeedback(postId: $postId, type: $type) {
@@ -164,9 +139,6 @@ export const ADD_POST_FEEDBACK = gql`
         tags {
           id
           name
-        }
-        category {
-          id
         }
         feedback {
           type
@@ -192,9 +164,6 @@ export const REMOVE_POST_FEEDBACK = gql`
         tags {
           id
           name
-        }
-        category {
-          id
         }
         feedback {
           type

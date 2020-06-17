@@ -74,13 +74,6 @@ const PostItem = (props: Props) => {
                 </div>
               </div>
             </div>
-            {/* <CategoryTree
-          category={data?.categories?.find(
-            (item: Category) => item.id === urlParam.categoryid
-          )}
-          categories={data?.categories}
-          handleChange={handleChange}
-        /> */}
           </div>
           <div className="page-highlight" />
         </div>

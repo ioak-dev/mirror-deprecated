@@ -27,7 +27,6 @@ const CreateItem = (props: Props) => {
     title: '',
     description: '',
     tags: [],
-    categoryId: '',
     addTags: [],
     removeTags: [],
   });
@@ -123,7 +122,6 @@ const CreateItem = (props: Props) => {
     if (isEmptyAttributes(errorFields)) {
       const payload: PostPayload = {
         title: state.title,
-        categoryId: state.categoryId,
         description: state.description,
         addTags: state.addTags,
         removeTags: state.removeTags,
@@ -132,13 +130,6 @@ const CreateItem = (props: Props) => {
         variables: {
           payload,
         },
-        // update: (cache, { data: { addPost } }) => {
-        //   const data: any = cache.readQuery({ query: LIST_POST_CATEGORIES });
-        //   console.log('********');
-        //   console.log(data);
-        //   // data.items = [...data.items, addPost];
-        //   // cache.writeQuery({ query: GET_ITEMS }, data);
-        // },
       }).then(response => {
         props.history.length > 2
           ? props.history.goBack()
@@ -176,7 +167,6 @@ const CreateItem = (props: Props) => {
       </div>
       <div className="create-post-item">
         <div className="user-form">
-          {/* <CategoryTree id={props.categoryid} /> */}
           <OakText
             label="Title"
             data={state}
