@@ -143,6 +143,80 @@ export type ArticleCategory = {
   articles?: Maybe<Scalars['Int']>;
 };
 
+export type PostPayload = {
+  id?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  categoryId?: Maybe<Scalars['String']>;
+  addTags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  removeTags?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export type PostPaginated = {
+  __typename?: 'PostPaginated';
+  pageNo?: Maybe<Scalars['Int']>;
+  hasMore?: Maybe<Scalars['Boolean']>;
+  total?: Maybe<Scalars['Int']>;
+  results: Array<Maybe<Post>>;
+};
+
+export type Post = {
+  __typename?: 'Post';
+  id: Scalars['ID'];
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  views: Scalars['Int'];
+  helpful: Scalars['Int'];
+  notHelpful: Scalars['Int'];
+  createdAt?: Maybe<Scalars['DateScalar']>;
+  updatedAt?: Maybe<Scalars['DateScalar']>;
+  tags?: Maybe<Array<Maybe<PostTag>>>;
+  feedback?: Maybe<Array<Maybe<PostFeedback>>>;
+  category?: Maybe<PostCategory>;
+};
+
+export type PostTagPaginated = {
+  __typename?: 'PostTagPaginated';
+  pageNo?: Maybe<Scalars['Int']>;
+  hasMore?: Maybe<Scalars['Boolean']>;
+  total?: Maybe<Scalars['Int']>;
+  results: Array<Maybe<PostTag>>;
+};
+
+export type PostTagCloud = {
+  __typename?: 'PostTagCloud';
+  name?: Maybe<Scalars['String']>;
+  count?: Maybe<Scalars['Int']>;
+};
+
+export type PostTag = {
+  __typename?: 'PostTag';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  post?: Maybe<Post>;
+};
+
+export type PostFeedback = {
+  __typename?: 'PostFeedback';
+  id: Scalars['ID'];
+  type?: Maybe<Scalars['String']>;
+  post?: Maybe<Post>;
+};
+
+export type PostCategoryPayload = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  parentCategoryId?: Maybe<Scalars['String']>;
+};
+
+export type PostCategory = {
+  __typename?: 'PostCategory';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  parentCategoryId?: Maybe<Scalars['String']>;
+  posts?: Maybe<Scalars['Int']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   asset?: Maybe<Asset>;
@@ -159,6 +233,14 @@ export type Query = {
   articleFeedback?: Maybe<Array<Maybe<ArticleFeedback>>>;
   articleCategory?: Maybe<ArticleCategory>;
   articleCategories?: Maybe<Array<Maybe<ArticleCategory>>>;
+  post?: Maybe<Post>;
+  posts?: Maybe<PostPaginated>;
+  searchPosts?: Maybe<PostPaginated>;
+  postTagCloud?: Maybe<Array<Maybe<PostTagCloud>>>;
+  postsByTag?: Maybe<PostTagPaginated>;
+  postFeedback?: Maybe<Array<Maybe<PostFeedback>>>;
+  postCategory?: Maybe<PostCategory>;
+  postCategories?: Maybe<Array<Maybe<PostCategory>>>;
 };
 
 export type QueryAssetArgs = {
@@ -213,6 +295,36 @@ export type QueryArticleCategoryArgs = {
   id: Scalars['ID'];
 };
 
+export type QueryPostArgs = {
+  id: Scalars['ID'];
+};
+
+export type QueryPostsArgs = {
+  categoryId: Scalars['ID'];
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
+};
+
+export type QuerySearchPostsArgs = {
+  text?: Maybe<Scalars['String']>;
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
+};
+
+export type QueryPostsByTagArgs = {
+  tag: Scalars['String'];
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
+};
+
+export type QueryPostFeedbackArgs = {
+  postId: Scalars['ID'];
+};
+
+export type QueryPostCategoryArgs = {
+  id: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   updateAsset?: Maybe<Asset>;
@@ -223,6 +335,11 @@ export type Mutation = {
   addArticleFeedback?: Maybe<ArticleFeedback>;
   removeArticleFeedback?: Maybe<ArticleFeedback>;
   addArticleCategory?: Maybe<ArticleCategory>;
+  addPost?: Maybe<Post>;
+  deletePost?: Maybe<Post>;
+  addPostFeedback?: Maybe<PostFeedback>;
+  removePostFeedback?: Maybe<PostFeedback>;
+  addPostCategory?: Maybe<PostCategory>;
 };
 
 export type MutationUpdateAssetArgs = {
@@ -260,6 +377,28 @@ export type MutationAddArticleCategoryArgs = {
   payload?: Maybe<ArticleCategoryPayload>;
 };
 
+export type MutationAddPostArgs = {
+  payload?: Maybe<PostPayload>;
+};
+
+export type MutationDeletePostArgs = {
+  id: Scalars['ID'];
+};
+
+export type MutationAddPostFeedbackArgs = {
+  postId: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type MutationRemovePostFeedbackArgs = {
+  postId: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type MutationAddPostCategoryArgs = {
+  payload?: Maybe<PostCategoryPayload>;
+};
+
 export type AddArticleMutationVariables = {
   payload: ArticlePayload;
 };
@@ -275,6 +414,14 @@ export type CreateAssetMutationVariables = {
 
 export type CreateAssetMutation = { __typename?: 'Mutation' } & {
   createAsset?: Maybe<{ __typename?: 'Asset' } & Pick<Asset, 'id'>>;
+};
+
+export type AddPostMutationVariables = {
+  payload: PostPayload;
+};
+
+export type AddPostMutation = { __typename?: 'Mutation' } & {
+  addPost?: Maybe<{ __typename?: 'Post' } & Pick<Post, 'id'>>;
 };
 
 export const AddArticleDocument = gql`
@@ -415,4 +562,69 @@ export type CreateAssetMutationResult = ApolloReactCommon.MutationResult<
 export type CreateAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<
   CreateAssetMutation,
   CreateAssetMutationVariables
+>;
+export const AddPostDocument = gql`
+  mutation AddPost($payload: PostPayload!) {
+    addPost(payload: $payload) {
+      id
+    }
+  }
+`;
+export type AddPostMutationFn = ApolloReactCommon.MutationFunction<
+  AddPostMutation,
+  AddPostMutationVariables
+>;
+export type AddPostComponentProps = Omit<
+  ApolloReactComponents.MutationComponentOptions<
+    AddPostMutation,
+    AddPostMutationVariables
+  >,
+  'mutation'
+>;
+
+export const AddPostComponent = (props: AddPostComponentProps) => (
+  <ApolloReactComponents.Mutation<AddPostMutation, AddPostMutationVariables>
+    mutation={AddPostDocument}
+    {...props}
+  />
+);
+
+export type AddPostProps<
+  TChildProps = {},
+  TDataName extends string = 'mutate'
+> = {
+  [key in TDataName]: ApolloReactCommon.MutationFunction<
+    AddPostMutation,
+    AddPostMutationVariables
+  >;
+} &
+  TChildProps;
+export function withAddPost<
+  TProps,
+  TChildProps = {},
+  TDataName extends string = 'mutate'
+>(
+  operationOptions?: ApolloReactHoc.OperationOption<
+    TProps,
+    AddPostMutation,
+    AddPostMutationVariables,
+    AddPostProps<TChildProps, TDataName>
+  >
+) {
+  return ApolloReactHoc.withMutation<
+    TProps,
+    AddPostMutation,
+    AddPostMutationVariables,
+    AddPostProps<TChildProps, TDataName>
+  >(AddPostDocument, {
+    alias: 'addPost',
+    ...operationOptions,
+  });
+}
+export type AddPostMutationResult = ApolloReactCommon.MutationResult<
+  AddPostMutation
+>;
+export type AddPostMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddPostMutation,
+  AddPostMutationVariables
 >;

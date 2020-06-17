@@ -23,7 +23,6 @@ import Navigation from '../Navigation';
 import { Authorization } from '../Types/GeneralTypes';
 import Tenant from '../Tenant';
 import ArticleHome from '../Article/ArticleHome';
-import UserAdministration from '../UserAdministration';
 import OakRoute from '../Auth/OakRoute';
 import Unauthorized from '../Auth/Unauthorized';
 import CreateArticle from '../Article/CreateArticle';
@@ -40,6 +39,13 @@ import Email from '../Login/Email/index';
 import Login from '../Login/index';
 import ExternLogin from '../Auth/ExternLogin';
 import { receiveMessage } from '../../events/MessageService';
+import EditPost from '../Post/EditPost';
+import CreatePost from '../Post/CreatePost';
+import ViewPost from '../Post/ViewPost';
+import PostsByTag from '../Post/PostHome/PostsByTag';
+import SearchPost from '../Post/PostHome/SearchPost';
+import BrowsePost from '../Post/PostHome/BrowsePost';
+import PostHome from '../Post/PostHome';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -224,6 +230,7 @@ const Content = (props: Props) => {
                     />
                   )}
                 />
+                {/* Article URLs */}
                 <Route
                   path="/:asset/article"
                   exact
@@ -309,6 +316,94 @@ const Content = (props: Props) => {
                     />
                   )}
                 />
+
+                {/* Post URLs */}
+                <Route
+                  path="/:asset/post"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={PostHome}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/browse"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={BrowsePost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/search"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={SearchPost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/tag"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={PostsByTag}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+
+                <Route
+                  path="/:asset/post/view"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={ViewPost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/create"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={CreatePost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/edit"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={EditPost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+
                 <Route
                   path="/:asset/asset/view"
                   exact
@@ -330,18 +425,6 @@ const Content = (props: Props) => {
                       {...props}
                       component={EditAsset}
                       // middleware={['authenticate']}
-                    />
-                  )}
-                />
-                <Route
-                  path="/:asset/useradministration"
-                  exact
-                  render={propsLocal => (
-                    <OakRoute
-                      {...propsLocal}
-                      {...props}
-                      component={UserAdministration}
-                      middleware={['authenticate', 'isAdmin']}
                     />
                   )}
                 />
