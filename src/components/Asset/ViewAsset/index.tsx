@@ -15,7 +15,7 @@ interface Props {
 const ViewAsset = (props: Props) => {
   const { loading, error, data } = useQuery(GET_ASSET, {
     variables: {
-      assetId: props.match.params.asset,
+      assetId: props.asset,
     },
   });
   return (

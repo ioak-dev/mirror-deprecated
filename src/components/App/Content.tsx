@@ -46,6 +46,7 @@ import PostsByTag from '../Post/PostHome/PostsByTag';
 import SearchPost from '../Post/PostHome/SearchPost';
 import BrowsePost from '../Post/PostHome/BrowsePost';
 import PostHome from '../Post/PostHome';
+import AssetCreateSuccess from '../Asset/CreateAsset/AssetCreateSuccess';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -173,6 +174,17 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={CreateAsset}
+                    />
+                  )}
+                />
+                <Route
+                  path="/asset/summary"
+                  exact
+                  render={propsLocal => (
+                    <OakRoute
+                      {...propsLocal}
+                      {...props}
+                      component={AssetCreateSuccess}
                     />
                   )}
                 />

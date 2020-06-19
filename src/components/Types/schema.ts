@@ -68,7 +68,7 @@ export const CREATE_ASSET = gql`
     $payload: AssetPayload!
     $addition: AssetAdditionPayload!
   ) {
-    CreateAsset(payload: $payload, addition: $addition) {
+    createAsset(payload: $payload, addition: $addition) {
       id
       name
       description
