@@ -199,7 +199,7 @@ export const POST_COMMENTS = gql`
 `;
 
 export const UPDATE_POST_COMMENT = gql`
-  mutation UpdatePostComment($payload: PostCommentPayload) {
+  mutation UpdatePostComment($payload: PostCommentPayload!) {
     updatePostComment(payload: $payload) {
       id
     }
