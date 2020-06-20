@@ -201,6 +201,30 @@ export type PostFeedback = {
   post?: Maybe<Post>;
 };
 
+export type PostCommentPaginated = {
+  __typename?: 'PostCommentPaginated';
+  pageNo?: Maybe<Scalars['Int']>;
+  hasMore?: Maybe<Scalars['Boolean']>;
+  total?: Maybe<Scalars['Int']>;
+  results: Array<Maybe<PostComment>>;
+};
+
+export type PostCommentPayload = {
+  id?: Maybe<Scalars['ID']>;
+  text?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
+  postId: Scalars['String'];
+};
+
+export type PostComment = {
+  __typename?: 'PostComment';
+  id: Scalars['ID'];
+  text?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
+  createdBy?: Maybe<Scalars['String']>;
+  updatedBy?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   asset?: Maybe<Asset>;
@@ -223,6 +247,7 @@ export type Query = {
   postTagCloud?: Maybe<Array<Maybe<PostTagCloud>>>;
   postsByTag?: Maybe<PostTagPaginated>;
   postFeedback?: Maybe<Array<Maybe<PostFeedback>>>;
+  postComments?: Maybe<PostCommentPaginated>;
 };
 
 export type QueryAssetArgs = {
@@ -302,6 +327,12 @@ export type QueryPostFeedbackArgs = {
   postId: Scalars['ID'];
 };
 
+export type QueryPostCommentsArgs = {
+  postId: Scalars['String'];
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   updateAsset?: Maybe<Asset>;
@@ -316,6 +347,7 @@ export type Mutation = {
   deletePost?: Maybe<Post>;
   addPostFeedback?: Maybe<PostFeedback>;
   removePostFeedback?: Maybe<PostFeedback>;
+  updatePostComment?: Maybe<PostComment>;
 };
 
 export type MutationUpdateAssetArgs = {
@@ -371,21 +403,16 @@ export type MutationRemovePostFeedbackArgs = {
   type: Scalars['String'];
 };
 
+export type MutationUpdatePostCommentArgs = {
+  payload: PostCommentPayload;
+};
+
 export type AddArticleMutationVariables = {
   payload: ArticlePayload;
 };
 
 export type AddArticleMutation = { __typename?: 'Mutation' } & {
   addArticle?: Maybe<{ __typename?: 'Article' } & Pick<Article, 'id'>>;
-};
-
-export type CreateAssetMutationVariables = {
-  payload: AssetPayload;
-  addition: AssetAdditionPayload;
-};
-
-export type CreateAssetMutation = { __typename?: 'Mutation' } & {
-  createAsset?: Maybe<{ __typename?: 'Asset' } & Pick<Asset, 'id'>>;
 };
 
 export type AddPostMutationVariables = {
@@ -463,77 +490,6 @@ export type AddArticleMutationResult = ApolloReactCommon.MutationResult<
 export type AddArticleMutationOptions = ApolloReactCommon.BaseMutationOptions<
   AddArticleMutation,
   AddArticleMutationVariables
->;
-export const CreateAssetDocument = gql`
-  mutation createAsset(
-    $payload: AssetPayload!
-    $addition: AssetAdditionPayload!
-  ) {
-    createAsset(payload: $payload, addition: $addition) {
-      id
-    }
-  }
-`;
-export type CreateAssetMutationFn = ApolloReactCommon.MutationFunction<
-  CreateAssetMutation,
-  CreateAssetMutationVariables
->;
-export type CreateAssetComponentProps = Omit<
-  ApolloReactComponents.MutationComponentOptions<
-    CreateAssetMutation,
-    CreateAssetMutationVariables
-  >,
-  'mutation'
->;
-
-export const CreateAssetComponent = (props: CreateAssetComponentProps) => (
-  <ApolloReactComponents.Mutation<
-    CreateAssetMutation,
-    CreateAssetMutationVariables
-  >
-    mutation={CreateAssetDocument}
-    {...props}
-  />
-);
-
-export type CreateAssetProps<
-  TChildProps = {},
-  TDataName extends string = 'mutate'
-> = {
-  [key in TDataName]: ApolloReactCommon.MutationFunction<
-    CreateAssetMutation,
-    CreateAssetMutationVariables
-  >;
-} &
-  TChildProps;
-export function withCreateAsset<
-  TProps,
-  TChildProps = {},
-  TDataName extends string = 'mutate'
->(
-  operationOptions?: ApolloReactHoc.OperationOption<
-    TProps,
-    CreateAssetMutation,
-    CreateAssetMutationVariables,
-    CreateAssetProps<TChildProps, TDataName>
-  >
-) {
-  return ApolloReactHoc.withMutation<
-    TProps,
-    CreateAssetMutation,
-    CreateAssetMutationVariables,
-    CreateAssetProps<TChildProps, TDataName>
-  >(CreateAssetDocument, {
-    alias: 'createAsset',
-    ...operationOptions,
-  });
-}
-export type CreateAssetMutationResult = ApolloReactCommon.MutationResult<
-  CreateAssetMutation
->;
-export type CreateAssetMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  CreateAssetMutation,
-  CreateAssetMutationVariables
 >;
 export const AddPostDocument = gql`
   mutation AddPost($payload: PostPayload!) {

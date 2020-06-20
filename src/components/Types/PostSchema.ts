@@ -181,3 +181,27 @@ export const POST_TAG_CLOUD = gql`
     }
   }
 `;
+
+export const POST_COMMENTS = gql`
+  query PostComments($postId: String!, $pageNo: Int, $pageSize: Int) {
+    postComments(postId: $postId, pageNo: $pageNo, pageSize: $pageSize) {
+      results {
+        id
+        text
+        parentId
+        createdBy
+        updatedBy
+      }
+      pageNo
+      hasMore
+    }
+  }
+`;
+
+export const UPDATE_POST_COMMENT = gql`
+  mutation UpdatePostComment($payload: PostCommentPayload) {
+    updatePostComment(payload: $payload) {
+      id
+    }
+  }
+`;
