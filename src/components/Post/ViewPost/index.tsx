@@ -7,6 +7,7 @@ import { GET_POST } from '../../Types/PostSchema';
 import OakButton from '../../../oakui/OakButton';
 import FeedbackView from './FeedbackView';
 import OakSpinner from '../../../oakui/OakSpinner';
+import CommentHome from '../../Comment';
 
 interface Props {
   location: any;
@@ -43,6 +44,7 @@ const ViewPost = (props: Props) => {
                 post={data.post}
               />
               <FeedbackView post={data.post} />
+              <CommentHome postId={urlParam.id} />
             </>
           )}
           {error && <div className="typography-6">Post does not exist</div>}

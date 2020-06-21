@@ -77,12 +77,14 @@ const PostSection = (props: Props) => {
           <div className="post-section">
             <div className="post-list-container">
               {data?.posts?.results?.map((item: Post) => (
-                <PostLink
-                  key={item.id}
-                  post={item}
-                  asset={props.asset}
-                  history={props.history}
-                />
+                <>
+                  <PostLink
+                    key={item.id}
+                    post={item}
+                    asset={props.asset}
+                    history={props.history}
+                  />
+                </>
               ))}
               {data?.posts?.results?.length === 0 && (
                 <div className="typography-6">No posts</div>
