@@ -5,7 +5,6 @@ import { Post } from '../../../types/graphql';
 import OakViewer from '../../../oakui/OakViewer';
 import TagContainer from './TagContainer';
 import { DELETE_POST } from '../../Types/PostSchema';
-import CommentHome from '../../Comment';
 
 interface Props {
   id: string;

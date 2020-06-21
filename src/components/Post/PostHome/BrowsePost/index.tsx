@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
 import PostSection from './PostSection';
-import CreateComment from '../../../Comment/CreateComment';
-import CommentHome from '../../../Comment';
 
 interface Props {
   setProfile: Function;

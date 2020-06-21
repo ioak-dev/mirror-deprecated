@@ -7,7 +7,7 @@ import { GET_POST } from '../../Types/PostSchema';
 import OakButton from '../../../oakui/OakButton';
 import FeedbackView from './FeedbackView';
 import OakSpinner from '../../../oakui/OakSpinner';
-import CommentHome from '../../Comment';
+import CommentSection from './CommentSection';
 
 interface Props {
   location: any;
@@ -53,7 +53,7 @@ const ViewPost = (props: Props) => {
 
         <div className="app-content comment-section-wrapper">
           <div className="app-text">
-            <CommentHome postId={urlParam.id} />
+            <CommentSection postId={urlParam.id} />
           </div>
         </div>
       </div>
