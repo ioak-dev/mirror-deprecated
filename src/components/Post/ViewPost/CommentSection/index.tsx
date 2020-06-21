@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import CreateComment from './CreateComment';
-import OakButton from '../../oakui/OakButton';
-import ViewComment from './ViewComment';
+import NewCommentItem from './NewCommentItem';
+import CommentItem from './CommentItem';
+import { POST_COMMENTS } from '../../../Types/PostSchema';
 import './style.scss';
-import { POST_COMMENTS } from '../Types/PostSchema';
 
 interface Props {
   postId: string;
-  commentId?: string;
-  isReply?: boolean;
 }
 
-const CommentHome = (props: Props) => {
+const CommentSection = (props: Props) => {
   const { loading, data, fetchMore } = useQuery(POST_COMMENTS, {
     variables: {
       postId: props.postId,
     },
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
   });
-  const [isComment, setIsComment] = useState(false);
+  const [newComment, setNewComment] = useState(false);
   const [viewComments, setViewComments] = useState(true);
   return (
     <>
@@ -33,7 +30,7 @@ const CommentHome = (props: Props) => {
                   <i className="material-icons typography-6">edit</i>
                   <div
                     className="hyperlink"
-                    onClick={() => setIsComment(!isComment)}
+                    onClick={() => setNewComment(!newComment)}
                   >
                     New comment
                   </div>
@@ -56,14 +53,14 @@ const CommentHome = (props: Props) => {
         </div>
       </div>
 
-      {isComment && (
-        <CreateComment postId={props.postId} setComment={setIsComment} />
+      {newComment && (
+        <NewCommentItem postId={props.postId} setNewComment={setNewComment} />
       )}
       <div className={viewComments ? 'view-comment show' : 'view-comment hide'}>
-        <ViewComment postId={props.postId} />
+        <CommentItem postId={props.postId} />
       </div>
     </>
   );
 };
 
-export default CommentHome;
+export default CommentSection;

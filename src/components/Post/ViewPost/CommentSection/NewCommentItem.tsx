@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import OakEditor from '../../../oakui/OakEditor';
-import OakButton from '../../../oakui/OakButton';
-import { UPDATE_POST_COMMENT } from '../../Types/PostSchema';
-import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
-import { PostCommentPayload } from '../../../types/graphql';
+import OakEditor from '../../../../oakui/OakEditor';
+import OakButton from '../../../../oakui/OakButton';
+import { UPDATE_POST_COMMENT } from '../../../Types/PostSchema';
+import { isEmptyOrSpaces, isEmptyAttributes } from '../../../Utils';
+import { PostCommentPayload } from '../../../../types/graphql';
 
 interface Props {
-  commentId: string;
   postId: string;
-  setIsReplay: Function;
+  parentid?: string;
+  setNewComment: Function;
 }
 
-const ReplyItem = (props: Props) => {
+const NewCommentItem = (props: Props) => {
   const [createComment] = useMutation(UPDATE_POST_COMMENT);
   const [state, setState] = useState({ comment: '' });
   const [formErrors, setFormErrors] = useState<any>({
@@ -34,7 +34,7 @@ const ReplyItem = (props: Props) => {
     setFormErrors(errorFields);
     if (isEmptyAttributes(errorFields)) {
       const payload: PostCommentPayload = {
-        parentId: props.commentId,
+        parentId: props.parentid,
         postId: props.postId,
         text: state.comment,
       };
@@ -44,13 +44,14 @@ const ReplyItem = (props: Props) => {
         },
       }).then(response => {
         if (response.data.updatePostComment.id) {
-          props.setIsReplay(false);
+          props.setNewComment(false);
         }
       });
     }
   };
+
   return (
-    <div>
+    <>
       <OakEditor
         data={state}
         errorData={formErrors}
@@ -58,12 +59,12 @@ const ReplyItem = (props: Props) => {
         handleChange={e => handleChange(e)}
       />
       <div className="action-header position-right">
-        <OakButton action={submit} theme="primary" variant="block">
-          <i className="material-icons">add_comment</i>Comment
+        <OakButton action={submit} theme="primary" variant="appear">
+          <i className="material-icons">double_arrow</i>Save
         </OakButton>
       </div>
-    </div>
+    </>
   );
 };
 
-export default ReplyItem;
+export default NewCommentItem;

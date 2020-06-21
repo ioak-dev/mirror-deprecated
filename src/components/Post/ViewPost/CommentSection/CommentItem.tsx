@@ -1,20 +1,22 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { POST_COMMENTS } from '../../Types/PostSchema';
-import OakInfiniteScroll from '../../../oakui/OakInfiniteScroll';
-import OakSpinner from '../../../oakui/OakSpinner';
-import ViewDetails from './ViewDetails';
+import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
+import { POST_COMMENTS } from '../../../Types/PostSchema';
+import OakSpinner from '../../../../oakui/OakSpinner';
+import CommentContent from './CommentContent';
 
 interface Props {
   postId: string;
 }
-const ViewItem = (props: Props) => {
+
+const CommentItem = (props: Props) => {
   const { loading, data, fetchMore } = useQuery(POST_COMMENTS, {
     variables: {
       postId: props.postId,
       pageSize: 10,
       pageNo: 0,
     },
+    fetchPolicy: 'cache-and-network',
   });
 
   const fetchMoreComments = () => {
@@ -47,11 +49,10 @@ const ViewItem = (props: Props) => {
         <div className="post-list-container">
           {data?.postComments?.results?.map(item => (
             <>
-              <ViewDetails
-                commentId={item.id}
+              <CommentContent
                 postId={props.postId}
+                text={item.text}
                 key={item.id}
-                comment={item.text}
               />
             </>
           ))}
@@ -66,4 +67,4 @@ const ViewItem = (props: Props) => {
   );
 };
 
-export default ViewItem;
+export default CommentItem;
