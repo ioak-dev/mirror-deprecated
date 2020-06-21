@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import CreateComment from './CreateComment';
 import OakButton from '../../oakui/OakButton';
 import ViewComment from './ViewComment';
+import './style.scss';
 import { POST_COMMENTS } from '../Types/PostSchema';
 
 interface Props {
@@ -19,33 +20,48 @@ const CommentHome = (props: Props) => {
     fetchPolicy: 'cache-and-network',
   });
   const [isComment, setIsComment] = useState(false);
-  const [viewComments, setViewComments] = useState(false);
+  const [viewComments, setViewComments] = useState(true);
   return (
     <>
-      <div className="action-footer position-left align-horizontal post-feedback">
-        <OakButton
-          action={() => setIsComment(!isComment)}
-          theme="primary"
-          variant="appear"
-        >
-          <i className="material-icons">reply</i>
-        </OakButton>
-        {!loading && (
-          <OakButton
-            action={() => setViewComments(!viewComments)}
-            theme="primary"
-            variant="appear"
-          >
-            <i className="material-icons">question_answer</i>
-            {data?.postComments?.results?.length}
-          </OakButton>
-        )}
+      <div className="section-header">
+        <div className="section-title">
+          Comments&nbsp;({data?.postComments?.results?.length})
+          <div className="section-subtitle">
+            <div className="typography-5 comment-section-subtitle align-horizontal">
+              <div className="comment-section-actions">
+                <div className="align-horizontal hyperlink-container">
+                  <i className="material-icons typography-6">edit</i>
+                  <div
+                    className="hyperlink"
+                    onClick={() => setIsComment(!isComment)}
+                  >
+                    New comment
+                  </div>
+                </div>
+                <div className="align-horizontal hyperlink-container">
+                  <i className="material-icons typography-6">
+                    {viewComments ? 'expand_less' : 'expand_more'}
+                  </i>
+                  <div
+                    className="hyperlink"
+                    onClick={() => setViewComments(!viewComments)}
+                  >
+                    {viewComments ? 'Hide' : 'Show'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="section-highlight" />
+        </div>
       </div>
 
       {isComment && (
         <CreateComment postId={props.postId} setComment={setIsComment} />
       )}
-      {viewComments && <ViewComment postId={props.postId} />}
+      <div className={viewComments ? 'view-comment show' : 'view-comment hide'}>
+        <ViewComment postId={props.postId} />
+      </div>
     </>
   );
 };

@@ -18,21 +18,22 @@ const ViewItem = (props: Props) => {
   });
 
   const fetchMoreComments = () => {
-    if (data?.comments?.hasMore) {
+    console.log(data);
+    if (data?.postComments?.hasMore) {
       fetchMore({
         variables: {
-          pageNo: data?.comments?.pageNo,
+          pageNo: data?.postComments?.pageNo,
         },
         updateQuery: (prev: any, { fetchMoreResult }: any) => {
           return {
-            comments: {
-              ...prev.comments,
+            postComments: {
+              ...prev.postComments,
               results: [
-                ...prev.comments.results,
-                ...fetchMoreResult.comments.results,
+                ...prev.postComments.results,
+                ...fetchMoreResult.postComments.results,
               ],
-              pageNo: fetchMoreResult.comments.pageNo,
-              hasMore: fetchMoreResult.comments.hasMore,
+              pageNo: fetchMoreResult.postComments.pageNo,
+              hasMore: fetchMoreResult.postComments.hasMore,
             },
           };
         },
@@ -41,30 +42,27 @@ const ViewItem = (props: Props) => {
   };
 
   return (
-    <>
-      <OakInfiniteScroll handleChange={fetchMoreComments} selector=".app-page">
-        <div className="post-section">
-          <div className="post-list-container">
-            <div className="app-subtitle">Comments</div>
-            {data?.postComments?.results?.map(item => (
-              <>
-                <ViewDetails
-                  commentId={item.id}
-                  postId={props.postId}
-                  key={item.id}
-                  comment={item.text}
-                />
-              </>
-            ))}
+    <OakInfiniteScroll handleChange={fetchMoreComments} selector=".app-page">
+      <div className="post-section">
+        <div className="post-list-container">
+          {data?.postComments?.results?.map(item => (
+            <>
+              <ViewDetails
+                commentId={item.id}
+                postId={props.postId}
+                key={item.id}
+                comment={item.text}
+              />
+            </>
+          ))}
 
-            {data?.comments?.results?.length === 0 && (
-              <div className="typography-6">No comments</div>
-            )}
-          </div>
-          <div>{loading ? <OakSpinner /> : ''}</div>
+          {data?.postComments?.results?.length === 0 && (
+            <div className="typography-6">No comments</div>
+          )}
         </div>
-      </OakInfiniteScroll>
-    </>
+        <div>{loading ? <OakSpinner /> : ''}</div>
+      </div>
+    </OakInfiniteScroll>
   );
 };
 

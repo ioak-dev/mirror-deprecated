@@ -51,14 +51,12 @@ const CreateItem = (props: Props) => {
 
   return (
     <>
-      <div className="action-header position-right">
-        <OakEditor
-          data={state}
-          errorData={formErrors}
-          id="comment"
-          handleChange={e => handleChange(e)}
-        />
-      </div>
+      <OakEditor
+        data={state}
+        errorData={formErrors}
+        id="comment"
+        handleChange={e => handleChange(e)}
+      />
       <div className="action-header position-right">
         <OakButton action={submit} theme="primary" variant="block">
           <i className="material-icons">add_comment</i>Comment

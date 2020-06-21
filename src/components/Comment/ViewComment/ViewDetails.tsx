@@ -16,8 +16,7 @@ const ViewDetails = (props: Props) => {
   return (
     <>
       <div className="view-comment-item">
-        <div className="app-text">
-          {/* <div className="post-meta">
+        {/* <div className="post-meta">
             {props.comment?.createdAt && (
               <div className="post-date">
                 Published on {formatDateText(props.comment?.createdAt)}
@@ -44,26 +43,25 @@ const ViewDetails = (props: Props) => {
             )}
           </div> */}
 
-          <OakViewer>{props.comment}</OakViewer>
-          <div className="action-footer position-right align-horizontal post-feedback">
-            <OakButton
-              action={() => setIsReply(!isReply)}
-              theme="primary"
-              variant="appear"
-            >
-              <i className="material-icons">reply</i>
-            </OakButton>
-          </div>
+        <OakViewer>{props.comment}</OakViewer>
+        <div className="action-footer position-right align-horizontal post-feedback">
+          <OakButton
+            action={() => setIsReply(!isReply)}
+            theme="primary"
+            variant="appear"
+          >
+            <i className="material-icons">reply</i>
+          </OakButton>
         </div>
-        {isReply && (
-          <Reply
-            postId={props.postId}
-            commentId={props.commentId}
-            reply="new"
-            setIsReplay={setIsReply}
-          />
-        )}
       </div>
+      {isReply && (
+        <Reply
+          postId={props.postId}
+          commentId={props.commentId}
+          reply="new"
+          setIsReplay={setIsReply}
+        />
+      )}
     </>
   );
 };

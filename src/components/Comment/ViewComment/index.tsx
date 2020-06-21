@@ -8,7 +8,7 @@ interface Props {
 
 const ViewComment = (props: Props) => {
   return (
-    <div className="app-content">
+    <div className="">
       <ViewItem postId={props.postId} />
     </div>
   );

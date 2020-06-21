@@ -9,13 +9,11 @@ interface Props {
 
 const CreateComment = (props: Props) => {
   return (
-    <div className="app-content">
-      <CreateItem
-        postId={props.postId}
-        parentid={props.parentId}
-        setComment={props.setComment}
-      />
-    </div>
+    <CreateItem
+      postId={props.postId}
+      parentid={props.parentId}
+      setComment={props.setComment}
+    />
   );
 };
 

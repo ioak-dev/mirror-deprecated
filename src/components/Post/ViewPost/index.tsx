@@ -31,26 +31,35 @@ const ViewPost = (props: Props) => {
   }, [props.location.search]);
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          {loading && <OakSpinner />}
-          {!loading && !error && (
-            <>
-              <PostItem
-                history={props.history}
-                id={urlParam.id}
-                asset={props.asset}
-                post={data.post}
-              />
-              <FeedbackView post={data.post} />
-              <CommentHome postId={urlParam.id} />
-            </>
-          )}
-          {error && <div className="typography-6">Post does not exist</div>}
+    <>
+      <div className="app-page">
+        <div className="app-content">
+          <div className="app-text">
+            {loading && <OakSpinner />}
+            {!loading && !error && (
+              <>
+                <PostItem
+                  history={props.history}
+                  id={urlParam.id}
+                  asset={props.asset}
+                  post={data.post}
+                />
+                <FeedbackView post={data.post} />
+              </>
+            )}
+            {error && <div className="typography-6">Post does not exist</div>}
+          </div>
+        </div>
+
+        <div className="app-content comment-section-wrapper">
+          <div className="app-text">
+            <CommentHome postId={urlParam.id} />
+          </div>
         </div>
       </div>
-    </div>
+      {/* <div className="app-page">
+      </div> */}
+    </>
   );
 };
 

@@ -433,6 +433,10 @@ code {
       justify-content: flex-end;
     }
 
+    &.position-between {
+      justify-content: space-between;
+    }
+
     &.position-center {
       justify-content: center;
     }
