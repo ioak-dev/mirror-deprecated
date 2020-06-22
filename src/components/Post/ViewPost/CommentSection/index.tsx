@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import NewCommentItem from './NewCommentItem';
-import CommentItem from './CommentItem';
+import CommentList from './CommentList';
 import { POST_COMMENTS } from '../../../Types/PostSchema';
 import './style.scss';
 
@@ -27,7 +27,7 @@ const CommentSection = (props: Props) => {
             <div className="typography-5 comment-section-subtitle align-horizontal">
               <div className="comment-section-actions">
                 <div className="align-horizontal hyperlink-container">
-                  <i className="material-icons typography-6">edit</i>
+                  <i className="material-icons typography-6">add_comment</i>
                   <div
                     className="hyperlink"
                     onClick={() => setNewComment(!newComment)}
@@ -56,8 +56,8 @@ const CommentSection = (props: Props) => {
       {newComment && (
         <NewCommentItem postId={props.postId} setNewComment={setNewComment} />
       )}
-      <div className={viewComments ? 'view-comment show' : 'view-comment hide'}>
-        <CommentItem postId={props.postId} />
+      <div className={viewComments ? 'comment-list show' : 'comment-list hide'}>
+        <CommentList postId={props.postId} />
       </div>
     </>
   );

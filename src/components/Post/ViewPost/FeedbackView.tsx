@@ -58,23 +58,29 @@ const FeedbackView = (props: Props) => {
   }, [props.post.feedback]);
 
   return (
-    <div className="action-footer position-right space-top-4 post-feedback">
-      <i
-        className={`material-icons helpful ${
-          providedFeedbacks.includes('helpful') ? ' active' : ''
-        }`}
-        onClick={() => feedback('helpful')}
-      >
-        thumb_up
-      </i>
-      <i
-        className={`material-icons not-helpful ${
-          providedFeedbacks.includes('notHelpful') ? ' active' : ''
-        }`}
-        onClick={() => feedback('notHelpful')}
-      >
-        thumb_down
-      </i>
+    <div className="action-footer position-right space-top-4 post-feedback align-horizontal">
+      <div className="align-horizontal">
+        <i
+          className={`material-icons helpful ${
+            providedFeedbacks.includes('helpful') ? ' active' : ''
+          }`}
+          onClick={() => feedback('helpful')}
+        >
+          thumb_up
+        </i>
+        <div className="typography-5">{props.post.helpful}</div>
+      </div>
+      <div className="align-horizontal">
+        <i
+          className={`material-icons not-helpful ${
+            providedFeedbacks.includes('notHelpful') ? ' active' : ''
+          }`}
+          onClick={() => feedback('notHelpful')}
+        >
+          thumb_down
+        </i>
+        <div className="typography-5">{props.post.notHelpful}</div>
+      </div>
     </div>
   );
 };

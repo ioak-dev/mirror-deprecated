@@ -45,3 +45,9 @@ export function sort(array, property, isReverseOrder) {
 
   return result;
 }
+
+export function htmlToText(str?: string | null) {
+  if (!str) return false;
+  str = str.toString();
+  return str.replace(/(<([^>]+)>)/gi, '');
+}

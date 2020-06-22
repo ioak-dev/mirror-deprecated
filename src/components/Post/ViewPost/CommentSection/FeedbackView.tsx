@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { Article } from '../../../types/graphql';
+import { PostComment } from '../../../../types/graphql';
 import {
-  ADD_ARTICLE_FEEDBACK,
-  REMOVE_ARTICLE_FEEDBACK,
-  GET_ARTICLE,
-} from '../../Types/ArticleSchema';
-import { sendMessage } from '../../../events/MessageService';
+  ADD_POST_FEEDBACK,
+  REMOVE_POST_FEEDBACK,
+  GET_POST,
+} from '../../../Types/PostSchema';
+import { sendMessage } from '../../../../events/MessageService';
 
 interface Props {
-  article: Article;
+  comment: PostComment;
 }
 
 const FeedbackView = (props: Props) => {
-  const [addArticleFeedback, { data: addedFeedback }] = useMutation(
-    ADD_ARTICLE_FEEDBACK
+  const [addPostCommentFeedback, { data: addedCommentFeedback }] = useMutation(
+    ADD_POST_FEEDBACK
   );
-  const [removeArticleFeedback, { data: removedFeedback }] = useMutation(
-    REMOVE_ARTICLE_FEEDBACK
-  );
+  const [
+    removePostCommentFeedback,
+    { data: removedCommentFeedback },
+  ] = useMutation(REMOVE_POST_FEEDBACK);
   const [providedFeedbacks, setProvidedFeedbacks] = useState<any[]>([]);
 
   const feedback = type => {
     if (providedFeedbacks.includes(type)) {
-      removeArticleFeedback({
+      removePostCommentFeedback({
         variables: {
-          articleId: props.article.id,
+          postId: props.comment.id,
           type,
         },
       }).then(() => {
@@ -35,9 +36,9 @@ const FeedbackView = (props: Props) => {
         });
       });
     } else {
-      addArticleFeedback({
+      addPostCommentFeedback({
         variables: {
-          articleId: props.article.id,
+          postId: props.comment.id,
           type,
         },
       }).then(() => {
@@ -49,18 +50,18 @@ const FeedbackView = (props: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (props.article?.feedback) {
-      setProvidedFeedbacks(
-        props.article.feedback.map((item: any) => item.type)
-      );
-    } else {
-      setProvidedFeedbacks([]);
-    }
-  }, [props.article.feedback]);
+  // useEffect(() => {
+  //   if (props.comment?.feedback) {
+  //     setProvidedFeedbacks(
+  //       props.comment.feedback.map((item: any) => item.type)
+  //     );
+  //   } else {
+  //     setProvidedFeedbacks([]);
+  //   }
+  // }, [props.comment.feedback]);
 
   return (
-    <div className="action-footer position-right space-top-4 post-feedback align-horizontal">
+    <div className="action-footer position-left space-top-4 comment-feedback align-horizontal">
       <div className="align-horizontal">
         <i
           className={`material-icons helpful ${
@@ -70,7 +71,7 @@ const FeedbackView = (props: Props) => {
         >
           thumb_up
         </i>
-        <div className="typography-5">{props.article.helpful}</div>
+        <div className="typography-5">{props.comment.helpful}</div>
       </div>
       <div className="align-horizontal">
         <i
@@ -81,7 +82,7 @@ const FeedbackView = (props: Props) => {
         >
           thumb_down
         </i>
-        <div className="typography-5">{props.article.notHelpful}</div>
+        <div className="typography-5">{props.comment.notHelpful}</div>
       </div>
     </div>
   );

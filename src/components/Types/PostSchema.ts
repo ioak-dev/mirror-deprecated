@@ -189,8 +189,12 @@ export const POST_COMMENTS = gql`
         id
         text
         parentId
+        helpful
+        notHelpful
         createdBy
         updatedBy
+        createdAt
+        updatedAt
       }
       pageNo
       hasMore

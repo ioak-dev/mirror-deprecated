@@ -3,13 +3,14 @@ import { useQuery } from '@apollo/react-hooks';
 import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
 import { POST_COMMENTS } from '../../../Types/PostSchema';
 import OakSpinner from '../../../../oakui/OakSpinner';
-import CommentContent from './CommentContent';
+import { PostComment } from '../../../../types/graphql';
+import ViewComment from './ViewComment';
 
 interface Props {
   postId: string;
 }
 
-const CommentItem = (props: Props) => {
+const CommentList = (props: Props) => {
   const { loading, data, fetchMore } = useQuery(POST_COMMENTS, {
     variables: {
       postId: props.postId,
@@ -20,7 +21,6 @@ const CommentItem = (props: Props) => {
   });
 
   const fetchMoreComments = () => {
-    console.log(data);
     if (data?.postComments?.hasMore) {
       fetchMore({
         variables: {
@@ -45,26 +45,29 @@ const CommentItem = (props: Props) => {
 
   return (
     <OakInfiniteScroll handleChange={fetchMoreComments} selector=".app-page">
-      <div className="post-section">
-        <div className="post-list-container">
-          {data?.postComments?.results?.map(item => (
-            <>
-              <CommentContent
-                postId={props.postId}
-                text={item.text}
-                key={item.id}
-              />
-            </>
-          ))}
+      <div className="comment-list">
+        {data?.postComments?.results?.map((item: PostComment) => (
+          <ViewComment
+            postId={props.postId}
+            comment={item}
+            parentComment={
+              item.id === item.parentId
+                ? null
+                : data.postComments.results.find(
+                    subcomment => subcomment.id === item.parentId
+                  )
+            }
+            key={item.id}
+          />
+        ))}
 
-          {data?.postComments?.results?.length === 0 && (
-            <div className="typography-6">No comments</div>
-          )}
-        </div>
-        <div>{loading ? <OakSpinner /> : ''}</div>
+        {data?.postComments?.results?.length === 0 && (
+          <div className="typography-6">No comments</div>
+        )}
       </div>
+      <div>{loading ? <OakSpinner /> : ''}</div>
     </OakInfiniteScroll>
   );
 };
 
-export default CommentItem;
+export default CommentList;

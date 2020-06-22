@@ -1,11 +1,19 @@
-.comment-section-actions {
+.comment-list {
   display: grid;
-  grid-auto-flow: column;
-  justify-content: flex-start;
-  column-gap: 20px;
+  grid-auto-flow: row;
+  row-gap: 40px;
 }
 
-.view-comment {
+.comment-section-subtitle {
+  .comment-section-actions {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+    column-gap: 20px;
+  }
+}
+
+.comment-list {
   overflow-y: hidden;
   &.show {
     animation: slideDown 0.3s cubic-bezier(0, 1, 0.5, 1);
@@ -14,6 +22,69 @@
   &.hide {
     animation: slideUp 0.3s cubic-bezier(0, 1, 0.5, 1);
     height: 0px;
+  }
+}
+
+.view-comment {
+  background-color: var(--color-background-4);
+  box-shadow: var(--bs-md);
+  padding: 20px 26px;
+  border-radius: 4px;
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 20px;
+  .view-comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .view-comment-meta {
+      font-size: 13px;
+    }
+    .view-comment-actions {
+      display: grid;
+      grid-auto-flow: column;
+      justify-content: flex-end;
+      column-gap: 20px;
+      div {
+        display: grid;
+        grid-auto-flow: column;
+      }
+    }
+  }
+}
+
+.parent-comment-preview {
+  background-color: var(--color-background-3);
+  padding: 10px 20px;
+  margin: 0 20px;
+  border-radius: 4px;
+  .parent-comment-preview-header {
+    // font-size: 12px;
+    // color: var(--color-foreground-4);
+  }
+  .parent-comment-preview-content {
+  }
+}
+
+.comment-feedback {
+  cursor: pointer;
+  user-select: none;
+  .material-icons {
+    font-size: 1.2em;
+    color: var(--color-foreground-3);
+    &.helpful {
+      &:hover,
+      &.active {
+        color: var(--color-success);
+      }
+    }
+
+    &.not-helpful {
+      &:hover,
+      &.active {
+        color: var(--color-failure);
+      }
+    }
   }
 }
 
