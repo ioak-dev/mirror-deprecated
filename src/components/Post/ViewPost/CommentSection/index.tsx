@@ -54,7 +54,10 @@ const CommentSection = (props: Props) => {
       </div>
 
       {newComment && (
-        <NewCommentItem postId={props.postId} setNewComment={setNewComment} />
+        <NewCommentItem
+          postId={props.postId}
+          closeEdit={() => setNewComment(false)}
+        />
       )}
       <div className={viewComments ? 'comment-list show' : 'comment-list hide'}>
         <CommentList postId={props.postId} />

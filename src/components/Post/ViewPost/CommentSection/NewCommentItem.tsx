@@ -9,7 +9,7 @@ import { PostCommentPayload } from '../../../../types/graphql';
 interface Props {
   postId: string;
   parentid?: string;
-  setNewComment: Function;
+  closeEdit: Function;
 }
 
 const NewCommentItem = (props: Props) => {
@@ -44,7 +44,7 @@ const NewCommentItem = (props: Props) => {
         },
       }).then(response => {
         if (response.data.updatePostComment.id) {
-          props.setNewComment(false);
+          props.closeEdit();
         }
       });
     }
@@ -59,6 +59,13 @@ const NewCommentItem = (props: Props) => {
         handleChange={e => handleChange(e)}
       />
       <div className="action-header position-right">
+        <OakButton
+          action={() => props.closeEdit()}
+          theme="default"
+          variant="appear"
+        >
+          <i className="material-icons">close</i>Cancel
+        </OakButton>
         <OakButton action={submit} theme="primary" variant="appear">
           <i className="material-icons">double_arrow</i>Save
         </OakButton>

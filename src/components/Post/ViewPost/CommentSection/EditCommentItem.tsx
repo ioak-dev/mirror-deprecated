@@ -9,7 +9,7 @@ import { isEmptyOrSpaces, isEmptyAttributes } from '../../../Utils';
 interface Props {
   postId: string;
   comment: PostComment;
-  setEditComment: Function;
+  closeEdit: Function;
 }
 const EditCommentItem = (props: Props) => {
   const [updateComment] = useMutation(UPDATE_POST_COMMENT);
@@ -48,7 +48,7 @@ const EditCommentItem = (props: Props) => {
         },
       }).then(response => {
         if (response.data.updatePostComment.id) {
-          props.setEditComment(false);
+          props.closeEdit();
         }
       });
     }
@@ -62,7 +62,10 @@ const EditCommentItem = (props: Props) => {
         id="comment"
         handleChange={e => handleChange(e)}
       />
-      <div className="action-header position-right">
+      <div className="action-footer position-right">
+        <OakButton action={props.closeEdit} theme="default" variant="appear">
+          <i className="material-icons">close</i>Cancel
+        </OakButton>
         <OakButton action={submit} theme="primary" variant="appear">
           <i className="material-icons">double_arrow</i>Save
         </OakButton>

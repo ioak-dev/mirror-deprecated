@@ -14,8 +14,7 @@ interface Props {
   parentComment: PostComment;
 }
 function ViewComment(props: Props) {
-  const [newComment, setNewComment] = useState(false);
-  const [editComment, setEditComment] = useState(false);
+  const [actionType, setActionType] = useState('none');
 
   return (
     <div className="view-comment">
@@ -29,42 +28,43 @@ function ViewComment(props: Props) {
             <i className="material-icons typography-6">edit</i>
             <div
               className="hyperlink"
-              onClick={() => setEditComment(!editComment)}
+              onClick={() => setActionType('editcomment')}
             >
               Edit
             </div>
           </div>
           <div className="hyperlink-container">
             <i className="material-icons typography-6">reply</i>
-            <div
-              className="hyperlink"
-              onClick={() => setNewComment(!newComment)}
-            >
+            <div className="hyperlink" onClick={() => setActionType('reply')}>
               Reply
             </div>
           </div>
         </div>
       </div>
 
-      {!editComment && props.parentComment && (
-        <ParentCommentPreview parentComment={props.parentComment} />
+      {['none', 'reply'].includes(actionType) && (
+        <>
+          {props.parentComment && (
+            <ParentCommentPreview parentComment={props.parentComment} />
+          )}
+          <OakViewer>{props.comment?.text}</OakViewer>
+          {actionType === 'none' && <FeedbackView comment={props.comment} />}
+        </>
       )}
-      {!editComment && <OakViewer>{props.comment?.text}</OakViewer>}
-      {newComment && (
+      {actionType === 'reply' && (
         <NewCommentItem
           postId={props.postId}
-          setNewComment={setNewComment}
+          closeEdit={() => setActionType('none')}
           parentid={props.comment.id}
         />
       )}
-      {editComment && (
+      {actionType === 'editcomment' && (
         <EditCommentItem
           postId={props.postId}
-          setEditComment={setEditComment}
+          closeEdit={() => setActionType('none')}
           comment={props.comment}
         />
       )}
-      <FeedbackView comment={props.comment} />
     </div>
   );
 }

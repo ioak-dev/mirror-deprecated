@@ -206,6 +206,14 @@ export const UPDATE_POST_COMMENT = gql`
   mutation UpdatePostComment($payload: PostCommentPayload!) {
     updatePostComment(payload: $payload) {
       id
+      text
+      parentId
+      helpful
+      notHelpful
+      createdBy
+      updatedBy
+      createdAt
+      updatedAt
     }
   }
 `;
