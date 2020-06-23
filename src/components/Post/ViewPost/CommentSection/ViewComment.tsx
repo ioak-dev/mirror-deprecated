@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import OakViewer from '../../../../oakui/OakViewer';
 import NewCommentItem from './NewCommentItem';
 import ParentCommentPreview from './ParentCommentPreview';
@@ -6,6 +6,7 @@ import './style.scss';
 import { formatDateText } from '../../../Lib/DateUtils';
 import { PostComment } from '../../../../types/graphql';
 import FeedbackView from './FeedbackView';
+import EditCommentItem from './EditCommentItem';
 
 interface Props {
   postId: string;
@@ -14,6 +15,8 @@ interface Props {
 }
 function ViewComment(props: Props) {
   const [newComment, setNewComment] = useState(false);
+  const [editComment, setEditComment] = useState(false);
+
   return (
     <div className="view-comment">
       <div className="view-comment-header">
@@ -26,7 +29,7 @@ function ViewComment(props: Props) {
             <i className="material-icons typography-6">edit</i>
             <div
               className="hyperlink"
-              onClick={() => setNewComment(!newComment)}
+              onClick={() => setEditComment(!editComment)}
             >
               Edit
             </div>
@@ -42,15 +45,23 @@ function ViewComment(props: Props) {
           </div>
         </div>
       </div>
-      {props.parentComment && (
+
+      {!editComment && props.parentComment && (
         <ParentCommentPreview parentComment={props.parentComment} />
       )}
-      <OakViewer>{props.comment?.text}</OakViewer>
+      {!editComment && <OakViewer>{props.comment?.text}</OakViewer>}
       {newComment && (
         <NewCommentItem
           postId={props.postId}
           setNewComment={setNewComment}
           parentid={props.comment.id}
+        />
+      )}
+      {editComment && (
+        <EditCommentItem
+          postId={props.postId}
+          setEditComment={setEditComment}
+          comment={props.comment}
         />
       )}
       <FeedbackView comment={props.comment} />
