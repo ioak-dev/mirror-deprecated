@@ -228,6 +228,14 @@ export type PostComment = {
   updatedBy?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateScalar']>;
   updatedAt?: Maybe<Scalars['DateScalar']>;
+  feedback?: Maybe<Array<Maybe<PostCommentFeedback>>>;
+};
+
+export type PostCommentFeedback = {
+  __typename?: 'PostCommentFeedback';
+  id: Scalars['ID'];
+  type?: Maybe<Scalars['String']>;
+  postComment?: Maybe<PostComment>;
 };
 
 export type Query = {
@@ -253,6 +261,7 @@ export type Query = {
   postsByTag?: Maybe<PostTagPaginated>;
   postFeedback?: Maybe<Array<Maybe<PostFeedback>>>;
   postComments?: Maybe<PostCommentPaginated>;
+  postCommentFeedback?: Maybe<Array<Maybe<PostCommentFeedback>>>;
 };
 
 
@@ -355,6 +364,11 @@ export type QueryPostCommentsArgs = {
   pageNo?: Maybe<Scalars['Int']>;
 };
 
+
+export type QueryPostCommentFeedbackArgs = {
+  commentId: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   updateAsset?: Maybe<Asset>;
@@ -370,6 +384,8 @@ export type Mutation = {
   addPostFeedback?: Maybe<PostFeedback>;
   removePostFeedback?: Maybe<PostFeedback>;
   updatePostComment?: Maybe<PostComment>;
+  addPostCommentFeedback?: Maybe<PostCommentFeedback>;
+  removePostCommentFeedback?: Maybe<PostCommentFeedback>;
 };
 
 
@@ -440,6 +456,18 @@ export type MutationRemovePostFeedbackArgs = {
 
 export type MutationUpdatePostCommentArgs = {
   payload: PostCommentPayload;
+};
+
+
+export type MutationAddPostCommentFeedbackArgs = {
+  commentId: Scalars['String'];
+  type: Scalars['String'];
+};
+
+
+export type MutationRemovePostCommentFeedbackArgs = {
+  commentId: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type AddArticleMutationVariables = {

@@ -8,6 +8,8 @@ import OakButton from '../../../oakui/OakButton';
 import FeedbackView from './FeedbackView';
 import OakSpinner from '../../../oakui/OakSpinner';
 import CommentSection from './CommentSection';
+import StatusChip from '../../Common/StatusChip';
+import { days } from '../../Lib/DateUtils';
 
 interface Props {
   location: any;
@@ -38,6 +40,26 @@ const ViewPost = (props: Props) => {
             {loading && <OakSpinner />}
             {!loading && !error && (
               <>
+                <div className="post-status-header">
+                  <StatusChip
+                    label="Closed"
+                    color="success"
+                    icon="check_circle"
+                  />
+                  <div className="typography-4 post-status-label">
+                    {`Answered ${Math.round(
+                      Math.abs(days(data.post.createdAt))
+                    )} days ago`}
+                  </div>
+                </div>
+                <div className="post-status-header space-top-1">
+                  <StatusChip label="Open" color="failure" icon="help" />
+                  <div className="typography-4 post-status-label">
+                    {`Reported ${Math.round(
+                      Math.abs(days(data.post.createdAt))
+                    )} days ago`}
+                  </div>
+                </div>
                 <PostItem
                   history={props.history}
                   id={urlParam.id}

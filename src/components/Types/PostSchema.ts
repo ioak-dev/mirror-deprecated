@@ -195,6 +195,9 @@ export const POST_COMMENTS = gql`
         updatedBy
         createdAt
         updatedAt
+        feedback {
+          type
+        }
       }
       pageNo
       hasMore
@@ -214,6 +217,38 @@ export const UPDATE_POST_COMMENT = gql`
       updatedBy
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const ADD_POST_COMMENT_FEEDBACK = gql`
+  mutation AddPostCommentFeedback($commentId: String!, $type: String!) {
+    addPostCommentFeedback(commentId: $commentId, type: $type) {
+      id
+      postComment {
+        id
+        helpful
+        notHelpful
+        feedback {
+          type
+        }
+      }
+    }
+  }
+`;
+
+export const REMOVE_POST_COMMENT_FEEDBACK = gql`
+  mutation RemovePostCommentFeedback($commentId: String!, $type: String!) {
+    removePostCommentFeedback(commentId: $commentId, type: $type) {
+      id
+      postComment {
+        id
+        helpful
+        notHelpful
+        feedback {
+          type
+        }
+      }
     }
   }
 `;

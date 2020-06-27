@@ -5,6 +5,8 @@ import {
   ADD_POST_FEEDBACK,
   REMOVE_POST_FEEDBACK,
   GET_POST,
+  ADD_POST_COMMENT_FEEDBACK,
+  REMOVE_POST_COMMENT_FEEDBACK,
 } from '../../../Types/PostSchema';
 import { sendMessage } from '../../../../events/MessageService';
 
@@ -14,19 +16,29 @@ interface Props {
 
 const FeedbackView = (props: Props) => {
   const [addPostCommentFeedback, { data: addedCommentFeedback }] = useMutation(
-    ADD_POST_FEEDBACK
+    ADD_POST_COMMENT_FEEDBACK
   );
   const [
     removePostCommentFeedback,
     { data: removedCommentFeedback },
-  ] = useMutation(REMOVE_POST_FEEDBACK);
+  ] = useMutation(REMOVE_POST_COMMENT_FEEDBACK);
   const [providedFeedbacks, setProvidedFeedbacks] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (props.comment?.feedback) {
+      setProvidedFeedbacks(
+        props.comment.feedback.map((item: any) => item.type)
+      );
+    } else {
+      setProvidedFeedbacks([]);
+    }
+  }, [props.comment.feedback]);
 
   const feedback = type => {
     if (providedFeedbacks.includes(type)) {
       removePostCommentFeedback({
         variables: {
-          postId: props.comment.id,
+          commentId: props.comment.id,
           type,
         },
       }).then(() => {
@@ -38,7 +50,7 @@ const FeedbackView = (props: Props) => {
     } else {
       addPostCommentFeedback({
         variables: {
-          postId: props.comment.id,
+          commentId: props.comment.id,
           type,
         },
       }).then(() => {
