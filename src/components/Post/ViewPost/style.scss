@@ -78,10 +78,16 @@
 .post-status-header {
   display: grid;
   grid-auto-flow: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  column-gap: 10px;
-  .post-status-label {
-    color: var(--color-foreground-4);
+  .post-status {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 10px;
+    .post-status-label {
+      color: var(--color-foreground-4);
+    }
   }
 }

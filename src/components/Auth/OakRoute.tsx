@@ -76,6 +76,7 @@ const OakRoute = (props: Props) => {
             firstName: data.session.firstName,
             lastName: data.session.lastName,
             email: data.session.email,
+            id: data.session.id,
           })
         );
       } else {

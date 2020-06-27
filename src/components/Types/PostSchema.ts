@@ -8,6 +8,8 @@ export const LIST_POSTS = gql`
         title
         description
         views
+        followers
+        comments
         helpful
         notHelpful
         createdAt
@@ -31,6 +33,8 @@ export const SEARCH_POSTS = gql`
         title
         description
         views
+        followers
+        comments
         helpful
         notHelpful
         createdAt
@@ -54,10 +58,16 @@ export const GET_POST = gql`
       title
       description
       views
+      followers
+      comments
       helpful
       notHelpful
       createdAt
       updatedAt
+      followerList {
+        id
+        userId
+      }
       tags {
         id
         name
@@ -80,6 +90,8 @@ export const POSTS_BY_TAG = gql`
           title
           description
           views
+          followers
+          comments
           helpful
           notHelpful
           createdAt
@@ -103,6 +115,8 @@ export const UPDATE_POST = gql`
       title
       description
       views
+      followers
+      comments
       helpful
       notHelpful
       createdAt
@@ -129,17 +143,8 @@ export const ADD_POST_FEEDBACK = gql`
       id
       post {
         id
-        title
-        description
-        views
         helpful
         notHelpful
-        createdAt
-        updatedAt
-        tags {
-          id
-          name
-        }
         feedback {
           type
         }
@@ -154,17 +159,8 @@ export const REMOVE_POST_FEEDBACK = gql`
       id
       post {
         id
-        title
-        description
-        views
         helpful
         notHelpful
-        createdAt
-        updatedAt
-        tags {
-          id
-          name
-        }
         feedback {
           type
         }
@@ -249,6 +245,26 @@ export const REMOVE_POST_COMMENT_FEEDBACK = gql`
           type
         }
       }
+    }
+  }
+`;
+
+export const FOLLOW_POST = gql`
+  mutation FollowPost($postId: String!) {
+    followPost(postId: $postId) {
+      id
+      userId
+      postId
+    }
+  }
+`;
+
+export const UNFOLLOW_POST = gql`
+  mutation UnfollowPost($postId: String!) {
+    unfollowPost(postId: $postId) {
+      id
+      userId
+      postId
     }
   }
 `;

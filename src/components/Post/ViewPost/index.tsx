@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, connect } from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import './style.scss';
@@ -20,6 +21,7 @@ interface Props {
 const queryString = require('query-string');
 
 const ViewPost = (props: Props) => {
+  const authorization = useSelector(state => state.authorization);
   const [urlParam, setUrlParam] = useState({
     id: '',
   });
@@ -41,23 +43,30 @@ const ViewPost = (props: Props) => {
             {!loading && !error && (
               <>
                 <div className="post-status-header">
-                  <StatusChip
-                    label="Closed"
-                    color="success"
-                    icon="check_circle"
-                  />
-                  <div className="typography-4 post-status-label">
-                    {`Answered ${Math.round(
-                      Math.abs(days(data.post.createdAt))
-                    )} days ago`}
+                  <div className="post-status">
+                    <StatusChip
+                      label="Closed"
+                      color="success"
+                      icon="check_circle"
+                    />
+                    <div className="typography-4 post-status-label desktop-only">
+                      {`Answered ${Math.round(
+                        Math.abs(days(data.post.createdAt))
+                      )} days ago`}
+                    </div>
                   </div>
-                </div>
-                <div className="post-status-header space-top-1">
-                  <StatusChip label="Open" color="failure" icon="help" />
-                  <div className="typography-4 post-status-label">
-                    {`Reported ${Math.round(
-                      Math.abs(days(data.post.createdAt))
-                    )} days ago`}
+                  <div>
+                    {data.post.followerList?.find(
+                      item => item?.userId === authorization.id
+                    ) ? (
+                      <>
+                        <i className="material-icons-outlined">stop_circle</i>
+                        <i className="material-icons-outlined">rss_feed</i>
+                        Stop following
+                      </>
+                    ) : (
+                      <>Follow</>
+                    )}
                   </div>
                 </div>
                 <PostItem

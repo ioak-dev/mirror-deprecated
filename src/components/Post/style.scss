@@ -18,6 +18,11 @@
     .post-date {
       color: var(--color-foreground-4);
     }
+    .answered-post {
+      display: flex;
+      // color: var(--color-success);
+      color: var(--color-foreground-3);
+    }
     .post-statistic-chip {
       display: grid;
       grid-auto-flow: column;

@@ -166,12 +166,15 @@ export type Post = {
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   views: Scalars['Int'];
+  comments: Scalars['Int'];
+  followers: Scalars['Int'];
   helpful: Scalars['Int'];
   notHelpful: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateScalar']>;
   updatedAt?: Maybe<Scalars['DateScalar']>;
   tags?: Maybe<Array<Maybe<PostTag>>>;
   feedback?: Maybe<Array<Maybe<PostFeedback>>>;
+  followerList?: Maybe<Array<Maybe<PostFollower>>>;
 };
 
 export type PostTagPaginated = {
@@ -200,6 +203,13 @@ export type PostFeedback = {
   id: Scalars['ID'];
   type?: Maybe<Scalars['String']>;
   post?: Maybe<Post>;
+};
+
+export type PostFollower = {
+  __typename?: 'PostFollower';
+  id: Scalars['ID'];
+  userId?: Maybe<Scalars['String']>;
+  postId?: Maybe<Scalars['String']>;
 };
 
 export type PostCommentPaginated = {
@@ -383,6 +393,8 @@ export type Mutation = {
   deletePost?: Maybe<Post>;
   addPostFeedback?: Maybe<PostFeedback>;
   removePostFeedback?: Maybe<PostFeedback>;
+  followPost?: Maybe<PostFollower>;
+  unfollowPost?: Maybe<PostFollower>;
   updatePostComment?: Maybe<PostComment>;
   addPostCommentFeedback?: Maybe<PostCommentFeedback>;
   removePostCommentFeedback?: Maybe<PostCommentFeedback>;
@@ -451,6 +463,16 @@ export type MutationAddPostFeedbackArgs = {
 export type MutationRemovePostFeedbackArgs = {
   postId: Scalars['String'];
   type: Scalars['String'];
+};
+
+
+export type MutationFollowPostArgs = {
+  postId: Scalars['String'];
+};
+
+
+export type MutationUnfollowPostArgs = {
+  postId: Scalars['String'];
 };
 
 

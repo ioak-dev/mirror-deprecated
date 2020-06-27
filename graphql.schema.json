@@ -1321,6 +1321,38 @@
             "deprecationReason": null
           },
           {
+            "name": "comments",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "followers",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "helpful",
             "description": null,
             "args": [],
@@ -1402,6 +1434,22 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "PostFeedback",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "followerList",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "PostFollower",
                 "ofType": null
               }
             },
@@ -1607,6 +1655,57 @@
             "type": {
               "kind": "OBJECT",
               "name": "Post",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "PostFollower",
+        "description": null,
+        "fields": [
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "userId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "postId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3011,6 +3110,60 @@
             "type": {
               "kind": "OBJECT",
               "name": "PostFeedback",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "followPost",
+            "description": null,
+            "args": [
+              {
+                "name": "postId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "PostFollower",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unfollowPost",
+            "description": null,
+            "args": [
+              {
+                "name": "postId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "PostFollower",
               "ofType": null
             },
             "isDeprecated": false,

@@ -22,6 +22,9 @@ const PostLink = (props: Props) => {
         </div>
       </div>
       <div className="post-meta">
+        <div className="answered-post">
+          <i className="material-icons-outlined">verified</i>
+        </div>
         {props.post?.createdAt && (
           <div className="post-date">
             Published on {formatDateText(props.post?.createdAt)}
@@ -34,6 +37,12 @@ const PostLink = (props: Props) => {
             }`}
           </div>
         )}
+        {props.post?.comments > 0 && (
+          <div className="post-statistic-chip comments">
+            {props.post?.comments}
+            <i className="material-icons">forum</i>
+          </div>
+        )}
         {props.post?.helpful > 0 && (
           <div className="post-statistic-chip helpful">
             {props.post?.helpful}
@@ -44,6 +53,12 @@ const PostLink = (props: Props) => {
           <div className="post-statistic-chip not-helpful">
             {props.post?.notHelpful}
             <i className="material-icons">thumb_down</i>
+          </div>
+        )}
+        {props.post?.followers > 0 && (
+          <div className="post-statistic-chip follower">
+            {props.post?.followers}
+            <i className="material-icons">rss_feed</i>
           </div>
         )}
       </div>
