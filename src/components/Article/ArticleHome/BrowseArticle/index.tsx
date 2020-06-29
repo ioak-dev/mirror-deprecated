@@ -3,6 +3,7 @@ import './style.scss';
 import OakButton from '../../../../oakui/OakButton';
 import ArticleSection from './ArticleSection';
 import CategorySection from './CategorySection';
+import OakHeading from '../../../../oakui/OakHeading';
 
 interface Props {
   setProfile: Function;
@@ -30,7 +31,7 @@ const BrowseArticle = (props: Props) => {
     );
   };
 
-  const searchArticle = event => {
+  const searchArticle = () => {
     props.history.push(`/${props.asset}/article/search`);
   };
 
@@ -45,17 +46,12 @@ const BrowseArticle = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text browse-article">
-          <div className="page-title">
-            Browse articles by category
-            <div className="page-subtitle">
-              <div className="browse-article-subtitle">
-                <div className="hyperlink" onClick={searchArticle}>
-                  Or search instead
-                </div>
-              </div>
-            </div>
-            <div className="page-highlight" />
-          </div>
+          <OakHeading
+            title="Browse articles by category"
+            links={[
+              { label: 'Or Search instead', action: () => searchArticle() },
+            ]}
+          />
           <div className="typography-4">
             Articles are grouped based on a logical hierarchy for easier
             navigation. Here you can explore the articles by narrowing down your
