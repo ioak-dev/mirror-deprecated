@@ -92,19 +92,32 @@
   }
 }
 
-.follow-icon {
-  cursor: pointer;
-  &.follow {
-    &:hover,
-    &.active {
+.follower-view {
+  display: grid;
+  justify-items: flex-end;
+  .follow-action {
+    user-select: none;
+    cursor: pointer;
+    padding: 0px 10px;
+    border-radius: 4px;
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 10px;
+    align-items: center;
+    background-color: var(--color-background-4);
+    &:hover {
       color: var(--color-success);
     }
 
-    &.unfollow {
-      &:hover,
-      &.active {
+    &.active {
+      color: var(--color-warning);
+      &:hover {
         color: var(--color-failure);
       }
+    }
+    .followers-count {
+      display: flex;
+      align-items: center;
     }
   }
 }

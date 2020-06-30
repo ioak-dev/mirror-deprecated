@@ -210,6 +210,7 @@ export type PostFollower = {
   id: Scalars['ID'];
   userId?: Maybe<Scalars['String']>;
   postId?: Maybe<Scalars['String']>;
+  post?: Maybe<Post>;
 };
 
 export type PostCommentPaginated = {

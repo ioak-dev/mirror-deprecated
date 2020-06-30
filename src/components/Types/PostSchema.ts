@@ -253,8 +253,14 @@ export const FOLLOW_POST = gql`
   mutation FollowPost($postId: String!) {
     followPost(postId: $postId) {
       id
-      userId
-      postId
+      post {
+        id
+        followers
+        followerList {
+          id
+          userId
+        }
+      }
     }
   }
 `;
@@ -264,7 +270,14 @@ export const UNFOLLOW_POST = gql`
     unfollowPost(postId: $postId) {
       id
       userId
-      postId
+      post {
+        id
+        followers
+        followerList {
+          id
+          userId
+        }
+      }
     }
   }
 `;

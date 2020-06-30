@@ -11,7 +11,7 @@ import OakSpinner from '../../../oakui/OakSpinner';
 import CommentSection from './CommentSection';
 import StatusChip from '../../Common/StatusChip';
 import { days } from '../../Lib/DateUtils';
-import ViewFollowers from './ViewFollowers';
+import FollowerView from './FollowerView';
 
 interface Props {
   location: any;
@@ -56,24 +56,7 @@ const ViewPost = (props: Props) => {
                       )} days ago`}
                     </div>
                   </div>
-                  <div>
-                    {data.post.followerList?.find(
-                      item => item?.userId === authorization.id
-                    ) ? (
-                      <div className="follow-icon unfollow align-horizontal">
-                        {/* <i className="material-icons-outlined">stop_circle</i> */}
-                        <i className="material-icons-outlined">rss_feed</i>
-                        <ViewFollowers post={data.post} />
-                      </div>
-                    ) : (
-                      <div className="follow-icon follow align-horizontal">
-                        <ViewFollowers post={data.post} />
-                        <i className="material-icons-outlined typography-7">
-                          <sup>add</sup>
-                        </i>
-                      </div>
-                    )}
-                  </div>
+                  <FollowerView post={data.post} />
                 </div>
                 <PostItem
                   history={props.history}
@@ -94,8 +77,6 @@ const ViewPost = (props: Props) => {
           </div>
         </div>
       </div>
-      {/* <div className="app-page">
-      </div> */}
     </>
   );
 };
