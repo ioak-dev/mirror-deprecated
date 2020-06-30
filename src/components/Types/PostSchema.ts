@@ -212,6 +212,26 @@ export const POST_COMMENTS = gql`
   }
 `;
 
+export const POST_COMMENT = gql`
+  query PostComment($id: ID!) {
+    postComment(id: $id) {
+      id
+      text
+      parentId
+      helpful
+      notHelpful
+      isAnswer
+      createdBy
+      updatedBy
+      createdAt
+      updatedAt
+      feedback {
+        type
+      }
+    }
+  }
+`;
+
 export const UPDATE_POST_COMMENT = gql`
   mutation UpdatePostComment($payload: PostCommentPayload!) {
     updatePostComment(payload: $payload) {

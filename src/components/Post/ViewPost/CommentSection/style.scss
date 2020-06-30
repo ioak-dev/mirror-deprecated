@@ -62,6 +62,24 @@
       }
     }
   }
+
+  &.answer {
+    // background-color: var(--color-success);
+    // border: 1px solid var(--color-success);
+    border-left: 6px solid var(--color-success);
+  }
+
+  .accepted-answer-container {
+    .accepted-answer-label {
+      color: var(--color-foreground-4);
+    }
+    .answered-answer-icon {
+      &.material-icons-outlined {
+        font-size: 30px;
+        // color: var(--color-success);
+      }
+    }
+  }
 }
 
 .parent-comment-preview {

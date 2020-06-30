@@ -7,6 +7,7 @@ import OakSpinner from '../../../../oakui/OakSpinner';
 import PostLink from '../../PostLink';
 import OakButton from '../../../../oakui/OakButton';
 import { LIST_POSTS } from '../../../Types/PostSchema';
+import OakSubheading from '../../../../oakui/OakSubheading';
 
 interface Props {
   history: any;
@@ -50,19 +51,7 @@ const PostSection = (props: Props) => {
     <>
       <>
         <div className="section-header">
-          <div className="section-title">
-            Posts
-            <div className="section-subtitle">
-              {/* Posts under chosen category */}
-              {/* <div
-                  className="hyperlink typography-5 post-section-subtitle"
-                  onClick={createPostLink}
-                >
-                  Create new post
-                </div> */}
-            </div>
-            <div className="section-highlight" />
-          </div>
+          <OakSubheading title="Posts" />
           <div>
             <OakButton
               theme="primary"

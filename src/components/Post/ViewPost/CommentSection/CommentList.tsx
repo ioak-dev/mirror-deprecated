@@ -50,13 +50,7 @@ const CommentList = (props: Props) => {
           <ViewComment
             postId={props.postId}
             comment={item}
-            parentComment={
-              item.id === item.parentId
-                ? null
-                : data.postComments.results.find(
-                    subcomment => subcomment.id === item.parentId
-                  )
-            }
+            comments={data.postComments?.results}
             key={item.id}
           />
         ))}

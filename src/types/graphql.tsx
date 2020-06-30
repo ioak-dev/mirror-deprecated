@@ -275,6 +275,7 @@ export type Query = {
   postsByTag?: Maybe<PostTagPaginated>;
   postFeedback?: Maybe<Array<Maybe<PostFeedback>>>;
   postComments?: Maybe<PostCommentPaginated>;
+  postComment?: Maybe<PostComment>;
   postCommentFeedback?: Maybe<Array<Maybe<PostCommentFeedback>>>;
 };
 
@@ -376,6 +377,11 @@ export type QueryPostCommentsArgs = {
   postId: Scalars['String'];
   pageSize?: Maybe<Scalars['Int']>;
   pageNo?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryPostCommentArgs = {
+  id: Scalars['ID'];
 };
 
 

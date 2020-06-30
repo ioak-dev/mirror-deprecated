@@ -7,6 +7,7 @@ import OakSpinner from '../../../../oakui/OakSpinner';
 import ArticleLink from '../../ArticleLink';
 import OakButton from '../../../../oakui/OakButton';
 import { LIST_ARTICLES } from '../../../Types/ArticleSchema';
+import OakSubheading from '../../../../oakui/OakSubheading';
 
 interface Props {
   categoryId: string;
@@ -58,19 +59,7 @@ const ArticleSection = (props: Props) => {
       {props.categoryId && (
         <>
           <div className="section-header">
-            <div className="section-title">
-              Articles
-              <div className="section-subtitle">
-                {/* Articles under chosen category */}
-                {/* <div
-                  className="hyperlink typography-5 article-section-subtitle"
-                  onClick={createArticleLink}
-                >
-                  Create new article
-                </div> */}
-              </div>
-              <div className="section-highlight" />
-            </div>
+            <OakSubheading title="Articles" />
             <div>
               <OakButton
                 theme="primary"

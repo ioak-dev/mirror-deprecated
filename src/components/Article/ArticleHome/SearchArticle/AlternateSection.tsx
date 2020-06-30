@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.scss';
+import OakSubheading from '../../../../oakui/OakSubheading';
 
 interface Props {
   asset: string;
@@ -20,11 +21,10 @@ const AlternateSection = (props: Props) => {
       <div className="typography-4 no-article-match-message">
         No articles found matching your search criteria
       </div>
-      <div className="section-title">
-        Here is what you can do next
-        <div className="section-subtitle">Other ways of getting answer</div>
-        <div className="section-highlight" />
-      </div>
+      <OakSubheading
+        title="Here is what you can do next"
+        subtitle="Other ways of getting answer"
+      />
       <div className="no-article-match-action">
         <div className="hyperlink" onClick={browseArticle}>
           Browse articles by category

@@ -73,7 +73,7 @@ const FeedbackView = (props: Props) => {
   // }, [props.comment.feedback]);
 
   return (
-    <div className="action-footer position-left space-top-4 comment-feedback align-horizontal">
+    <div className="action-footer position-left comment-feedback align-horizontal">
       <div className="align-horizontal">
         <i
           className={`material-icons helpful ${

@@ -8,6 +8,7 @@ import PostLink from '../../PostLink';
 import { SEARCH_POSTS } from '../../../Types/PostSchema';
 import OakText from '../../../../oakui/OakText';
 import AlternateSection from './AlternateSection';
+import OakSubheading from '../../../../oakui/OakSubheading';
 
 interface Props {
   asset: string;
@@ -77,14 +78,10 @@ const SearchSection = (props: Props) => {
         <div className="search-results-section">
           <div className="search-results-container">
             {data?.searchPosts?.results?.length > 0 && (
-              <div className="section-title">
-                Search results
-                <div className="section-subtitle">
-                  Showing results for &quot;{props.text}&quot;
-                </div>
-                {data?.searchPosts?.results?.total}
-                <div className="section-highlight" />
-              </div>
+              <OakSubheading
+                title="Search results"
+                subtitle={`Showing results for "${props.text}"`}
+              />
             )}
             {data?.searchPosts?.results?.map((item: Post) => (
               <PostLink

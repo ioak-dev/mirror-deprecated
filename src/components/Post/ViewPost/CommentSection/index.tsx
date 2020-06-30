@@ -4,6 +4,7 @@ import NewCommentItem from './NewCommentItem';
 import CommentList from './CommentList';
 import { POST_COMMENTS } from '../../../Types/PostSchema';
 import './style.scss';
+import OakSubheading from '../../../../oakui/OakSubheading';
 
 interface Props {
   postId: string;
@@ -18,39 +19,30 @@ const CommentSection = (props: Props) => {
   });
   const [newComment, setNewComment] = useState(false);
   const [viewComments, setViewComments] = useState(true);
+
+  const getSectionLinks = () => {
+    return [
+      {
+        label: 'New comment',
+        icon: 'add_comment',
+        action: () => setNewComment(!newComment),
+      },
+      {
+        label: viewComments ? 'Hide' : 'Show',
+        icon: viewComments ? 'expand_less' : 'expand_more',
+        action: () => setViewComments(!viewComments),
+      },
+    ];
+  };
+
   return (
     <>
       <div className="section-header">
-        <div className="section-title">
-          Comments&nbsp;({data?.postComments?.results?.length})
-          <div className="section-subtitle">
-            <div className="typography-5 comment-section-subtitle align-horizontal">
-              <div className="comment-section-actions">
-                <div className="align-horizontal hyperlink-container">
-                  <i className="material-icons typography-6">add_comment</i>
-                  <div
-                    className="hyperlink"
-                    onClick={() => setNewComment(!newComment)}
-                  >
-                    New comment
-                  </div>
-                </div>
-                <div className="align-horizontal hyperlink-container">
-                  <i className="material-icons typography-6">
-                    {viewComments ? 'expand_less' : 'expand_more'}
-                  </i>
-                  <div
-                    className="hyperlink"
-                    onClick={() => setViewComments(!viewComments)}
-                  >
-                    {viewComments ? 'Hide' : 'Show'}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="section-highlight" />
-        </div>
+        <OakSubheading
+          title={`Comments (${data?.postComments?.results?.length})`}
+          links={getSectionLinks()}
+          linkSize="large"
+        />
       </div>
 
       {newComment && (

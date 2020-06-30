@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.scss';
+import OakSubheading from '../../../../oakui/OakSubheading';
 
 interface Props {
   asset: string;
@@ -7,7 +8,7 @@ interface Props {
 }
 
 const AlternateSection = (props: Props) => {
-  const browsePost = event => {
+  const browsePost = () => {
     props.history.push(`/${props.asset}/post/browse`);
   };
 
@@ -16,11 +17,10 @@ const AlternateSection = (props: Props) => {
       <div className="typography-4 no-post-match-message">
         No posts found matching your search criteria
       </div>
-      <div className="section-title">
-        Here is what you can do next
-        <div className="section-subtitle">Other ways of getting answer</div>
-        <div className="section-highlight" />
-      </div>
+      <OakSubheading
+        title="Here is what you can do next"
+        subtitle="Other ways of getting answer"
+      />
       <div className="no-post-match-action">
         <div className="hyperlink" onClick={browsePost}>
           Browse posts by timeline
