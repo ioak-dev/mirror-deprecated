@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.scss';
 import OakButton from '../../../oakui/OakButton';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   setProfile: Function;
@@ -28,11 +29,10 @@ const ArticleHome = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
-          <div className="page-title">
-            Article knowledge base
-            <div className="page-subtitle">Home of knowledge</div>
-            <div className="page-highlight" />
-          </div>
+          <OakHeading
+            title="Article knowledge base"
+            subtitle="Home of knowledge"
+          />
           <div className="typography-4 space-bottom-4">
             Welcome to the world of knowledge. Here you will find articles that
             will answer the question on your mind about this application. You

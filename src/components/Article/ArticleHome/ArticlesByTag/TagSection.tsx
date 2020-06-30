@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
 import { ARTICLE_TAG_CLOUD } from '../../../Types/ArticleSchema';
 import TagLink from './TagLink';
+import OakHeading from '../../../../oakui/OakHeading';
 
 interface Props {
   handleChange: Function;
@@ -15,24 +16,19 @@ const TagSection = (props: Props) => {
     fetchPolicy: 'cache-and-network',
   });
 
-  const searchArticle = event => {
+  const searchArticle = () => {
     props.history.push(`/${props.asset}/article/search`);
   };
 
   return (
     <div className="app-content">
       <div className="app-text">
-        <div className="page-title">
-          Articles by tag
-          <div className="page-subtitle">
-            <div className="browse-article-subtitle">
-              <div className="hyperlink" onClick={searchArticle}>
-                Or Search instead
-              </div>
-            </div>
-          </div>
-          <div className="page-highlight" />
-        </div>
+        <OakHeading
+          title="Articles by tag"
+          links={[
+            { label: 'Or Search instead', action: () => searchArticle() },
+          ]}
+        />
         <div className="tag-section">
           {data?.articleTagCloud?.map(item => (
             <TagLink

@@ -6,6 +6,7 @@ import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
 import ArticleLink from '../../ArticleLink';
 import { Article, ArticleTag } from '../../../../types/graphql';
 import OakSpinner from '../../../../oakui/OakSpinner';
+import OakHeading from '../../../../oakui/OakHeading';
 
 interface Props {
   tag: string;
@@ -48,34 +49,29 @@ const ArticleSection = (props: Props) => {
     props.history.goBack();
   };
 
-  const viewByTags = event => {
+  const viewByTags = () => {
     props.history.push(`/${props.asset}/article/tag`);
   };
 
   return (
     <div className="app-content">
       <div className="app-text">
-        <div className="page-title">
-          Articles by tag
-          <div className="page-subtitle">
-            Showing articles for tag &quot;{props.tag}&quot;
-            <div className="tag-article-section-action">
-              <div className="align-horizontal hyperlink-container">
-                <i className="material-icons typography-6">reply</i>
-                <div className="hyperlink" onClick={goBack}>
-                  Go back
-                </div>
-              </div>
-              <div className="align-horizontal hyperlink-container see-other-tags">
-                <i className="material-icons typography-6">local_offer</i>
-                <div className="hyperlink" onClick={viewByTags}>
-                  See other tags
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="page-highlight" />
-        </div>
+        <OakHeading
+          title="Articles by tag"
+          subtitle={`Showing articles for tag "${props.tag}"`}
+          links={[
+            {
+              label: 'Go back',
+              icon: 'reply',
+              action: () => goBack(),
+            },
+            {
+              label: 'See other tags',
+              icon: 'local_offer',
+              action: () => viewByTags(),
+            },
+          ]}
+        />
         <div className="tag-article-section">
           <OakInfiniteScroll
             handleChange={fetchMoreArticles}
