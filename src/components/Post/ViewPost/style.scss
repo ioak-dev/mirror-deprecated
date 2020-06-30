@@ -91,3 +91,20 @@
     }
   }
 }
+
+.follow-icon {
+  cursor: pointer;
+  &.follow {
+    &:hover,
+    &.active {
+      color: var(--color-success);
+    }
+
+    &.unfollow {
+      &:hover,
+      &.active {
+        color: var(--color-failure);
+      }
+    }
+  }
+}
