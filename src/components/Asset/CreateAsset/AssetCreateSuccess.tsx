@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_ASSET } from '../../Types/schema';
 import OakViewer from '../../../oakui/OakViewer';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   location: any;
@@ -21,10 +22,7 @@ const AssetCreateSuccess = (props: Props) => {
       <div className="app-content">
         <div className="app-text">
           <div className="view-asset-item">
-            <div className="page-title">
-              Asset details
-              <div className="page-highlight" />
-            </div>
+            <OakHeading title="Asset details" />
             {!loading && !error && (
               <>
                 <div className="typography-5 align-horizontal">

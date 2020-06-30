@@ -53,24 +53,28 @@ const ArticleSection = (props: Props) => {
     props.history.push(`/${props.asset}/article/tag`);
   };
 
+  const getHeadingLinks = () => {
+    return [
+      {
+        label: 'Go back',
+        icon: 'reply',
+        action: () => goBack(),
+      },
+      {
+        label: 'See other tags',
+        icon: 'local_offer',
+        action: () => viewByTags(),
+      },
+    ];
+  };
+
   return (
     <div className="app-content">
       <div className="app-text">
         <OakHeading
           title="Articles by tag"
           subtitle={`Showing articles for tag "${props.tag}"`}
-          links={[
-            {
-              label: 'Go back',
-              icon: 'reply',
-              action: () => goBack(),
-            },
-            {
-              label: 'See other tags',
-              icon: 'local_offer',
-              action: () => viewByTags(),
-            },
-          ]}
+          links={getHeadingLinks()}
         />
         <div className="tag-article-section">
           <OakInfiniteScroll

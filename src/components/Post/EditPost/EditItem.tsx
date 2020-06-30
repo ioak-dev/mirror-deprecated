@@ -8,6 +8,7 @@ import { sendMessage } from '../../../events/MessageService';
 import { Post, PostPayload } from '../../../types/graphql';
 import OakChipGroup from '../../../oakui/OakChipGroup';
 import { UPDATE_POST } from '../../Types/PostSchema';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   id: string;
@@ -151,11 +152,7 @@ const EditItem = (props: Props) => {
   return (
     <>
       <div className="page-header">
-        <div className="page-title">
-          Edit post
-          {/* <div className="page-subtitle">sub text</div> */}
-          <div className="page-highlight" />
-        </div>
+        <OakHeading title="Edit post" />
         <div className="action-header position-right">
           <OakButton action={update} theme="primary" variant="appear">
             <i className="material-icons">double_arrow</i>Save

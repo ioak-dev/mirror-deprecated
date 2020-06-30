@@ -6,6 +6,7 @@ import { AssetPayload, AssetAdditionPayload } from '../../../types/graphql';
 import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
 import { CREATE_ASSET } from '../../Types/schema';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   history: any;
@@ -105,10 +106,7 @@ const CreateItem = (props: Props) => {
   return (
     <>
       <div className="page-header">
-        <div className="page-title">
-          Create Asset
-          <div className="page-highlight" />
-        </div>
+        <OakHeading title="Create asset" />
 
         <div className="action-header position-right">
           <OakButton action={submit} theme="primary" variant="appear">

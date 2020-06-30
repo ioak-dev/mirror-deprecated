@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   history: any;
@@ -51,7 +52,10 @@ const OneAuth = (props: Props) => {
       <div className="app-content">
         <div className="app-text">
           <div className="view-asset-item">
-            <div className="page-title">Login Details</div>
+            <OakHeading
+              title="Login via Oneauth"
+              subtitle="You will be redirected to oneauth for signing in to your space"
+            />
             <div className="action-header position-right">
               <OakButton action={oaLogin} theme="primary" variant="appear">
                 <i className="material-icons">double_arrow</i>Submit

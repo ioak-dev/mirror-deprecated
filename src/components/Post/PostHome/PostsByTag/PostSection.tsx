@@ -6,6 +6,7 @@ import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
 import PostLink from '../../PostLink';
 import { Post, PostTag } from '../../../../types/graphql';
 import OakSpinner from '../../../../oakui/OakSpinner';
+import OakHeading from '../../../../oakui/OakHeading';
 
 interface Props {
   tag: string;
@@ -45,34 +46,33 @@ const PostSection = (props: Props) => {
     props.history.goBack();
   };
 
-  const viewByTags = event => {
+  const viewByTags = () => {
     props.history.push(`/${props.asset}/post/tag`);
+  };
+
+  const getHeadingLinks = () => {
+    return [
+      {
+        label: 'Go back',
+        icon: 'reply',
+        action: () => goBack(),
+      },
+      {
+        label: 'See other tags',
+        icon: 'local_offer',
+        action: () => viewByTags(),
+      },
+    ];
   };
 
   return (
     <div className="app-content">
       <div className="app-text">
-        <div className="page-title">
-          Posts by tag
-          <div className="page-subtitle">
-            Showing posts for tag &quot;{props.tag}&quot;
-            <div className="tag-post-section-action">
-              <div className="align-horizontal hyperlink-container">
-                <i className="material-icons typography-6">reply</i>
-                <div className="hyperlink" onClick={goBack}>
-                  Go back
-                </div>
-              </div>
-              <div className="align-horizontal hyperlink-container see-other-tags">
-                <i className="material-icons typography-6">local_offer</i>
-                <div className="hyperlink" onClick={viewByTags}>
-                  See other tags
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="page-highlight" />
-        </div>
+        <OakHeading
+          title="Posts by tag"
+          subtitle={`Showing posts for tag "${props.tag}"`}
+          links={getHeadingLinks()}
+        />
         <div className="tag-post-section">
           <OakInfiniteScroll handleChange={fetchMorePosts} selector=".app-page">
             <div className="search-results-section">

@@ -5,6 +5,7 @@ import { Article } from '../../../types/graphql';
 import OakViewer from '../../../oakui/OakViewer';
 import TagContainer from './TagContainer';
 import { DELETE_ARTICLE } from '../../Types/ArticleSchema';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   id: string;
@@ -45,45 +46,32 @@ const ArticleItem = (props: Props) => {
     });
   };
 
+  const getHeadingLinks = () => {
+    const links: any[] = [];
+    if (props.history.length > 2) {
+      links.push({
+        label: 'Go back',
+        icon: 'reply',
+        action: () => goBack(),
+      });
+    }
+    links.push({ label: 'Edit', icon: 'edit', action: () => editArticle() });
+    links.push({
+      label: 'Delete',
+      icon: 'delete_outline',
+      action: () => deleteArticlePrompt(),
+    });
+    return links;
+  };
+
   return (
     <>
       <div className="view-article-item">
-        <div className="page-title">
-          {props.article.title}
-          <div className="page-subtitle">
-            <div className="article-item-actions typography-5">
-              {props.history.length > 2 && (
-                <div
-                  className="align-horizontal hyperlink-container"
-                  onClick={goBack}
-                >
-                  <i className="material-icons typography-6">reply</i>
-                  <div className="hyperlink">Go back</div>
-                </div>
-              )}
-              <div className="align-horizontal hyperlink-container">
-                <i className="material-icons typography-6">edit</i>
-                <div className="hyperlink" onClick={editArticle}>
-                  Edit
-                </div>
-              </div>
-              <div className="align-horizontal hyperlink-container">
-                <i className="material-icons typography-6">delete_outline</i>
-                <div className="hyperlink" onClick={deleteArticlePrompt}>
-                  Delete
-                </div>
-              </div>
-            </div>
-            {/* <CategoryTree
-          category={data?.categories?.find(
-            (item: Category) => item.id === urlParam.categoryid
-          )}
-          categories={data?.categories}
-          handleChange={handleChange}
-        /> */}
-          </div>
-          <div className="page-highlight" />
-        </div>
+        <OakHeading
+          title={props.article.title || ''}
+          links={getHeadingLinks()}
+          linkSize="large"
+        />
         <TagContainer
           tags={props.article.tags || []}
           history={props.history}

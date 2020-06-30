@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
 import SearchSection from './SearchSection';
+import OakHeading from '../../../../oakui/OakHeading';
 
 interface Props {
   setProfile: Function;
@@ -22,7 +23,7 @@ const SearchPost = (props: Props) => {
     setUrlParam(queryString.parse(props.location.search));
   }, [props.location.search]);
 
-  const browsePost = event => {
+  const browsePost = () => {
     props.history.push(`/${props.asset}/post/browse`);
   };
 
@@ -34,17 +35,15 @@ const SearchPost = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text browse-post">
-          <div className="page-title">
-            Search posts
-            <div className="page-subtitle">
-              <div className="browse-post-subtitle">
-                <div className="hyperlink" onClick={browsePost}>
-                  Or Browse by timeline instead
-                </div>
-              </div>
-            </div>
-            <div className="page-highlight" />
-          </div>
+          <OakHeading
+            title="Search posts"
+            links={[
+              {
+                label: 'Or Browse by timeline instead',
+                action: () => browsePost(),
+              },
+            ]}
+          />
           {/* <div className="typography-4 align-horizontal">
             Find your questions answered, from the knowledge base. If you
             don&apos;t get your desired answers, you can post your question for

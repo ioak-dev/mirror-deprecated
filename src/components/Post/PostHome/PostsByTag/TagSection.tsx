@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
 import { POST_TAG_CLOUD } from '../../../Types/PostSchema';
 import TagLink from './TagLink';
+import OakHeading from '../../../../oakui/OakHeading';
 
 interface Props {
   handleChange: Function;
@@ -15,24 +16,17 @@ const TagSection = (props: Props) => {
     fetchPolicy: 'cache-and-network',
   });
 
-  const searchPost = event => {
+  const searchPost = () => {
     props.history.push(`/${props.asset}/post/search`);
   };
 
   return (
     <div className="app-content">
       <div className="app-text">
-        <div className="page-title">
-          Posts by tag
-          <div className="page-subtitle">
-            <div className="browse-post-subtitle">
-              <div className="hyperlink" onClick={searchPost}>
-                Or Search instead
-              </div>
-            </div>
-          </div>
-          <div className="page-highlight" />
-        </div>
+        <OakHeading
+          title="Posts by tag"
+          links={[{ label: 'Or Search instead', action: () => searchPost() }]}
+        />
         <div className="tag-section">
           {data?.postTagCloud?.map(item => (
             <TagLink

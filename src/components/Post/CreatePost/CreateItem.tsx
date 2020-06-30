@@ -7,6 +7,7 @@ import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import OakChipGroup from '../../../oakui/OakChipGroup';
 import { PostPayload } from '../../../types/graphql';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   history: any;
@@ -145,11 +146,10 @@ const CreateItem = (props: Props) => {
   return (
     <>
       <div className="page-header">
-        <div className="page-title">
-          Create post
-          {/* <div className="page-subtitle">sub text</div> */}
-          <div className="page-highlight" />
-        </div>
+        <OakHeading
+          title="Create post"
+          subtitle="Submit your question, and you will receive an answer shortly"
+        />
         <div className="action-header position-right">
           <OakButton action={submit} theme="primary" variant="appear">
             <i className="material-icons">double_arrow</i>Save

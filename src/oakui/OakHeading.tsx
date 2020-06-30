@@ -3,13 +3,15 @@ import './styles/oak-heading.scss';
 import OakHeadingLink from './OakHeadingLink';
 
 interface Props {
-  title: string;
+  title: any;
   subtitle?: string;
   links?: {
     label: string;
     icon?: string;
     action: any;
   }[];
+  linkSize?: 'large';
+  children?: any;
 }
 
 const OakHeading = (props: Props) => {
@@ -21,12 +23,12 @@ const OakHeading = (props: Props) => {
       )}
       <div className="heading-links">
         {props.links?.map((item, index) => (
-          <OakHeadingLink link={item} key={index} />
+          <OakHeadingLink link={item} key={index} size={props.linkSize} />
         ))}
       </div>
-      {/* {props.children && (
+      {props.children && (
         <div className="heading-children">{props.children}</div>
-      )} */}
+      )}
       <div className="heading-highlight" />
     </div>
   );

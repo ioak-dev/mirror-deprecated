@@ -6,6 +6,7 @@ import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 
 import { CREATE_EMAIL_ACCOUNT } from '../../Types/schema';
 import { UserPayload } from '../../../types/graphql';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   history: any;
@@ -89,13 +90,10 @@ const AccountItem = (props: Props) => {
       {!message && (
         <form method="GET" onSubmit={submit} noValidate>
           <div className="page-header">
-            <div className="page-title">
-              Email authentication
-              <div className="page-subtitle">
-                You don&apos;t have an user account yet. Signup now
-              </div>
-              <div className="page-highlight" />
-            </div>
+            <OakHeading
+              title="Email authentication"
+              subtitle="You don't have an user account yet. Signup now"
+            />
 
             <div className="action-header position-right">
               <OakButton action={submit} theme="primary" variant="appear">

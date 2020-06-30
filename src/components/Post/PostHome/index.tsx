@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.scss';
 import OakButton from '../../../oakui/OakButton';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   setProfile: Function;
@@ -32,13 +33,10 @@ const PostHome = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
-          <div className="page-title">
-            Customer support forum
-            <div className="page-subtitle">
-              Connecting seekers, contributors and customer support
-            </div>
-            <div className="page-highlight" />
-          </div>
+          <OakHeading
+            title="Customer support forum"
+            subtitle="Connecting seekers, contributors and customer support"
+          />
           <div className="typography-4 space-bottom-4">
             <ol>
               <div className="typography-6">

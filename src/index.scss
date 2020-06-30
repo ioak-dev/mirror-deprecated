@@ -64,32 +64,6 @@ code {
     word-break: break-word;
   }
 
-  .page-title {
-    font-size: var(--metric-typography-10);
-
-    // border-left: 10px solid var(--color-primary-1);
-    // padding-left: 10px;
-    margin-bottom: 20px;
-    display: grid;
-    row-gap: 6px;
-
-    .page-subtitle {
-      font-size: var(--metric-typography-4);
-      display: grid;
-      grid-auto-flow: row;
-      row-gap: 4px;
-      justify-content: flex-start;
-    }
-  }
-
-  .page-highlight {
-    margin-top: 10px;
-    background-color: var(--color-primary-1);
-    height: 8px;
-    width: 60px;
-    border-radius: 4px;
-  }
-
   .section-highlight {
     margin-top: 6px;
     background-color: var(--color-primary-1);

@@ -5,6 +5,7 @@ import { Post } from '../../../types/graphql';
 import OakViewer from '../../../oakui/OakViewer';
 import TagContainer from './TagContainer';
 import { DELETE_POST } from '../../Types/PostSchema';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   id: string;
@@ -45,38 +46,32 @@ const PostItem = (props: Props) => {
     });
   };
 
+  const getHeadingLinks = () => {
+    const links: any[] = [];
+    if (props.history.length > 2) {
+      links.push({
+        label: 'Go back',
+        icon: 'reply',
+        action: () => goBack(),
+      });
+    }
+    links.push({ label: 'Edit', icon: 'edit', action: () => editPost() });
+    links.push({
+      label: 'Delete',
+      icon: 'delete_outline',
+      action: () => deletePostPrompt(),
+    });
+    return links;
+  };
+
   return (
     <>
       <div className="view-post-item">
-        <div className="page-title">
-          {props.post.title}
-          <div className="page-subtitle">
-            <div className="post-item-actions typography-5">
-              {props.history.length > 2 && (
-                <div
-                  className="align-horizontal hyperlink-container"
-                  onClick={goBack}
-                >
-                  <i className="material-icons typography-6">reply</i>
-                  <div className="hyperlink">Go back</div>
-                </div>
-              )}
-              <div className="align-horizontal hyperlink-container">
-                <i className="material-icons typography-6">edit</i>
-                <div className="hyperlink" onClick={editPost}>
-                  Edit
-                </div>
-              </div>
-              <div className="align-horizontal hyperlink-container">
-                <i className="material-icons typography-6">delete_outline</i>
-                <div className="hyperlink" onClick={deletePostPrompt}>
-                  Delete
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="page-highlight" />
-        </div>
+        <OakHeading
+          title={props.post.title || ''}
+          links={getHeadingLinks()}
+          linkSize="large"
+        />
         <TagContainer
           tags={props.post.tags || []}
           history={props.history}

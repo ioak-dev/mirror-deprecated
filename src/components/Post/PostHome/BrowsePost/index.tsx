@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
 import PostSection from './PostSection';
+import OakHeading from '../../../../oakui/OakHeading';
 
 interface Props {
   setProfile: Function;
@@ -10,7 +11,7 @@ interface Props {
 }
 
 const BrowsePost = (props: Props) => {
-  const searchPost = event => {
+  const searchPost = () => {
     props.history.push(`/${props.asset}/post/search`);
   };
 
@@ -18,17 +19,10 @@ const BrowsePost = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text browse-post">
-          <div className="page-title">
-            Browse posts by timeline
-            <div className="page-subtitle">
-              <div className="browse-post-subtitle">
-                <div className="hyperlink" onClick={searchPost}>
-                  Or search instead
-                </div>
-              </div>
-            </div>
-            <div className="page-highlight" />
-          </div>
+          <OakHeading
+            title="Browse posts by timeline"
+            links={[{ label: 'Or search instead', action: () => searchPost() }]}
+          />
           <div className="typography-4">
             Here you can explore the posts in forum, by publication month of the
             post

@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.scss';
 import LoginMethod from './LoginMethod';
+import OakHeading from '../../oakui/OakHeading';
 
 interface Props {
   history: any;
@@ -25,16 +26,10 @@ const Login = (props: Props) => {
     <div className="app-page">
       <div className="app-content">
         <div className="app-text">
-          <div className="page-title">
-            <div className="align-horizontal">
-              {/* <i className="material-icons">fingerprint</i> */}
-              Sign in
-            </div>
-            <div className="page-subtitle">
-              Choose the preferred authentication method to continue
-            </div>
-            <div className="page-highlight" />
-          </div>
+          <OakHeading
+            title="Sign in"
+            subtitle="Choose the preferred authentication method to continue"
+          />
           <div className="view-asset-item">
             <div className="space-top-3 mirror-signin">
               <div className="login-home">
