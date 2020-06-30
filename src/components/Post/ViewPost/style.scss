@@ -80,16 +80,6 @@
   grid-auto-flow: column;
   justify-content: space-between;
   align-items: center;
-  .post-status {
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: flex-start;
-    align-items: center;
-    column-gap: 10px;
-    .post-status-label {
-      color: var(--color-foreground-4);
-    }
-  }
 }
 
 .follower-view {
@@ -118,6 +108,19 @@
     .followers-count {
       display: flex;
       align-items: center;
+    }
+  }
+}
+
+.post-status-view {
+  .post-status {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    column-gap: 10px;
+    .post-status-label {
+      color: var(--color-foreground-4);
     }
   }
 }

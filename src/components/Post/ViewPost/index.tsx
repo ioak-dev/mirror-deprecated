@@ -12,6 +12,7 @@ import CommentSection from './CommentSection';
 import StatusChip from '../../Common/StatusChip';
 import { days } from '../../Lib/DateUtils';
 import FollowerView from './FollowerView';
+import StatusView from './StatusView';
 
 interface Props {
   location: any;
@@ -44,18 +45,7 @@ const ViewPost = (props: Props) => {
             {!loading && !error && (
               <>
                 <div className="post-status-header">
-                  <div className="post-status">
-                    <StatusChip
-                      label="Closed"
-                      color="success"
-                      icon="check_circle"
-                    />
-                    <div className="typography-4 post-status-label desktop-only">
-                      {`Answered ${Math.round(
-                        Math.abs(days(data.post.createdAt))
-                      )} days ago`}
-                    </div>
-                  </div>
+                  <StatusView post={data.post} />
                   <FollowerView post={data.post} />
                 </div>
                 <PostItem

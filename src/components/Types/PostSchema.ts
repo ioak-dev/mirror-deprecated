@@ -12,6 +12,8 @@ export const LIST_POSTS = gql`
         comments
         helpful
         notHelpful
+        isAnswered
+        answeredOn
         createdAt
         updatedAt
         tags {
@@ -37,6 +39,8 @@ export const SEARCH_POSTS = gql`
         comments
         helpful
         notHelpful
+        isAnswered
+        answeredOn
         createdAt
         updatedAt
         tags {
@@ -62,6 +66,8 @@ export const GET_POST = gql`
       comments
       helpful
       notHelpful
+      isAnswered
+      answeredOn
       createdAt
       updatedAt
       followerList {
@@ -94,6 +100,8 @@ export const POSTS_BY_TAG = gql`
           comments
           helpful
           notHelpful
+          isAnswered
+          answeredOn
           createdAt
           updatedAt
           tags {
@@ -119,6 +127,8 @@ export const UPDATE_POST = gql`
       comments
       helpful
       notHelpful
+      isAnswered
+      answeredOn
       createdAt
       updatedAt
       tags {
@@ -187,6 +197,7 @@ export const POST_COMMENTS = gql`
         parentId
         helpful
         notHelpful
+        isAnswer
         createdBy
         updatedBy
         createdAt
@@ -209,6 +220,7 @@ export const UPDATE_POST_COMMENT = gql`
       parentId
       helpful
       notHelpful
+      isAnswer
       createdBy
       updatedBy
       createdAt
@@ -278,6 +290,24 @@ export const UNFOLLOW_POST = gql`
           userId
         }
       }
+    }
+  }
+`;
+
+export const MARK_POSTCOMMENT_AS_ANSWER = gql`
+  mutation MarkPostCommentAsAnswer($id: ID!) {
+    markPostCommentAsAnswer(id: $id) {
+      id
+      isAnswer
+    }
+  }
+`;
+
+export const UNMARK_POSTCOMMENT_AS_ANSWER = gql`
+  mutation UnmarkPostCommentAsAnswer($id: ID!) {
+    unmarkPostCommentAsAnswer(id: $id) {
+      id
+      isAnswer
     }
   }
 `;

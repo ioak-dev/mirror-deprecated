@@ -22,9 +22,11 @@ const PostLink = (props: Props) => {
         </div>
       </div>
       <div className="post-meta">
-        <div className="answered-post">
-          <i className="material-icons-outlined">verified</i>
-        </div>
+        {props.post?.isAnswered && (
+          <div className="answered-post">
+            <i className="material-icons-outlined">verified</i>
+          </div>
+        )}
         {props.post?.createdAt && (
           <div className="post-date">
             Published on {formatDateText(props.post?.createdAt)}

@@ -167,6 +167,8 @@ export type Post = {
   description?: Maybe<Scalars['String']>;
   views: Scalars['Int'];
   comments: Scalars['Int'];
+  isAnswered: Scalars['Boolean'];
+  answeredOn?: Maybe<Scalars['DateScalar']>;
   followers: Scalars['Int'];
   helpful: Scalars['Int'];
   notHelpful: Scalars['Int'];
@@ -235,6 +237,7 @@ export type PostComment = {
   parentId?: Maybe<Scalars['String']>;
   helpful?: Maybe<Scalars['Int']>;
   notHelpful?: Maybe<Scalars['Int']>;
+  isAnswer?: Maybe<Scalars['Boolean']>;
   createdBy?: Maybe<Scalars['String']>;
   updatedBy?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateScalar']>;
@@ -397,6 +400,8 @@ export type Mutation = {
   followPost?: Maybe<PostFollower>;
   unfollowPost?: Maybe<PostFollower>;
   updatePostComment?: Maybe<PostComment>;
+  markPostCommentAsAnswer?: Maybe<PostComment>;
+  unmarkPostCommentAsAnswer?: Maybe<PostComment>;
   addPostCommentFeedback?: Maybe<PostCommentFeedback>;
   removePostCommentFeedback?: Maybe<PostCommentFeedback>;
 };
@@ -479,6 +484,16 @@ export type MutationUnfollowPostArgs = {
 
 export type MutationUpdatePostCommentArgs = {
   payload: PostCommentPayload;
+};
+
+
+export type MutationMarkPostCommentAsAnswerArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationUnmarkPostCommentAsAnswerArgs = {
+  id: Scalars['ID'];
 };
 
 
