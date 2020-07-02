@@ -4,6 +4,8 @@ import './style.scss';
 import { GET_ASSET } from '../../Types/schema';
 import OakSpinner from '../../../oakui/OakSpinner';
 import ViewItem from './ViewItem';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   location: any;
@@ -19,17 +21,15 @@ const ViewAsset = (props: Props) => {
     },
   });
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          {loading && <OakSpinner />}
-          {!loading && !error && (
-            <ViewItem history={props.history} asset={data.asset} />
-          )}
-          {error && <div className="typography-6">Asset does not exist</div>}
-        </div>
-      </div>
-    </div>
+    <OakPage>
+      <OakSection>
+        {loading && <OakSpinner />}
+        {!loading && !error && (
+          <ViewItem history={props.history} asset={data.asset} />
+        )}
+        {error && <div className="typography-6">Asset does not exist</div>}
+      </OakSection>
+    </OakPage>
   );
 };
 

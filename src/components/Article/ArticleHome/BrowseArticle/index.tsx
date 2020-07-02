@@ -4,6 +4,8 @@ import OakButton from '../../../../oakui/OakButton';
 import ArticleSection from './ArticleSection';
 import CategorySection from './CategorySection';
 import OakHeading from '../../../../oakui/OakHeading';
+import OakPage from '../../../../oakui/OakPage';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   setProfile: Function;
@@ -43,9 +45,9 @@ const BrowseArticle = (props: Props) => {
   };
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text browse-article">
+    <OakPage>
+      <OakSection>
+        <div className="browse-article">
           <OakHeading
             title="Browse articles by category"
             links={[
@@ -70,8 +72,8 @@ const BrowseArticle = (props: Props) => {
             asset={props.asset}
           />
         </div>
-      </div>
-    </div>
+      </OakSection>
+    </OakPage>
   );
 };
 

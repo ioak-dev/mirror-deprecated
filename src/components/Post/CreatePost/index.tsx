@@ -1,6 +1,8 @@
 import React from 'react';
 import './style.scss';
 import CreateItem from './CreateItem';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   history: any;
@@ -9,13 +11,11 @@ interface Props {
 
 const CreatePost = (props: Props) => {
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          <CreateItem history={props.history} asset={props.asset} />
-        </div>
-      </div>
-    </div>
+    <OakPage>
+      <OakSection>
+        <CreateItem history={props.history} asset={props.asset} />
+      </OakSection>
+    </OakPage>
   );
 };
 

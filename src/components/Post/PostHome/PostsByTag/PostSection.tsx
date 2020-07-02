@@ -7,6 +7,7 @@ import PostLink from '../../PostLink';
 import { Post, PostTag } from '../../../../types/graphql';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import OakHeading from '../../../../oakui/OakHeading';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   tag: string;
@@ -66,40 +67,38 @@ const PostSection = (props: Props) => {
   };
 
   return (
-    <div className="app-content">
-      <div className="app-text">
-        <OakHeading
-          title="Posts by tag"
-          subtitle={`Showing posts for tag "${props.tag}"`}
-          links={getHeadingLinks()}
-        />
-        <div className="tag-post-section">
-          <OakInfiniteScroll handleChange={fetchMorePosts} selector=".app-page">
-            <div className="search-results-section">
-              <div className="search-results-container">
-                {data?.postsByTag?.results?.map((item: PostTag, index) => (
-                  <div key={item?.post?.id || index}>
-                    {item?.post && (
-                      <PostLink
-                        post={item.post}
-                        asset={props.asset}
-                        history={props.history}
-                      />
-                    )}
-                  </div>
-                ))}
-                {/* {data?.postsByTag?.results?.length === 0 &&
+    <OakSection>
+      <OakHeading
+        title="Posts by tag"
+        subtitle={`Showing posts for tag "${props.tag}"`}
+        links={getHeadingLinks()}
+      />
+      <div className="tag-post-section">
+        <OakInfiniteScroll handleChange={fetchMorePosts} selector=".oak-page">
+          <div className="search-results-section">
+            <div className="search-results-container">
+              {data?.postsByTag?.results?.map((item: PostTag, index) => (
+                <div key={item?.post?.id || index}>
+                  {item?.post && (
+                    <PostLink
+                      post={item.post}
+                      asset={props.asset}
+                      history={props.history}
+                    />
+                  )}
+                </div>
+              ))}
+              {/* {data?.postsByTag?.results?.length === 0 &&
               props.text &&
               !loading && (
                 <AlternateSection history={props.history} asset={props.asset} />
               )} */}
-              </div>
-              <div>{loading ? <OakSpinner /> : ''}</div>
             </div>
-          </OakInfiniteScroll>
-        </div>
+            <div>{loading ? <OakSpinner /> : ''}</div>
+          </div>
+        </OakInfiniteScroll>
       </div>
-    </div>
+    </OakSection>
   );
 };
 

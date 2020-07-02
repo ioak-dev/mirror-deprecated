@@ -7,6 +7,8 @@ import { GET_ARTICLE } from '../../Types/ArticleSchema';
 import OakButton from '../../../oakui/OakButton';
 import FeedbackView from './FeedbackView';
 import OakSpinner from '../../../oakui/OakSpinner';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   location: any;
@@ -30,25 +32,23 @@ const ViewArticle = (props: Props) => {
   }, [props.location.search]);
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          {loading && <OakSpinner />}
-          {!loading && !error && (
-            <>
-              <ArticleItem
-                history={props.history}
-                id={urlParam.id}
-                asset={props.asset}
-                article={data.article}
-              />
-              <FeedbackView article={data.article} />
-            </>
-          )}
-          {error && <div className="typography-6">Article does not exist</div>}
-        </div>
-      </div>
-    </div>
+    <OakPage>
+      <OakSection>
+        {loading && <OakSpinner />}
+        {!loading && !error && (
+          <>
+            <ArticleItem
+              history={props.history}
+              id={urlParam.id}
+              asset={props.asset}
+              article={data.article}
+            />
+            <FeedbackView article={data.article} />
+          </>
+        )}
+        {error && <div className="typography-6">Article does not exist</div>}
+      </OakSection>
+    </OakPage>
   );
 };
 

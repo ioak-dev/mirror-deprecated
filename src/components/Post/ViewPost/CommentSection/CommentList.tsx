@@ -44,7 +44,7 @@ const CommentList = (props: Props) => {
   };
 
   return (
-    <OakInfiniteScroll handleChange={fetchMoreComments} selector=".app-page">
+    <OakInfiniteScroll handleChange={fetchMoreComments} selector=".oak-page">
       <div className="comment-list">
         {data?.postComments?.results?.map((item: PostComment) => (
           <ViewComment

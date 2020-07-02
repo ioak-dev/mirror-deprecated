@@ -2,6 +2,8 @@ import React from 'react';
 import './style.scss';
 import LoginMethod from './LoginMethod';
 import OakHeading from '../../oakui/OakHeading';
+import OakPage from '../../oakui/OakPage';
+import OakSection from '../../oakui/OakSection';
 
 interface Props {
   history: any;
@@ -23,29 +25,23 @@ const Login = (props: Props) => {
   };
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          <OakHeading
-            title="Sign in"
-            subtitle="Choose the preferred authentication method to continue"
-          />
-          <div className="view-asset-item">
-            <div className="space-top-3 mirror-signin">
-              <div className="login-home">
-                <LoginMethod action={oaLogin} icon="blur_on" label="Oneauth" />
-                <LoginMethod action={emailLogin} icon="email" label="Email" />
-                <LoginMethod
-                  action={mirrorLogin}
-                  icon="people"
-                  label="Native"
-                />
-              </div>
+    <OakPage>
+      <OakSection>
+        <OakHeading
+          title="Sign in"
+          subtitle="Choose the preferred authentication method to continue"
+        />
+        <div className="view-asset-item">
+          <div className="space-top-3 mirror-signin">
+            <div className="login-home">
+              <LoginMethod action={oaLogin} icon="blur_on" label="Oneauth" />
+              <LoginMethod action={emailLogin} icon="email" label="Email" />
+              <LoginMethod action={mirrorLogin} icon="people" label="Native" />
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </OakSection>
+    </OakPage>
   );
 };
 

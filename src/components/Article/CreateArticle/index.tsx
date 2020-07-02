@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
 import CreateItem from './CreateItem';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   location: any;
@@ -20,17 +22,15 @@ const CreateArticle = (props: Props) => {
   }, []);
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          <CreateItem
-            history={props.history}
-            categoryid={urlParam.categoryid}
-            asset={props.asset}
-          />
-        </div>
-      </div>
-    </div>
+    <OakPage>
+      <OakSection>
+        <CreateItem
+          history={props.history}
+          categoryid={urlParam.categoryid}
+          asset={props.asset}
+        />
+      </OakSection>
+    </OakPage>
   );
 };
 

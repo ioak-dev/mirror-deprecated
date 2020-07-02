@@ -13,6 +13,8 @@ import StatusChip from '../../Common/StatusChip';
 import { days } from '../../Lib/DateUtils';
 import FollowerView from './FollowerView';
 import StatusView from './StatusView';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   location: any;
@@ -37,37 +39,33 @@ const ViewPost = (props: Props) => {
   }, [props.location.search]);
 
   return (
-    <>
-      <div className="app-page">
-        <div className="app-content">
-          <div className="app-text">
-            {loading && <OakSpinner />}
-            {!loading && !error && (
-              <>
-                <div className="post-status-header">
-                  <StatusView post={data.post} />
-                  <FollowerView post={data.post} />
-                </div>
-                <PostItem
-                  history={props.history}
-                  id={urlParam.id}
-                  asset={props.asset}
-                  post={data.post}
-                />
-                <FeedbackView post={data.post} />
-              </>
-            )}
-            {error && <div className="typography-6">Post does not exist</div>}
-          </div>
-        </div>
+    <OakPage>
+      <OakSection>
+        {loading && <OakSpinner />}
+        {!loading && !error && (
+          <>
+            <div className="post-status-header">
+              <StatusView post={data.post} />
+              <FollowerView post={data.post} />
+            </div>
+            <PostItem
+              history={props.history}
+              id={urlParam.id}
+              asset={props.asset}
+              post={data.post}
+            />
+            <FeedbackView post={data.post} />
+          </>
+        )}
+        {error && <div className="typography-6">Post does not exist</div>}
+      </OakSection>
 
-        <div className="app-content comment-section-wrapper">
-          <div className="app-text">
-            <CommentSection postId={urlParam.id} />
-          </div>
+      <OakSection>
+        <div className="comment-section-wrapper">
+          <CommentSection postId={urlParam.id} />
         </div>
-      </div>
-    </>
+      </OakSection>
+    </OakPage>
   );
 };
 

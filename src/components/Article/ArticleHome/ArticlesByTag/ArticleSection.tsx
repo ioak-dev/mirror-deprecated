@@ -7,6 +7,7 @@ import ArticleLink from '../../ArticleLink';
 import { Article, ArticleTag } from '../../../../types/graphql';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import OakHeading from '../../../../oakui/OakHeading';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   tag: string;
@@ -69,45 +70,41 @@ const ArticleSection = (props: Props) => {
   };
 
   return (
-    <div className="app-content">
-      <div className="app-text">
-        <OakHeading
-          title="Articles by tag"
-          subtitle={`Showing articles for tag "${props.tag}"`}
-          links={getHeadingLinks()}
-        />
-        <div className="tag-article-section">
-          <OakInfiniteScroll
-            handleChange={fetchMoreArticles}
-            selector=".app-page"
-          >
-            <div className="search-results-section">
-              <div className="search-results-container">
-                {data?.articlesByTag?.results?.map(
-                  (item: ArticleTag, index) => (
-                    <div key={item?.article?.id || index}>
-                      {item?.article && (
-                        <ArticleLink
-                          article={item.article}
-                          asset={props.asset}
-                          history={props.history}
-                        />
-                      )}
-                    </div>
-                  )
-                )}
-                {/* {data?.articlesByTag?.results?.length === 0 &&
+    <OakSection>
+      <OakHeading
+        title="Articles by tag"
+        subtitle={`Showing articles for tag "${props.tag}"`}
+        links={getHeadingLinks()}
+      />
+      <div className="tag-article-section">
+        <OakInfiniteScroll
+          handleChange={fetchMoreArticles}
+          selector=".oak-page"
+        >
+          <div className="search-results-section">
+            <div className="search-results-container">
+              {data?.articlesByTag?.results?.map((item: ArticleTag, index) => (
+                <div key={item?.article?.id || index}>
+                  {item?.article && (
+                    <ArticleLink
+                      article={item.article}
+                      asset={props.asset}
+                      history={props.history}
+                    />
+                  )}
+                </div>
+              ))}
+              {/* {data?.articlesByTag?.results?.length === 0 &&
               props.text &&
               !loading && (
                 <AlternateSection history={props.history} asset={props.asset} />
               )} */}
-              </div>
-              <div>{loading ? <OakSpinner /> : ''}</div>
             </div>
-          </OakInfiniteScroll>
-        </div>
+            <div>{loading ? <OakSpinner /> : ''}</div>
+          </div>
+        </OakInfiniteScroll>
       </div>
-    </div>
+    </OakSection>
   );
 };
 

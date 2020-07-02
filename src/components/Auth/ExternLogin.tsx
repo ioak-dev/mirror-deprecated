@@ -3,6 +3,8 @@ import './Login.scss';
 import { useApolloClient } from '@apollo/react-hooks';
 
 import { NEW_EXTERN_SESSION } from '../Types/schema';
+import OakPage from '../../oakui/OakPage';
+import OakSection from '../../oakui/OakSection';
 
 const queryString = require('query-string');
 
@@ -42,13 +44,11 @@ const ExternLogin = (props: Props) => {
   return (
     <>
       {isInvalidToken && (
-        <div className="app-page">
-          <div className="app-content">
-            <div className="app-text">
-              <div className="extern-login">Invalid token</div>
-            </div>
-          </div>
-        </div>
+        <OakPage>
+          <OakSection>
+            <div className="extern-login">Invalid token</div>
+          </OakSection>
+        </OakPage>
       )}
     </>
   );

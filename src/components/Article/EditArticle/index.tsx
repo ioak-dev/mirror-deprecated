@@ -5,6 +5,8 @@ import { useQuery } from '@apollo/react-hooks';
 import EditItem from './EditItem';
 import OakSpinner from '../../../oakui/OakSpinner';
 import { GET_ARTICLE } from '../../Types/ArticleSchema';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   asset: string;
@@ -29,21 +31,19 @@ const EditArticle = (props: Props) => {
   }, [props.location.search]);
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          {!loading && !error && (
-            <EditItem
-              history={props.history}
-              id={urlParam.id}
-              asset={props.asset}
-              article={data.article}
-            />
-          )}
-          {loading && <OakSpinner />}
-        </div>
-      </div>
-    </div>
+    <OakPage>
+      <OakSection>
+        {!loading && !error && (
+          <EditItem
+            history={props.history}
+            id={urlParam.id}
+            asset={props.asset}
+            article={data.article}
+          />
+        )}
+        {loading && <OakSpinner />}
+      </OakSection>
+    </OakPage>
   );
 };
 

@@ -74,7 +74,7 @@ const SearchSection = (props: Props) => {
           label="Type your question"
         />
       </form>
-      <OakInfiniteScroll handleChange={fetchMorePosts} selector=".app-page">
+      <OakInfiniteScroll handleChange={fetchMorePosts} selector=".oak-page">
         <div className="search-results-section">
           <div className="search-results-container">
             {data?.searchPosts?.results?.length > 0 && (

@@ -49,40 +49,32 @@ const PostSection = (props: Props) => {
 
   return (
     <>
-      <>
-        <div className="section-header">
-          <OakSubheading title="Posts" />
-          <div>
-            <OakButton
-              theme="primary"
-              variant="regular"
-              action={createPostLink}
-            >
-              New post
-            </OakButton>
-          </div>
+      <div className="section-header">
+        <OakSubheading title="Posts" />
+        <div>
+          <OakButton theme="primary" variant="regular" action={createPostLink}>
+            New post
+          </OakButton>
         </div>
-        <OakInfiniteScroll handleChange={fetchMorePosts} selector=".app-page">
-          <div className="post-section">
-            <div className="post-list-container">
-              {data?.posts?.results?.map((item: Post) => (
-                <>
-                  <PostLink
-                    key={item.id}
-                    post={item}
-                    asset={props.asset}
-                    history={props.history}
-                  />
-                </>
-              ))}
-              {data?.posts?.results?.length === 0 && (
-                <div className="typography-6">No posts</div>
-              )}
-            </div>
-            <div>{loading ? <OakSpinner /> : ''}</div>
+      </div>
+      <OakInfiniteScroll handleChange={fetchMorePosts} selector=".oak-page">
+        <div className="post-section">
+          <div className="post-list-container">
+            {data?.posts?.results?.map((item: Post) => (
+              <PostLink
+                key={item.id}
+                post={item}
+                asset={props.asset}
+                history={props.history}
+              />
+            ))}
+            {data?.posts?.results?.length === 0 && (
+              <div className="typography-6">No posts</div>
+            )}
           </div>
-        </OakInfiniteScroll>
-      </>
+          <div>{loading ? <OakSpinner /> : ''}</div>
+        </div>
+      </OakInfiniteScroll>
     </>
   );
 };

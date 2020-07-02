@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './style.scss';
 import PostSection from './PostSection';
 import OakHeading from '../../../../oakui/OakHeading';
+import OakPage from '../../../../oakui/OakPage';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   setProfile: Function;
@@ -16,9 +18,9 @@ const BrowsePost = (props: Props) => {
   };
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text browse-post">
+    <OakPage>
+      <OakSection>
+        <div className="browse-post">
           <OakHeading
             title="Browse posts by timeline"
             links={[{ label: 'Or search instead', action: () => searchPost() }]}
@@ -30,8 +32,8 @@ const BrowsePost = (props: Props) => {
           <div className="section-close" />
           <PostSection history={props.history} asset={props.asset} />
         </div>
-      </div>
-    </div>
+      </OakSection>
+    </OakPage>
   );
 };
 

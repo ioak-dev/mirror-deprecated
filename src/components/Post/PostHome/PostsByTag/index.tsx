@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './style.scss';
 import TagSection from './TagSection';
 import PostSection from './PostSection';
+import OakPage from '../../../../oakui/OakPage';
 
 interface Props {
   setProfile: Function;
@@ -28,7 +29,7 @@ const PostsByTag = (props: Props) => {
   };
 
   return (
-    <div className="app-page">
+    <OakPage>
       {/* <div className="typography-4 align-horizontal">
             Find your questions answered, from the knowledge base. If you
             don&apos;t get your desired answers, you can post your question for
@@ -48,7 +49,7 @@ const PostsByTag = (props: Props) => {
           history={props.history}
         />
       )}
-    </div>
+    </OakPage>
   );
 };
 

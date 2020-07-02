@@ -4,6 +4,7 @@ import './style.scss';
 import { POST_TAG_CLOUD } from '../../../Types/PostSchema';
 import TagLink from './TagLink';
 import OakHeading from '../../../../oakui/OakHeading';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   handleChange: Function;
@@ -21,23 +22,21 @@ const TagSection = (props: Props) => {
   };
 
   return (
-    <div className="app-content">
-      <div className="app-text">
-        <OakHeading
-          title="Posts by tag"
-          links={[{ label: 'Or Search instead', action: () => searchPost() }]}
-        />
-        <div className="tag-section">
-          {data?.postTagCloud?.map(item => (
-            <TagLink
-              key={item.name}
-              tag={item}
-              handleClick={() => props.handleChange(item.name)}
-            />
-          ))}
-        </div>
+    <OakSection>
+      <OakHeading
+        title="Posts by tag"
+        links={[{ label: 'Or Search instead', action: () => searchPost() }]}
+      />
+      <div className="tag-section">
+        {data?.postTagCloud?.map(item => (
+          <TagLink
+            key={item.name}
+            tag={item}
+            handleClick={() => props.handleChange(item.name)}
+          />
+        ))}
       </div>
-    </div>
+    </OakSection>
   );
 };
 

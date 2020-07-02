@@ -2,6 +2,8 @@ import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { GET_ASSET } from '../../Types/schema';
 import EditItem from './EditItem';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   match: any;
@@ -18,21 +20,19 @@ const EditAsset = (props: Props) => {
   });
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          {!loading && !error && (
-            <EditItem
-              asset={props.asset}
-              history={props.history}
-              id={props.match.params.asset}
-              assetData={data.asset}
-            />
-          )}
-          {error && <div className="typography-6">Asset does not exist</div>}
-        </div>
-      </div>
-    </div>
+    <OakPage>
+      <OakSection>
+        {!loading && !error && (
+          <EditItem
+            asset={props.asset}
+            history={props.history}
+            id={props.match.params.asset}
+            assetData={data.asset}
+          />
+        )}
+        {error && <div className="typography-6">Asset does not exist</div>}
+      </OakSection>
+    </OakPage>
   );
 };
 

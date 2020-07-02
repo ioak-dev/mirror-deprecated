@@ -72,7 +72,7 @@ const ArticleSection = (props: Props) => {
           </div>
           <OakInfiniteScroll
             handleChange={fetchMoreArticles}
-            selector=".app-page"
+            selector=".oak-page"
           >
             <div className="article-section">
               <div className="article-list-container">

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './style.scss';
 import SearchSection from './SearchSection';
 import OakHeading from '../../../../oakui/OakHeading';
+import OakPage from '../../../../oakui/OakPage';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   setProfile: Function;
@@ -32,9 +34,9 @@ const SearchArticle = (props: Props) => {
   };
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text browse-article">
+    <OakPage>
+      <OakSection>
+        <div className="browse-article">
           <OakHeading
             title="Search articles"
             links={[
@@ -56,8 +58,8 @@ const SearchArticle = (props: Props) => {
             handleSearchTextChange={handleSearchTextChange}
           />
         </div>
-      </div>
-    </div>
+      </OakSection>
+    </OakPage>
   );
 };
 
