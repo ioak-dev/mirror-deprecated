@@ -1,9 +1,10 @@
 import React from 'react';
+import { useApolloClient } from '@apollo/react-hooks';
 import { useSelector, useDispatch } from 'react-redux';
 import { addAuth } from '../../actions/AuthActions';
 import { Authorization } from '../Types/GeneralTypes';
 import { sendMessage } from '../../events/MessageService';
-import { httpGet } from '../Lib/RestTemplate';
+import { GET_SESSION } from '../Types/schema';
 
 interface Props {
   authorization: Authorization;
@@ -16,7 +17,8 @@ interface Props {
   cookies: any;
 }
 
-const OakRoute = (props: Props) => {
+const OakRouteGraph = (props: Props) => {
+  const gqlClient = useApolloClient();
   const authorization = useSelector(state => state.authorization);
   const profile = useSelector(state => state.profile);
   const dispatch = useDispatch();
@@ -60,41 +62,34 @@ const OakRoute = (props: Props) => {
     const authKey = props.cookies.get(cookieKey);
     const baseAuthUrl = `/auth/${props.match.params.asset}`;
     if (authKey) {
-      httpGet(`${baseAuthUrl}/session/${authKey}`, null)
-        .then(sessionResponse => {
-          if (sessionResponse.status === 200) {
-            dispatch(
-              addAuth({
-                isAuth: true,
-                token: sessionResponse.data.token,
-                secret: '',
-                firstName: sessionResponse.data.firstName,
-                lastName: sessionResponse.data.lastName,
-                email: sessionResponse.data.email,
-                type: sessionResponse.data.type,
-                userId: sessionResponse.data.userId,
-              })
-            );
-          }
-        })
-        .catch((error: any) => {
-          props.cookies.remove(cookieKey);
-          if (redirect && error.response.status === 404) {
-            sendMessage('notification', true, {
-              type: 'failure',
-              message: 'Invalid session token',
-              duration: 3000,
-            });
-            redirectToLogin(props.match.params.asset);
-          } else if (redirect && error.response.status === 401) {
-            sendMessage('notification', true, {
-              type: 'failure',
-              message: 'Session expired',
-              duration: 3000,
-            });
-            redirectToLogin(props.match.params.asset);
-          }
-        });
+      const { data } = await gqlClient.query({
+        query: GET_SESSION,
+        variables: { key: authKey, asset: props.match.params.asset },
+      });
+
+      if (data?.session) {
+        dispatch(
+          addAuth({
+            isAuth: true,
+            token: data.session.token,
+            secret: '',
+            firstName: data.session.firstName,
+            lastName: data.session.lastName,
+            email: data.session.email,
+            id: data.session.id,
+          })
+        );
+      } else {
+        props.cookies.remove(cookieKey);
+        if (redirect) {
+          sendMessage('notification', true, {
+            type: 'failure',
+            message: 'Invalid session token',
+            duration: 3000,
+          });
+          redirectToLogin(props.match.params.asset);
+        }
+      }
     } else if (redirect) {
       redirectToLogin(props.match.params.asset);
     } else {
@@ -131,4 +126,4 @@ const OakRoute = (props: Props) => {
   );
 };
 
-export default OakRoute;
+export default OakRouteGraph;

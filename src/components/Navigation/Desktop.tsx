@@ -73,7 +73,6 @@ const Desktop = (props: Props) => {
             <OakButton
               theme="primary"
               variant="disappear"
-              small
               action={props.logout}
             >
               <i className="material-icons">power_settings_new</i>Logout

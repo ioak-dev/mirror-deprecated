@@ -40,8 +40,8 @@ button {
 
     background: none;
     outline: none;
-    color: var(--btn-text-color);
-    // text-transform: uppercase;
+    color: var(--btn-text-color) !important;
+    text-transform: uppercase;
     cursor: pointer;
     transition: 0.4s cubic-bezier(0.5, 1.6, 0.4, 0.7);
     position: relative;
@@ -88,19 +88,27 @@ button {
     }
 
     &.appear {
+      --height-start: 0%;
+      --height-end: 100%;
+      --width-start: 0%;
+      --width-end: 100%;
       &:hover {
         background-color: var(--color-bg);
       }
 
       &.light {
-        color: var(--btn-text-color-dark);
+        color: var(--btn-text-color-dark) !important;
         &:hover {
-          color: var(--btn-text-color);
+          color: var(--btn-text-color) !important;
         }
       }
     }
 
     &.disappear {
+      --height-start: 100%;
+      --height-end: 0%;
+      --width-start: 100%;
+      --width-end: 0%;
       background-color: var(--color-bg);
       &:hover {
         background-color: transparent;
@@ -108,7 +116,30 @@ button {
 
       &.light {
         &:hover {
-          color: var(--btn-text-color-dark);
+          color: var(--btn-text-color-dark) !important;
+        }
+      }
+    }
+
+    &.appear,
+    &.disappear {
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 0%;
+        z-index: -1;
+        transition: 0.4s cubic-bezier(0.5, 1.6, 0.4, 0.7);
+        background-color: var(--color-bg);
+        top: 0;
+        width: var(--width-start);
+        height: 100%;
+      }
+      &:hover {
+        &::before {
+          right: 0;
+          width: var(--width-end);
         }
       }
     }
@@ -120,9 +151,9 @@ button {
       }
 
       &.light {
-        color: var(--btn-text-color-dark);
+        color: var(--btn-text-color-dark) !important;
         &:hover {
-          color: var(--btn-text-color);
+          color: var(--btn-text-color) !important;
         }
       }
     }
@@ -134,7 +165,7 @@ button {
       }
 
       &.light {
-        color: var(--btn-text-color-dark);
+        color: var(--btn-text-color-dark) !important;
       }
     }
 
