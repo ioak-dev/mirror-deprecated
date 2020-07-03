@@ -91,3 +91,13 @@ export const UPDATE_ASSET = gql`
     }
   }
 `;
+
+export const USERS = gql`
+  query Users {
+    users {
+      id
+      firstName
+      lastName
+    }
+  }
+`;

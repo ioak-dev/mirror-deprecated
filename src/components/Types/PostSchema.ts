@@ -55,6 +55,34 @@ export const SEARCH_POSTS = gql`
   }
 `;
 
+export const MY_POSTS = gql`
+  query MyPosts($pageNo: Int, $pageSize: Int) {
+    myPosts(pageNo: $pageNo, pageSize: $pageSize) {
+      results {
+        id
+        title
+        description
+        views
+        followers
+        comments
+        helpful
+        notHelpful
+        isAnswered
+        answeredOn
+        createdAt
+        updatedAt
+        tags {
+          id
+          name
+        }
+      }
+      pageNo
+      hasMore
+      total
+    }
+  }
+`;
+
 export const GET_POST = gql`
   query Post($id: ID!) {
     post(id: $id) {

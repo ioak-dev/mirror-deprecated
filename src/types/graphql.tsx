@@ -174,6 +174,8 @@ export type Post = {
   notHelpful: Scalars['Int'];
   createdAt?: Maybe<Scalars['DateScalar']>;
   updatedAt?: Maybe<Scalars['DateScalar']>;
+  createdBy?: Maybe<Scalars['String']>;
+  updatedBy?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<PostTag>>>;
   feedback?: Maybe<Array<Maybe<PostFeedback>>>;
   followerList?: Maybe<Array<Maybe<PostFollower>>>;
@@ -260,6 +262,7 @@ export type Query = {
   newEmailSession?: Maybe<Session>;
   newExternSession?: Maybe<Session>;
   session?: Maybe<UserSession>;
+  users: Array<Maybe<User>>;
   article?: Maybe<Article>;
   articles?: Maybe<ArticlePaginated>;
   searchArticles?: Maybe<ArticlePaginated>;
@@ -271,6 +274,7 @@ export type Query = {
   post?: Maybe<Post>;
   posts?: Maybe<PostPaginated>;
   searchPosts?: Maybe<PostPaginated>;
+  myPosts?: Maybe<PostPaginated>;
   postTagCloud?: Maybe<Array<Maybe<PostTagCloud>>>;
   postsByTag?: Maybe<PostTagPaginated>;
   postFeedback?: Maybe<Array<Maybe<PostFeedback>>>;
@@ -356,6 +360,12 @@ export type QueryPostsArgs = {
 
 export type QuerySearchPostsArgs = {
   text?: Maybe<Scalars['String']>;
+  pageSize?: Maybe<Scalars['Int']>;
+  pageNo?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryMyPostsArgs = {
   pageSize?: Maybe<Scalars['Int']>;
   pageNo?: Maybe<Scalars['Int']>;
 };

@@ -5,20 +5,23 @@ import NewCommentItem from './NewCommentItem';
 import ParentCommentPreview from './ParentCommentPreview';
 import './style.scss';
 import { formatDateText } from '../../../Lib/DateUtils';
-import { PostComment } from '../../../../types/graphql';
+import { PostComment, User } from '../../../../types/graphql';
 import FeedbackView from './FeedbackView';
 import EditCommentItem from './EditCommentItem';
 import { POST_COMMENT } from '../../../Types/PostSchema';
+import OakAvatar from '../../../../oakui/OakAvatar';
 
 interface Props {
   postId: string;
   comment: PostComment;
   comments?: PostComment[];
+  users: User[];
 }
 function ViewComment(props: Props) {
   const gqlClient = useApolloClient();
   const [actionType, setActionType] = useState('none');
   const [parentComment, setParentComment] = useState<PostComment | undefined>();
+  const [user, setUser] = useState<User | undefined>();
 
   useEffect(() => {
     (async function anonymous() {
@@ -33,6 +36,8 @@ function ViewComment(props: Props) {
         });
         setParentComment(response?.postComment);
       }
+
+      setUser(props.users?.find(item => item.id === props.comment?.createdBy));
     })();
   }, [props.comment]);
 
@@ -40,8 +45,15 @@ function ViewComment(props: Props) {
     <div className={`view-comment ${props.comment.isAnswer ? 'answer' : ''}`}>
       <div className="view-comment-header">
         <div className="view-comment-meta">
-          {props.comment?.createdBy} replied on{' '}
-          {formatDateText(props.comment?.createdAt)}
+          {user && (
+            <OakAvatar
+              firstName={user.firstName || ''}
+              lastName={user.lastName || ''}
+              showName
+              size="small"
+            />
+          )}{' '}
+          replied on {formatDateText(props.comment?.createdAt)}
         </div>
         <div className="view-comment-actions">
           <div className="hyperlink-container">
@@ -65,7 +77,10 @@ function ViewComment(props: Props) {
       {['none', 'reply'].includes(actionType) && (
         <>
           {parentComment && (
-            <ParentCommentPreview parentComment={parentComment} />
+            <ParentCommentPreview
+              parentComment={parentComment}
+              users={props.users}
+            />
           )}
           <OakViewer>{props.comment?.text}</OakViewer>
           {actionType === 'none' && (

@@ -5,6 +5,7 @@ import { POST_COMMENTS } from '../../../Types/PostSchema';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import { PostComment } from '../../../../types/graphql';
 import ViewComment from './ViewComment';
+import { USERS } from '../../../Types/schema';
 
 interface Props {
   postId: string;
@@ -19,6 +20,7 @@ const CommentList = (props: Props) => {
     },
     fetchPolicy: 'cache-and-network',
   });
+  const { loading: usersLoading, data: usersData } = useQuery(USERS);
 
   const fetchMoreComments = () => {
     if (data?.postComments?.hasMore) {
@@ -51,6 +53,7 @@ const CommentList = (props: Props) => {
             postId={props.postId}
             comment={item}
             comments={data.postComments?.results}
+            users={usersData?.users}
             key={item.id}
           />
         ))}

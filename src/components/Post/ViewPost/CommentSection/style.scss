@@ -46,6 +46,10 @@
       align-items: center;
     }
     .view-comment-meta {
+      display: grid;
+      grid-auto-flow: column;
+      align-items: center;
+      column-gap: 6px;
       font-size: 13px;
       @media (max-width: 767px) {
         margin-bottom: 20px;
