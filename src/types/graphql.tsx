@@ -244,6 +244,7 @@ export type PostComment = {
   updatedBy?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateScalar']>;
   updatedAt?: Maybe<Scalars['DateScalar']>;
+  post?: Maybe<Post>;
   feedback?: Maybe<Array<Maybe<PostCommentFeedback>>>;
 };
 
