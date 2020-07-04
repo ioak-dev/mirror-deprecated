@@ -23,8 +23,7 @@ import Navigation from '../Navigation';
 import { Authorization } from '../Types/GeneralTypes';
 import Tenant from '../Tenant';
 import ArticleHome from '../Article/ArticleHome';
-import UserAdministration from '../UserAdministration';
-import OakRoute from '../Auth/OakRoute';
+import OakRouteGraph from '../Auth/OakRouteGraph';
 import Unauthorized from '../Auth/Unauthorized';
 import CreateArticle from '../Article/CreateArticle';
 import ViewArticle from '../Article/ViewArticle';
@@ -40,6 +39,14 @@ import Email from '../Login/Email/index';
 import Login from '../Login/index';
 import ExternLogin from '../Auth/ExternLogin';
 import { receiveMessage } from '../../events/MessageService';
+import EditPost from '../Post/EditPost';
+import CreatePost from '../Post/CreatePost';
+import ViewPost from '../Post/ViewPost';
+import PostsByTag from '../Post/PostHome/PostsByTag';
+import SearchPost from '../Post/PostHome/SearchPost';
+import BrowsePost from '../Post/PostHome/BrowsePost';
+import PostHome from '../Post/PostHome';
+import AssetCreateSuccess from '../Asset/CreateAsset/AssetCreateSuccess';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -124,13 +131,17 @@ const Content = (props: Props) => {
                 <Route
                   path="/login"
                   render={propsLocal => (
-                    <OakRoute {...propsLocal} {...props} component={OaLogin} />
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={OaLogin}
+                    />
                   )}
                 />
                 <Route
                   path="/:asset/unauthorized"
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={Unauthorized}
@@ -142,28 +153,40 @@ const Content = (props: Props) => {
                   path="/"
                   exact
                   render={propsLocal => (
-                    <OakRoute {...propsLocal} {...props} component={Landing} />
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={Landing}
+                    />
                   )}
                 />
                 <Route
                   path="/home"
                   exact
                   render={propsLocal => (
-                    <OakRoute {...propsLocal} {...props} component={Landing} />
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={Landing}
+                    />
                   )}
                 />
                 <Route
                   path="/tenant"
                   exact
                   render={propsLocal => (
-                    <OakRoute {...propsLocal} {...props} component={Tenant} />
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={Tenant}
+                    />
                   )}
                 />
                 <Route
                   path="/asset/create"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={CreateAsset}
@@ -171,9 +194,20 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
+                  path="/asset/summary"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={AssetCreateSuccess}
+                    />
+                  )}
+                />
+                <Route
                   path="/:asset/home"
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={Home}
@@ -184,7 +218,7 @@ const Content = (props: Props) => {
                 <Route
                   path="/:asset/login/home"
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={Login}
@@ -195,7 +229,7 @@ const Content = (props: Props) => {
                 <Route
                   path="/:asset/login/extern"
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={ExternLogin}
@@ -205,7 +239,7 @@ const Content = (props: Props) => {
                 <Route
                   path="/:asset/login/oa"
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={OneAuth}
@@ -216,7 +250,7 @@ const Content = (props: Props) => {
                 <Route
                   path="/:asset/login/email"
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={Email}
@@ -224,11 +258,12 @@ const Content = (props: Props) => {
                     />
                   )}
                 />
+                {/* Article URLs */}
                 <Route
                   path="/:asset/article"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={ArticleHome}
@@ -240,7 +275,7 @@ const Content = (props: Props) => {
                   path="/:asset/article/browse"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={BrowseArticle}
@@ -252,7 +287,7 @@ const Content = (props: Props) => {
                   path="/:asset/article/search"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={SearchArticle}
@@ -264,7 +299,7 @@ const Content = (props: Props) => {
                   path="/:asset/article/tag"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={ArticlesByTag}
@@ -277,7 +312,7 @@ const Content = (props: Props) => {
                   path="/:asset/article/view"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={ViewArticle}
@@ -289,7 +324,7 @@ const Content = (props: Props) => {
                   path="/:asset/article/create"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={CreateArticle}
@@ -301,7 +336,7 @@ const Content = (props: Props) => {
                   path="/:asset/article/edit"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={EditArticle}
@@ -309,11 +344,99 @@ const Content = (props: Props) => {
                     />
                   )}
                 />
+
+                {/* Post URLs */}
+                <Route
+                  path="/:asset/post"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={PostHome}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/browse"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={BrowsePost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/search"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={SearchPost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/tag"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={PostsByTag}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+
+                <Route
+                  path="/:asset/post/view"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={ViewPost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/create"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={CreatePost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/post/edit"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={EditPost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+
                 <Route
                   path="/:asset/asset/view"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={ViewAsset}
@@ -325,7 +448,7 @@ const Content = (props: Props) => {
                   path="/:asset/asset/edit"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={EditAsset}
@@ -334,22 +457,10 @@ const Content = (props: Props) => {
                   )}
                 />
                 <Route
-                  path="/:asset/useradministration"
-                  exact
-                  render={propsLocal => (
-                    <OakRoute
-                      {...propsLocal}
-                      {...props}
-                      component={UserAdministration}
-                      middleware={['authenticate', 'isAdmin']}
-                    />
-                  )}
-                />
-                <Route
                   path="/:asset"
                   exact
                   render={propsLocal => (
-                    <OakRoute
+                    <OakRouteGraph
                       {...propsLocal}
                       {...props}
                       component={Home}

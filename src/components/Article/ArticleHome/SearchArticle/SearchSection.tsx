@@ -5,9 +5,10 @@ import { Article } from '../../../../types/graphql';
 import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
 import OakSpinner from '../../../../oakui/OakSpinner';
 import ArticleLink from '../../ArticleLink';
-import { SEARCH_ARTICLES } from '../../../Types/schema';
+import { SEARCH_ARTICLES } from '../../../Types/ArticleSchema';
 import OakText from '../../../../oakui/OakText';
 import AlternateSection from './AlternateSection';
+import OakSubheading from '../../../../oakui/OakSubheading';
 
 interface Props {
   asset: string;
@@ -76,18 +77,14 @@ const SearchSection = (props: Props) => {
           label="Type your question"
         />
       </form>
-      <OakInfiniteScroll handleChange={fetchMoreArticles} selector=".app-page">
+      <OakInfiniteScroll handleChange={fetchMoreArticles} selector=".oak-page">
         <div className="search-results-section">
           <div className="search-results-container">
             {data?.searchArticles?.results?.length > 0 && (
-              <div className="section-title">
-                Search results
-                <div className="section-subtitle">
-                  Showing results for &quot;{props.text}&quot;
-                </div>
-                {data?.searchArticles?.results?.total}
-                <div className="section-highlight" />
-              </div>
+              <OakSubheading
+                title="Search results"
+                subtitle={`Showing results for "${props.text}"`}
+              />
             )}
             {data?.searchArticles?.results?.map((item: Article) => (
               <ArticleLink

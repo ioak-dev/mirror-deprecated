@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import EmailItem from './EmailItem';
 import AccountItem from './AccountItem';
 import TokenItem from './TokenItem';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   history: any;
@@ -35,33 +37,31 @@ const Email = (props: Props) => {
   };
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          <div className="view-asset-item">
-            {state.type === 'email' && (
-              <EmailItem
-                history={props.history}
-                tokenLogin={tokenLogin}
-                newAccount={newAccount}
-              />
-            )}
-            {state.type === 'token' && (
-              <TokenItem
-                history={props.history}
-                emailLogin={emailLogin}
-                asset={props.asset}
-                queryParam={queryParam}
-                cookies={props.cookies}
-              />
-            )}
-            {state.type === 'new' && (
-              <AccountItem history={props.history} emailLogin={emailLogin} />
-            )}
-          </div>
+    <OakPage>
+      <OakSection>
+        <div className="view-asset-item">
+          {state.type === 'email' && (
+            <EmailItem
+              history={props.history}
+              tokenLogin={tokenLogin}
+              newAccount={newAccount}
+            />
+          )}
+          {state.type === 'token' && (
+            <TokenItem
+              history={props.history}
+              emailLogin={emailLogin}
+              asset={props.asset}
+              queryParam={queryParam}
+              cookies={props.cookies}
+            />
+          )}
+          {state.type === 'new' && (
+            <AccountItem history={props.history} emailLogin={emailLogin} />
+          )}
         </div>
-      </div>
-    </div>
+      </OakSection>
+    </OakPage>
   );
 };
 

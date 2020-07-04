@@ -5,6 +5,7 @@ import OakButton from '../../../oakui/OakButton';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import { NEW_EMAIL_SESSION } from '../../Types/schema';
 import './style.scss';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   history: any;
@@ -69,13 +70,10 @@ const EmailItem = (props: Props) => {
       {isTokenSent && (
         <>
           <div className="page-header">
-            <div className="page-title">
-              Email authentication
-              <div className="page-subtitle">
-                You will receive an authentication token to your email
-              </div>
-              <div className="page-highlight" />
-            </div>
+            <OakHeading
+              title="Email authentication"
+              subtitle="You will receive an authentication token to your email"
+            />
           </div>
           <div className="typhography-4 hyperlink-inline">
             Authentication token is generated and sent to your email. You can
@@ -90,13 +88,10 @@ const EmailItem = (props: Props) => {
       {!isTokenSent && (
         <>
           <div className="page-header">
-            <div className="page-title">
-              Email authentication
-              <div className="page-subtitle">
-                You will receive an authentication token to your email
-              </div>
-              <div className="page-highlight" />
-            </div>
+            <OakHeading
+              title="Email authentication"
+              subtitle="You will receive an authentication token to your email"
+            />
             <div className="action-header position-right">
               <OakButton action={login} theme="primary" variant="appear">
                 <i className="material-icons">double_arrow</i>Submit

@@ -1,11 +1,13 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
-import { ARTICLES_BY_TAG } from '../../../Types/schema';
+import { ARTICLES_BY_TAG } from '../../../Types/ArticleSchema';
 import OakInfiniteScroll from '../../../../oakui/OakInfiniteScroll';
 import ArticleLink from '../../ArticleLink';
-import { Article, Tag } from '../../../../types/graphql';
+import { Article, ArticleTag } from '../../../../types/graphql';
 import OakSpinner from '../../../../oakui/OakSpinner';
+import OakHeading from '../../../../oakui/OakHeading';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   tag: string;
@@ -48,64 +50,61 @@ const ArticleSection = (props: Props) => {
     props.history.goBack();
   };
 
-  const viewByTags = event => {
+  const viewByTags = () => {
     props.history.push(`/${props.asset}/article/tag`);
   };
 
+  const getHeadingLinks = () => {
+    return [
+      {
+        label: 'Go back',
+        icon: 'reply',
+        action: () => goBack(),
+      },
+      {
+        label: 'See other tags',
+        icon: 'local_offer',
+        action: () => viewByTags(),
+      },
+    ];
+  };
+
   return (
-    <div className="app-content">
-      <div className="app-text">
-        <div className="page-title">
-          Articles by tag
-          <div className="page-subtitle">
-            Showing articles for tag &quot;{props.tag}&quot;
-            <div className="tag-article-section-action">
-              <div className="align-horizontal hyperlink-container">
-                <i className="material-icons typography-6">reply</i>
-                <div className="hyperlink" onClick={goBack}>
-                  Go back
+    <OakSection>
+      <OakHeading
+        title="Articles by tag"
+        subtitle={`Showing articles for tag "${props.tag}"`}
+        links={getHeadingLinks()}
+      />
+      <div className="tag-article-section">
+        <OakInfiniteScroll
+          handleChange={fetchMoreArticles}
+          selector=".oak-page"
+        >
+          <div className="search-results-section">
+            <div className="search-results-container">
+              {data?.articlesByTag?.results?.map((item: ArticleTag, index) => (
+                <div key={item?.article?.id || index}>
+                  {item?.article && (
+                    <ArticleLink
+                      article={item.article}
+                      asset={props.asset}
+                      history={props.history}
+                    />
+                  )}
                 </div>
-              </div>
-              <div className="align-horizontal hyperlink-container see-other-tags">
-                <i className="material-icons typography-6">local_offer</i>
-                <div className="hyperlink" onClick={viewByTags}>
-                  See other tags
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="page-highlight" />
-        </div>
-        <div className="tag-article-section">
-          <OakInfiniteScroll
-            handleChange={fetchMoreArticles}
-            selector=".app-page"
-          >
-            <div className="search-results-section">
-              <div className="search-results-container">
-                {data?.articlesByTag?.results?.map((item: Tag, index) => (
-                  <div key={item?.article?.id || index}>
-                    {item?.article && (
-                      <ArticleLink
-                        article={item.article}
-                        asset={props.asset}
-                        history={props.history}
-                      />
-                    )}
-                  </div>
-                ))}
-                {/* {data?.articlesByTag?.results?.length === 0 &&
+              ))}
+              {/* {data?.articlesByTag?.results?.length === 0 &&
               props.text &&
               !loading && (
                 <AlternateSection history={props.history} asset={props.asset} />
               )} */}
-              </div>
-              <div>{loading ? <OakSpinner /> : ''}</div>
             </div>
-          </OakInfiniteScroll>
-        </div>
+            <div>{loading ? <OakSpinner /> : ''}</div>
+          </div>
+        </OakInfiniteScroll>
       </div>
-    </div>
+    </OakSection>
   );
 };
 

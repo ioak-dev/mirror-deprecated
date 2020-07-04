@@ -25,3 +25,11 @@ export const formatDate = (date: Date) => {
   }
   return '';
 };
+
+export const days = (dateText: string) => {
+  if (dateText) {
+    const date = new Date(dateText);
+    return (date.getTime() - new Date().getTime()) / (1000 * 3600 * 24);
+  }
+  return 0;
+};

@@ -1,29 +1,19 @@
 import React, { useState } from 'react';
-import { gql } from 'apollo-boost';
 import { useMutation } from '@apollo/react-hooks';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import { sendMessage } from '../../../events/MessageService';
 import { AssetPayload, AssetAdditionPayload } from '../../../types/graphql';
 import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
+import { CREATE_ASSET } from '../../Types/schema';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   history: any;
+  asset?: string;
 }
 
-const CREATE_ASSET = gql`
-  mutation createAsset(
-    $payload: AssetPayload!
-    $addition: AssetAdditionPayload!
-  ) {
-    createAsset(payload: $payload, addition: $addition) {
-      id
-    }
-  }
-`;
-
 const CreateItem = (props: Props) => {
-  const [stage, setStage] = useState('assetdetails');
   const [createAsset, { data: savedAsset }] = useMutation(CREATE_ASSET);
   const [state, setState] = useState<any>({
     name: '',
@@ -88,13 +78,11 @@ const CreateItem = (props: Props) => {
         },
       })
         .then((response: any) => {
+          console.log(response);
           if (response.data.createAsset.id) {
-            setStage('created');
-            sendMessage('login-notification', true, {
-              type: 'main',
-              message:
-                'Your asset has been setup. Token details will be sent to your email. Please check your email for further instructions',
-            });
+            props.history.push(
+              `/asset/summary?id=${response.data.createAsset.assetId}`
+            );
           } else {
             sendMessage('notification', true, {
               type: 'failure',
@@ -115,19 +103,10 @@ const CreateItem = (props: Props) => {
     props.history.goBack();
   };
 
-  const handleSubmit = event => {
-    if (stage === 'assetdetails') {
-      submit(event);
-    }
-  };
-
   return (
     <>
       <div className="page-header">
-        <div className="page-title">
-          Create Asset
-          <div className="page-highlight" />
-        </div>
+        <OakHeading title="Create asset" />
 
         <div className="action-header position-right">
           <OakButton action={submit} theme="primary" variant="appear">

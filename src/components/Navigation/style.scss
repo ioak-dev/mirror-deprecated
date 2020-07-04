@@ -52,6 +52,7 @@
 
     .links {
       display: flex;
+      user-select: none;
       a {
         color: var(--color-foreground-2);
         position: relative;

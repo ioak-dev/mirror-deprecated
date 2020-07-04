@@ -1,0 +1,20 @@
+.browse-post {
+  .browse-post-subtitle {
+  }
+}
+
+.create-post-item {
+  display: grid;
+  grid-auto-flow: row;
+  row-gap: 20px;
+}
+
+.post-section {
+  display: flex;
+  flex-direction: column;
+  .post-list-container {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 30px;
+  }
+}

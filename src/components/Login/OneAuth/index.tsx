@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
+import OakHeading from '../../../oakui/OakHeading';
+import OakPage from '../../../oakui/OakPage';
+import OakSection from '../../../oakui/OakSection';
 
 interface Props {
   history: any;
@@ -47,36 +50,37 @@ const OneAuth = (props: Props) => {
   };
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text">
-          <div className="view-asset-item">
-            <div className="page-title">Login Details</div>
-            <div className="action-header position-right">
-              <OakButton action={oaLogin} theme="primary" variant="appear">
-                <i className="material-icons">double_arrow</i>Submit
+    <OakPage>
+      <OakSection>
+        <div className="view-asset-item">
+          <OakHeading
+            title="Login via Oneauth"
+            subtitle="You will be redirected to oneauth for signing in to your space"
+          />
+          <div className="action-header position-right">
+            <OakButton action={oaLogin} theme="primary" variant="appear">
+              <i className="material-icons">double_arrow</i>Submit
+            </OakButton>
+            {props.history.length > 2 && (
+              <OakButton
+                action={() => cancelCreation()}
+                theme="default"
+                variant="appear"
+              >
+                <i className="material-icons">close</i>Cancel
               </OakButton>
-              {props.history.length > 2 && (
-                <OakButton
-                  action={() => cancelCreation()}
-                  theme="default"
-                  variant="appear"
-                >
-                  <i className="material-icons">close</i>Cancel
-                </OakButton>
-              )}
-            </div>
-            <OakText
-              label="Space"
-              data={state}
-              errorData={formErrors}
-              id="space"
-              handleChange={e => handleChange(e)}
-            />
+            )}
           </div>
+          <OakText
+            label="Space"
+            data={state}
+            errorData={formErrors}
+            id="space"
+            handleChange={e => handleChange(e)}
+          />
         </div>
-      </div>
-    </div>
+      </OakSection>
+    </OakPage>
   );
 };
 

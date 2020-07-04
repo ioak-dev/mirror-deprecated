@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import './style.scss';
-import { LIST_ARTICLE_CATEGORIES } from '../../../Types/schema';
+import { LIST_ARTICLE_CATEGORIES } from '../../../Types/ArticleSchema';
 import { ArticleCategory } from '../../../../types/graphql';
 import CategoryView from './CategoryView';
 

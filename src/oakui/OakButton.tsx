@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
-import './styles/oak-button.scss';
+import './styles/oak-button-mirror.scss';
 import OakIcon from './OakIcon';
 
 interface Props {

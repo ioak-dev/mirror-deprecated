@@ -1,8 +1,10 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import './style.scss';
-import { TAG_CLOUD } from '../../../Types/schema';
+import { ARTICLE_TAG_CLOUD } from '../../../Types/ArticleSchema';
 import TagLink from './TagLink';
+import OakHeading from '../../../../oakui/OakHeading';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   handleChange: Function;
@@ -11,39 +13,30 @@ interface Props {
 }
 
 const TagSection = (props: Props) => {
-  const { data } = useQuery(TAG_CLOUD, {
+  const { data } = useQuery(ARTICLE_TAG_CLOUD, {
     fetchPolicy: 'cache-and-network',
   });
 
-  const searchArticle = event => {
+  const searchArticle = () => {
     props.history.push(`/${props.asset}/article/search`);
   };
 
   return (
-    <div className="app-content">
-      <div className="app-text">
-        <div className="page-title">
-          Articles by tag
-          <div className="page-subtitle">
-            <div className="browse-article-subtitle">
-              <div className="hyperlink" onClick={searchArticle}>
-                Or Search instead
-              </div>
-            </div>
-          </div>
-          <div className="page-highlight" />
-        </div>
-        <div className="tag-section">
-          {data?.tagCloud?.map(item => (
-            <TagLink
-              key={item.name}
-              tag={item}
-              handleClick={() => props.handleChange(item.name)}
-            />
-          ))}
-        </div>
+    <OakSection>
+      <OakHeading
+        title="Articles by tag"
+        links={[{ label: 'Or Search instead', action: () => searchArticle() }]}
+      />
+      <div className="tag-section">
+        {data?.articleTagCloud?.map(item => (
+          <TagLink
+            key={item.name}
+            tag={item}
+            handleClick={() => props.handleChange(item.name)}
+          />
+        ))}
       </div>
-    </div>
+    </OakSection>
   );
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 import './style.scss';
 import { NavLink } from 'react-router-dom';
-import { Authorization, Profile } from '../Types/GeneralTypes';
+import { Authorization } from '../Types/GeneralTypes';
 
 interface Props {
   authorization: Authorization;
@@ -28,13 +28,20 @@ const Links = (props: Props) => {
           >
             Articles
           </NavLink>
+          <NavLink
+            to={`/${props.asset}/post`}
+            className="navitem"
+            activeClassName="active"
+          >
+            Forum
+          </NavLink>
 
           <NavLink
             to={`/${props.asset}/asset/view`}
             className="navitem"
             activeClassName="active"
           >
-            View Asset
+            Asset
           </NavLink>
         </>
       )}

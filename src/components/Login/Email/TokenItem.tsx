@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   history: any;
@@ -57,13 +58,10 @@ const TokenItem = (props: Props) => {
   return (
     <>
       <div className="page-header">
-        <div className="page-title">
-          Email authentication
-          <div className="page-subtitle">
-            You would have received an authentication token in your email
-          </div>
-          <div className="page-highlight" />
-        </div>
+        <OakHeading
+          title="Email authentication"
+          subtitle="You would have received an authentication token in your email"
+        />
         <div className="action-header position-right">
           <OakButton action={login} theme="primary" variant="appear">
             <i className="material-icons">double_arrow</i>Submit

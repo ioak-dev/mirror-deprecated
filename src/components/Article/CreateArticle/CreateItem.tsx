@@ -9,7 +9,11 @@ import { sendMessage } from '../../../events/MessageService';
 import CategoryTree from '../Category/CategoryTree';
 import OakChipGroup from '../../../oakui/OakChipGroup';
 import { ArticlePayload, ArticleCategory } from '../../../types/graphql';
-import { LIST_ARTICLES, LIST_ARTICLE_CATEGORIES } from '../../Types/schema';
+import {
+  LIST_ARTICLES,
+  LIST_ARTICLE_CATEGORIES,
+} from '../../Types/ArticleSchema';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   categoryid: any;
@@ -168,11 +172,7 @@ const CreateItem = (props: Props) => {
   return (
     <>
       <div className="page-header">
-        <div className="page-title">
-          Create article
-          {/* <div className="page-subtitle">sub text</div> */}
-          <div className="page-highlight" />
-        </div>
+        <OakHeading title="Create article" />
         <div className="action-header position-right">
           <OakButton action={submit} theme="primary" variant="appear">
             <i className="material-icons">double_arrow</i>Save

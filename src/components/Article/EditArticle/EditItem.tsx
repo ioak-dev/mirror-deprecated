@@ -12,7 +12,11 @@ import {
   ArticleCategory,
 } from '../../../types/graphql';
 import OakChipGroup from '../../../oakui/OakChipGroup';
-import { UPDATE_ARTICLE, LIST_ARTICLE_CATEGORIES } from '../../Types/schema';
+import {
+  UPDATE_ARTICLE,
+  LIST_ARTICLE_CATEGORIES,
+} from '../../Types/ArticleSchema';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   id: string;
@@ -164,11 +168,7 @@ const EditItem = (props: Props) => {
   return (
     <>
       <div className="page-header">
-        <div className="page-title">
-          Edit article
-          {/* <div className="page-subtitle">sub text</div> */}
-          <div className="page-highlight" />
-        </div>
+        <OakHeading title="Edit article" />
         <div className="action-header position-right">
           <OakButton action={update} theme="primary" variant="appear">
             <i className="material-icons">double_arrow</i>Save

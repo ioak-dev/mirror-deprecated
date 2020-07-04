@@ -9,7 +9,8 @@ import OakSpinner from '../../../../oakui/OakSpinner';
 import CreateCategory from './CreateCategory';
 import CreateCategoryLink from './CreateCategoryLink';
 import OakButton from '../../../../oakui/OakButton';
-import { LIST_ARTICLE_CATEGORIES } from '../../../Types/schema';
+import { LIST_ARTICLE_CATEGORIES } from '../../../Types/ArticleSchema';
+import OakSubheading from '../../../../oakui/OakSubheading';
 
 interface Props {
   categoryId: string;
@@ -44,21 +45,15 @@ const CategorySection = (props: Props) => {
   return (
     <div className="category-section">
       <div className="category-section-header">
-        <div className="section-title">
-          Category
-          <div className="section-subtitle">
-            <div className="category-subtitle">
-              <CategoryTree
-                category={data?.articleCategories?.find(
-                  (item: ArticleCategory) => item.id === props.categoryId
-                )}
-                categories={data?.articleCategories}
-                handleChange={props.handleChange}
-              />
-            </div>
-          </div>
-          <div className="section-highlight" />
-        </div>
+        <OakSubheading title="Category">
+          <CategoryTree
+            category={data?.articleCategories?.find(
+              (item: ArticleCategory) => item.id === props.categoryId
+            )}
+            categories={data?.articleCategories}
+            handleChange={props.handleChange}
+          />
+        </OakSubheading>
       </div>
       {view && view.length > 0 && (
         <div className="typography-4">Choose a category to explore</div>

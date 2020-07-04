@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
 import SearchSection from './SearchSection';
+import OakHeading from '../../../../oakui/OakHeading';
+import OakPage from '../../../../oakui/OakPage';
+import OakSection from '../../../../oakui/OakSection';
 
 interface Props {
   setProfile: Function;
@@ -22,7 +25,7 @@ const SearchArticle = (props: Props) => {
     setUrlParam(queryString.parse(props.location.search));
   }, [props.location.search]);
 
-  const browseArticle = event => {
+  const browseArticle = () => {
     props.history.push(`/${props.asset}/article/browse`);
   };
 
@@ -31,20 +34,18 @@ const SearchArticle = (props: Props) => {
   };
 
   return (
-    <div className="app-page">
-      <div className="app-content">
-        <div className="app-text browse-article">
-          <div className="page-title">
-            Search articles
-            <div className="page-subtitle">
-              <div className="browse-article-subtitle">
-                <div className="hyperlink" onClick={browseArticle}>
-                  Or Browse by category instead
-                </div>
-              </div>
-            </div>
-            <div className="page-highlight" />
-          </div>
+    <OakPage>
+      <OakSection>
+        <div className="browse-article">
+          <OakHeading
+            title="Search articles"
+            links={[
+              {
+                label: 'Or Browse by category instead',
+                action: () => browseArticle(),
+              },
+            ]}
+          />
           {/* <div className="typography-4 align-horizontal">
             Find your questions answered, from the knowledge base. If you
             don&apos;t get your desired answers, you can post your question for
@@ -57,8 +58,8 @@ const SearchArticle = (props: Props) => {
             handleSearchTextChange={handleSearchTextChange}
           />
         </div>
-      </div>
-    </div>
+      </OakSection>
+    </OakPage>
   );
 };
 

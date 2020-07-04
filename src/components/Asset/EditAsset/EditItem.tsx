@@ -8,6 +8,7 @@ import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import { AssetPayload, Asset } from '../../../types/graphql';
 
 import { UPDATE_ASSET } from '../../Types/schema';
+import OakHeading from '../../../oakui/OakHeading';
 
 interface Props {
   id: string;
@@ -118,39 +119,38 @@ const EditItem = (props: Props) => {
     <>
       <div className="page-header">
         {props.asset && (
-          <div className="page-title">
-            <div className="align-horizontal">
-              Edit Asset
-              <div className="asset-status-container space-left-1 typography-4">
-                {!state.productionMode && (
-                  <div className="asset-status down">down</div>
-                )}
-                {state.productionMode && (
-                  <div className="asset-status live">live</div>
-                )}
+          <OakHeading
+            title={
+              <div className="align-horizontal">
+                Edit asset
+                <div className="asset-status-container space-left-1 typography-4">
+                  {!state.productionMode && (
+                    <div className="asset-status down">down</div>
+                  )}
+                  {state.productionMode && (
+                    <div className="asset-status live">live</div>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="page-subtitle">
-              {!state.productionMode && (
-                <div className="align-horizontal">
-                  To activate asset, &nbsp;
-                  <div className="hyperlink" onClick={changeMode}>
-                    turn on production mode
-                  </div>
+            }
+          >
+            {!state.productionMode && (
+              <div className="align-horizontal">
+                To activate asset, &nbsp;
+                <div className="hyperlink" onClick={changeMode}>
+                  turn on production mode
                 </div>
-              )}
-              {state.productionMode && (
-                <div className="align-horizontal">
-                  To activate asset, &nbsp;
-                  <div className="hyperlink" onClick={changeMode}>
-                    turn off production mode
-                  </div>
+              </div>
+            )}
+            {state.productionMode && (
+              <div className="align-horizontal">
+                To activate asset, &nbsp;
+                <div className="hyperlink" onClick={changeMode}>
+                  turn off production mode
                 </div>
-              )}
-            </div>
-
-            <div className="page-highlight" />
-          </div>
+              </div>
+            )}
+          </OakHeading>
         )}
         {props.assetData && (
           <div className="action-header position-right">
