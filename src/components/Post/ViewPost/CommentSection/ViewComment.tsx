@@ -10,6 +10,7 @@ import FeedbackView from './FeedbackView';
 import EditCommentItem from './EditCommentItem';
 import { POST_COMMENT } from '../../../Types/PostSchema';
 import OakAvatar from '../../../../oakui/OakAvatar';
+import MarkComment from './MarkComment';
 
 interface Props {
   postId: string;
@@ -56,6 +57,7 @@ function ViewComment(props: Props) {
           replied on {formatDateText(props.comment?.createdAt)}
         </div>
         <div className="view-comment-actions">
+          <MarkComment comment={props.comment} />
           <div className="hyperlink-container">
             <i className="material-icons typography-6">edit</i>
             <div
@@ -114,6 +116,7 @@ function ViewComment(props: Props) {
           comment={props.comment}
         />
       )}
+      {/* {actionType === 'markcomment' && <MarkComment postId={props.postId} />} */}
     </div>
   );
 }
