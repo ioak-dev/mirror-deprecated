@@ -43,6 +43,13 @@ const Landing = () => {
         </p>
       </div>
       <div className="action">
+        <NavLink to="/asset/list" className="navitem" activeClassName="active">
+          <OakButton theme="primary" variant="disappear">
+            Available Assets
+          </OakButton>
+        </NavLink>
+      </div>
+      <div className="action space-top-4">
         <NavLink
           to="/asset/create"
           className="navitem"
@@ -53,6 +60,7 @@ const Landing = () => {
           </OakButton>
         </NavLink>
       </div>
+
       {/* <OakSubMenu data = {this.state.data} variant="secondary"/>
       <div>
         <OakButton align="left" theme="primary" variant="disappear" icon="open_in_new" action="">disappear</OakButton>
