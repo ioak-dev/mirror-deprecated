@@ -39,9 +39,6 @@ const Landing = (props: Props) => {
           {data?.assets?.map(asset => (
             <AssetItem asset={asset} history={props.history} />
           ))}
-          {data?.assets?.map(asset => (
-            <AssetItem asset={asset} history={props.history} />
-          ))}
         </div>
       )}
     </div>
