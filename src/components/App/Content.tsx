@@ -47,6 +47,7 @@ import SearchPost from '../Post/PostHome/SearchPost';
 import BrowsePost from '../Post/PostHome/BrowsePost';
 import PostHome from '../Post/PostHome';
 import AssetCreateSuccess from '../Asset/CreateAsset/AssetCreateSuccess';
+import MyPosts from '../Post/MyPosts/index';
 
 const themes = {
   themecolor1: getTheme('#69A7BF'),
@@ -427,6 +428,18 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={EditPost}
+                      middleware={['authenticate']}
+                    />
+                  )}
+                />
+                <Route
+                  path="/:asset/mypost/mypost"
+                  exact
+                  render={propsLocal => (
+                    <OakRouteGraph
+                      {...propsLocal}
+                      {...props}
+                      component={MyPosts}
                       middleware={['authenticate']}
                     />
                   )}

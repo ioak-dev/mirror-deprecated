@@ -347,6 +347,11 @@ export const MARK_POSTCOMMENT_AS_ANSWER = gql`
     markPostCommentAsAnswer(id: $id) {
       id
       isAnswer
+      post {
+        id
+        isAnswered
+        answeredOn
+      }
     }
   }
 `;
@@ -356,6 +361,11 @@ export const UNMARK_POSTCOMMENT_AS_ANSWER = gql`
     unmarkPostCommentAsAnswer(id: $id) {
       id
       isAnswer
+      post {
+        id
+        isAnswered
+        answeredOn
+      }
     }
   }
 `;

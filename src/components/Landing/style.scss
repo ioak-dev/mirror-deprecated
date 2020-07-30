@@ -1,14 +1,26 @@
 .landing {
+  display: grid;
+  align-content: flex-start;
+
+  padding: 100px;
+  min-height: 100vh;
+  row-gap: 20px;
+
+  .landing--action {
     display: grid;
-    grid-template-rows: auto;
-    justify-content: center;
-    align-content: flex-start;
+    grid-auto-flow: row;
+    justify-items: center;
+    row-gap: 20px;
+  }
+  .landing--asset-list {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 20px;
+  }
+}
 
-    padding: 100px;
-    min-height: 100vh;
-
-    .action {
-        display: grid;
-        justify-content: center;
-    }
+.asset-list-item {
+  .asset-list-item--link {
+    display: flex;
+  }
 }

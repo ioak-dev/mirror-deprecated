@@ -43,6 +43,13 @@ const Links = (props: Props) => {
           >
             Asset
           </NavLink>
+          <NavLink
+            to={`/${props.asset}/mypost/mypost`}
+            className="navitem"
+            activeClassName="active"
+          >
+            My posts
+          </NavLink>
         </>
       )}
     </div>

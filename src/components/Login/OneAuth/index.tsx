@@ -53,23 +53,25 @@ const OneAuth = (props: Props) => {
     <OakPage>
       <OakSection>
         <div className="view-asset-item">
-          <OakHeading
-            title="Login via Oneauth"
-            subtitle="You will be redirected to oneauth for signing in to your space"
-          />
-          <div className="action-header position-right">
-            <OakButton action={oaLogin} theme="primary" variant="appear">
-              <i className="material-icons">double_arrow</i>Submit
-            </OakButton>
-            {props.history.length > 2 && (
-              <OakButton
-                action={() => cancelCreation()}
-                theme="default"
-                variant="appear"
-              >
-                <i className="material-icons">close</i>Cancel
+          <div className="page-header">
+            <OakHeading
+              title="Login via Oneauth"
+              subtitle="You will be redirected to oneauth for signing in to your space"
+            />
+            <div className="action-header position-right">
+              <OakButton action={oaLogin} theme="primary" variant="appear">
+                <i className="material-icons">double_arrow</i>Submit
               </OakButton>
-            )}
+              {props.history.length > 2 && (
+                <OakButton
+                  action={() => cancelCreation()}
+                  theme="default"
+                  variant="appear"
+                >
+                  <i className="material-icons">close</i>Cancel
+                </OakButton>
+              )}
+            </div>
           </div>
           <OakText
             label="Space"
