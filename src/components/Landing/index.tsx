@@ -37,7 +37,7 @@ const Landing = (props: Props) => {
       {!loading && !error && showAssets && (
         <div className="landing--asset-list">
           {data?.assets?.map(asset => (
-            <AssetItem asset={asset} history={props.history} />
+            <AssetItem asset={asset} history={props.history} key={asset.id} />
           ))}
         </div>
       )}

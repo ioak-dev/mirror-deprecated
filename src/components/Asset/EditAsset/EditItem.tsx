@@ -69,13 +69,6 @@ const EditItem = (props: Props) => {
     if (isEmptyOrSpaces(state.jwtPassword)) {
       errorFields.jwtPassword = 'JWT Password cannot be empty';
     }
-    if (
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-        state.email.trim().toLowerCase()
-      )
-    ) {
-      errorFields.email = 'Invalid email';
-    }
     setFormErrors(errorFields);
     if (isEmptyAttributes(errorFields)) {
       const payload: AssetPayload = {
@@ -110,7 +103,7 @@ const EditItem = (props: Props) => {
       },
     }).then(response => {
       if (response.data.updateAsset.id) {
-        props.history.go();
+        props.history.goBack();
       }
     });
   };

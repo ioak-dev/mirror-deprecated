@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import EmailItem from './EmailItem';
 import AccountItem from './AccountItem';
 import TokenItem from './TokenItem';
@@ -15,6 +16,7 @@ interface Props {
 const queryString = require('query-string');
 
 const Email = (props: Props) => {
+  const authorization = useSelector(state => state.authorization);
   const [state, setState] = useState({ type: 'email' });
   const [queryParam, setQueryParam] = useState<any>({});
 
@@ -35,6 +37,12 @@ const Email = (props: Props) => {
   const newAccount = () => {
     props.history.push(`/${props.asset}/login/email?type=new`);
   };
+
+  useEffect(() => {
+    if (authorization.isAuth) {
+      props.history.push(`/${props.asset}/home`);
+    }
+  }, [authorization]);
 
   return (
     <OakPage>

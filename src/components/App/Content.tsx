@@ -223,7 +223,7 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={Login}
-                      // middleware={['readAuthentication']}
+                      middleware={['readAuthentication']}
                     />
                   )}
                 />
@@ -234,6 +234,7 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={ExternLogin}
+                      middleware={['readAuthentication']}
                     />
                   )}
                 />
@@ -244,7 +245,7 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={OneAuth}
-                      // middleware={['readAuthentication']}
+                      middleware={['readAuthentication']}
                     />
                   )}
                 />
@@ -255,7 +256,7 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={Email}
-                      // middleware={['readAuthentication']}
+                      middleware={['readAuthentication']}
                     />
                   )}
                 />
@@ -453,7 +454,7 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={ViewAsset}
-                      // middleware={['authenticate']}
+                      middleware={['readAuthentication']}
                     />
                   )}
                 />
@@ -465,7 +466,7 @@ const Content = (props: Props) => {
                       {...propsLocal}
                       {...props}
                       component={EditAsset}
-                      // middleware={['authenticate']}
+                      middleware={['readAuthentication']}
                     />
                   )}
                 />
