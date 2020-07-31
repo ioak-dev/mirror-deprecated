@@ -25,7 +25,7 @@ const TokenItem = (props: Props) => {
         `mirror_${props.asset}`,
         `email ${props.queryParam.auth_token}`
       );
-      props.history.push(`/${props.asset}/home`);
+      props.history.push(`/${props.asset}/article`);
     }
   }, [props.queryParam]);
 

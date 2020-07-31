@@ -27,20 +27,26 @@ const Email = (props: Props) => {
   }, [props.location.search]);
 
   const emailLogin = () => {
-    props.history.push(`/${props.asset}/login/email?type=email`);
+    props.history.push(
+      `/${props.asset}/login/email?type=email&from=${queryParam.from}`
+    );
   };
 
   const tokenLogin = () => {
-    props.history.push(`/${props.asset}/login/email?type=token`);
+    props.history.push(
+      `/${props.asset}/login/email?type=token&from=${queryParam.from}`
+    );
   };
 
   const newAccount = () => {
-    props.history.push(`/${props.asset}/login/email?type=new`);
+    props.history.push(
+      `/${props.asset}/login/email?type=new&from=${queryParam.from}`
+    );
   };
 
   useEffect(() => {
     if (authorization.isAuth) {
-      props.history.push(`/${props.asset}/home`);
+      props.history.push(queryParam.from || `/${props.asset}/article`);
     }
   }, [authorization]);
 

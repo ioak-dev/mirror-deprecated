@@ -23,9 +23,9 @@ const OneAuth = (props: Props) => {
   });
 
   useEffect(() => {
-    const spaceData = queryString.parse(props.location.search);
-    if (spaceData.space) {
-      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${spaceData.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}`;
+    const queryParam = queryString.parse(props.location.search);
+    if (queryParam.space) {
+      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${queryParam.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}&from=${queryParam.from}`;
     }
   }, []);
 
@@ -36,7 +36,12 @@ const OneAuth = (props: Props) => {
     }
     setFormErrors(errorFields);
     if (isEmptyAttributes(errorFields)) {
-      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${state.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}`;
+      const queryParam = queryString.parse(props.location.search);
+      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${
+        state.space
+      }/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${
+        props.asset
+      }${queryParam.from ? `&from=${queryParam.from}` : ''}`;
     }
   };
 
@@ -53,7 +58,7 @@ const OneAuth = (props: Props) => {
 
   useEffect(() => {
     if (authorization.isAuth) {
-      props.history.push(`/${props.asset}/home`);
+      props.history.push(`/${props.asset}/article`);
     }
   }, [authorization]);
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import './style.scss';
 import LoginMethod from './LoginMethod';
@@ -11,15 +11,23 @@ interface Props {
   match: any;
   params: string;
   asset: string;
+  location: any;
 }
+
+const queryString = require('query-string');
 
 const Login = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
+  const [from, setFrom] = useState<string | undefined>();
   const oaLogin = () => {
-    props.history.push(`/${props.asset}/login/oa`);
+    props.history.push(
+      `/${props.asset}/login/oa${from ? `?from=${from}` : ''}`
+    );
   };
   const emailLogin = () => {
-    props.history.push(`/${props.asset}/login/email`);
+    props.history.push(
+      `/${props.asset}/login/email${from ? `?from=${from}` : ''}`
+    );
   };
 
   const mirrorLogin = () => {
@@ -28,9 +36,14 @@ const Login = (props: Props) => {
 
   useEffect(() => {
     if (authorization.isAuth) {
-      props.history.push(`/${props.asset}/home`);
+      props.history.push(`/${props.asset}/article`);
     }
   }, [authorization]);
+
+  useEffect(() => {
+    const query = queryString.parse(props.location.search);
+    query.from ? setFrom(query.from) : setFrom(undefined);
+  }, [props.location.search]);
 
   return (
     <OakPage>
