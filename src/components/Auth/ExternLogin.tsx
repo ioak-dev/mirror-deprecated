@@ -35,7 +35,7 @@ const ExternLogin = (props: Props) => {
         `mirror_${props.asset}`,
         `extern ${data?.newExternSession?.sessionId}`
       );
-      props.history.push(`/${props.asset}/home`);
+      props.history.push(`/${props.asset}/article`);
     } else {
       setIsInvalidToken(true);
     }
