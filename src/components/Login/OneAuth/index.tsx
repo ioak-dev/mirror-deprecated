@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
 import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
@@ -15,6 +16,7 @@ interface Props {
 const queryString = require('query-string');
 
 const OneAuth = (props: Props) => {
+  const authorization = useSelector(state => state.authorization);
   const [state, setState] = useState({ space: '' });
   const [formErrors, setFormErrors] = useState<any>({
     space: '',
@@ -48,6 +50,12 @@ const OneAuth = (props: Props) => {
   const cancelCreation = () => {
     props.history.goBack();
   };
+
+  useEffect(() => {
+    if (authorization.isAuth) {
+      props.history.push(`/${props.asset}/home`);
+    }
+  }, [authorization]);
 
   return (
     <OakPage>

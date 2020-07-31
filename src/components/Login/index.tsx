@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import './style.scss';
 import LoginMethod from './LoginMethod';
 import OakHeading from '../../oakui/OakHeading';
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const Login = (props: Props) => {
+  const authorization = useSelector(state => state.authorization);
   const oaLogin = () => {
     props.history.push(`/${props.asset}/login/oa`);
   };
@@ -23,6 +25,12 @@ const Login = (props: Props) => {
   const mirrorLogin = () => {
     console.log('not yet implemented');
   };
+
+  useEffect(() => {
+    if (authorization.isAuth) {
+      props.history.push(`/${props.asset}/home`);
+    }
+  }, [authorization]);
 
   return (
     <OakPage>

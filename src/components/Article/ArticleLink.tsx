@@ -2,6 +2,7 @@ import React from 'react';
 import './style.scss';
 import { Article } from '../../types/graphql';
 import { formatDateText } from '../Lib/DateUtils';
+import { htmlToText } from '../Utils';
 
 interface Props {
   article: Article;
@@ -49,7 +50,7 @@ const ArticleLink = (props: Props) => {
       </div>
 
       <div className="article-description typography-4 three-liner">
-        {props.article.description}
+        {htmlToText(props.article.description)}
       </div>
     </div>
   );
