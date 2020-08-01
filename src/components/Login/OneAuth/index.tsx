@@ -36,22 +36,6 @@ const OneAuth = (props: Props) => {
     });
   }, [searchCriteria]);
 
-  // const oaLogin = () => {
-  //   const errorFields: any = { space: '' };
-  //   if (isEmptyOrSpaces(state.space)) {
-  //     errorFields.space = 'Space cannot be empty';
-  //   }
-  //   setFormErrors(errorFields);
-  //   if (isEmptyAttributes(errorFields)) {
-  //     const queryParam = queryString.parse(props.location.search);
-  //     window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${
-  //       state.space
-  //     }/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${
-  //       props.asset
-  //     }${queryParam.from ? `&from=${queryParam.from}` : ''}`;
-  //   }
-  // };
-
   const search = (existingSpace, criteria) => {
     if (isEmptyOrSpaces(criteria)) {
       return existingSpace;
@@ -68,15 +52,27 @@ const OneAuth = (props: Props) => {
     });
   };
 
-  const cancelCreation = () => {
-    props.history.goBack();
-  };
-
   useEffect(() => {
     if (authorization.isAuth) {
       props.history.push(`/${props.asset}/article`);
     }
   }, [authorization]);
+
+  const goBack = () => {
+    props.history.goBack();
+  };
+
+  const getHeadingLinks = () => {
+    const links: any[] = [];
+    if (props.history.length > 2) {
+      links.push({
+        label: 'Go back',
+        icon: 'reply',
+        action: () => goBack(),
+      });
+    }
+    return links;
+  };
 
   return (
     <OakPage>
@@ -86,21 +82,20 @@ const OneAuth = (props: Props) => {
             <OakHeading
               title="Login via Oneauth"
               subtitle="You will be redirected to oneauth for signing in to your space"
+              links={getHeadingLinks()}
+              linkSize="large"
             />
-            <div className="action-header position-right">
-              {/* <OakButton action={oaLogin} theme="primary" variant="appear">
-                <i className="material-icons">double_arrow</i>Submit
-              </OakButton> */}
+            {/* <div className="action-header position-right">
               {props.history.length > 2 && (
                 <OakButton
                   action={() => cancelCreation()}
                   theme="default"
                   variant="appear"
                 >
-                  <i className="material-icons">close</i>Cancel
+                  <i className="material-icons">close</i>Back
                 </OakButton>
               )}
-            </div>
+            </div> */}
           </div>
           <OakText
             label="Type company name to filter"
