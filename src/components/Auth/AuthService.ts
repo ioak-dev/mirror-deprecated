@@ -131,3 +131,9 @@ function encrypt(password, message, salt) {
 function decrypt(password, ciphertext) {
   return sjcl.decrypt(password, ciphertext);
 }
+
+export function fetchSpace() {
+  return httpGet(`/space/introspect`, null).then(function(response) {
+    return Promise.resolve(response.data);
+  });
+}

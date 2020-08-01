@@ -6,6 +6,9 @@ import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import OakHeading from '../../../oakui/OakHeading';
 import OakPage from '../../../oakui/OakPage';
 import OakSection from '../../../oakui/OakSection';
+import { fetchSpace } from '../../Auth/AuthService';
+import OakSelect from '../../../oakui/OakSelect';
+import OakAutoComplete from '../../../oakui/OakAutoComplete';
 
 interface Props {
   history: any;
@@ -21,12 +24,27 @@ const OneAuth = (props: Props) => {
   const [formErrors, setFormErrors] = useState<any>({
     space: '',
   });
+  const [existingSpace, setExistingSpace] = useState({
+    autoCompleteDropdownData: [{}],
+  });
 
   useEffect(() => {
     const queryParam = queryString.parse(props.location.search);
     if (queryParam.space) {
       window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${queryParam.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}&from=${queryParam.from}`;
     }
+  }, []);
+
+  useEffect(() => {
+    fetchSpace().then(response => {
+      const dropList: any[] = [];
+      response.data
+        ?.filter(item => delete item._id)
+        .map(item => {
+          dropList.push({ key: item.spaceId, value: item.name });
+        });
+      setExistingSpace({ autoCompleteDropdownData: dropList });
+    });
   }, []);
 
   const oaLogin = () => {
@@ -62,6 +80,10 @@ const OneAuth = (props: Props) => {
     }
   }, [authorization]);
 
+  const handleAutoCompleteChange = (value: string) => {
+    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${value}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}`;
+  };
+
   return (
     <OakPage>
       <OakSection>
@@ -86,6 +108,14 @@ const OneAuth = (props: Props) => {
               )}
             </div>
           </div>
+          {existingSpace && (
+            <OakAutoComplete
+              label="Select space from the list"
+              placeholder="Search by user name"
+              handleChange={handleAutoCompleteChange}
+              objects={existingSpace.autoCompleteDropdownData}
+            />
+          )}
           <OakText
             label="Space"
             data={state}
