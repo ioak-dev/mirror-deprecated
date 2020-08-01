@@ -7,8 +7,8 @@ import OakHeading from '../../../oakui/OakHeading';
 import OakPage from '../../../oakui/OakPage';
 import OakSection from '../../../oakui/OakSection';
 import { fetchSpace } from '../../Auth/AuthService';
-import OakSelect from '../../../oakui/OakSelect';
-import OakAutoComplete from '../../../oakui/OakAutoComplete';
+import SpaceItem from './SpaceItem';
+import './style.scss';
 
 interface Props {
   history: any;
@@ -20,13 +20,8 @@ const queryString = require('query-string');
 
 const OneAuth = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
-  const [state, setState] = useState({ space: '' });
-  const [formErrors, setFormErrors] = useState<any>({
-    space: '',
-  });
-  const [existingSpace, setExistingSpace] = useState({
-    autoCompleteDropdownData: [{}],
-  });
+  const [view, setView] = useState<Array<any> | undefined>(undefined);
+  const [searchCriteria, setSearchCriteria] = useState({ text: '' });
 
   useEffect(() => {
     const queryParam = queryString.parse(props.location.search);
@@ -37,35 +32,38 @@ const OneAuth = (props: Props) => {
 
   useEffect(() => {
     fetchSpace().then(response => {
-      const dropList: any[] = [];
-      response.data
-        ?.filter(item => delete item._id)
-        .map(item => {
-          dropList.push({ key: item.spaceId, value: item.name });
-        });
-      setExistingSpace({ autoCompleteDropdownData: dropList });
+      setView(search(response.data, searchCriteria.text));
     });
-  }, []);
+  }, [searchCriteria]);
 
-  const oaLogin = () => {
-    const errorFields: any = { space: '' };
-    if (isEmptyOrSpaces(state.space)) {
-      errorFields.space = 'Space cannot be empty';
+  // const oaLogin = () => {
+  //   const errorFields: any = { space: '' };
+  //   if (isEmptyOrSpaces(state.space)) {
+  //     errorFields.space = 'Space cannot be empty';
+  //   }
+  //   setFormErrors(errorFields);
+  //   if (isEmptyAttributes(errorFields)) {
+  //     const queryParam = queryString.parse(props.location.search);
+  //     window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${
+  //       state.space
+  //     }/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${
+  //       props.asset
+  //     }${queryParam.from ? `&from=${queryParam.from}` : ''}`;
+  //   }
+  // };
+
+  const search = (existingSpace, criteria) => {
+    if (isEmptyOrSpaces(criteria)) {
+      return existingSpace;
     }
-    setFormErrors(errorFields);
-    if (isEmptyAttributes(errorFields)) {
-      const queryParam = queryString.parse(props.location.search);
-      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${
-        state.space
-      }/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${
-        props.asset
-      }${queryParam.from ? `&from=${queryParam.from}` : ''}`;
-    }
+    return existingSpace.filter(
+      item => item.name.toLowerCase().indexOf(criteria.toLowerCase()) !== -1
+    );
   };
 
-  const handleChange = event => {
-    setState({
-      ...state,
+  const handleSearchCriteria = event => {
+    setSearchCriteria({
+      ...searchCriteria,
       [event.target.name]: event.target.value,
     });
   };
@@ -80,10 +78,6 @@ const OneAuth = (props: Props) => {
     }
   }, [authorization]);
 
-  const handleAutoCompleteChange = (value: string) => {
-    window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${value}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}`;
-  };
-
   return (
     <OakPage>
       <OakSection>
@@ -94,9 +88,9 @@ const OneAuth = (props: Props) => {
               subtitle="You will be redirected to oneauth for signing in to your space"
             />
             <div className="action-header position-right">
-              <OakButton action={oaLogin} theme="primary" variant="appear">
+              {/* <OakButton action={oaLogin} theme="primary" variant="appear">
                 <i className="material-icons">double_arrow</i>Submit
-              </OakButton>
+              </OakButton> */}
               {props.history.length > 2 && (
                 <OakButton
                   action={() => cancelCreation()}
@@ -108,21 +102,24 @@ const OneAuth = (props: Props) => {
               )}
             </div>
           </div>
-          {existingSpace && (
-            <OakAutoComplete
-              label="Select space from the list"
-              placeholder="Search by user name"
-              handleChange={handleAutoCompleteChange}
-              objects={existingSpace.autoCompleteDropdownData}
-            />
-          )}
           <OakText
-            label="Space"
-            data={state}
-            errorData={formErrors}
-            id="space"
-            handleChange={e => handleChange(e)}
+            label="Type company name to filter"
+            handleChange={handleSearchCriteria}
+            id="text"
+            data={searchCriteria}
           />
+          <div className="list-spaces">
+            <div className="list-spaces--content">
+              {view?.map(space => (
+                <SpaceItem
+                  history={props.history}
+                  space={space}
+                  key={space._id}
+                  asset={props.asset}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </OakSection>
     </OakPage>
