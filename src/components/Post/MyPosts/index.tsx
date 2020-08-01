@@ -5,9 +5,15 @@ import OakSection from '../../../oakui/OakSection';
 import OakSpinner from '../../../oakui/OakSpinner';
 import { MY_POSTS } from '../../Types/PostSchema';
 import OakHeading from '../../../oakui/OakHeading';
-import OakViewer from '../../../oakui/OakViewer';
+import PostLink from '../PostLink';
+import './style.scss';
 
-const MyPosts = () => {
+interface Props {
+  history: any;
+  asset: string;
+}
+
+const MyPosts = (props: Props) => {
   const { loading, error, data } = useQuery(MY_POSTS, {
     variables: { pageSize: 10, pageNo: 0 },
     fetchPolicy: 'cache-and-network',
@@ -16,18 +22,22 @@ const MyPosts = () => {
   return (
     <OakPage>
       <OakSection>
-        <OakHeading title="My posts" />
+        <OakHeading
+          title="My posts"
+          subtitle="Posts submitted by me. Posts that I am following"
+        />
         {loading && <OakSpinner />}
         {!loading && !error && (
-          <>
+          <div className="my-posts">
             {data.myPosts.results.map(item => (
-              <>
-                <OakHeading title={item.title || ''} linkSize="large" />
-
-                <OakViewer>{item.description}</OakViewer>
-              </>
+              <PostLink
+                post={item}
+                asset={props.asset}
+                history={props.history}
+                key={item.id}
+              />
             ))}
-          </>
+          </div>
         )}
         {error && <div className="typography-6">Post does not exist</div>}
       </OakSection>
