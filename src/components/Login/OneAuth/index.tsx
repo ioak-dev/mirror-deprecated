@@ -6,6 +6,9 @@ import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import OakHeading from '../../../oakui/OakHeading';
 import OakPage from '../../../oakui/OakPage';
 import OakSection from '../../../oakui/OakSection';
+import { fetchSpace } from '../../Auth/AuthService';
+import SpaceItem from './SpaceItem';
+import './style.scss';
 
 interface Props {
   history: any;
@@ -17,10 +20,8 @@ const queryString = require('query-string');
 
 const OneAuth = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
-  const [state, setState] = useState({ space: '' });
-  const [formErrors, setFormErrors] = useState<any>({
-    space: '',
-  });
+  const [view, setView] = useState<Array<any> | undefined>(undefined);
+  const [searchCriteria, setSearchCriteria] = useState({ text: '' });
 
   useEffect(() => {
     const queryParam = queryString.parse(props.location.search);
@@ -29,31 +30,26 @@ const OneAuth = (props: Props) => {
     }
   }, []);
 
-  const oaLogin = () => {
-    const errorFields: any = { space: '' };
-    if (isEmptyOrSpaces(state.space)) {
-      errorFields.space = 'Space cannot be empty';
+  useEffect(() => {
+    fetchSpace().then(response => {
+      setView(search(response.data, searchCriteria.text));
+    });
+  }, [searchCriteria]);
+
+  const search = (existingSpace, criteria) => {
+    if (isEmptyOrSpaces(criteria)) {
+      return existingSpace;
     }
-    setFormErrors(errorFields);
-    if (isEmptyAttributes(errorFields)) {
-      const queryParam = queryString.parse(props.location.search);
-      window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${
-        state.space
-      }/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${
-        props.asset
-      }${queryParam.from ? `&from=${queryParam.from}` : ''}`;
-    }
+    return existingSpace.filter(
+      item => item.name.toLowerCase().indexOf(criteria.toLowerCase()) !== -1
+    );
   };
 
-  const handleChange = event => {
-    setState({
-      ...state,
+  const handleSearchCriteria = event => {
+    setSearchCriteria({
+      ...searchCriteria,
       [event.target.name]: event.target.value,
     });
-  };
-
-  const cancelCreation = () => {
-    props.history.goBack();
   };
 
   useEffect(() => {
@@ -61,6 +57,22 @@ const OneAuth = (props: Props) => {
       props.history.push(`/${props.asset}/article`);
     }
   }, [authorization]);
+
+  const goBack = () => {
+    props.history.goBack();
+  };
+
+  const getHeadingLinks = () => {
+    const links: any[] = [];
+    if (props.history.length > 2) {
+      links.push({
+        label: 'Go back',
+        icon: 'reply',
+        action: () => goBack(),
+      });
+    }
+    return links;
+  };
 
   return (
     <OakPage>
@@ -70,29 +82,39 @@ const OneAuth = (props: Props) => {
             <OakHeading
               title="Login via Oneauth"
               subtitle="You will be redirected to oneauth for signing in to your space"
+              links={getHeadingLinks()}
+              linkSize="large"
             />
-            <div className="action-header position-right">
-              <OakButton action={oaLogin} theme="primary" variant="appear">
-                <i className="material-icons">double_arrow</i>Submit
-              </OakButton>
+            {/* <div className="action-header position-right">
               {props.history.length > 2 && (
                 <OakButton
                   action={() => cancelCreation()}
                   theme="default"
                   variant="appear"
                 >
-                  <i className="material-icons">close</i>Cancel
+                  <i className="material-icons">close</i>Back
                 </OakButton>
               )}
-            </div>
+            </div> */}
           </div>
           <OakText
-            label="Space"
-            data={state}
-            errorData={formErrors}
-            id="space"
-            handleChange={e => handleChange(e)}
+            label="Type company name to filter"
+            handleChange={handleSearchCriteria}
+            id="text"
+            data={searchCriteria}
           />
+          <div className="list-spaces">
+            <div className="list-spaces--content">
+              {view?.map(space => (
+                <SpaceItem
+                  history={props.history}
+                  space={space}
+                  key={space._id}
+                  asset={props.asset}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </OakSection>
     </OakPage>
