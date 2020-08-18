@@ -5,6 +5,8 @@ import LoginMethod from './LoginMethod';
 import OakHeading from '../../oakui/OakHeading';
 import OakPage from '../../oakui/OakPage';
 import OakSection from '../../oakui/OakSection';
+import oaBlack from '../../images/oneauth_black_small.svg';
+import oaWhite from '../../images/oneauth_white_small.svg';
 
 interface Props {
   history: any;
@@ -18,6 +20,7 @@ const queryString = require('query-string');
 
 const Login = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
+  const profile = useSelector(state => state.profile);
   const [from, setFrom] = useState<string | undefined>();
   const oaLogin = () => {
     props.history.push(
@@ -55,9 +58,21 @@ const Login = (props: Props) => {
         <div className="view-asset-item">
           <div className="space-top-3 mirror-signin">
             <div className="login-home">
-              <LoginMethod action={oaLogin} icon="blur_on" label="Oneauth" />
-              <LoginMethod action={emailLogin} icon="email" label="Email" />
-              <LoginMethod action={mirrorLogin} icon="people" label="Native" />
+              <LoginMethod
+                action={oaLogin}
+                icon="corporate_fare"
+                label="Enterprise Login"
+              />
+              <LoginMethod
+                action={mirrorLogin}
+                icon="people"
+                label="Individual Login"
+              />
+              <LoginMethod
+                action={emailLogin}
+                icon="email"
+                label="OTP via Email"
+              />
             </div>
           </div>
         </div>
