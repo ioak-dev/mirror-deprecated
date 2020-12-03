@@ -17,8 +17,6 @@ const OaLogin = (props: Props) => {
         `mirror_${query.asset}`,
         `oa ${query.space} ${query.authKey}`
       );
-      console.log(typeof query.from);
-      console.log(query.from || `/${query.asset}/article`);
       props.history.push(query.from ? query.from : `/${query.asset}/article`);
     }
   }, []);

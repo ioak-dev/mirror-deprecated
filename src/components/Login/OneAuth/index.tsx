@@ -22,12 +22,14 @@ const OneAuth = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
   const [view, setView] = useState<Array<any> | undefined>(undefined);
   const [searchCriteria, setSearchCriteria] = useState({ text: '' });
+  const [queryParam, setQueryParam] = useState<any>();
 
   useEffect(() => {
     const queryParam = queryString.parse(props.location.search);
     if (queryParam.space) {
       window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${queryParam.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}&from=${queryParam.from}`;
     }
+    setQueryParam(queryParam);
   }, []);
 
   useEffect(() => {
@@ -111,6 +113,7 @@ const OneAuth = (props: Props) => {
                   space={space}
                   key={space._id}
                   asset={props.asset}
+                  from={queryParam && queryParam.from ? queryParam.from : null}
                 />
               ))}
             </div>
