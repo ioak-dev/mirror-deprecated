@@ -2,7 +2,7 @@
   "name": "mirror",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mirror.ioak.org",
+  "homepage": "https://mirror-app.ioak.io",
   "dependencies": {
     "@apollo/react-common": "^3.1.4",
     "@apollo/react-components": "^3.1.5",
