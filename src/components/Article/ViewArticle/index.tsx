@@ -9,6 +9,7 @@ import FeedbackView from './FeedbackView';
 import OakSpinner from '../../../oakui/OakSpinner';
 import OakPage from '../../../oakui/OakPage';
 import OakSection from '../../../oakui/OakSection';
+import CommentSection from '../ArticleHome/CommentSection';
 
 interface Props {
   location: any;
@@ -47,6 +48,11 @@ const ViewArticle = (props: Props) => {
           </>
         )}
         {error && <div className="typography-6">Article does not exist</div>}
+      </OakSection>
+      <OakSection>
+        <div className="comment-section-wrapper">
+          <CommentSection postId={urlParam.id} />
+        </div>
       </OakSection>
     </OakPage>
   );
