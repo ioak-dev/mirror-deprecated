@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
@@ -9,6 +9,7 @@ import OakSection from '../../../oakui/OakSection';
 import { fetchSpace } from '../../Auth/AuthService';
 import SpaceItem from './SpaceItem';
 import './style.scss';
+import OakSpinner from '../../../oakui/OakSpinner';
 
 interface Props {
   history: any;
@@ -22,6 +23,7 @@ const OneAuth = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
   const [view, setView] = useState<Array<any> | undefined>(undefined);
   const [searchCriteria, setSearchCriteria] = useState({ text: '' });
+  const [spinner, setSpinner] = useState(false);
   const [queryParam, setQueryParam] = useState<any>();
 
   useEffect(() => {
@@ -33,8 +35,10 @@ const OneAuth = (props: Props) => {
   }, []);
 
   useEffect(() => {
+    setSpinner(true);
     fetchSpace().then(response => {
       setView(search(response.data, searchCriteria.text));
+      setSpinner(false);
     });
   }, [searchCriteria]);
 
@@ -87,24 +91,18 @@ const OneAuth = (props: Props) => {
               links={getHeadingLinks()}
               linkSize="large"
             />
-            {/* <div className="action-header position-right">
-              {props.history.length > 2 && (
-                <OakButton
-                  action={() => cancelCreation()}
-                  theme="default"
-                  variant="appear"
-                >
-                  <i className="material-icons">close</i>Back
-                </OakButton>
-              )}
-            </div> */}
           </div>
-          <OakText
-            label="Type company name to filter"
-            handleChange={handleSearchCriteria}
-            id="text"
-            data={searchCriteria}
-          />
+          {spinner && <OakSpinner />}
+          {view && view?.length > 0 ? (
+            <OakText
+              label="Type company name to filter"
+              handleChange={handleSearchCriteria}
+              id="text"
+              data={searchCriteria}
+            />
+          ) : (
+            'No space found. Check with Oneauth administrator.'
+          )}
           <div className="list-spaces">
             <div className="list-spaces--content">
               {view?.map(space => (
