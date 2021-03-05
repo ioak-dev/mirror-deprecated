@@ -1,7 +1,8 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSelector } from 'react-redux';
+import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
-import { isEmptyOrSpaces } from '../../Utils';
+import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
 import OakHeading from '../../../oakui/OakHeading';
 import OakPage from '../../../oakui/OakPage';
 import OakSection from '../../../oakui/OakSection';
@@ -23,12 +24,14 @@ const OneAuth = (props: Props) => {
   const [view, setView] = useState<Array<any> | undefined>(undefined);
   const [searchCriteria, setSearchCriteria] = useState({ text: '' });
   const [spinner, setSpinner] = useState(false);
+  const [queryParam, setQueryParam] = useState<any>();
 
   useEffect(() => {
     const queryParam = queryString.parse(props.location.search);
     if (queryParam.space) {
       window.location.href = `${process.env.REACT_APP_ONEAUTH_URL}/#/space/${queryParam.space}/login?type=signin&appId=${process.env.REACT_APP_ONEAUTH_APP_ID}&asset=${props.asset}&from=${queryParam.from}`;
     }
+    setQueryParam(queryParam);
   }, []);
 
   useEffect(() => {
@@ -108,6 +111,7 @@ const OneAuth = (props: Props) => {
                   space={space}
                   key={space._id}
                   asset={props.asset}
+                  from={queryParam && queryParam.from ? queryParam.from : null}
                 />
               ))}
             </div>
