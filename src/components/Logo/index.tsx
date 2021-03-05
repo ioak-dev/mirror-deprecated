@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, connect, useDispatch } from 'react-redux';
 import './style.scss';
-import oneauthWhite from '../../images/oneauth_white.svg';
-import oneauthBlack from '../../images/oneauth_black.svg';
+import mirrorWhite from '../../images/mirror_white.svg';
 
 const Logo = () => {
   const authorization = useSelector(state => state.authorization);
@@ -13,7 +12,7 @@ const Logo = () => {
 
   return (
     <div className="logo">
-      <img className="logo--image" src={oneauthWhite} alt="Oneauth logo" />
+      <img className="logo--image" src={mirrorWhite} alt="Oneauth logo" />
     </div>
   );
 };
