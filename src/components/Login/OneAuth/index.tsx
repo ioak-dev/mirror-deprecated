@@ -1,8 +1,7 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import OakButton from '../../../oakui/OakButton';
 import OakText from '../../../oakui/OakText';
-import { isEmptyOrSpaces, isEmptyAttributes } from '../../Utils';
+import { isEmptyOrSpaces } from '../../Utils';
 import OakHeading from '../../../oakui/OakHeading';
 import OakPage from '../../../oakui/OakPage';
 import OakSection from '../../../oakui/OakSection';
@@ -23,7 +22,7 @@ const OneAuth = (props: Props) => {
   const authorization = useSelector(state => state.authorization);
   const [view, setView] = useState<Array<any> | undefined>(undefined);
   const [searchCriteria, setSearchCriteria] = useState({ text: '' });
-  const [spinner, setSpinner] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [queryParam, setQueryParam] = useState<any>();
 
   useEffect(() => {
@@ -35,10 +34,10 @@ const OneAuth = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    setSpinner(true);
+    setLoading(true);
     fetchSpace().then(response => {
       setView(search(response.data, searchCriteria.text));
-      setSpinner(false);
+      setLoading(false);
     });
   }, [searchCriteria]);
 
@@ -92,17 +91,23 @@ const OneAuth = (props: Props) => {
               linkSize="large"
             />
           </div>
-          {spinner && <OakSpinner />}
-          {view && view?.length > 0 ? (
+
+          {loading && <OakSpinner />}
+
+          {!loading && view && view.length > 0 && (
             <OakText
               label="Type company name to filter"
               handleChange={handleSearchCriteria}
               id="text"
               data={searchCriteria}
             />
-          ) : (
-            'No space found. Check with Oneauth administrator.'
           )}
+
+          {!loading &&
+            view &&
+            view.length === 0 &&
+            'No space found. Check with Oneauth administrator.'}
+
           <div className="list-spaces">
             <div className="list-spaces--content">
               {view?.map(space => (
