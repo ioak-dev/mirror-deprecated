@@ -17,32 +17,40 @@ const App = props => {
 
   useEffect(() => {
     httpGet(
-      constants.API_HEALTHCHECK_HELLO,
+      constants.API_MIRROR_HEALTHCHECK_HELLO,
       null,
-      process.env.REACT_APP_ONEAUTH_API_URL
-    )
-      .then(response => {
-        if (response.status === 200) {
-          setHealthCheck({
-            ...healthCheck,
-            isVerified: true,
-            allowAccess: true,
+      process.env.REACT_APP_GRAPHQL_URL
+    ).then(response => {
+      if (response.status === 200) {
+        httpGet(
+          constants.API_HEALTHCHECK_HELLO,
+          null,
+          process.env.REACT_APP_ONEAUTH_API_URL
+        )
+          .then(response => {
+            if (response.status === 200) {
+              setHealthCheck({
+                ...healthCheck,
+                isVerified: true,
+                allowAccess: true,
+              });
+            } else {
+              setHealthCheck({
+                ...healthCheck,
+                isVerified: true,
+                allowAccess: false,
+              });
+            }
+          })
+          .catch(error => {
+            setHealthCheck({
+              ...healthCheck,
+              isVerified: true,
+              allowAccess: false,
+            });
           });
-        } else {
-          setHealthCheck({
-            ...healthCheck,
-            isVerified: true,
-            allowAccess: false,
-          });
-        }
-      })
-      .catch(error => {
-        setHealthCheck({
-          ...healthCheck,
-          isVerified: true,
-          allowAccess: false,
-        });
-      });
+      }
+    });
   }, []);
 
   return (
