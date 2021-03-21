@@ -15,6 +15,11 @@ const App = props => {
     allowAccess: false,
   });
 
+  const [mirrorHealthCheck, setMirrorHealthCheck] = useState({
+    isVerified: false,
+    allowAccess: false,
+  });
+
   useEffect(() => {
     httpGet(
       constants.API_HEALTHCHECK_HELLO,
@@ -45,15 +50,51 @@ const App = props => {
       });
   }, []);
 
+  useEffect(() => {
+    httpGet(
+      constants.API_MIRROR_HEALTHCHECK_HELLO,
+      null,
+      process.env.REACT_APP_API_HEALTHCHECK_URL
+    )
+      .then(response => {
+        if (response.status === 200) {
+          setMirrorHealthCheck({
+            ...healthCheck,
+            isVerified: true,
+            allowAccess: true,
+          });
+        } else {
+          setMirrorHealthCheck({
+            ...healthCheck,
+            isVerified: true,
+            allowAccess: false,
+          });
+        }
+      })
+      .catch(error => {
+        setMirrorHealthCheck({
+          ...healthCheck,
+          isVerified: true,
+          allowAccess: false,
+        });
+      });
+  }, []);
+
   return (
     <Provider store={store}>
-      {healthCheck.isVerified && healthCheck.allowAccess && (
-        <Content {...props} />
+      {mirrorHealthCheck.isVerified &&
+        mirrorHealthCheck.allowAccess &&
+        healthCheck.isVerified &&
+        healthCheck.allowAccess && <Content {...props} />}
+
+      {(mirrorHealthCheck.isVerified || healthCheck.isVerified) &&
+        (!mirrorHealthCheck.allowAccess || !healthCheck.allowAccess) && (
+          <HealthCheckFailed />
+        )}
+
+      {(!mirrorHealthCheck.isVerified || !healthCheck.isVerified) && (
+        <HealthCheckProgress />
       )}
-      {healthCheck.isVerified && !healthCheck.allowAccess && (
-        <HealthCheckFailed />
-      )}
-      {!healthCheck.isVerified && <HealthCheckProgress />}
     </Provider>
   );
 };
