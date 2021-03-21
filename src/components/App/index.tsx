@@ -11,57 +11,89 @@ import constants from '../Constants';
 
 const App = props => {
   const [healthCheck, setHealthCheck] = useState({
-    isVerified: false,
-    allowAccess: false,
+    oneauthVerified: false,
+    oneauthReachable: false,
   });
+
+  const [mirrorHealthCheck, setMirrorHealthCheck] = useState({
+    mirrorVerified: false,
+    mirrorReachable: false,
+  });
+
+  useEffect(() => {
+    httpGet(
+      constants.API_HEALTHCHECK_HELLO,
+      null,
+      process.env.REACT_APP_ONEAUTH_API_URL
+    )
+      .then(response => {
+        if (response.status === 200) {
+          setHealthCheck({
+            ...healthCheck,
+            oneauthVerified: true,
+            oneauthReachable: true,
+          });
+        } else {
+          setHealthCheck({
+            ...healthCheck,
+            oneauthVerified: true,
+            oneauthReachable: false,
+          });
+        }
+      })
+      .catch(error => {
+        setHealthCheck({
+          ...healthCheck,
+          oneauthVerified: true,
+          oneauthReachable: false,
+        });
+      });
+  }, []);
 
   useEffect(() => {
     httpGet(
       constants.API_MIRROR_HEALTHCHECK_HELLO,
       null,
       process.env.REACT_APP_GRAPHQL_URL
-    ).then(response => {
-      if (response.status === 200) {
-        httpGet(
-          constants.API_HEALTHCHECK_HELLO,
-          null,
-          process.env.REACT_APP_ONEAUTH_API_URL
-        )
-          .then(response => {
-            if (response.status === 200) {
-              setHealthCheck({
-                ...healthCheck,
-                isVerified: true,
-                allowAccess: true,
-              });
-            } else {
-              setHealthCheck({
-                ...healthCheck,
-                isVerified: true,
-                allowAccess: false,
-              });
-            }
-          })
-          .catch(error => {
-            setHealthCheck({
-              ...healthCheck,
-              isVerified: true,
-              allowAccess: false,
-            });
+    )
+      .then(response => {
+        if (response.status === 200) {
+          setMirrorHealthCheck({
+            ...healthCheck,
+            mirrorVerified: true,
+            mirrorReachable: true,
           });
-      }
-    });
+        } else {
+          setMirrorHealthCheck({
+            ...healthCheck,
+            mirrorVerified: true,
+            mirrorReachable: false,
+          });
+        }
+      })
+      .catch(error => {
+        setMirrorHealthCheck({
+          ...healthCheck,
+          mirrorVerified: true,
+          mirrorReachable: false,
+        });
+      });
   }, []);
 
   return (
     <Provider store={store}>
-      {healthCheck.isVerified && healthCheck.allowAccess && (
-        <Content {...props} />
+      {mirrorHealthCheck.mirrorVerified &&
+        mirrorHealthCheck.mirrorReachable &&
+        healthCheck.oneauthVerified &&
+        healthCheck.oneauthReachable && <Content {...props} />}
+
+      {(mirrorHealthCheck.mirrorVerified || healthCheck.oneauthVerified) &&
+        (!mirrorHealthCheck.mirrorReachable ||
+          !healthCheck.oneauthReachable) && <HealthCheckFailed />}
+
+      {(!mirrorHealthCheck.mirrorVerified || !healthCheck.oneauthVerified) && (
+        <HealthCheckProgress />
       )}
-      {healthCheck.isVerified && !healthCheck.allowAccess && (
-        <HealthCheckFailed />
-      )}
-      {!healthCheck.isVerified && <HealthCheckProgress />}
     </Provider>
   );
 };
