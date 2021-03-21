@@ -11,13 +11,13 @@ import constants from '../Constants';
 
 const App = props => {
   const [healthCheck, setHealthCheck] = useState({
-    oneauthVerified: false,
-    oneauthReachable: false,
+    isVerified: false,
+    allowAccess: false,
   });
 
   const [mirrorHealthCheck, setMirrorHealthCheck] = useState({
-    mirrorVerified: false,
-    mirrorReachable: false,
+    isVerified: false,
+    allowAccess: false,
   });
 
   useEffect(() => {
@@ -30,22 +30,22 @@ const App = props => {
         if (response.status === 200) {
           setHealthCheck({
             ...healthCheck,
-            oneauthVerified: true,
-            oneauthReachable: true,
+            isVerified: true,
+            allowAccess: true,
           });
         } else {
           setHealthCheck({
             ...healthCheck,
-            oneauthVerified: true,
-            oneauthReachable: false,
+            isVerified: true,
+            allowAccess: false,
           });
         }
       })
       .catch(error => {
         setHealthCheck({
           ...healthCheck,
-          oneauthVerified: true,
-          oneauthReachable: false,
+          isVerified: true,
+          allowAccess: false,
         });
       });
   }, []);
@@ -60,38 +60,39 @@ const App = props => {
         if (response.status === 200) {
           setMirrorHealthCheck({
             ...healthCheck,
-            mirrorVerified: true,
-            mirrorReachable: true,
+            isVerified: true,
+            allowAccess: true,
           });
         } else {
           setMirrorHealthCheck({
             ...healthCheck,
-            mirrorVerified: true,
-            mirrorReachable: false,
+            isVerified: true,
+            allowAccess: false,
           });
         }
       })
       .catch(error => {
         setMirrorHealthCheck({
           ...healthCheck,
-          mirrorVerified: true,
-          mirrorReachable: false,
+          isVerified: true,
+          allowAccess: false,
         });
       });
   }, []);
 
   return (
     <Provider store={store}>
-      {mirrorHealthCheck.mirrorVerified &&
-        mirrorHealthCheck.mirrorReachable &&
-        healthCheck.oneauthVerified &&
-        healthCheck.oneauthReachable && <Content {...props} />}
+      {mirrorHealthCheck.isVerified &&
+        mirrorHealthCheck.allowAccess &&
+        healthCheck.isVerified &&
+        healthCheck.allowAccess && <Content {...props} />}
 
-      {(mirrorHealthCheck.mirrorVerified || healthCheck.oneauthVerified) &&
-        (!mirrorHealthCheck.mirrorReachable ||
-          !healthCheck.oneauthReachable) && <HealthCheckFailed />}
+      {(mirrorHealthCheck.isVerified || healthCheck.isVerified) &&
+        (!mirrorHealthCheck.allowAccess || !healthCheck.allowAccess) && (
+          <HealthCheckFailed />
+        )}
 
-      {(!mirrorHealthCheck.mirrorVerified || !healthCheck.oneauthVerified) && (
+      {(!mirrorHealthCheck.isVerified || !healthCheck.isVerified) && (
         <HealthCheckProgress />
       )}
     </Provider>
