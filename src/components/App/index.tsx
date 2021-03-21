@@ -54,7 +54,7 @@ const App = props => {
     httpGet(
       constants.API_MIRROR_HEALTHCHECK_HELLO,
       null,
-      process.env.REACT_APP_GRAPHQL_URL
+      process.env.REACT_APP_API_HEALTHCHECK_URL
     )
       .then(response => {
         if (response.status === 200) {
