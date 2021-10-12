@@ -1,0 +1,6 @@
+src
+.babelrc
+webpack.config.js
+babel.config.js
+rollup.config.js
+*.tgz
