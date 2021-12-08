@@ -3,12 +3,14 @@ import { useHistory, useLocation } from 'react-router';
 import { MirrorConfig } from '../types/MirrorConfigType';
 import './MirrorApp.scss';
 import MirrorHome from '../components/MirrorHome';
+import { MirrorRecordModel } from '../types/MirrorRecordModel';
 
 const queryString = require('query-string');
 
 interface Props {
   config: MirrorConfig;
   children?: any;
+  rows: MirrorRecordModel[];
 }
 
 const MirrorApp = (props: Props) => {
@@ -91,7 +93,12 @@ const MirrorApp = (props: Props) => {
   return (
     <div className="mirror-app">
       {criteria.type === 'home' && (
-        <MirrorHome criteria={criteria} slots={slots} config={props.config} />
+        <MirrorHome
+          criteria={criteria}
+          slots={slots}
+          config={props.config.fieldDef}
+          rows={props.rows}
+        />
       )}
     </div>
   );

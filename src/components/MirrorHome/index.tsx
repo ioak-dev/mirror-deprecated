@@ -1,18 +1,21 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
-import { MirrorConfig } from '../../types/MirrorConfigType';
+import { MirrorRecordFieldDef } from '../../types/MirrorRecordFieldDef';
 import './style.scss';
+import TableView from './TableView';
+import { MirrorRecordModel } from '../../types/MirrorRecordModel';
 
 interface Props {
   criteria: any;
   slots: any;
-  config?: MirrorConfig;
+  config: MirrorRecordFieldDef[];
+  rows: MirrorRecordModel[];
 }
 
 const MirrorHome = (props: Props) => {
   return (
     <div className="mirror-home">
-      Test message - {props.config?.message || 'Welcome to Mirror Application'}
+      <TableView config={props.config} rows={props.rows} />
     </div>
   );
 };

@@ -1,0 +1,27 @@
+table {
+  position: absolute;
+  top: 10%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid;
+}
+
+tr,
+th {
+  white-space: nowrap;
+  padding: 1rem;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid;
+}
+
+tbody,
+tr,
+td {
+  white-space: nowrap;
+  width: 20%;
+  overflow-wrap: break-word;
+  padding: 0.5rem;
+  border: 1px solid;
+}
