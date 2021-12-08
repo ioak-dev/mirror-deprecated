@@ -1,0 +1,98 @@
+@import './variables.css';
+
+/* * {
+  --element-site-viewbox: 960px;
+}
+@media (max-width: 768px) {
+  * {
+    --element-site-viewbox: 540px;
+  }
+}
+.mirror-site-viewbox {
+  width: 100%;
+  max-width: var(--element-site-viewbox);
+} */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.one-sided-page {
+  padding: var(--mirror-articlepage-padding);
+}
+.one-sided-page__container {
+  max-width: var(--mirror-articlepage-maxwidth);
+  margin: auto;
+}
+
+@media (min-width: 1000px) {
+  .two-sided-page {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 60px;
+    padding: var(--mirror-homepage-padding);
+  }
+}
+@media (max-width: 999px) {
+  .two-sided-page {
+    display: grid;
+    grid-template-rows: auto auto;
+    row-gap: 60px;
+    padding: 0 16px;
+  }
+}
+@media (min-width: 1000px) {
+  .two-sided-page__right {
+    width: 350px;
+  }
+}
+
+.one-liner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.two-liner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.three-liner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.four-liner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 4; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.five-liner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 5; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+.six-liner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 6; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}

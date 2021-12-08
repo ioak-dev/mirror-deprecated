@@ -1,0 +1,48 @@
+* {
+  --oak-app-layout-topbar-height: 50px;
+
+  --mirror-font-family: 'Raleway', sans-serif;
+
+  --mirror-foregroundcolor-1: var(--color-1);
+  --mirror-foregroundcolor-2: var(--color-2);
+  --mirror-foregroundcolor-3: var(--color-3);
+
+  --mirror-backgroundcolor-1: var(--color-global);
+  --mirror-backgroundcolor-2: var(--color-container);
+  --mirror-backgroundcolor-3: var(--color-surface);
+
+  --mirror-color-primary: rgb(0, 183, 255);
+  --mirror-color-primary-i: #fff;
+  --mirror-color-primary-dark: rgb(3, 157, 218);
+  --mirror-color-primary-dark-i: #fff;
+  --mirror-color-secondary: rgb(153, 0, 255);
+  --mirror-color-secondary-i: #fff;
+  --mirror-color-secondary-dark: rgb(135, 0, 224);
+  --mirror-color-secondary-dark-i: #fff;
+
+  --mirror-tag-backgroundcolor: var(--color-global-dark);
+  --mirror-tag-foregroundcolor: var(--color-global-dark-i);
+  --mirror-tag-backgroundcolor-hover: var(--color-global-darker);
+  --mirror-tag-foregroundcolor-hover: var(--color-global-darker-i);
+  --mirror-tag-borderradius: 0px;
+  --mirror-tag-padding: 6px 16px;
+  --mirror-divider-color: var(--color-global-darkest);
+
+  --mirror-homepage-padding: 0 20px;
+  --mirror-articlepage-padding: 4em;
+  --mirror-articlepage-maxwidth: 1000px;
+}
+@media (max-width: 767px) {
+  * {
+    --mirror-articlepage-padding: 16px;
+  }
+}
+@media (max-width: 999px) {
+  * {
+    --mirror-homepage-padding: 0 16px;
+  }
+}
+
+.mirror-inline-children > * {
+  display: inline;
+}
