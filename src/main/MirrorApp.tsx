@@ -10,7 +10,7 @@ const queryString = require('query-string');
 interface Props {
   config: MirrorConfig;
   children?: any;
-  rows: MirrorRecordModel[];
+  records: MirrorRecordModel[];
 }
 
 const MirrorApp = (props: Props) => {
@@ -96,8 +96,9 @@ const MirrorApp = (props: Props) => {
         <MirrorHome
           criteria={criteria}
           slots={slots}
-          config={props.config.fieldDef}
-          rows={props.rows}
+          config={props.config}
+          records={props.records}
+          handleRecordClick={props.config.handleRecordClick}
         />
       )}
     </div>
