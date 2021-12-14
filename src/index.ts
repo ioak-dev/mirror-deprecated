@@ -2,5 +2,6 @@
 import MirrorApp from './main/MirrorApp';
 import { MirrorConfig } from './types/MirrorConfigType';
 import { MirrorRecordModel } from './types/MirrorRecordModel';
+import { PaginatePref } from './types/PaginatePref';
 
-export { MirrorApp, MirrorConfig, MirrorRecordModel };
+export { MirrorApp, MirrorConfig, MirrorRecordModel, PaginatePref };
