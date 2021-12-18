@@ -24,6 +24,8 @@ const TableView = (props: Props) => {
     []
   );
 
+  const [criteria, setCriteria] = useState('');
+
   useEffect(() => {
     props.config.paginationPreference &&
       setPaginatePref({
@@ -32,12 +34,21 @@ const TableView = (props: Props) => {
   }, [props.config.paginationPreference]);
 
   useEffect(() => {
-    if (!props.config.pageChanged || props.config.paginationPreference) {
-      applyPagination(paginatePref);
-    } else {
+    if (props.config.pageChanged && props.config.paginationPreference) {
       setRecordToDisplay(props.records);
+    } else {
+      applyPagination(paginatePref);
     }
   }, [props.records]);
+
+  useEffect(() => {
+    if (props.config.onChangeSearch) {
+      const delayDebounceFn = setTimeout(() => {
+        clickHandler();
+      }, 1000);
+      return () => clearTimeout(delayDebounceFn);
+    }
+  }, [criteria]);
 
   const handleClick = (
     field: MirrorRecordFieldDef,
@@ -52,7 +63,6 @@ const TableView = (props: Props) => {
   };
 
   const pageChanged = (_paginatePref: PaginatePref) => {
-    console.log(_paginatePref);
     if (props.config.pageChanged && props.config.paginationPreference) {
       props.config.pageChanged(_paginatePref);
     } else {
@@ -69,56 +79,88 @@ const TableView = (props: Props) => {
     const pageTo =
       _paginatePref.rowsPerPage +
       (_paginatePref.pageNo - 1) * _paginatePref.rowsPerPage;
-    setRecordToDisplay(props.records.slice(pageFrom, pageTo));
+    setRecordToDisplay(
+      getSearchResults(_paginatePref.searchText).slice(pageFrom, pageTo)
+    );
+  };
+
+  const handleSearch = (e: any) => {
+    setCriteria(e.target.value);
+  };
+
+  const clickHandler = () => {
+    pageChanged({
+      ...paginatePref,
+      pageNo: 1,
+      searchText: criteria,
+    });
+  };
+
+  const getSearchResults: any = (text: any) => {
+    if (text) {
+      const lowercasedFilter = text.toLowerCase().trim();
+      const result = props.records.filter((item) => {
+        return Object.keys(item).some(
+          (key) =>
+            typeof item[key] === 'string' &&
+            item[key].toLowerCase().includes(lowercasedFilter)
+        );
+      });
+      return result;
+    }
+    return props.records;
   };
 
   return (
     <>
+      <input type="search" onChange={handleSearch} className="table__search" />
+      {!props.config.onChangeSearch && (
+        <button className="search__button" type="submit" onClick={clickHandler}>
+          Search
+        </button>
+      )}
+
+      <Paginate
+        totalRows={totalRows}
+        pagePref={paginatePref}
+        pageChanged={pageChanged}
+      />
+
       <div>
-        <slot name="grid" className="table__paginate">
+        <slot name="grid">
+          <table cellPadding={0} cellSpacing={0}>
+            <thead>
+              <tr>
+                {props.config &&
+                  props.config.fieldDef.map((header) => (
+                    <th key={header.field}>{header.headerName}</th>
+                  ))}
+              </tr>
+            </thead>
+            <tbody>
+              {recordToDisplay.map((record: any) => (
+                <tr key={record.id}>
+                  {props.config.fieldDef.map((header) => (
+                    <td
+                      role="presentation"
+                      key={header.field}
+                      onClick={() => handleClick(header, record)}
+                    >
+                      {record[header.field]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </slot>
+        <slot name="bottom" className="table__paginate">
           <Paginate
             totalRows={totalRows}
             pagePref={paginatePref}
             pageChanged={pageChanged}
           />
         </slot>
-
-        <div>
-          <slot name="grid">
-            <table cellPadding={0} cellSpacing={0}>
-              <thead>
-                <tr>
-                  {props.config &&
-                    props.config.fieldDef.map((header) => (
-                      <th key={header.field}>{header.headerName}</th>
-                    ))}
-                </tr>
-              </thead>
-              <tbody>
-                {recordToDisplay.map((record: any) => (
-                  <tr key={record.id}>
-                    {props.config.fieldDef.map((header) => (
-                      <td
-                        role="presentation"
-                        key={header.field}
-                        onClick={() => handleClick(header, record)}
-                      >
-                        {record[header.field]}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </slot>
-          <slot name="bottom" className="table__paginate">
-            <Paginate
-              totalRows={totalRows}
-              pagePref={paginatePref}
-              pageChanged={pageChanged}
-            />
-          </slot>
-        </div>
       </div>
     </>
   );

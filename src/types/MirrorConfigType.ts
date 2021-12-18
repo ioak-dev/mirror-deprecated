@@ -5,8 +5,8 @@ export type MirrorConfig = {
   // message?: string;
   fieldDef: MirrorRecordFieldDef[];
   handleRecordClick?: Function;
-  serverSidePagination?: boolean;
   paginationPreference?: PaginatePref;
+  onChangeSearch: boolean;
   pageChanged?: Function;
   totalRows: number;
 };

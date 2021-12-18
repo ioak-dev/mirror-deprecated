@@ -22,38 +22,31 @@ td {
   border: 1px solid;
 }
 
-/*****************************/
 .table__paginate {
   padding: 12px 10px;
   float: right;
 }
-.table__paginate--dense {
-  padding: 10px 6px;
-}
+
 .table__datagrid {
   overflow: auto;
 }
-.table__datagrid--nav-top.table__datagrid--fill-global {
-  border-top: 1px solid var(--color-global-darker);
+
+.table__search {
+  width: 10%;
+  box-sizing: border-box;
+  padding: 0 5px;
+  outline: none;
+  text-overflow: ellipsis;
+  font-family: inherit;
+  color: inherit;
+  background-color: inherit;
+  margin: 10px 10px 10px 400px;
 }
-.table__datagrid--nav-bottom.table__datagrid--fill-global {
-  border-bottom: 1px solid var(--color-global-darker);
-}
-.table__datagrid--nav-top.table__datagrid--fill-container {
-  border-top: 1px solid var(--color-container-darker);
-}
-.table__datagrid--nav-bottom.table__datagrid--fill-container {
-  border-bottom: 1px solid var(--color-container-darker);
-}
-.table__datagrid--nav-top.table__datagrid--fill-surface {
-  border-top: 1px solid var(--color-surface-darker);
-}
-.table__datagrid--nav-bottom.table__datagrid--fill-surface {
-  border-bottom: 1px solid var(--color-surface-darker);
-}
-.table__datagrid--nav-top.table__datagrid--fill-float {
-  border-top: 1px solid var(--color-float-darker);
-}
-.table__datagrid--nav-bottom.table__datagrid--fill-float {
-  border-bottom: 1px solid var(--color-float-darker);
+
+.search__button {
+  font-size: 10.5px;
+  padding: 0 10px;
+  height: 25px;
+  margin: 10px;
+  width: 10%;
 }
